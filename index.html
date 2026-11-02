@@ -114,7 +114,12 @@
 
       <!-- ============ DASHBOARD ============ -->
       <section class="screen live" id="s-dashboard">
-        <div class="pad">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Dashboard</h1><p class="sub">Coverage, safeguarding and reporting across every district SUGIRA Muryango works in.</p></div>
+          </div>
+        </div>
+        <div class="pad" style="padding-top:1.5rem">
           <div class="filters">
             <button class="fl"><span class="k">Place</span><b>Rwanda</b><span class="cv">&#9660;</span></button>
             <button class="fl"><span class="k">Cohort</span><b>All</b><span class="cv">&#9660;</span></button>
@@ -129,14 +134,18 @@
           </div>
 
           <div class="stats">
-            <div class="st"><div class="l">Visits done</div><div class="v">1 842 <small>of 2 210</small></div>
-              <div class="d"><b>&darr; 83%</b> from 91% last week</div><div class="trk"><i style="width:83%"></i></div></div>
-            <div class="st"><div class="l">Behind the cohort</div><div class="v">148 <small>of 2 210</small></div>
-              <div class="d"><b>&uarr;</b> from 102 last week</div><div class="trk warn"><i style="width:7%"></i></div></div>
-            <div class="st"><div class="l">Reported today</div><div class="v">174 <small>of 193</small></div>
-              <div class="d">19 not synced &middot; provisional</div><div class="trk"><i style="width:90%"></i></div></div>
+            <div class="st"><div class="l">Visits done</div>
+              <div class="vrow"><div class="v">1 842 <small>of 2 210</small></div><span class="delta down">&darr; 83%</span></div>
+              <div class="d">Down from 91% last week</div><div class="trk"><i style="width:83%"></i></div></div>
+            <div class="st"><div class="l">Behind the cohort</div>
+              <div class="vrow"><div class="v">148 <small>of 2 210</small></div><span class="delta down">&uarr; 46</span></div>
+              <div class="d">Up from 102 last week</div><div class="trk warn"><i style="width:7%"></i></div></div>
+            <div class="st"><div class="l">Reported today</div>
+              <div class="vrow"><div class="v">174 <small>of 193</small></div><span class="delta down">19 silent</span></div>
+              <div class="d">Figures provisional until they sync</div><div class="trk"><i style="width:90%"></i></div></div>
           </div>
 
+          <div class="sect"><div><h2>Where to look first</h2><p>The places and people furthest from where they should be this week.</p></div></div>
           <div class="cols c2">
             <div class="card">
               <div class="card-h"><h3>Worst five sectors this week</h3><span class="side"><a data-go="households">See all</a></span></div>
@@ -154,6 +163,8 @@
             </div>
           </div>
 
+          <div class="sect"><div><h2>Coverage and participation</h2><p>All thirteen programme statistics, re-scoped whenever you change the filters above.</p></div>
+            <span class="side"><span class="seg"><button type="button" class="on">This week</button><button type="button">Month</button><button type="button">Cohort</button></span></span></div>
           <div class="cols c2e">
             <div class="card">
               <div class="card-h"><h3>Visits conducted per module</h3></div>
@@ -184,7 +195,7 @@
               </div>
               <div class="legend"><span><i style="background:var(--amber)"></i>Below the 30% threshold</span></div>
             </div>
-            <div class="card wide">
+            <div class="card lg wide">
               <div class="card-h"><h3>Households reached, district &times; module</h3></div>
               <div class="tblwrap"><div class="mx">
                 <div class="mr"><span class="lb"></span><span class="hd">1</span><span class="hd">2</span><span class="hd">3</span><span class="hd">4</span><span class="hd">5</span><span class="hd">6</span><span class="hd">7</span><span class="hd">8</span><span class="hd">9</span><span class="hd">10</span><span class="hd">11</span><span class="hd">12</span></div>
@@ -505,9 +516,15 @@
         </div>
         <div class="pad">
           <div class="stats">
-            <div class="st"><div class="l">Reported today</div><div class="v">174 <small>of 193</small></div><div class="trk"><i style="width:90%"></i></div></div>
-            <div class="st"><div class="l">Silent over 48 hours</div><div class="v">19</div><div class="d"><b>&uarr;</b> from 11 yesterday</div></div>
-            <div class="st"><div class="l">Longest silence</div><div class="v">6 <small>days</small></div><div class="d">E. Mutesi &middot; Huye</div></div>
+            <div class="st"><div class="l">Reported today</div>
+              <div class="vrow"><div class="v">174 <small>of 193</small></div><span class="delta up">90%</span></div>
+              <div class="trk"><i style="width:90%"></i></div></div>
+            <div class="st"><div class="l">Silent over 48 hours</div>
+              <div class="vrow"><div class="v">19</div><span class="delta down">&uarr; 8</span></div>
+              <div class="d">Up from 11 yesterday</div></div>
+            <div class="st"><div class="l">Longest silence</div>
+              <div class="vrow"><div class="v">6 <small>days</small></div></div>
+              <div class="d">E. Mutesi &middot; Huye</div></div>
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
