@@ -19,10 +19,18 @@ if [ -n "$(git status --porcelain)" ]; then
   echo
 fi
 
-if ! git merge-base --is-ancestor HEAD "origin/$(git rev-parse --abbrev-ref HEAD)" 2>/dev/null; then
-  echo "warning: HEAD is not on the remote yet. Push first if you want the live site"
-  echo "         to match what is on GitHub."
+# Production only ever serves main. Each session now works in its own worktree,
+# and `git rev-parse HEAD` inside one is that branch's tip, not main's — so
+# without this guard a session could put its own unmerged branch live from its
+# own checkout, and the deploy would look perfectly clean while doing it. This
+# rule used to live in an agreement between sessions; it belongs in the script.
+git fetch -q origin main 2>/dev/null || true
+if ! git merge-base --is-ancestor HEAD origin/main 2>/dev/null; then
+  echo "deploy refused — $sha ($(git rev-parse --abbrev-ref HEAD)) is not on origin/main."
   echo
+  echo "  The live site only ever serves main. Merge this branch into main and push"
+  echo "  it, then deploy from a checkout whose HEAD is on main."
+  exit 1
 fi
 
 tmp=$(mktemp -d)
