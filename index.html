@@ -827,11 +827,12 @@
           </div>
         </div>
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:.4rem">19</span></button>
-          <button class="tab" type="button" data-tab="tablet">On the tablet<span class="chip" style="margin-left:.4rem">11</span></button>
-          <button class="tab" type="button" data-tab="notablet">Not on the tablet<span class="chip" style="margin-left:.4rem">8</span></button>
-          </div>
-        <div class="pad">
+          <button class="tab on" type="button" data-tab="all" data-panel="list">All<span class="chip" style="margin-left:.4rem">19</span></button>
+          <button class="tab" type="button" data-tab="tablet" data-panel="list">On the tablet<span class="chip" style="margin-left:.4rem">11</span></button>
+          <button class="tab" type="button" data-tab="notablet" data-panel="list">Not on the tablet<span class="chip" style="margin-left:.4rem">8</span></button>
+          <button class="tab" type="button" data-panel="monitoring">Monitoring forms<span class="chip" style="margin-left:.4rem">17</span></button>
+        </div>
+        <div class="pad" data-panelid="list">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead>
@@ -860,6 +861,21 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>19 projects, all marked Active &middot; 11 reach the tablet</span></div>
+          </div>
+        </div>
+              <div class="pad" data-panelid="monitoring" hidden>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Monitoring module</th><th>Kinyarwanda</th><th>Who fills it in</th><th class="num">Forms</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Welcome session</td><td class="mut">Guhana ikaze</td><td class="mut">IZU Cell Coordinator</td><td class="num">2</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr><td class="nm">1.Family Narrative</td><td class="mut">1.Amateka y&rsquo;umuryango</td><td class="mut">IZU Cell Coordinator</td><td class="num">2</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr><td class="nm">4.The Importance of Good Hygiene</td><td class="mut">4.Akamaro k&rsquo;isuku n&rsquo;isukura</td><td class="mut">IZU Cell Coordinator</td><td class="num">2</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr><td class="nm">6.The Importance of Good Health</td><td class="mut">6. Akamaro k&rsquo;ubuzima bwiza</td><td class="mut">IZU Cell Coordinator</td><td class="num">2</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr><td class="nm">Play Session</td><td class="mut">Ikiganiro cyo gukina</td><td class="mut">IZU Sector Coordinator</td><td class="num">1</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>17 monitoring modules &middot; a separate track from the sessions themselves, and what feeds IZU performance</span></div>
           </div>
         </div>
       </section>
@@ -1448,6 +1464,15 @@
               <p class="axis-foot">Set to Sector, a holder sees their own sector&rsquo;s households and no others. Left unset &mdash; as every one of the ten roles is today &mdash; it means the whole country.</p>
             </div>
             <div class="axis">
+              <h4>Who holds it <span class="axis-tag now">exists today</span></h4>
+              <p>The role form&rsquo;s own Yes/No. A stakeholder role belongs to someone looking in from outside the programme &mdash; a district official, a partner &mdash; rather than someone running it.</p>
+              <div class="levels">
+                <button class="lvl on" type="button"><span class="dot"></span>Programme staff<span class="n">7 roles</span></button>
+                <button class="lvl" type="button"><span class="dot"></span>Stakeholders<span class="n">3 roles</span></button>
+              </div>
+              <p class="axis-foot">The three stakeholder roles are the NCDA officials and the BC office. Marking a role this way is what keeps a partner out of the household list without anyone having to remember to untick it.</p>
+            </div>
+            <div class="axis">
               <h4>Which programme <span class="axis-tag new">new</span></h4>
               <p>The second axis the client described. Nineteen projects run in this system; a role rarely needs all of them.</p>
               <div class="levels">
@@ -1755,6 +1780,7 @@
           <button class="tab" type="button" data-panel="docs">Documents <span class="chip" style="margin-left:.4rem">41</span></button>
           <button class="tab" type="button" data-panel="faqs">FAQs</button>
           <button class="tab" type="button" data-panel="feedback">Feedback <span class="chip warn" style="margin-left:.4rem">7</span></button>
+          <button class="tab" type="button" data-panel="guidance">Instructions<span class="chip" style="margin-left:.4rem">8</span></button>
         </div>
 
         <div class="pad" data-panelid="videos">
@@ -1763,8 +1789,8 @@
               <thead><tr><th>Video</th><th>For</th><th>Languages</th><th>Visible to</th><th class="num">Opened</th></tr></thead>
               <tbody>
                 <tr><td class="nm">Playing with everyday objects</td><td class="mut">Session 3 &middot; Building Early Communication Skills</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">IZU at Village</td><td class="num">1 844</td></tr>
-                <tr><td class="nm">Feeding a child who refuses</td><td class="mut">Session 5 &middot; The Importance of Good Hygiene</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">IZU at Village</td><td class="num">1 602</td></tr>
-                <tr><td class="nm">Talking with fathers</td><td class="mut">Session 9 &middot; Resolving Conflicts in the Home</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut">IZU at Village</td><td class="num">388</td></tr>
+                <tr><td class="nm">Feeding a child who refuses</td><td class="mut">Session 5 &middot; The Importance of Good Nutrition</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">IZU at Village</td><td class="num">1 602</td></tr>
+                <tr><td class="nm">Talking with fathers</td><td class="mut">Session 9 &middot; The Important Role Everyone Plays</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut">IZU at Village</td><td class="num">388</td></tr>
                 <tr><td class="nm">Recognising signs of harm</td><td class="mut">Safeguarding protocol</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip bad"><i></i>Supervisors and above</span></td><td class="num">214</td></tr>
               </tbody>
             </table></div>
@@ -1817,6 +1843,21 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>7 unread of 42</span></div>
+          </div>
+        </div>
+              <div class="pad" data-panelid="guidance" hidden>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Instruction</th><th>Shown</th><th>Languages</th><th>Who sees it</th><th class="num">Updated</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Before you start a session</td><td class="mut">Opening any module on the tablet</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">IZU at Village</td><td class="num mut">14 Oct</td></tr>
+                <tr><td class="nm">What counts as a risk of harm</td><td class="mut">Above the risk question</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">Everyone</td><td class="num mut">2 Oct</td></tr>
+                <tr><td class="nm">Measuring a child correctly</td><td class="mut">Anthropometric form</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">IZU at Village</td><td class="num mut">21 Sep</td></tr>
+                <tr><td class="nm">When a household is absent</td><td class="mut">Session did not occur form</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">IZU at Village</td><td class="num mut">21 Sep</td></tr>
+                <tr><td class="nm">Posting to the community</td><td class="mut">Above the composer</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut">Everyone</td><td class="num mut">4 Aug</td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>8 instructions &middot; each appears at the moment it is needed rather than in a manual</span></div>
           </div>
         </div>
       </section>
