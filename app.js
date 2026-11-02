@@ -13,6 +13,13 @@
     wall:         { crumbs: [['Reports', 'reports'], ['Wall board', null]],               nav: 'wall' },
     empty:        { crumbs: [['Not designed yet', null]],                                 nav: null },
 
+    people:       { crumbs: [['People', null]],                                           nav: 'people' },
+    roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
+    role:         { crumbs: [['Roles & access', 'roles'], ['Sector supervisor', null]],   nav: 'roles' },
+    places:       { crumbs: [['Places', null]],                                           nav: 'places' },
+    system:       { crumbs: [['System', null]],                                           nav: 'system' },
+    login:        { crumbs: [['Sign in', null]],                                          nav: null },
+
     programme:    { crumbs: [['Programme', null]],                                        nav: 'programme' },
     project:      { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', null]],
                     nav: 'programme' },
@@ -85,7 +92,25 @@
             '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>',
       done: 'Cohort created as a draft \u2014 no household is scheduled yet'
     },
-    report: {
+    invite: {
+      title: 'Invite someone',
+      ok: 'Send invitation',
+      body: '<div><label for="f-ie">Email</label><input id="f-ie" type="email" placeholder="name@fxbrwanda.org"></div>' +
+            '<div><label for="f-ir">Role</label><select id="f-ir"><option>Home visitor</option><option>Sector supervisor</option><option>IZU cell coordinator</option><option>District coordinator</option><option>Social worker</option><option>M&amp;E officer</option></select></div>' +
+            '<div><label for="f-ip">Where</label><select id="f-ip"><option>Tumba \u00b7 Huye</option><option>Rusatira \u00b7 Huye</option><option>Mbazi \u00b7 Huye</option><option>Kigembe \u00b7 Gisagara</option></select></div>' +
+            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">They set their own password from the invitation. No one else sees it.</p>',
+      done: 'Invitation sent \u2014 they appear under Invited until they accept'
+    },
+    role: {
+      title: 'New role',
+      ok: 'Create role',
+      body: '<div><label for="f-rn">Role name</label><input id="f-rn" type="text" placeholder="e.g. District coordinator"></div>' +
+            '<div><label for="f-rl">Operates at</label><select id="f-rl"><option>Sector</option><option>Cell</option><option>District</option><option>Province</option><option>National</option><option>IZU</option></select></div>' +
+            '<div><label for="f-rp">Programme</label><select id="f-rp"><option>All projects</option><option>Selected projects</option></select></div>' +
+            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">The level, not the place. Which sector or district a person covers is set when you give them the role.</p>',
+      done: 'Role created with nothing granted yet'
+    },
+
       title: 'Build a report',
       ok: 'Run report',
       body: '<div><label for="f-q">Question</label><select id="f-q"><option>Male caregiver attendance</option><option>Risk of harm by type</option><option>Household needs</option><option>Visits per module</option><option>Average minutes per module</option></select></div>' +
@@ -292,6 +317,7 @@
     setNav(def.nav);
     resetTabs(next);
     current = key;
+    document.querySelector('.shell').classList.toggle('bare', key === 'login');
     if (scrollEl) scrollEl.scrollTop = 0;
     try {
       if (location.hash.slice(1) !== key) history.replaceState(null, '', '#' + key);
@@ -321,6 +347,25 @@
     if (toast) { say(toast.getAttribute('data-toast')); return; }
     var m = e.target.closest('[data-modal]');
     if (m) { openModal(m.getAttribute('data-modal')); }
+  });
+
+  // ---- permission grid ----
+  $$('.tick').forEach(function (t) {
+    if (t.disabled) return;
+    t.addEventListener('click', function () {
+      var on = t.classList.toggle('on');
+      t.setAttribute('aria-pressed', String(on));
+    });
+  });
+
+  // ---- scope: one level, one programme rule ----
+  $$('.axis .levels').forEach(function (group) {
+    group.addEventListener('click', function (e) {
+      var b = e.target.closest('.lvl');
+      if (!b) return;
+      $$('.lvl', group).forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+    });
   });
 
   // ---- framed alerts collapse to their header ----

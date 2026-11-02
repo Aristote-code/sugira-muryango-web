@@ -138,6 +138,13 @@ Every control takes ClickUp's own component tokens, resolved from its compiled
 | Table | header and rows 13px |
 | Pagination | 28 square, radius 6 |
 
+Every font size in the app is one of **11 / 12 / 13 / 13.3333 / 14 / 16 / 18 / 20 /
+24 / 28 / 40**, and every radius one of **2 / 4 / 5 / 6 / 7 / 8 / 10 / 12 / 16 / 20 /
+full**. `scripts/audit-tokens.py` checks this and prints anything that drifts.
+
+Two exemptions, both deliberate: the 16:9 wall board sizes in container units so it
+scales with the display, and the navigation rail keeps its own values.
+
 **The navigation rail is deliberately exempt** and was not touched: 268px, its own
 37px items at radius 10, and pill counts at `radius.full`.
 
