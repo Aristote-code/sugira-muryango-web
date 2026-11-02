@@ -60,6 +60,7 @@ on icon rules. Setting `stroke` there would override the symbol and flatten thos
 
 - The active navigation item carries a colour bar as well as a background change,
   because the background difference alone is about 1.2:1.
-- Light and dark themes both follow `prefers-color-scheme` and an explicit
-  `data-theme` attribute.
+- The app ships **light only**: `<html data-theme="light">` pins it, so a visitor's
+  dark OS setting cannot flip it. The dark palette is still in the stylesheet —
+  delete that attribute to restore automatic light/dark.
 - Verified at 1440px and 375px with no horizontal overflow on any screen.

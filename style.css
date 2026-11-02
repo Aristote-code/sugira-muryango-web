@@ -44,6 +44,10 @@
   --link:var(--b300); --lift:0 6px 14px rgba(0,0,0,.45);
   color-scheme:dark;
 }
+/* The app ships light. Every dark block is guarded by :not([data-theme="light"]),
+   and <html> carries data-theme="light", so the OS setting cannot flip it.
+   Removing that attribute restores automatic light/dark. */
+:root[data-theme="light"]{color-scheme:light}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--page);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.5;letter-spacing:-.011em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
