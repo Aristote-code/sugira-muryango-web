@@ -110,7 +110,7 @@
             '<p style="font-size:.82rem;color:var(--ink-3);margin:0">The level, not the place. Which sector or district a person covers is set when you give them the role.</p>',
       done: 'Role created with nothing granted yet'
     },
-
+    report: {
       title: 'Build a report',
       ok: 'Run report',
       body: '<div><label for="f-q">Question</label><select id="f-q"><option>Male caregiver attendance</option><option>Risk of harm by type</option><option>Household needs</option><option>Visits per module</option><option>Average minutes per module</option></select></div>' +
