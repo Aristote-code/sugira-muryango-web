@@ -10,7 +10,10 @@ git diff --cached --name-only --diff-filter=ACM -z \
   | tr '\0' '\n' \
   | while IFS= read -r f; do
       [ -n "$f" ] || continue
-      case "$f" in app.js|style.css|index.html) ;; *) continue ;; esac
+      # Any script the site ships, not a fixed list: filters.js was added to the
+      # page and to the deploy while this still named app.js alone, so its
+      # staged content went unchecked.
+      case "$f" in *.js|style.css|index.html) ;; *) continue ;; esac
       git show ":$f" > "$staged/$f" 2>/dev/null
     done
 
