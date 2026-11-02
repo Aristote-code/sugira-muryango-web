@@ -22,11 +22,11 @@
     login:        { crumbs: [['Sign in', null]],                                          nav: null },
 
     programme:    { crumbs: [['Programme', null]],                                        nav: 'programme' },
-    project:      { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', null]],
+    project:      { crumbs: [['Programme', 'programme'], ['Household Module Tracking', null]],
                     nav: 'programme' },
-    module:       { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', 'project'],
+    module:       { crumbs: [['Programme', 'programme'], ['Household Module Tracking', 'project'],
                              ['The Importance of Good Health', null]], nav: 'programme' },
-    form:         { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', 'project'],
+    form:         { crumbs: [['Programme', 'programme'], ['Household Module Tracking', 'project'],
                              ['The Importance of Good Health', 'module'], ['Visit record', null]], nav: 'programme' },
     cohorts:      { crumbs: [['Programme', 'programme'], ['Cohorts', null]],              nav: 'cohorts' },
     translations: { crumbs: [['Programme', 'programme'], ['Translations', null]],         nav: 'translations' }
@@ -106,7 +106,7 @@
       title: 'New project',
       ok: 'Create project',
       body: '<div><label for="f-pn">Project name</label><input id="f-pn" type="text" placeholder="e.g. FCG participation and interaction"></div>' +
-            '<div><label for="f-pm">Start from</label><select id="f-pm"><option>An empty project</option><option>A copy of SUGIRA Muryango \u2014 core</option></select></div>',
+            '<div><label for="f-pm">Start from</label><select id="f-pm"><option>An empty project</option><option>A copy of Household Module Tracking</option></select></div>',
       done: 'Project created'
     },
     module: {
