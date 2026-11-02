@@ -19,7 +19,8 @@
   --g600:#CECECE; --g700:#BBBBBB; --g800:#8D8D8D; --g900:#838383; --g1000:#646464; --g1100:#202020;
   --ink:var(--g1100); --ink-2:var(--g1000); --ink-3:var(--g900); --ink-4:var(--g700);
   --red:#E5484D; --red-bg:#FFEFEF; --red-line:#F7CFD1; --red-ink:#C62A2F;
-  --al-a:#7E2A2E; --al-m:#8E383C; --al-b:#A14449;  /* alert header ramp, muted brick */
+  --al-a:#FCE9EA; --al-m:#FADFE1; --al-b:#F6D0D3;  /* alert header ramp, pale */
+  --al-ink:#A82429; --al-edge:#F2C3C7;
   --amber:#FFC53D; --amber-bg:#FFF3D0; --amber-line:#F3DCA6; --amber-ink:#915930;
   --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
   --page:#FCFCFC; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
@@ -233,27 +234,27 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 .callout .ch svg{width:14px;height:14px;fill:none}
 .callout p{font-size:.91rem;color:var(--ink-2);max-width:86ch}
 
-/* Framed alert: a gradient header names the alert, a white panel sits inside the frame,
+/* Framed alert: a pale blush header names the alert, a white panel sits inside the frame,
    and each thing needing action gets its own outlined row.
-   The ramp is a muted brick — 50% to 41% saturation rather than the 71% to 63% of a vivid
-   red, which on a screen someone watches all day reads as alarm rather than seriousness.
-   Three stops on a slight diagonal so the ramp does not band. White holds throughout:
-   9.30:1, 7.26:1, 6.11:1. */
+   The ramp is pale, so the header text is dark rather than white: #A82429 holds at 6.10:1
+   on the lightest stop and 5.05:1 on the deepest. A pale frame only separates from the
+   white panel at 1.17:1, so the panel carries a hairline to keep the structure readable. */
 .al{border-radius:var(--r-card);
   background:linear-gradient(105deg,var(--al-a) 0%,var(--al-m) 55%,var(--al-b) 100%);
   padding:0 3px 3px;box-shadow:var(--lift)}
 .al.is-shut{padding-bottom:0}
 .al-hd{display:flex;align-items:center;gap:.55rem;width:100%;border:0;background:none;cursor:pointer;
-  color:#fff;font-family:var(--ui);font-weight:600;font-size:.9rem;letter-spacing:-.012em;
+  color:var(--al-ink);font-family:var(--ui);font-weight:600;font-size:.9rem;letter-spacing:-.012em;
   padding:.66rem .8rem;text-align:left;border-radius:var(--r-card) var(--r-card) 0 0}
-.al-hd:hover{background:rgba(255,255,255,.1)}
-.al-hd:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+.al-hd:hover{background:rgba(0,0,0,.035)}
+.al-hd:focus-visible{outline:2px solid var(--al-ink);outline-offset:-3px}
 .al-hd svg{width:17px;height:17px;flex:none;fill:none}
-.al-hd .ct{margin-left:auto;font-size:.79rem;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:-.008em}
-.al-hd .cv{flex:none;opacity:.78;transform:rotate(90deg);transition:transform .16s ease}
+.al-hd .ct{margin-left:auto;font-size:.79rem;font-weight:500;color:var(--al-ink);opacity:.86;letter-spacing:-.008em}
+.al-hd .cv{flex:none;opacity:.7;transform:rotate(90deg);transition:transform .16s ease}
 .al-hd[aria-expanded="false"] .cv{transform:rotate(0)}
 @media (prefers-reduced-motion:reduce){.al-hd .cv{transition:none}}
-.al-bd{background:var(--surface);border-radius:calc(var(--r-card) - 3px);padding:1.15rem 1.2rem;display:grid;gap:.85rem}
+.al-bd{background:var(--surface);border:1px solid var(--al-edge);border-radius:calc(var(--r-card) - 3px);
+  padding:1.15rem 1.2rem;display:grid;gap:.85rem}
 .al-lead{font-size:1rem;color:var(--ink);letter-spacing:-.015em;max-width:92ch}
 .al-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
   border:1px solid var(--line);border-radius:var(--r-ctl);padding:.8rem 1rem}
