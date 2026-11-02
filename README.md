@@ -30,15 +30,26 @@ Deep links work — `#households`, `#case`, `#wall` and so on.
 
 ## Design system
 
-| Token | Value | Where it came from |
+Greys, semantics, radii, spacing and elevation are **`@dsb/clickup` tokens**, resolved
+from its compiled `tokens.css` rather than eyeballed.
+
+| Token | Value | Source |
 | --- | --- | --- |
-| Primary | `#A23A91` | The SUGIRA mobile Figma file |
+| Primary | `#A23A91` | SUGIRA's own, bound into ClickUp's primary slot |
 | Chrome | `#36132F` | Derived — same hue, 16.3:1 on white |
-| Surface | `#FFFFFF` on `#F7F8FA` | White cards, grey field |
-| Radius | 12px cards, 8px controls, 100px pills | |
-| Type | Inter — 14 / 16 / 18 / 22 / 42 | The SUGIRA mobile Figma file |
-| Critical | `#C10007` | A child at risk |
-| Warning | `#BB4D00` | Behind schedule, not reporting |
+| Canvas / surface | `#FCFCFC` / `#FFFFFF` | ClickUp |
+| Greys | `#F9F9F9` → `#202020`, pure neutral | ClickUp |
+| Border | `#E8E8E8` default, `#F0F0F0` subtle | ClickUp |
+| Radius | 8px controls, 12px cards, 16px large | ClickUp |
+| Elevation | `0 0 1px #00000044, 0 1px 2px #0000000E` | ClickUp `elevation.border-1` |
+| Spacing | 4px grid | ClickUp |
+| Critical | `#E5484D` / ink `#C62A2F` | ClickUp |
+| Warning | `#FFC53D` / ink `#915930` | ClickUp |
+| Success | `#30A46C` / ink `#18794E` | ClickUp |
+| Type | Inter | The SUGIRA Figma file, kept over ClickUp's system stack |
+
+Cards carry ClickUp's elevation ring instead of a hairline border — in that system the
+ring *is* the edge, which is why `elevation.border-1` is named the way it is.
 
 The brand colour is confined to the rail, buttons, the active tab, the avatar,
 progress bars and chart bars. Card surfaces stay white.

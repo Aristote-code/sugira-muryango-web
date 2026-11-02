@@ -1,4 +1,8 @@
 /* SUGIRA Muryango — web.
+   Greys, semantics, radii, spacing and elevation are @dsb/clickup tokens, resolved
+   from its compiled tokens.css. The primary is bound to SUGIRA's own #A23A91 rather
+   than ClickUp's #6049E7 — that is the one token a consuming brand is meant to rebind.
+   Inter is kept over the system stack because it is the typeface in the Sugira Figma file.
    Palette, type, radii and card treatment taken from the Sugira mobile file:
    brand #A23A91, cards as a 7% brand tint with a soft shadow, radius 20, Inter, zinc text.
    Construction follows the Avano system: chrome rail, breadcrumb topbar, page header,
@@ -8,36 +12,40 @@
   --b50:#FBF4F9; --b100:#F6E6F3; --b200:#EEC9E7; --b300:#DFA0D3; --b400:#C566B4;
   --b500:#A23A91; --b600:#8A2F7B; --b700:#702665; --b800:#5B2053; --b900:#4A1B44;
   --brand:#36132F; --pill:#4E1C46; --gold:#E8B33A;
-  --tint:#F4F4F5;          /* neutral hover / sunken surface */
-  --tint-2:#E9E9EB;        /* one step deeper, for tracks */
-  /* zinc, as in the file */
-  --z50:#FAFAFA; --z100:#F4F4F5; --z200:#E4E4E7; --z300:#D4D4D8; --z400:#A1A1AA;
-  --ink:#18181B; --ink-2:#455154; --ink-3:#71717A; --ink-4:#A1A1AA;
-  --red:#C10007; --red-bg:#FEF2F2; --red-line:#FFC9C9; --red-ink:#9F0712;
-  --amber:#BB4D00; --amber-bg:#FFFBEB; --amber-line:#FEE685; --amber-ink:#973C00;
-  --green:#007A55; --green-bg:#ECFDF5; --green-line:#A4F4CF; --green-ink:#006045;
-  --page:#F7F8FA; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--z200); --line-2:#EFEFF1;
+  --tint:var(--g100);      /* sunken surface, table headers, hovers */
+  --tint-2:var(--g200);    /* tracks and wells */
+  /* ClickUp grey ramp, resolved from @dsb/clickup — pure neutrals, no hue bias */
+  --g100:#F9F9F9; --g200:#F0F0F0; --g300:#E8E8E8; --g400:#E0E0E0; --g500:#D9D9D9;
+  --g600:#CECECE; --g700:#BBBBBB; --g800:#8D8D8D; --g900:#838383; --g1000:#646464; --g1100:#202020;
+  --ink:var(--g1100); --ink-2:var(--g1000); --ink-3:var(--g900); --ink-4:var(--g700);
+  --red:#E5484D; --red-bg:#FFEFEF; --red-line:#F7CFD1; --red-ink:#C62A2F;
+  --amber:#FFC53D; --amber-bg:#FFF3D0; --amber-line:#F3DCA6; --amber-ink:#915930;
+  --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
+  --page:#FCFCFC; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
   --link:var(--b600);
   --ui:"Inter","Helvetica Neue",Arial,sans-serif;
-  --r-card:12px; --r-lg:16px; --r-ctl:8px; --r-pill:100px;
-  --lift:none;
+  --r-xs:.125rem; --r-ctl:.5rem; --r-card:.75rem; --r-lg:1rem; --r-pill:666px;
+  --lift:0 0 1px 0 #00000044, 0 1px 2px 0 #0000000E;
+  --lift-overlay:0 0 1px 0 #00000044, 0 4px 6px -1px #0000001B, 0 2px 4px -2px #0000001B;
+  --lift-modal:0 0 1px 0 #00000044, 0 20px 25px -5px #0000001B, 0 8px 10px -6px #0000001B;
+  --sp-4:1rem; --sp-6:1.5rem; --sp-8:2rem;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --page:#0F1115; --card:#171A20; --surface:#171A20; --tint:#1E222A; --tint-2:#272C36;
-    --line:#272C36; --line-2:#20242C;
-    --ink:#F4F0F3; --ink-2:#B6ADB4; --ink-3:#8E858C; --ink-4:#6B636A;
+    --page:#141414; --card:#1C1C1C; --surface:#1C1C1C; --tint:#242424; --tint-2:#2E2E2E;
+    --line:#2E2E2E; --line-2:#262626;
+    --ink:#EDEDED; --ink-2:#A0A0A0; --ink-3:#7E7E7E; --ink-4:#5E5E5E;
     --red:#FF6467; --red-bg:#2A1316; --red-line:#55202A; --red-ink:#FFA2A2;
     --amber:#FFB900; --amber-bg:#2A1D0B; --amber-line:#5B4111; --amber-ink:#FFD230;
     --green:#00D492; --green-bg:#0B241B; --green-line:#17422F; --green-ink:#5EE9B5;
-    --link:var(--b300); --lift:none;
+    --link:var(--b300); --lift:0 0 1px 0 #FFFFFF22, 0 1px 2px 0 #00000055;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --page:#0F1115; --card:#171A20; --surface:#171A20; --tint:#1E222A; --tint-2:#272C36;
-  --line:#272C36; --line-2:#20242C;
-  --ink:#F4F0F3; --ink-2:#B6ADB4; --ink-3:#8E858C; --ink-4:#6B636A;
+  --page:#141414; --card:#1C1C1C; --surface:#1C1C1C; --tint:#242424; --tint-2:#2E2E2E;
+  --line:#2E2E2E; --line-2:#262626;
+  --ink:#EDEDED; --ink-2:#A0A0A0; --ink-3:#7E7E7E; --ink-4:#5E5E5E;
   --red:#FF6467; --red-bg:#2A1316; --red-line:#55202A; --red-ink:#FFA2A2;
   --amber:#FFB900; --amber-bg:#2A1D0B; --amber-line:#5B4111; --amber-ink:#FFD230;
   --green:#00D492; --green-bg:#0B241B; --green-line:#17422F; --green-ink:#5EE9B5;
@@ -178,7 +186,7 @@ button{font-family:inherit}
 .search input::placeholder{color:var(--ink-4)}
 .seg{display:inline-flex;background:var(--tint);border-radius:var(--r-ctl);padding:4px;gap:4px}
 .seg button{border:0;background:none;cursor:pointer;font-size:.875rem;font-weight:500;color:var(--ink-3);padding:.4rem .85rem;border-radius:6px;letter-spacing:-.014em}
-.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(16,24,40,.06)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--lift)}
 
 /* ---------------- chips ---------------- */
 .chip{display:inline-flex;align-items:center;gap:.32rem;font-size:.74rem;font-weight:600;border-radius:var(--r-pill);padding:.2rem .58rem;
@@ -192,10 +200,10 @@ button{font-family:inherit}
 :root[data-theme="dark"] .chip.brand{background:rgba(162,58,145,.2);color:var(--b300)}
 
 /* ---------------- cards: the tinted surface from the mobile file ---------------- */
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:20px 24px;min-width:0}
+.card{background:var(--card);border-radius:var(--r-card);padding:20px 24px;min-width:0;box-shadow:var(--lift)}
 .card.lg{border-radius:var(--r-lg);padding:20px}
 .card.flush{padding:0;overflow:hidden}
-.card.plainsurface{background:var(--surface)}
+.card.plainsurface{background:var(--surface);box-shadow:var(--lift)}
 .card-h{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;min-height:24px}
 .card-h h3{font-size:1rem;font-weight:600;letter-spacing:-.016em}
 .card-h .side{margin-left:auto;display:flex;align-items:center;gap:.5rem}
@@ -210,7 +218,7 @@ button{font-family:inherit}
 @media (min-width:820px){.cols.c3{grid-template-columns:repeat(3,1fr)}}
 .wide{grid-column:1/-1}
 
-.callout{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--b500);border-radius:var(--r-card);padding:1.1rem 1.25rem}
+.callout{background:var(--surface);border-left:3px solid var(--b500);border-radius:var(--r-card);padding:1.1rem 1.25rem;box-shadow:var(--lift)}
 
 .callout .ch{display:flex;align-items:center;gap:.45rem;font-size:.76rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--b600);margin-bottom:.5rem}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .callout .ch{color:var(--b300)}}
@@ -233,7 +241,7 @@ button{font-family:inherit}
 
 /* stats — the 42px ExtraBold figure from the mobile file */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:1rem}
-.st{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:16px 24px;display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:132px}
+.st{background:var(--card);border-radius:var(--r-card);box-shadow:var(--lift);padding:16px 24px;display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:132px}
 .st .l{font-size:.875rem;font-weight:500;letter-spacing:-.014em;color:var(--ink-3)}
 .st .v{font-size:1.75rem;font-weight:600;letter-spacing:-.03em;line-height:1.14;font-variant-numeric:tabular-nums;color:var(--ink)}
 .st .v small{font-size:.875rem;font-weight:500;color:var(--ink-3);letter-spacing:-.014em}
@@ -340,7 +348,7 @@ button{font-family:inherit}
 .empty p{font-size:.87rem;color:var(--ink-3);max-width:46ch}
 
 /* wall board */
-.board{container-type:inline-size;aspect-ratio:16/9;background:#17141A;color:#F1EDF0;display:flex;flex-direction:column;border-radius:var(--r-card);overflow:hidden;border:1px solid var(--line)}
+.board{container-type:inline-size;aspect-ratio:16/9;background:#17141A;color:#F1EDF0;display:flex;flex-direction:column;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--lift)}
 .bt{display:flex;align-items:center;gap:2cqw;padding:1.6cqw 2.2cqw;border-bottom:1px solid #322A31}
 .bt .bn{font-weight:800;font-size:1.9cqw;color:#D98FC7}
 .bt .bs{font-size:1.5cqw;color:#A098A0}
@@ -376,7 +384,7 @@ button{font-family:inherit}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .scrim{background:rgba(10,8,11,.74)}}
 :root[data-theme="dark"] .scrim{background:rgba(10,8,11,.74)}
 .scrim[hidden]{display:none}
-.modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);width:min(520px,100%);box-shadow:0 20px 48px rgba(16,24,40,.18);overflow:hidden}
+.modal{background:var(--surface);border-radius:var(--r-lg);width:min(520px,100%);box-shadow:var(--lift-modal);overflow:hidden}
 .modal .mh{display:flex;align-items:center;gap:.8rem;padding:1.2rem 1.4rem}
 .modal .mh h3{font-size:1.15rem;flex:1;font-weight:700}
 .modal .mh button{background:none;border:0;cursor:pointer;color:var(--ink-3);padding:.28rem;border-radius:7px;display:flex}
