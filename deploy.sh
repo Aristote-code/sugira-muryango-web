@@ -30,5 +30,9 @@ cleanup() { git worktree remove --force "$tmp" >/dev/null 2>&1 || true; rm -rf "
 trap cleanup EXIT
 
 git worktree add -q --detach "$tmp" HEAD
+
+# these live in the repo but are not part of the site
+rm -f "$tmp/deploy.sh" "$tmp/README.md"
+
 echo "deploying $sha from a clean checkout"
 netlify deploy --prod --dir "$tmp" --message "$msg"
