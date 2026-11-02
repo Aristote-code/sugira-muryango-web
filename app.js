@@ -19,6 +19,7 @@
     role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },
     system:       { crumbs: [['System', null]],                                           nav: 'system' },
+    profile:      { crumbs: [['Your profile', null]],                                   nav: null },
     login:        { crumbs: [['Sign in', null]],                                          nav: null },
 
     programme:    { crumbs: [['Programme', null]],                                        nav: 'programme' },
@@ -33,6 +34,30 @@
   };
 
   var MODALS = {
+    profile: {
+      title: 'Edit profile',
+      ok: 'Save',
+      body: '<div><label for="f-pn">Name</label><input id="f-pn" type="text" value="A. Gahimana"></div>' +
+            '<div><label for="f-pe">Email</label><input id="f-pe" type="email" value="a.gahimana@fxbrwanda.org"></div>' +
+            '<div><label for="f-pp">Phone</label><input id="f-pp" type="tel" value="+250 78 555 0144"></div>' +
+            '<div><label for="f-pl">Language</label><select id="f-pl"><option>English</option><option>Kinyarwanda</option></select></div>',
+      done: 'Profile saved'
+    },
+    pwd: {
+      title: 'Change password',
+      ok: 'Change password',
+      body: '<div><label for="f-p0">Current password</label><input id="f-p0" type="password" placeholder="Your current password"></div>' +
+            '<div><label for="f-p1">New password</label><input id="f-p1" type="password" placeholder="At least 12 characters"></div>' +
+            '<div><label for="f-p2">New password again</label><input id="f-p2" type="password"></div>' +
+            '<p style="font-size:13px;color:var(--ink-2)">Changing it signs you out everywhere except here.</p>',
+      done: 'Password changed — other devices have been signed out'
+    },
+    signoutall: {
+      title: 'Sign out everywhere else',
+      ok: 'Sign out everywhere else',
+      body: '<p style="font-size:14px;color:var(--ink-2);line-height:1.6">Two other devices are signed in as you: a tablet in Ngoma and a browser in Kigali. Both will be signed out. This browser stays signed in.</p>',
+      done: 'Signed out on 2 other devices'
+    },
     furule: {
       title: 'New follow-up rule',
       ok: 'Create rule',

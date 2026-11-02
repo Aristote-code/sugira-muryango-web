@@ -1556,6 +1556,127 @@
         </div>
       </section>
 
+
+      <!-- ============ PROFILE ============ -->
+      <section class="screen" id="s-profile">
+        <div class="phead">
+          <div class="row">
+            <span class="big">AG</span>
+            <div style="min-width:0">
+              <h1>A. Gahimana</h1>
+              <div class="meta">
+                <span><svg aria-hidden="true"><use href="#i-admin"/></svg>HQ officer</span>
+                <span><svg aria-hidden="true"><use href="#i-location"/></svg>National</span>
+                <span><svg aria-hidden="true"><use href="#i-programme"/></svg>All 19 projects</span>
+              </div>
+              <div class="tags"><span class="chip ok"><i></i>Active</span><span class="chip">Signed in now</span></div>
+            </div>
+            <div class="acts">
+              <button class="btn sec" type="button" data-modal="pwd">Change password</button>
+              <button class="btn" type="button" data-modal="profile"><svg aria-hidden="true"><use href="#i-edit"/></svg>Edit profile</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-panel="pdetails">Details</button>
+          <button class="tab" type="button" data-panel="paccess">What you can do</button>
+          <button class="tab" type="button" data-panel="pnotify">Notifications</button>
+          <button class="tab" type="button" data-panel="psecurity">Security</button>
+        </div>
+
+        <div class="pad" data-panelid="pdetails">
+          <div class="cols c2e">
+            <div class="card">
+              <div class="card-h"><h3>About you</h3></div>
+              <div class="lr"><span class="t">Name</span><span class="s">A. Gahimana</span></div>
+              <div class="lr"><span class="t">Email</span><span class="s">a.gahimana@fxbrwanda.org</span></div>
+              <div class="lr"><span class="t">Phone</span><span class="s">+250 78 555 0144</span></div>
+              <div class="lr"><span class="t">Organisation</span><span class="s">FXB Rwanda &middot; SUGIRA Muryango</span></div>
+              <div class="lr"><span class="t">Joined</span><span class="s">6 March 2025</span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>How the app behaves for you</h3></div>
+              <div class="lr"><span class="t">Language</span><span class="s">English</span><span class="c"><button class="rel" type="button" data-toast="Kinyarwanda is available on the tablet and here">Change</button></span></div>
+              <div class="lr"><span class="t">Dates</span><span class="s">2 November 2026</span></div>
+              <div class="lr"><span class="t">Week starts</span><span class="s">Monday</span></div>
+              <div class="lr"><span class="t">Default scope</span><span class="s">All five districts</span></div>
+              <p style="font-size:13px;color:var(--ink-3);margin-top:.9rem;max-width:56ch">Default scope is where every screen opens before you narrow it. Yours is national because your role is.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="paccess" hidden>
+          <div class="card">
+            <div class="card-h"><h3>Your role</h3><span class="side"><button class="rel" type="button" data-go="role">See the role</button></span></div>
+            <div class="lr"><span class="t">HQ officer</span><span class="s">National &middot; all 19 projects</span><span class="c"><span class="chip brand">Your only role</span></span></div>
+            <p style="font-size:13px;color:var(--ink-2);margin-top:.9rem;max-width:68ch">A person holds a role <b>at a place</b>, <b>within a programme</b>. Yours applies everywhere, which is why nothing on your screens is hidden by scope. Someone holding the same role in one district would see the same screens with fewer rows.</p>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>You can</th><th>See</th><th>Add</th><th>Change</th><th>Archive</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Households</td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip">No</span></td></tr>
+                <tr><td class="nm">Visits</td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip">No</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip">No</span></td></tr>
+                <tr><td class="nm">Risk-of-harm cases</td><td><span class="chip warn"><i></i>Counts only</span></td><td><span class="chip">No</span></td><td><span class="chip">No</span></td><td><span class="chip">No</span></td></tr>
+                <tr><td class="nm">Programme</td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td></tr>
+                <tr><td class="nm">Reports</td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip">No</span></td></tr>
+                <tr><td class="nm">People &amp; access</td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip">No</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Read-only &middot; what you can do is set by your role, not here. Case detail is the one thing your role withholds.</span></div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="pnotify" hidden>
+          <div class="card">
+            <div class="card-h"><h3>Where you are notified</h3></div>
+            <p style="font-size:13px;color:var(--ink-2);max-width:68ch;margin-bottom:1rem">Your role is notified at <b>National</b> level, so you receive anything raised anywhere in the programme. Narrowing this does not narrow what you can open &mdash; that is the role&rsquo;s scope, on the previous tab.</p>
+            <div class="levels">
+              <button class="lvl on" type="button"><span class="dot"></span>National<span class="n">everything</span></button>
+              <button class="lvl" type="button"><span class="ind" style="width:.7rem"></span><span class="dot"></span>Province<span class="n">5</span></button>
+              <button class="lvl" type="button"><span class="ind" style="width:1.4rem"></span><span class="dot"></span>District<span class="n">5 in use</span></button>
+              <button class="lvl" type="button"><span class="ind" style="width:2.1rem"></span><span class="dot"></span>Sector<span class="n">63</span></button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><h3>What reaches you</h3></div>
+            <div class="lr"><span class="t">A risk-of-harm case is raised</span><span class="s">Immediately, by email and in the app</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+            <div class="lr"><span class="t">A review passes 72 hours</span><span class="s">Immediately</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+            <div class="lr"><span class="t">An IZU stops reporting</span><span class="s">Daily summary</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+            <div class="lr"><span class="t">A scheduled report runs</span><span class="s">When it is sent</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+            <div class="lr"><span class="t">A post is reported in Community</span><span class="s">Daily summary</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
+            <div class="lr"><span class="t">Someone requests case access</span><span class="s">Goes to the case owner, not to you</span><span class="c"><span class="chip">Not yours</span></span></div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="psecurity" hidden>
+          <div class="cols c2e">
+            <div class="card">
+              <div class="card-h"><h3>Sign-in</h3></div>
+              <div class="lr"><span class="t">Password</span><span class="s">Changed 14 August 2026</span><span class="c"><button class="rel" type="button" data-modal="pwd">Change</button></span></div>
+              <div class="lr"><span class="t">Two-step sign-in</span><span class="s">By SMS to +250 78 555 0144</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+              <div class="lr"><span class="t">Recovery email</span><span class="s">Not set</span><span class="c"><span class="chip warn"><i></i>Add one</span></span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Where you are signed in</h3></div>
+              <div class="lr"><span class="t">This browser</span><span class="s">Kigali &middot; since 08:02 today</span><span class="c"><span class="chip ok"><i></i>Now</span></span></div>
+              <div class="lr"><span class="t">Tablet &mdash; SM-T290</span><span class="s">Ngoma &middot; 28 October</span><span class="c"><button class="rel" type="button" data-toast="Signed out on that device">Sign out</button></span></div>
+              <div class="lr"><span class="t">Chrome, Windows</span><span class="s">Kigali &middot; 21 October</span><span class="c"><button class="rel" type="button" data-toast="Signed out on that device">Sign out</button></span></div>
+              <div style="margin-top:1rem"><button class="btn sec sm" type="button" data-modal="signoutall">Sign out everywhere else</button></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><h3>Your recent activity</h3><span class="side"><button class="rel" type="button" data-go="system">All activity</button></span></div>
+            <div class="tl">
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-edit"/></svg></span><div><h4>Changed a role</h4><p>Sugira Muryango Sector lead (SLA)</p></div><span class="when">08:12</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-reports"/></svg></span><div><h4>Ran a report</h4><p>Male caregiver attendance by district</p></div><span class="when">06:00</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-admin"/></svg></span><div><h4>Invited someone</h4><p>T. Mukamana &middot; Sector lead, Rubavu</p></div><span class="when">31 Oct</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-programme"/></svg></span><div><h4>Published a form</h4><p>Visit record &middot; to the tablet</p></div><span class="when">14 Oct</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ============ SYSTEM ============ -->
       <section class="screen" id="s-system">
         <div class="phead">

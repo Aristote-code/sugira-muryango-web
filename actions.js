@@ -281,20 +281,24 @@
       var m = document.createElement('div');
       m.className = 'usermenu';
       m.setAttribute('role', 'menu');
+      /* A row that goes somewhere carries data-go and lets the router handle
+         it, rather than this menu keeping its own idea of how to navigate. */
       [
-        ['Your profile', function () { say('Profile is not part of this prototype'); }],
-        ['Switch role…', function () { say('A person holds one role per place'); }],
-        ['Sign out', function () {
-          var b = $('[data-go="login"]');
-          if (b) b.click(); else location.hash = '#login';
-        }]
+        ['Your profile', 'profile', null],
+        ['Switch role…', null, function () { say('A person holds one role per place'); }],
+        ['Sign out', 'login', null]
       ].forEach(function (row) {
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'usermenu-i';
         b.setAttribute('role', 'menuitem');
         b.textContent = row[0];
-        b.addEventListener('click', function () { m.remove(); chip.setAttribute('aria-expanded', 'false'); row[1](); });
+        if (row[1]) b.setAttribute('data-go', row[1]);
+        b.addEventListener('click', function () {
+          m.remove();
+          chip.setAttribute('aria-expanded', 'false');
+          if (row[2]) row[2]();
+        });
         m.appendChild(b);
       });
       document.body.appendChild(m);

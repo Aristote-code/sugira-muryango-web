@@ -25,7 +25,11 @@
   --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
   --page:#F9F9F9; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
   --link:var(--b600);
-  --z-drawer:1000; --z-pop:1100; --z-modal:2000; --z-toast:3000;
+  /* A menu always sits above whatever opened it, which includes a dialog:
+     --z-pop was set to clear the drawer and nobody asked what happens when a
+     select inside a modal is opened. It rendered behind the dialog and could
+     not be clicked. Order: page < drawer < dialog < menu < toast. */
+  --z-drawer:1000; --z-modal:2000; --z-pop:2500; --z-toast:3000;
   --ui:"Inter","Helvetica Neue",Arial,sans-serif;
   --r-xs:.125rem; --r-ctl:.5rem; --r-card:.75rem; --r-lg:1rem; --r-pill:666px;
   /* ClickUp control scale: heights xs/sm/md/lg, button radii by size, tag + chip radii */
@@ -563,7 +567,7 @@ svg use{pointer-events:none}
 .lvl.on{background:var(--b50);color:var(--b700);font-weight:600}
 .lvl .dot{width:7px;height:7px;border-radius:50%;background:var(--line);flex:none}
 .lvl.on .dot{background:var(--b500)}
-.lvl .n{margin-left:auto;font-size:12px;color:var(--ink-4);font-variant-numeric:tabular-nums}
+.lvl .n{margin-left:auto;font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
 .lvl .ind{display:inline-block;flex:none}
 
 /* places tree */
