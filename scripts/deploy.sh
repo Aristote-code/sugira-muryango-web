@@ -1,25 +1,11 @@
 #!/bin/sh
-# Deploy, but only if the site is sound.
+# Forwarder. The real script is ../deploy.sh at the repository root.
 #
-# `netlify deploy --dir .` skips the build step, so netlify.toml cannot guard it:
-# whatever is in the folder goes live as-is. That is how a half-written app.js
-# reached production once. Use this instead of calling netlify directly.
+# This path used to hold a second deploy script that ran `netlify deploy --dir .`,
+# which ships the working tree — including whatever another session has
+# half-written. Several of us edit this repo at once, so that is a live hazard
+# and not a theoretical one. It is kept as a forwarder rather than deleted
+# because it sits beside check.sh, so it is the one people reach for.
 set -eu
 root=$(git rev-parse --show-toplevel)
-cd "$root"
-
-echo "Checking before deploy"
-if ! sh scripts/check.sh "$root"; then
-  echo ""
-  echo "Deploy aborted — the site would be broken."
-  exit 1
-fi
-
-if [ -n "$(git status --porcelain)" ]; then
-  echo ""
-  echo "Note: the working tree has uncommitted changes. Deploying them anyway:"
-  git status --short | sed 's/^/      /'
-fi
-
-echo ""
-netlify deploy --prod --dir . --message "${1:-Deploy}"
+exec "$root/deploy.sh" "$@"

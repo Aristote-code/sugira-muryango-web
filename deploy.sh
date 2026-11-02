@@ -31,8 +31,18 @@ trap cleanup EXIT
 
 git worktree add -q --detach "$tmp" HEAD
 
+# Check what is about to ship, not what happens to be on disk. The pre-commit
+# hook validates a commit as it is made, but `git commit --no-verify` slips past
+# it, so the exported tree gets checked too.
+if ! sh "$tmp/scripts/check.sh" "$tmp"; then
+  echo
+  echo "deploy aborted — $sha would put a broken site live."
+  exit 1
+fi
+
 # these live in the repo but are not part of the site
 rm -f "$tmp/deploy.sh" "$tmp/README.md"
+rm -rf "$tmp/scripts"
 
 echo "deploying $sha from a clean checkout"
 netlify deploy --prod --dir "$tmp" --message "$msg"
