@@ -14,16 +14,23 @@
   --brand:#36132F; --pill:#4E1C46; --gold:#E8B33A;
   --tint:var(--g100);      /* sunken surface, table headers, hovers */
   --tint-2:var(--g200);    /* tracks and wells */
-  /* ClickUp grey ramp, resolved from @dsb/clickup — pure neutrals, no hue bias */
-  --g100:#F9F9F9; --g200:#F0F0F0; --g300:#E8E8E8; --g400:#E0E0E0; --g500:#D9D9D9;
-  --g600:#CECECE; --g700:#BBBBBB; --g800:#8D8D8D; --g900:#717171; --g1000:#646464; --g1100:#202020;
+  /* Grey ramp, from @dsb/clickup and then tinted a few points warm.
+     This is the one place the app leaves ClickUp's neutrals. The programme's
+     world is the field register — paper forms carried house to house and the
+     ledger they feed — and a pure cool grey reads like a console instead.
+     Lightness is unchanged, so every text pair keeps or slightly gains its
+     contrast; the ClickUp values are kept here to make the change reversible.
+     ClickUp: F9F9F9 F0F0F0 E8E8E8 E0E0E0 D9D9D9 CECECE BBBBBB 8D8D8D 717171 646464 202020 */
+  --g100:#FAF8F5; --g200:#F1EFEB; --g300:#E9E6E1; --g400:#E1DED8; --g500:#DAD7D1;
+  --g600:#CFCBC5; --g700:#BCB8B2; --g800:#8D8A85; --g900:#716E69; --g1000:#64615C; --g1100:#211F1D;
   --ink:var(--g1100); --ink-2:var(--g1000); --ink-3:var(--g900); --ink-4:var(--g800);
   --red:#E5484D; --red-bg:#FFEFEF; --red-line:#F7CFD1; --red-ink:#C62A2F;
   --al-a:#FCE9EA; --al-m:#FADFE1; --al-b:#F6D0D3;  /* alert header ramp, pale */
   --al-ink:#A82429; --al-edge:#F2C3C7;
   --amber:#FFC53D; --amber-bg:#FFF3D0; --amber-line:#F3DCA6; --amber-ink:#915930;
   --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
-  --page:#F9F9F9; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
+  /* Cards stay pure white, so they sit on the warm page like paper on a desk. */
+  --page:#FAF8F5; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
   --link:var(--b600);
   /* A menu always sits above whatever opened it, which includes a dialog:
      --z-pop was set to clear the drawer and nobody asked what happens when a
@@ -31,6 +38,8 @@
      not be clicked. Order: page < drawer < dialog < menu < toast. */
   --z-drawer:1000; --z-modal:2000; --z-pop:2500; --z-toast:3000;
   --ui:"Inter","Helvetica Neue",Arial,sans-serif;
+  /* One partner family, for figures and meta in the chart only. */
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   --r-xs:.125rem; --r-ctl:.5rem; --r-card:.75rem; --r-lg:1rem; --r-pill:666px;
   /* ClickUp control scale: heights xs/sm/md/lg, button radii by size, tag + chip radii */
   --h-xs:24px; --h-sm:28px; --h-md:32px; --h-lg:40px;
@@ -146,7 +155,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .crumbs a{color:var(--ink-3);text-decoration:none;cursor:pointer}
 .crumbs a:hover{color:var(--ink)}
 .crumbs b{color:var(--link);font-weight:600}
-.crumbs .sep{color:var(--ink-4)}
+.crumbs .sep{color:var(--ink-3)}
 .topbar .tools{margin-left:auto;display:flex;align-items:center;gap:.7rem}
 .userchip{display:flex;align-items:center;gap:.6rem;cursor:pointer;background:none;border:0;padding:.25rem .3rem;border-radius:var(--r-pill)}
 .userchip:hover{background:var(--tint)}
@@ -154,7 +163,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .userchip .who{text-align:left;line-height:1.25}
 .userchip .who b{display:block;font-size:13px;font-weight:600}
 .userchip .who span{display:block;font-size:12px;color:var(--ink-3)}
-.userchip .cv{color:var(--ink-4);font-size:11px}
+.userchip .cv{color:var(--ink-3);font-size:11px}
 @media (max-width:620px){.userchip .who{display:none}}
 
 .scroll{flex:1;overflow-y:auto;min-height:0;background:var(--page)}
@@ -203,7 +212,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .fl:hover{border-color:var(--b300);background:var(--tint)}
 .fl .k{font-size:12px;font-weight:500;letter-spacing:.01em;color:var(--ink-2)}
 .fl b{font-weight:500;color:var(--ink)}
-.fl .cv{opacity:.5;font-size:11px}
+.fl .cv{opacity:.75;font-size:11px}
 .filters{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center}
 .filters .rt{margin-left:auto;display:flex;align-items:center;gap:.45rem;font-size:12px;color:var(--ink-3)}
 .filters .rt i{width:6px;height:6px;border-radius:50%;background:var(--green);flex:none}
@@ -316,6 +325,28 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .trk i{display:block;height:100%;background:var(--b500);border-radius:var(--r-pill)}
 .trk.warn i{background:var(--amber)}
 
+/* ---- weekly completion chart ----
+   One chart, so it leads. The line stays in the neutral ramp and only the week
+   that broke the pattern takes the accent, which is why the dip reads before
+   you have found the axis. Figures and dates are mono so they sit apart from
+   the interface text without needing another weight. */
+.wk{margin-top:16px}
+.wk-hd{display:flex;align-items:flex-start;gap:16px;margin-bottom:12px}
+.wk-hd h3{font-size:16px;letter-spacing:-.01em}
+.wk-hd p{margin:4px 0 0;font-size:13px;color:var(--ink-3)}
+.wk-now{margin-left:auto;text-align:right;flex:none}
+.wk-now b{display:block;font-family:var(--mono);font-size:20px;font-weight:500;color:var(--b600);font-variant-numeric:tabular-nums}
+.wk-now span{font-size:12px;color:var(--ink-3)}
+.wk-plot{display:block;width:100%;height:auto}
+.wk-grid line{stroke:var(--line-2);stroke-width:1}
+.wk-base{stroke:var(--line);stroke-width:1}
+.wk-ax text{font-family:var(--mono);font-size:11px;fill:var(--ink-3);text-anchor:end}
+.wk-lbl text{font-family:var(--mono);font-size:11px;fill:var(--ink-3);text-anchor:middle}
+.wk-area{fill:var(--g200);opacity:.5}
+.wk-line{fill:none;stroke:var(--g700);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.wk-last{fill:none;stroke:var(--b500);stroke-width:2.5;stroke-linecap:round}
+.wk-dot{fill:var(--b500);stroke:var(--card);stroke-width:2.5}
+
 /* list rows */
 .lr{display:flex;align-items:center;gap:.7rem;padding:.68rem 0;border-top:1px solid var(--line-2);font-size:14px}
 .lr:first-of-type{border-top:0}
@@ -367,8 +398,10 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 /* module progress */
 .mods{display:grid;gap:.45rem}
 .mod{display:grid;grid-template-columns:auto 1fr auto;gap:.7rem;align-items:center;font-size:14px}
-.mod .dot{width:21px;height:21px;border-radius:50%;background:var(--tint-2);color:var(--ink-4);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex:none}
-.mod.done .dot{background:var(--green);color:#fff}
+.mod .dot{width:21px;height:21px;border-radius:50%;background:var(--tint-2);color:var(--ink-2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex:none}
+/* The tick says the session happened, so it is information and takes the ink
+   shade: white on the mid green only reached 3.16. */
+.mod.done .dot{background:var(--green-ink);color:#fff}
 .mod.now .dot{background:var(--b500);color:#fff}
 .mod .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mod.done .nm{color:var(--ink-2)}
@@ -436,7 +469,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .dw-crumbs{display:flex;align-items:center;gap:.4rem;font-size:13px;color:var(--ink-3);
   min-width:0;overflow:hidden;white-space:nowrap;padding-inline:.3rem;letter-spacing:-.008em}
 .dw-crumbs b{color:var(--ink-2);font-weight:500;overflow:hidden;text-overflow:ellipsis}
-.dw-crumbs .sep{color:var(--ink-4);flex:none}
+.dw-crumbs .sep{color:var(--ink-3);flex:none}
 .dw-ico{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:0;
   background:none;border-radius:var(--r-ctl);cursor:pointer;color:var(--ink-3);flex:none}
 .dw-ico:hover{background:var(--tint);color:var(--ink)}
@@ -479,11 +512,14 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .pgr .v{display:flex;align-items:center;gap:.45rem;min-height:24px;padding:2px 8px;border-radius:6px;
   font-size:14px;line-height:16px;color:var(--ink);min-width:0;flex-wrap:wrap}
 .pgr .v:hover{background:#0000000A}
-.pgr .v.empty{color:var(--ink-4)}
+/* The dash is the value, not decoration, so it reads at the text bar. */
+.pgr .v.empty{color:var(--ink-3)}
 .pg-badge{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:6px;
   font-size:12px;line-height:12px;font-weight:500;letter-spacing:.01em;color:#fff}
-.pg-badge.bad{background:var(--red)}.pg-badge.warn{background:var(--amber);color:#4A2A00}
-.pg-badge.ok{background:var(--green)}.pg-badge.brand{background:var(--b500)}
+/* White on the mid tones read 3.91 and 3.16, under the 4.5 text needs, so the
+   badges take the ink shade of each semantic colour instead. */
+.pg-badge.bad{background:var(--red-ink)}.pg-badge.warn{background:var(--amber);color:#4A2A00}
+.pg-badge.ok{background:var(--green-ink)}.pg-badge.brand{background:var(--b500)}
 .rec-desc{margin-top:1.25rem;padding-top:1.1rem;border-top:1px solid var(--line-2);
   font-size:16px;line-height:24px;color:var(--ink-2);max-width:82ch}
 .rec-desc b{color:var(--ink);font-weight:600}

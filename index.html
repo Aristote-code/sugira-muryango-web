@@ -175,6 +175,40 @@
               <div class="d">Figures provisional until they sync</div><div class="trk"><i style="width:90%"></i></div></div>
           </div>
 
+          <!-- The one chart on the dashboard, so it is the thing the eye lands on
+               after the alert. Neutral line, accent only on the week that broke
+               the pattern; the figures for the last two weeks are the same ones
+               the stat cards above state. -->
+          <div class="card wk">
+            <div class="wk-hd">
+              <div><h3>Visits completed each week</h3>
+                <p>Share of the visits scheduled for that week, all five districts</p></div>
+              <div class="wk-now"><b>83%</b><span>week ending 2 Nov</span></div>
+            </div>
+            <svg class="wk-plot" viewBox="0 0 1132 184" role="img"
+                 aria-label="Weekly visit completion, twelve weeks. Steady between 90 and 96 percent until the week ending 2 November, which falls to 83 percent.">
+              <g class="wk-grid">
+                <line x1="56" y1="20" x2="1100" y2="20"/>
+                <line x1="56" y1="76" x2="1100" y2="76"/>
+                <line x1="56" y1="132" x2="1100" y2="132"/>
+              </g>
+              <line class="wk-base" x1="56" y1="160" x2="1100" y2="160"/>
+              <g class="wk-ax">
+                <text x="44" y="24">100%</text><text x="44" y="80">90%</text><text x="44" y="136">80%</text>
+              </g>
+              <path class="wk-area" d="M56,42.4 L150.9,48 L245.8,53.6 L340.7,42.4 L435.6,59.2 L530.5,48 L625.5,53.6 L720.4,64.8 L815.3,59.2 L910.2,76 L1005.1,70.4 L1100,115.2 L1100,160 L56,160 Z"/>
+              <polyline class="wk-line" points="56,42.4 150.9,48 245.8,53.6 340.7,42.4 435.6,59.2 530.5,48 625.5,53.6 720.4,64.8 815.3,59.2 910.2,76 1005.1,70.4"/>
+              <polyline class="wk-last" points="1005.1,70.4 1100,115.2"/>
+              <circle class="wk-dot" cx="1100" cy="115.2" r="4.5"/>
+              <g class="wk-lbl">
+                <text x="150.9" y="178">25 Aug</text><text x="340.7" y="178">8 Sep</text>
+                <text x="530.5" y="178">22 Sep</text><text x="720.4" y="178">6 Oct</text>
+                <text x="910.2" y="178">20 Oct</text>
+                <text x="1100" y="178" text-anchor="end">2 Nov</text>
+              </g>
+            </svg>
+          </div>
+
           <div class="sect"><div><h2>Where to look first</h2><p>The places and people furthest from where they should be this week.</p></div></div>
           <div class="cols c2">
             <div class="card">
