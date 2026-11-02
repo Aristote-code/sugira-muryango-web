@@ -18,6 +18,7 @@
 (function () {
   'use strict';
 
+  var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) {
     return Array.prototype.slice.call((r || document).querySelectorAll(s));
   };
@@ -381,7 +382,7 @@
 
       // A table none of the filters name is left alone rather than emptied.
       if (!cols.length && !q) {
-        $$('tbody tr', table).forEach(function (r) { r.hidden = false; });
+        $$('tbody tr', table).forEach(function (r) { r.classList.remove('f-out'); });
         return;
       }
       var rows = $$('tbody tr', table);
@@ -389,7 +390,7 @@
       rows.forEach(function (row) {
         var keep = cols.every(function (c) { return cellMatches(row, c.i, c.f.value); });
         if (keep && q) keep = (row.innerText || '').toLowerCase().indexOf(q) > -1;
-        row.hidden = !keep;
+        row.classList.toggle('f-out', !keep);
         if (keep) shown += 1;
       });
     });
@@ -403,12 +404,13 @@
         var lv = row.querySelector('.lv');
         var keep = !lvl || (!!lv && lv.textContent.toLowerCase().indexOf(lvl.value.toLowerCase()) === 0);
         if (keep && q) keep = (row.innerText || '').toLowerCase().indexOf(q) > -1;
-        row.hidden = !keep;
+        row.classList.toggle('f-out', !keep);
         if (keep) shown += 1;
       });
     }
 
     if (screen.id === 's-dashboard') scopeDashboard(active);
+    document.dispatchEvent(new CustomEvent('filters:applied', { detail: { screen: screen.id } }));
     summarise(bar, active, shown, total);
   }
 
@@ -499,6 +501,31 @@
   // The tiles are rendered from BOARD at rest too, so the numbers on screen and
   // the numbers the filters produce can never drift apart.
   if (document.getElementById('s-dashboard')) scopeDashboard([]);
+
+  /* Navigation needs to set a filter when a sub-item lands on a filtered view,
+     and it must go through the same path a click does, so the two can never
+     hold different ideas of what the screen is showing. */
+  window.SugiraFilters = {
+    set: function (screenId, key, value) {
+      var btn = $$('#' + screenId + ' .fl').filter(function (b) { return keyOf(b) === key; })[0];
+      if (!btn) return false;
+      setValue(btn, value);
+      apply(btn);
+      return true;
+    },
+    clear: function (screenId) {
+      var bar = $('#' + screenId + ' .filters');
+      if (!bar) return false;
+      $$('.fl', bar).forEach(function (b) {
+        var d = DIMENSIONS[keyOf(b)];
+        if (d) setValue(b, d.all);
+      });
+      var inp = bar.querySelector('.search input');
+      if (inp) inp.value = '';
+      apply(bar.querySelector('.fl') || inp);
+      return true;
+    }
+  };
 
   document.addEventListener('click', function () { closePop(); });
   document.addEventListener('keydown', function (e) {

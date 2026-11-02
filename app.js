@@ -33,6 +33,13 @@
   };
 
   var MODALS = {
+    archive: {
+      title: 'Archive this form',
+      ok: 'Archive',
+      body: '<p style="font-size:14px;color:var(--ink-2);line-height:1.6">Archiving takes the form off the tablet at the next sync. Responses already collected stay where they are and keep appearing in reports &mdash; nothing is deleted.</p>' +
+            '<div><label for="f-arw">Why</label><select id="f-arw"><option>Replaced by a newer version</option><option>No longer part of the programme</option><option>Created in error</option></select></div>',
+      done: 'Archived — it leaves the tablet at the next sync'
+    },
     rohask: {
       title: 'Request access to RH-0044',
       ok: 'Send request',

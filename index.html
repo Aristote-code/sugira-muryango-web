@@ -34,26 +34,26 @@
         <svg aria-hidden="true"><use href="#i-households"/></svg>
         <span class="tx">Households</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-hh">
-        <li><button class="si" type="button" data-go="households"><span class="tx">All households</span><span class="ct">2 210</span></button></li>
-        <li><button class="si" type="button" data-go="households"><span class="tx">Behind schedule</span><span class="ct">148</span></button></li>
-        <li><button class="si" type="button" data-go="households"><span class="tx">Enrolment</span></button></li>
+        <li><button class="si" type="button" data-go="households" data-view="clear"><span class="tx">All households</span><span class="ct">2 210</span></button></li>
+        <li><button class="si" type="button" data-go="households" data-view="filter:status=Behind"><span class="tx">Behind schedule</span><span class="ct">148</span></button></li>
+        <li><button class="si" type="button" data-go="households" data-view="filter:status=Not started"><span class="tx">Enrolment</span></button></li>
       </ul>
 
       <button class="ni" type="button" aria-expanded="true" aria-controls="g-vs">
         <svg aria-hidden="true"><use href="#i-visits"/></svg>
         <span class="tx">Visits</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-vs">
-        <li><button class="si" type="button" data-go="visits"><span class="tx">This week</span><span class="ct">1 842</span></button></li>
-        <li><button class="si" type="button" data-go="visits"><span class="tx">Missed</span><span class="ct">368</span></button></li>
-        <li><button class="si" type="button" data-go="visits"><span class="tx">Supervision</span></button></li>
+        <li><button class="si" type="button" data-go="visits" data-view="clear"><span class="tx">This week</span><span class="ct">147</span></button></li>
+        <li><button class="si" type="button" data-go="visits" data-view="filter:status=Household absent"><span class="tx">Missed</span><span class="ct">368</span></button></li>
+        <li><button class="si" type="button" data-go="visits" data-view="go:field"><span class="tx">Supervision</span></button></li>
       </ul>
 
       <button class="ni" type="button" aria-expanded="true" aria-controls="g-sf">
         <svg aria-hidden="true"><use href="#i-safeguarding"/></svg>
         <span class="tx">Safeguarding</span><span class="ct sig">2</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-sf">
-        <li><button class="si" type="button" data-go="safeguarding"><span class="tx">Open cases</span><span class="ct sig">2</span></button></li>
-        <li><button class="si" type="button" data-go="safeguarding"><span class="tx">Closed cases</span></button></li>
+        <li><button class="si" type="button" data-go="safeguarding" data-view="tab:Open"><span class="tx">Open cases</span><span class="ct sig">2</span></button></li>
+        <li><button class="si" type="button" data-go="safeguarding" data-view="tab:Closed"><span class="tx">Closed cases</span></button></li>
       </ul>
     </div>
 
@@ -63,7 +63,7 @@
         <svg aria-hidden="true"><use href="#i-programme"/></svg>
         <span class="tx">Programme</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-pr" hidden>
-        <li><button class="si" type="button" data-go="programme"><span class="tx">Projects</span><span class="ct">6</span></button></li>
+        <li><button class="si" type="button" data-go="programme"><span class="tx">Projects</span><span class="ct">19</span></button></li>
         <li><button class="si" type="button" data-go="cohorts"><span class="tx">Cohorts</span><span class="ct">4</span></button></li>
         <li><button class="si" type="button" data-go="translations"><span class="tx">Translations</span><span class="ct sig">13</span></button></li>
       </ul>
@@ -71,24 +71,24 @@
         <svg aria-hidden="true"><use href="#i-reports"/></svg>
         <span class="tx">Reports</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-rp" hidden>
-        <li><button class="si" type="button" data-go="reports"><span class="tx">Saved reports</span></button></li>
-        <li><button class="si" type="button" data-go="reports"><span class="tx">Build a report</span></button></li>
+        <li><button class="si" type="button" data-go="reports" data-view="tab:Saved"><span class="tx">Saved reports</span></button></li>
+        <li><button class="si" type="button" data-go="reports" data-view="modal:report"><span class="tx">Build a report</span></button></li>
         <li><button class="si" type="button" data-go="wall"><span class="tx">Wall board</span></button></li>
       </ul>
       <button class="ni" type="button" aria-expanded="false" aria-controls="g-fs">
         <svg aria-hidden="true"><use href="#i-support"/></svg>
         <span class="tx">Field support</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-fs" hidden>
-        <li><button class="si" type="button" data-go="content"><span class="tx">Videos &amp; documents</span></button></li>
-        <li><button class="si" type="button" data-go="content"><span class="tx">FAQs</span></button></li>
-        <li><button class="si" type="button" data-go="content"><span class="tx">Feedback</span><span class="ct sig">7</span></button></li>
+        <li><button class="si" type="button" data-go="content" data-view="tab:Videos"><span class="tx">Videos &amp; documents</span></button></li>
+        <li><button class="si" type="button" data-go="content" data-view="tab:FAQs"><span class="tx">FAQs</span></button></li>
+        <li><button class="si" type="button" data-go="content" data-view="tab:Feedback"><span class="tx">Feedback</span><span class="ct sig">7</span></button></li>
       </ul>
       <button class="ni" type="button" aria-expanded="false" aria-controls="g-ad">
         <svg aria-hidden="true"><use href="#i-admin"/></svg>
         <span class="tx">Administration</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-ad" hidden>
-        <li><button class="si" type="button" data-go="people"><span class="tx">People</span><span class="ct">193</span></button></li>
-        <li><button class="si" type="button" data-go="roles"><span class="tx">Roles &amp; access</span><span class="ct">7</span></button></li>
+        <li><button class="si" type="button" data-go="people"><span class="tx">People</span><span class="ct">539</span></button></li>
+        <li><button class="si" type="button" data-go="roles"><span class="tx">Roles &amp; access</span><span class="ct">10</span></button></li>
         <li><button class="si" type="button" data-go="places"><span class="tx">Places</span></button></li>
         <li><button class="si" type="button" data-go="system"><span class="tx">System</span><span class="ct sig">1</span></button></li>
       </ul>
@@ -757,8 +757,8 @@
           <div class="row">
             <div><h1>Wall board</h1><p class="sub">Three boards rotating on a timer, for the screen in the office. No navigation, nobody touches it.</p></div>
             <div class="acts">
-              <button class="btn sec" type="button">Edit boards</button>
-              <button class="btn" type="button" data-toast="Opened full screen on the office display">Cast to display</button>
+              <button data-toast="Board layout is set per display" class="btn sec" type="button">Edit boards</button>
+              <button data-cast class="btn" type="button" data-toast="Opened full screen on the office display">Cast to display</button>
             </div>
           </div>
         </div>
@@ -806,7 +806,7 @@
         </div>
         <div class="tabs">
           <button class="tab on" type="button">Active <span class="chip" style="margin-left:.4rem">6</span></button>
-          <button class="tab" type="button">Archived <span class="chip" style="margin-left:.4rem">15</span></button>
+          <button data-modal="archive" class="tab" type="button">Archived <span class="chip" style="margin-left:.4rem">15</span></button>
           <button class="tab" type="button">All</button>
         </div>
         <div class="pad">
@@ -848,7 +848,7 @@
           <div class="rec-top">
             <span class="rec-type"><svg aria-hidden="true"><use href="#i-building"/></svg> Project</span>
             <span class="rec-id">PRJ-11</span>
-            <span class="acts"><button class="btn sec sm" type="button">Project settings</button><button class="btn sm" type="button" data-modal="module"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add module</button></span>
+            <span class="acts"><button data-modal="project" class="btn sec sm" type="button">Project settings</button><button class="btn sm" type="button" data-modal="module"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add module</button></span>
           </div>
           <h1>Household Module Tracking</h1>
           <div class="pg" id="pg-project">
@@ -871,7 +871,7 @@
           <button class="tab on" type="button">Modules</button>
           <button class="tab" type="button">Forms</button>
           <button class="tab" type="button">Cohorts</button>
-          <button class="tab" type="button">Archive <span class="chip" style="margin-left:.4rem">7</span></button>
+          <button data-modal="archive" class="tab" type="button">Archive <span class="chip" style="margin-left:.4rem">7</span></button>
         </div>
         <div class="pad">
           <div class="card flush plainsurface">
@@ -933,7 +933,7 @@
           <button class="tab on" type="button">Forms</button>
           <button class="tab" type="button">Content</button>
           <button class="tab" type="button">Schedule</button>
-          <button class="tab" type="button">Archive <span class="chip" style="margin-left:.4rem">2</span></button>
+          <button data-modal="archive" class="tab" type="button">Archive <span class="chip" style="margin-left:.4rem">2</span></button>
         </div>
         <div class="pad">
           <div class="card flush plainsurface">
@@ -956,7 +956,7 @@
           <div class="rec-top">
             <span class="rec-type"><svg aria-hidden="true"><use href="#i-reports"/></svg> Form</span>
             <span class="rec-id">FORM-9</span>
-            <span class="acts"><button class="btn sec sm" type="button">Archive</button><button class="btn sm" type="button" data-modal="fpublish">Publish changes</button></span>
+            <span class="acts"><button data-modal="archive" class="btn sec sm" type="button">Archive</button><button class="btn sm" type="button" data-modal="fpublish">Publish changes</button></span>
           </div>
           <h1>Visit record</h1>
           <div class="pg" id="pg-form">
@@ -1027,7 +1027,7 @@
                 <div class="lr click"><span class="t">Yego</span></div>
                 <div class="lr click"><span class="t">Oya</span></div>
                 <div class="lr click"><span class="t">Nta mubyeyi w&rsquo;umugabo mu rugo</span></div>
-                <div style="display:flex;gap:.6rem;margin-top:1.1rem"><button class="btn sec sm" type="button">Subira inyuma</button><button class="btn sm" type="button">Komeza</button></div>
+                <div style="display:flex;gap:.6rem;margin-top:1.1rem"><button data-toast="Previous question" class="btn sec sm" type="button">Subira inyuma</button><button data-toast="Next question" class="btn sm" type="button">Komeza</button></div>
               </div>
             </div>
             <div class="card">
@@ -1088,7 +1088,7 @@
             </table></div>
             <div class="tfoot"><span>Showing 1&ndash;4 of 986</span>
               <span class="side" style="margin-left:auto;display:flex;gap:.5rem">
-                <button class="btn sec sm" type="button">Deleted responses <span class="chip" style="margin-left:.35rem">3</span></button>
+                <button data-toast="3 responses were deleted and can be restored" class="btn sec sm" type="button">Deleted responses <span class="chip" style="margin-left:.35rem">3</span></button>
                 <button class="btn sec sm" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button></span></div>
           </div>
         </div>
@@ -1274,7 +1274,7 @@
               <div class="tags"><span class="chip bad"><i></i>Can open risk-of-harm detail</span><span class="chip brand">In use</span></div>
             </div>
             <div class="acts">
-              <button class="btn sec" type="button">Duplicate</button>
+              <button data-modal="role" class="btn sec" type="button">Duplicate</button>
               <button class="btn" type="button" data-modal="rsave">Save role</button>
             </div>
           </div>
@@ -1441,7 +1441,7 @@
               <p class="al-lead">Two screens return a 500 and render the Symfony debug page with full source and server paths. Anyone who reaches <code>/indicators</code> or <code>/useractivitylogs</code> sees the application&rsquo;s internals.</p>
               <div class="al-row">
                 <span class="al-what"><span class="lb">APP_DEBUG</span><span class="nm">Turn it off in staging</span></span>
-                <span class="al-act"><span class="chip bad"><i></i>Exposed</span><button class="btn sm" type="button" data-toast="Flagged for the client's engineering team">Flag to engineering</button></span>
+                <span class="al-act"><span class="chip bad"><i></i>Exposed</span><button data-modal="report" class="btn sm" type="button" data-toast="Flagged for the client's engineering team">Flag to engineering</button></span>
               </div>
             </div>
           </div>
@@ -1487,7 +1487,7 @@
           <div class="row">
             <div><h1>Field support</h1><p class="sub">What a home visitor can open on the tablet: the session videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose.</p></div>
             <div class="acts">
-              <button class="btn sec" type="button">Reorder</button>
+              <button data-toast="Drag a row to reorder it" class="btn sec" type="button">Reorder</button>
               <button class="btn" type="button" data-modal="publish"><svg aria-hidden="true"><use href="#i-plus"/></svg>Publish something</button>
             </div>
           </div>
@@ -1618,5 +1618,6 @@
 
 <script src="app.js" defer></script>
 <script src="filters.js" defer></script>
+<script src="actions.js" defer></script>
 </body>
 </html>
