@@ -34,7 +34,8 @@ if ! git merge-base --is-ancestor HEAD origin/main 2>/dev/null; then
 fi
 
 tmp=$(mktemp -d)
-cleanup() { git worktree remove --force "$tmp" >/dev/null 2>&1 || true; rm -rf "$tmp"; }
+pub=$(mktemp -d)
+cleanup() { git worktree remove --force "$tmp" >/dev/null 2>&1 || true; rm -rf "$tmp" "$pub"; }
 trap cleanup EXIT
 
 git worktree add -q --detach "$tmp" HEAD
@@ -48,9 +49,22 @@ if ! sh "$tmp/scripts/check.sh" "$tmp"; then
   exit 1
 fi
 
-# these live in the repo but are not part of the site
-rm -f "$tmp/deploy.sh" "$tmp/README.md"
-rm -rf "$tmp/scripts"
+# The site, named explicitly. This is an allowlist rather than a list of files
+# to delete, because the repository also holds build tooling, git hooks and this
+# script. With a blocklist every tool file added later ships until someone
+# remembers to exclude it — which is how scripts/check.sh and
+# scripts/audit-tokens.py came to be served from the live site. Forgetting to
+# add an asset here fails loudly the first time a page is opened; forgetting to
+# delete one fails silently, in public.
+site="index.html app.js style.css logo.svg netlify.toml"
+for f in $site; do
+  if [ ! -e "$tmp/$f" ]; then
+    echo "deploy aborted — $f is missing from $sha."
+    exit 1
+  fi
+  cp "$tmp/$f" "$pub/$f"
+done
 
-echo "deploying $sha from a clean checkout"
-netlify deploy --prod --dir "$tmp" --message "$msg"
+echo "deploying $sha from a clean checkout:"
+printf '      %s\n' $site
+netlify deploy --prod --dir "$pub" --message "$msg"
