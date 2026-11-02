@@ -465,6 +465,57 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 .shell.dw-open .scroll{overflow:hidden}
 @media (max-width:880px){.dw-panel{max-width:none;border-left:0}}
 
+/* Record header, to the measured ClickUp task-detail spec: type chip 82x28 r7, title
+   28/35 600, property rows 32 with a 120px label (16px icon + 14/16 tertiary, gap 6)
+   and a value padded 2/8 at r6 that tints on hover. Two columns above 1360, one below. */
+.rec{padding:1.35rem 1.35rem 0}
+.rec-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.9rem}
+.rec-type{display:inline-flex;align-items:center;gap:.4rem;height:28px;padding:0 10px;border-radius:7px;
+  border:1px solid var(--line);font-size:.8rem;font-weight:500;color:var(--ink-2);background:var(--surface)}
+.rec-type svg{width:14px;height:14px;fill:none}
+.rec-id{font-size:.78rem;color:var(--ink-4);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.rec-top .acts{margin-left:auto;display:flex;gap:.5rem;flex-wrap:wrap}
+.rec h1{font-size:28px;line-height:35px;font-weight:600;letter-spacing:-.025em;color:var(--ink)}
+.pg{display:grid;margin-top:1.1rem}
+@media (min-width:1360px){.pg{grid-template-columns:1fr 1fr;column-gap:2.5rem}}
+.dw-body .pg,.dw.as-sidebar .pg{grid-template-columns:1fr}
+.pgr{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:center;min-height:32px;gap:6px}
+.pgr .k{display:flex;align-items:center;gap:6px;font-size:14px;line-height:16px;color:var(--ink-3);min-width:0}
+.pgr .k svg{width:16px;height:16px;flex:none;fill:none;color:var(--ink-4)}
+.pgr .k span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pgr .v{display:flex;align-items:center;gap:.45rem;min-height:24px;padding:2px 8px;border-radius:6px;
+  font-size:14px;line-height:16px;color:var(--ink);min-width:0;flex-wrap:wrap}
+.pgr .v:hover{background:#0000000A}
+.pgr .v.empty{color:var(--ink-4)}
+.pg-badge{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:6px;
+  font-size:12px;line-height:12px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;color:#fff}
+.pg-badge.bad{background:var(--red)}.pg-badge.warn{background:var(--amber);color:#4A2A00}
+.pg-badge.ok{background:var(--green)}.pg-badge.brand{background:var(--b500)}
+.rec-desc{margin-top:1.25rem;padding-top:1.1rem;border-top:1px solid var(--line-2);
+  font-size:16px;line-height:24px;color:var(--ink-2);max-width:82ch}
+.rec-desc b{color:var(--ink);font-weight:600}
+.pg-collapse{display:inline-flex;align-items:center;height:24px;padding:0 6px;border-radius:5px;border:0;
+  background:none;cursor:pointer;font-family:var(--ui);font-size:12px;line-height:16px;font-weight:500;
+  color:var(--ink-3);margin-top:.5rem}
+.pg-collapse:hover{background:#0000000A;color:var(--ink-2)}
+.pg.hide-empty .pgr.is-empty{display:none}
+
+/* Layout switch: sidebar (default), modal, full page — ClickUp's three task layouts. */
+.dw-layout{display:inline-flex;gap:2px;background:var(--tint);border-radius:7px;padding:3px;margin-left:auto}
+.dw-layout button{width:26px;height:24px;border:0;background:none;border-radius:5px;cursor:pointer;
+  color:var(--ink-4);display:flex;align-items:center;justify-content:center;padding:0}
+.dw-layout button:hover{color:var(--ink-2)}
+.dw-layout button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--lift)}
+.dw-layout svg{width:18px;height:12px}
+.dw-ico.go-right{margin-left:.35rem}
+.dw.as-modal{align-items:center;justify-content:center;padding:24px}
+.dw.as-modal .dw-panel{max-width:1392px;width:100%;height:100%;border-radius:12px;border-left:0;
+  box-shadow:none;animation:dw-pop 180ms cubic-bezier(.32,.72,0,1)}
+.dw.as-modal .dw-bar{border-radius:12px 12px 0 0}
+@keyframes dw-pop{from{transform:scale(.985);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.dw.as-modal .dw-panel{animation:none}}
+@media (max-width:880px){.dw.as-modal{padding:0}.dw.as-modal .dw-panel{border-radius:0}.dw-layout{display:none}}
+
 /* modal */
 .scrim{position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:60}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .scrim{background:rgba(10,8,11,.74)}}

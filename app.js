@@ -212,6 +212,8 @@
     dwStack.push(key);
     dwRender();
     dw.hidden = false;
+    dw.classList.toggle('as-modal', dwLayout === 'modal');
+    dw.classList.toggle('as-sidebar', dwLayout === 'sidebar');
     var shell = document.querySelector('.shell');
     if (shell) shell.classList.add('dw-open');
     if (opening) {
@@ -233,6 +235,37 @@
     dwStack.pop();
     dwRender();
   }
+
+  // ---- layout switch: sidebar, modal, or promote to a full page ----
+  var dwLayout = 'sidebar';
+  function setLayout(next) {
+    if (next === 'page') {
+      var key = dwStack[dwStack.length - 1];
+      dwReturn = null;
+      if (key) go(key); else closeDrawer();
+      return;
+    }
+    dwLayout = next;
+    dw.classList.toggle('as-modal', next === 'modal');
+    dw.classList.toggle('as-sidebar', next === 'sidebar');
+    $$('[data-layout]', dw).forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-layout') === next));
+    });
+  }
+  dw.addEventListener('click', function (e) {
+    var l = e.target.closest('[data-layout]');
+    if (l) { setLayout(l.getAttribute('data-layout')); }
+  });
+
+  // ---- collapse empty fields, as the property grid offers ----
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-pg]');
+    if (!t) return;
+    var grid = document.getElementById(t.getAttribute('data-pg'));
+    if (!grid) return;
+    var hiding = grid.classList.toggle('hide-empty');
+    t.textContent = hiding ? 'Show empty fields' : 'Collapse empty fields';
+  });
 
   dw.addEventListener('click', function (e) {
     var t = e.target.closest('[data-dw]');

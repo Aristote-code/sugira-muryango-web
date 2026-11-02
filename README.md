@@ -84,6 +84,15 @@ forms, projects and modules are drawers. The screens that *list* them stay pages
   row afterwards. The list behind does not scroll.
 - Below 880px the panel is full-bleed.
 
+**Layout switch** in the header: sidebar (880px), modal (inset 24, r12) or full page —
+ClickUp's own three task layouts. The choice persists across opens.
+
+Household and case render as **property records**, to the measured task-detail spec:
+type chip 82x28 r7, title 28/35 weight 600, property rows 32 with a 120px label
+(16px icon + 14/16 tertiary, gap 6) and a value padded 2/8 at r6 that tints on hover.
+Two columns above 1360 on the page, one inside the drawer. Empty fields show a dash
+and can be collapsed.
+
 Geometry is the ClickUp drawer's: 880px, elevation-5, a `#00000099` scrim, and a
 180ms `cubic-bezier(.32, .72, 0, 1)` slide, all honouring `prefers-reduced-motion`.
 

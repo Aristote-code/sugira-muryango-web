@@ -340,27 +340,33 @@
 
       <!-- ============ HOUSEHOLD DETAIL ============ -->
       <section class="screen" id="s-household">
-        <div class="phead">
-          <div class="row">
-            <span class="big">MJ</span>
-            <div style="min-width:0">
-              <h1>Mukamana Jeanne</h1>
-              <div class="meta">
-                <span><svg aria-hidden="true"><use href="#i-building"/></svg>HH-1007</span>
-                <span><svg aria-hidden="true"><use href="#i-location"/></svg>Rango cell &middot; Tumba &middot; Huye</span>
-                <span><svg aria-hidden="true"><use href="#i-call"/></svg>+250 78 555 0192</span>
-              </div>
-              <div class="tags">
-                <span class="chip brand">Cohort 4</span>
-                <span class="chip bad"><i></i>Risk of harm open</span>
-                <span class="chip warn"><i></i>Behind schedule</span>
-              </div>
-            </div>
-            <div class="acts">
-              <button class="btn sec" type="button" data-modal="note"><svg aria-hidden="true"><use href="#i-edit"/></svg>Add note</button>
-              <button class="btn" type="button" data-modal="visit"><svg aria-hidden="true"><use href="#i-visits"/></svg>Log a visit</button>
-            </div>
+        <div class="rec">
+          <div class="rec-top">
+            <span class="rec-type"><svg aria-hidden="true"><use href="#i-households"/></svg> Household</span>
+            <span class="rec-id">HH-1007</span>
+            <span class="acts">
+              <button class="btn sec sm" type="button" data-modal="note"><svg aria-hidden="true"><use href="#i-edit"/></svg> Add note</button>
+              <button class="btn sm" type="button" data-modal="visit"><svg aria-hidden="true"><use href="#i-visits"/></svg> Log a visit</button>
+            </span>
           </div>
+          <h1>Mukamana Jeanne</h1>
+          <div class="pg" id="pg-hh">
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg><span>Status</span></span><span class="v"><span class="pg-badge bad">Risk of harm</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Place</span></span><span class="v">Rango cell &middot; Tumba &middot; Huye</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-call"/></svg><span>Phone</span></span><span class="v">+250 78 555 0192</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Home visitor</span></span><span class="v">M. Dusabe</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Cohort</span></span><span class="v"><span class="chip brand">Cohort 4</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-visits"/></svg><span>Session</span></span><span class="v">6 of 12 <span class="chip warn"><i></i>4 weeks behind</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Children</span></span><span class="v">3 &middot; two under five</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Enrolled</span></span><span class="v">12 June 2026</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Consent</span></span><span class="v">Given 12 June 2026</span></div>
+            <div class="pgr is-empty"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Needs recorded</span></span><span class="v empty">&mdash;</span></div>
+            <div class="pgr is-empty"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Last note</span></span><span class="v empty">&mdash;</span></div>
+          </div>
+          <button class="pg-collapse" type="button" data-pg="pg-hh">Collapse empty fields</button>
+          <p class="rec-desc">Six of twelve modules delivered. The household is <b>four weeks behind</b> the Cohort 4
+            schedule after two missed visits in October, and has an open risk-of-harm case overdue for review since
+            30 October.</p>
         </div>
         <div class="tabs">
           <button class="tab on" type="button">Overview</button>
@@ -499,27 +505,32 @@
 
       <!-- ============ CASE DETAIL ============ -->
       <section class="screen" id="s-case">
-        <div class="phead">
-          <div class="row">
-            <span class="big" style="background:var(--amber)">RH</span>
-            <div style="min-width:0">
-              <h1>RH-0044</h1>
-              <div class="meta">
-                <span><svg aria-hidden="true"><use href="#i-building"/></svg>HH-1007 Mukamana Jeanne</span>
-                <span><svg aria-hidden="true"><use href="#i-location"/></svg>Tumba &middot; Huye</span>
-                <span><svg aria-hidden="true"><use href="#i-clock"/></svg>Raised 28 Oct by M. Dusabe</span>
-              </div>
-              <div class="tags">
-                <span class="chip bad"><i></i>Review 2 days late</span>
-                <span class="chip">Neglect</span>
-                <span class="chip">Child under 5</span>
-              </div>
-            </div>
-            <div class="acts">
-              <button class="btn sec" type="button" data-modal="note">Add note</button>
-              <button class="btn" type="button" data-modal="review"><svg aria-hidden="true"><use href="#i-check"/></svg>Record review</button>
-            </div>
+        <div class="rec">
+          <div class="rec-top">
+            <span class="rec-type"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> Risk of harm</span>
+            <span class="rec-id">RH-0044</span>
+            <span class="acts">
+              <button class="btn sec sm" type="button" data-modal="note"><svg aria-hidden="true"><use href="#i-edit"/></svg> Add note</button>
+              <button class="btn sm" type="button" data-modal="review"><svg aria-hidden="true"><use href="#i-check"/></svg> Record review</button>
+            </span>
           </div>
+          <h1>Neglect &mdash; child under five</h1>
+          <div class="pg" id="pg-case">
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg><span>Status</span></span><span class="v"><span class="pg-badge bad">Review overdue</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Household</span></span><span class="v">HH-1007 Mukamana Jeanne</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Place</span></span><span class="v">Tumba &middot; Huye</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Raised by</span></span><span class="v">M. Dusabe, home visitor</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Raised</span></span><span class="v">28 October 2026</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-visits"/></svg><span>Review due</span></span><span class="v">30 October 2026 <span class="chip bad"><i></i>2 days late</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Supervisor</span></span><span class="v">C. Uwimana</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Raised at</span></span><span class="v">Session 6 &mdash; Play and communication</span></div>
+            <div class="pgr is-empty"><span class="k"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Referral</span></span><span class="v empty">&mdash;</span></div>
+            <div class="pgr is-empty"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Outcome</span></span><span class="v empty">&mdash;</span></div>
+          </div>
+          <button class="pg-collapse" type="button" data-pg="pg-case">Collapse empty fields</button>
+          <p class="rec-desc">During the Module 6 visit the home visitor recorded that the youngest child, aged two,
+            showed signs of inadequate feeding and had not attended the health post for a scheduled growth check.
+            The caregiver reported losing the household health insurance card in August.</p>
         </div>
         <div class="tabs">
           <button class="tab on" type="button">Case</button>
@@ -1085,6 +1096,11 @@
       <button class="dw-ico" type="button" data-dw="back" hidden aria-label="Back">
         <svg aria-hidden="true"><use href="#i-chevronLeft"/></svg></button>
       <nav class="dw-crumbs" id="dwCrumbs" aria-label="Breadcrumb"></nav>
+      <span class="dw-layout" role="group" aria-label="Layout">
+        <button type="button" data-layout="sidebar" aria-pressed="true" aria-label="Sidebar" title="Sidebar"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="1" y="1" width="58" height="38" rx="5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="32" y="4" width="24" height="32" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-opacity=".7" rx="3"/></svg></button>
+        <button type="button" data-layout="modal" aria-pressed="false" aria-label="Modal" title="Modal"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="1" y="1" width="58" height="38" rx="5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="10" y="7" width="40" height="26" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-opacity=".7" rx="3"/></svg></button>
+        <button type="button" data-layout="page" aria-pressed="false" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 60 40" aria-hidden="true"><rect x="1" y="1" width="58" height="38" rx="5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="4" y="4" width="52" height="32" fill="currentColor" fill-opacity=".3" stroke="currentColor" stroke-opacity=".7" rx="3"/></svg></button>
+      </span>
       <button class="dw-ico go-right" type="button" data-dw="expand" aria-label="Open as a full page" title="Open as a full page">
         <svg aria-hidden="true"><use href="#i-expand"/></svg></button>
       <button class="dw-ico" type="button" data-dw="close" aria-label="Close" title="Close">
