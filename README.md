@@ -46,6 +46,27 @@ to a report:
 The twelve-row module table from the original is the one thing dropped: it duplicated
 chart 13 exactly and sat directly beneath it.
 
+### Programme
+
+Projects > Modules > Forms, with the form screen as the centre. What the old system
+got wrong here, and what this does instead:
+
+| Old | Here |
+| --- | --- |
+| Two projects screens at two routes, each with its own create form | One screen, one way in, archived as a tab |
+| Every session printed twice, once per language | One row per session, languages as a column |
+| Forms *created* globally, *imported* into a module | One verb, created where they are used |
+| A global archive and a per-module archive, neither labelled | One archive, scoped to where you are |
+| "Preview" was a live, submittable form | A preview that cannot submit, and says so |
+| Translate dropped the project and module from the route | Keeps them, so Back works; paginated, side by side |
+| Data filter: six chained geography dropdowns, "Search andicator" | One place filter |
+| Two links to one recycle bin, at a third URL shape | One route to deleted responses |
+| Data, dashboard, reports and builder as four full-page navigations, five levels deep | Four tabs on the form |
+
+The report builder is the single most capable thing in the system being replaced and
+it was reachable only at `/surveys/project/11/modules/22/form/9/ref/254/reports-builder`,
+named in no menu. It is now one tab away from the form it reports on.
+
 Screens: Dashboard · Households · Household detail · Visits · Safeguarding ·
 Case detail · Field status · Reports · Wall board · and a marked placeholder for
 routes in the information architecture that this pass does not cover.

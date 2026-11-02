@@ -11,7 +11,17 @@
     field:        { crumbs: [['Field status', null]],                                     nav: 'field' },
     reports:      { crumbs: [['Reports', null]],                                          nav: 'reports' },
     wall:         { crumbs: [['Reports', 'reports'], ['Wall board', null]],               nav: 'wall' },
-    empty:        { crumbs: [['Not designed yet', null]],                                 nav: null }
+    empty:        { crumbs: [['Not designed yet', null]],                                 nav: null },
+
+    programme:    { crumbs: [['Programme', null]],                                        nav: 'programme' },
+    project:      { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', null]],
+                    nav: 'programme' },
+    module:       { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', 'project'],
+                             ['Play and communication', null]], nav: 'programme' },
+    form:         { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', 'project'],
+                             ['Play and communication', 'module'], ['Visit record', null]], nav: 'programme' },
+    cohorts:      { crumbs: [['Programme', 'programme'], ['Cohorts', null]],              nav: 'cohorts' },
+    translations: { crumbs: [['Programme', 'programme'], ['Translations', null]],         nav: 'translations' }
   };
 
   var MODALS = {
@@ -44,6 +54,36 @@
             '<div><label for="f-vill">Village</label><select id="f-vill"><option>Rango — Tumba — Huye</option><option>Cyarwa — Tumba — Huye</option><option>Mpare — Mbazi — Huye</option></select></div>' +
             '<div><label for="f-coh">Cohort</label><select id="f-coh"><option>Cohort 4</option><option>Cohort 5 (not yet started)</option></select></div>',
       done: 'Household enrolled in Cohort 4'
+    },
+    project: {
+      title: 'New project',
+      ok: 'Create project',
+      body: '<div><label for="f-pn">Project name</label><input id="f-pn" type="text" placeholder="e.g. Male engagement booster"></div>' +
+            '<div><label for="f-pm">Start from</label><select id="f-pm"><option>An empty project</option><option>A copy of SUGIRA Muryango \u2014 core</option></select></div>',
+      done: 'Project created'
+    },
+    module: {
+      title: 'Add a session',
+      ok: 'Add session',
+      body: '<div><label for="f-mn">Session name</label><input id="f-mn" type="text" placeholder="e.g. Problem solving"></div>' +
+            '<div><label for="f-mo">Position in the sequence</label><select id="f-mo"><option>After session 9</option><option>At the end</option><option>As a booster, outside the sequence</option></select></div>',
+      done: 'Session added \u2014 it is not on the mobile app until you publish'
+    },
+    form: {
+      title: 'New form',
+      ok: 'Create form',
+      body: '<div><label for="f-fn">Form name</label><input id="f-fn" type="text" placeholder="e.g. Caregiver observation"></div>' +
+            '<div><label for="f-fw">Filled in by</label><select id="f-fw"><option>Home visitor</option><option>Sector supervisor</option><option>IZU cell coordinator</option></select></div>' +
+            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">Created in this session, not imported from a global library.</p>',
+      done: 'Form created in Session 6'
+    },
+    cohort: {
+      title: 'New cohort',
+      ok: 'Create cohort',
+      body: '<div><label for="f-cn">Cohort name</label><input id="f-cn" type="text" placeholder="e.g. Cohort 5"></div>' +
+            '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Huye</option><option>Gisagara</option><option>Nyamagabe</option></select></div>' +
+            '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>',
+      done: 'Cohort created as a draft \u2014 no household is scheduled yet'
     },
     report: {
       title: 'Build a report',
@@ -117,6 +157,14 @@
     next.classList.add('live');
     setCrumbs(def.crumbs);
     setNav(def.nav);
+    var tabbed = next.querySelector('.tab[data-panel]');
+    if (tabbed) {
+      $$('.tab[data-panel]', next).forEach(function (t, i) { t.classList.toggle('on', i === 0); });
+      var first = tabbed.getAttribute('data-panel');
+      $$('[data-panelid]', next).forEach(function (x) {
+        x.hidden = x.getAttribute('data-panelid') !== first;
+      });
+    }
     current = key;
     if (scrollEl) scrollEl.scrollTop = 0;
     try {
@@ -163,6 +211,14 @@
       if (!t) return;
       $$('.tab', bar).forEach(function (x) { x.classList.remove('on'); });
       t.classList.add('on');
+      var panel = t.getAttribute('data-panel');
+      if (!panel) return;
+      var screen = bar.closest('.screen');
+      $$('[data-panelid]', screen).forEach(function (x) {
+        x.hidden = x.getAttribute('data-panelid') !== panel;
+      });
+      var sc = document.getElementById('scroll');
+      if (sc) sc.scrollTop = 0;
     });
   });
 

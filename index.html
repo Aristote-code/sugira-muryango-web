@@ -63,11 +63,9 @@
         <svg aria-hidden="true"><use href="#i-programme"/></svg>
         <span class="tx">Programme</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-pr" hidden>
-        <li><button class="si" type="button" data-go="empty"><span class="tx">Projects</span></button></li>
-        <li><button class="si" type="button" data-go="empty"><span class="tx">Modules &amp; sessions</span></button></li>
-        <li><button class="si" type="button" data-go="empty"><span class="tx">Forms</span></button></li>
-        <li><button class="si" type="button" data-go="empty"><span class="tx">Cohorts</span></button></li>
-        <li><button class="si" type="button" data-go="empty"><span class="tx">Translations</span></button></li>
+        <li><button class="si" type="button" data-go="programme"><span class="tx">Projects</span><span class="ct">6</span></button></li>
+        <li><button class="si" type="button" data-go="cohorts"><span class="tx">Cohorts</span><span class="ct">4</span></button></li>
+        <li><button class="si" type="button" data-go="translations"><span class="tx">Translations</span><span class="ct sig">13</span></button></li>
       </ul>
       <button class="ni" type="button" aria-expanded="false" aria-controls="g-rp">
         <svg aria-hidden="true"><use href="#i-reports"/></svg>
@@ -662,6 +660,381 @@
               </div></div>
             <div class="bf"><span class="pg"><b class="on"></b><b></b><b></b></span><span>Board 1 &mdash; Coverage</span>
               <span class="nx">NEXT: PARTICIPATION &amp; QUALITY &middot; 20s</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PROGRAMME · PROJECTS ============ -->
+      <section class="screen" id="s-programme">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Programme</h1><p class="sub">What a home visit contains: the projects, their sessions, the forms the visitor fills in, and the cohorts that decide who gets which session when.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button>
+              <button class="btn" type="button" data-modal="project"><svg aria-hidden="true"><use href="#i-plus"/></svg>New project</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">Active <span class="chip" style="margin-left:.4rem">6</span></button>
+          <button class="tab" type="button">Archived <span class="chip" style="margin-left:.4rem">15</span></button>
+          <button class="tab" type="button">All</button>
+        </div>
+        <div class="pad">
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Project</th><th class="num">Modules</th><th class="num">Forms</th><th class="num">Cohorts</th><th class="num">Households</th><th>Translation</th></tr></thead>
+              <tbody>
+                <tr data-go="project"><td class="nm">SUGIRA Muryango &mdash; core</td><td class="num">14</td><td class="num">34</td><td class="num">4</td><td class="num">2 210</td><td><span class="chip ok"><i></i>100%</span></td></tr>
+                <tr data-go="project"><td class="nm">Male engagement booster</td><td class="num">2</td><td class="num">6</td><td class="num">4</td><td class="num">2 210</td><td><span class="chip warn"><i></i>62%</span></td></tr>
+                <tr data-go="project"><td class="nm">IZU supervision</td><td class="num">1</td><td class="num">4</td><td class="num">&mdash;</td><td class="num">486 <span class="mut">IZU</span></td><td><span class="chip warn"><i></i>39%</span></td></tr>
+                <tr data-go="project"><td class="nm">Health referral pilot</td><td class="num">3</td><td class="num">5</td><td class="num">1</td><td class="num">214</td><td><span class="chip bad"><i></i>9%</span></td></tr>
+                <tr data-go="project"><td class="nm">Household enrolment</td><td class="num">1</td><td class="num">2</td><td class="num">4</td><td class="num">2 210</td><td><span class="chip ok"><i></i>100%</span></td></tr>
+                <tr data-go="project"><td class="nm">Sector supervision in action</td><td class="num">1</td><td class="num">3</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>44%</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>6 active &middot; 15 archived</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>The old system had two projects screens at two routes &mdash; one in the menu, one unreachable &mdash; each with its own create form asking for different fields. This is the one screen and the one way in. Archived projects are a tab, not a separate page.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PROJECT · MODULES ============ -->
+      <section class="screen" id="s-project">
+        <div class="phead">
+          <div class="row">
+            <span class="big">SM</span>
+            <div style="min-width:0">
+              <h1>SUGIRA Muryango &mdash; core</h1>
+              <div class="meta">
+                <span><svg aria-hidden="true"><use href="#i-programme"/></svg>14 modules</span>
+                <span><svg aria-hidden="true"><use href="#i-reports"/></svg>34 forms</span>
+                <span><svg aria-hidden="true"><use href="#i-households"/></svg>2 210 households across 4 cohorts</span>
+              </div>
+              <div class="tags"><span class="chip ok"><i></i>Fully translated</span><span class="chip brand">On the mobile app</span></div>
+            </div>
+            <div class="acts">
+              <button class="btn sec" type="button">Project settings</button>
+              <button class="btn" type="button" data-modal="module"><svg aria-hidden="true"><use href="#i-plus"/></svg>Add module</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">Modules</button>
+          <button class="tab" type="button">Forms</button>
+          <button class="tab" type="button">Cohorts</button>
+          <button class="tab" type="button">Archive <span class="chip" style="margin-left:.4rem">7</span></button>
+        </div>
+        <div class="pad">
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th style="width:3rem">#</th><th>Session</th><th class="num">Forms</th><th class="num">Median minutes</th><th>Languages</th><th>Delivered</th></tr></thead>
+              <tbody>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">Welcome session</td><td class="num">1</td><td class="num">28</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>2 210</span></td></tr>
+                <tr data-go="module"><td class="mut">1</td><td class="nm">Getting to know you</td><td class="num">2</td><td class="num">41</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>2 180</span></td></tr>
+                <tr data-go="module"><td class="mut">2</td><td class="nm">Daily routines</td><td class="num">2</td><td class="num">38</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>2 044</span></td></tr>
+                <tr data-go="module"><td class="mut">3</td><td class="nm">Play materials</td><td class="num">3</td><td class="num">44</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>1 902</span></td></tr>
+                <tr data-go="module"><td class="mut">4</td><td class="nm">Responsive feeding</td><td class="num">2</td><td class="num">51</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>1 768</span></td></tr>
+                <tr data-go="module"><td class="mut">5</td><td class="nm">Problem solving</td><td class="num">2</td><td class="num">39</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip warn"><i></i>1 204</span></td></tr>
+                <tr data-go="module"><td class="mut">6</td><td class="nm">Play and communication</td><td class="num">3</td><td class="num">42</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip warn"><i></i>986</span></td></tr>
+                <tr data-go="module"><td class="mut">7</td><td class="nm">Family conflict</td><td class="num">2</td><td class="num">47</td><td><span class="chip warn"><i></i>EN only</span></td><td><span class="chip warn"><i></i>742</span></td></tr>
+                <tr data-go="module"><td class="mut">8</td><td class="nm">Fathers and caregiving</td><td class="num">3</td><td class="num">52</td><td><span class="chip warn"><i></i>EN only</span></td><td><span class="chip bad"><i></i>488</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 9 of 14 &middot; sessions 9&ndash;12 and 2 boosters below</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>The old list printed every session twice &mdash; once in English, once in Kinyarwanda &mdash; so fourteen modules read as twenty-eight rows and you could not tell which pair belonged together. One row per session now, with the languages it exists in as a column. &ldquo;EN only&rdquo; is the work queue.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MODULE · FORMS ============ -->
+      <section class="screen" id="s-module">
+        <div class="phead">
+          <div class="row">
+            <span class="big">6</span>
+            <div style="min-width:0">
+              <h1>Play and communication</h1>
+              <div class="meta">
+                <span><svg aria-hidden="true"><use href="#i-programme"/></svg>Session 6 of 12 &middot; SUGIRA Muryango &mdash; core</span>
+                <span><svg aria-hidden="true"><use href="#i-clock"/></svg>Median 42 minutes</span>
+                <span><svg aria-hidden="true"><use href="#i-households"/></svg>986 households reached</span>
+              </div>
+              <div class="tags"><span class="chip ok"><i></i>EN &middot; RW</span><span class="chip brand">Cohort 4 current</span></div>
+            </div>
+            <div class="acts">
+              <button class="btn sec" type="button">Module settings</button>
+              <button class="btn" type="button" data-modal="form"><svg aria-hidden="true"><use href="#i-plus"/></svg>New form</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">Forms</button>
+          <button class="tab" type="button">Content</button>
+          <button class="tab" type="button">Schedule</button>
+          <button class="tab" type="button">Archive <span class="chip" style="margin-left:.4rem">2</span></button>
+        </div>
+        <div class="pad">
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Form</th><th>Filled in by</th><th class="num">Questions</th><th class="num">Responses</th><th>Languages</th><th class="num">Last edited</th></tr></thead>
+              <tbody>
+                <tr data-go="form"><td class="nm">Visit record</td><td class="mut">Home visitor</td><td class="num">30</td><td class="num">986</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="num mut">14 Oct</td></tr>
+                <tr data-go="form"><td class="nm">Caregiver observation</td><td class="mut">Home visitor</td><td class="num">12</td><td class="num">986</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="num mut">2 Sep</td></tr>
+                <tr data-go="form"><td class="nm">Supervisor spot-check</td><td class="mut">Sector supervisor</td><td class="num">8</td><td class="num">141</td><td><span class="chip warn"><i></i>EN only</span></td><td class="num mut">21 Aug</td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>3 forms in this module &middot; 2 archived</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>Forms used to be <strong>created</strong> in a global library and <strong>imported</strong> into a module &mdash; two different verbs for one object, and no way to go from &ldquo;I need a form for this session&rdquo; to a new form. There was also a global archive and a per-module archive, with nothing on either screen saying which one you were looking at. One verb, one archive, scoped to where you are.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FORM · THE CENTRE ============ -->
+      <section class="screen" id="s-form">
+        <div class="phead">
+          <div class="row">
+            <span class="big"><svg aria-hidden="true" style="width:26px;height:26px;color:#fff"><use href="#i-reports"/></svg></span>
+            <div style="min-width:0">
+              <h1>Visit record</h1>
+              <div class="meta">
+                <span><svg aria-hidden="true"><use href="#i-programme"/></svg>Session 6 &middot; SUGIRA Muryango &mdash; core</span>
+                <span><svg aria-hidden="true"><use href="#i-households"/></svg>986 responses</span>
+                <span><svg aria-hidden="true"><use href="#i-clock"/></svg>Edited 14 Oct by C. Uwimana</span>
+              </div>
+              <div class="tags"><span class="chip ok"><i></i>Live on the mobile app</span><span class="chip ok"><i></i>EN &middot; RW</span></div>
+            </div>
+            <div class="acts">
+              <button class="btn sec" type="button">Archive</button>
+              <button class="btn" type="button" data-toast="Published to the mobile app">Publish changes</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-panel="build">Build</button>
+          <button class="tab" type="button" data-panel="preview">Preview</button>
+          <button class="tab" type="button" data-panel="translate">Translate</button>
+          <button class="tab" type="button" data-panel="data">Data <span class="chip" style="margin-left:.4rem">986</span></button>
+          <button class="tab" type="button" data-panel="reports">Reports</button>
+        </div>
+
+        <div class="pad" data-panelid="build">
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>Questions</h3><span class="side"><a>Add question</a></span></div>
+              <div class="lr"><span class="s" style="width:1.4rem">1</span><span class="t">Date of visit</span><span class="chip">Date</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="s" style="width:1.4rem">2</span><span class="t">Who was present?</span><span class="chip">Multi-select</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="s" style="width:1.4rem">3</span><span class="t">Was the male caregiver present?</span><span class="chip">Yes / No</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="s" style="width:1.4rem">4</span><span class="t">Which activities were completed?</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="s" style="width:1.4rem">5</span><span class="t">Any sign of harm or neglect?</span><span class="chip bad"><i></i>Triggers a case</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="s" style="width:1.4rem">6</span><span class="t">Household needs identified</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="s" style="width:1.4rem">7</span><span class="t">Notes for the next visit</span><span class="chip">Long text</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="s" style="width:1.4rem"></span><span class="t mut" style="color:var(--ink-3)">23 more questions</span><span class="ch">&rsaquo;</span></div>
+            </div>
+            <div style="display:grid;gap:1rem;align-content:start">
+              <div class="card">
+                <div class="card-h"><h3>This form</h3></div>
+                <div class="kv">
+                  <div><div class="k">Questions</div><div class="v">30</div></div>
+                  <div><div class="k">Required</div><div class="v">11</div></div>
+                  <div><div class="k">Responses</div><div class="v">986</div></div>
+                  <div><div class="k">Median time</div><div class="v">42<span style="font-size:.8rem;color:var(--ink-3)">m</span></div></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-h"><h3>Safeguarding</h3></div>
+                <p style="font-size:.875rem;color:var(--ink-2);letter-spacing:-.014em">Question 5 opens a risk-of-harm case when answered yes. The case goes to the sector supervisor with a 72-hour review window.</p>
+                <div class="lr" style="margin-top:.6rem"><span class="t">Cases opened from this form</span><span class="c">14</span></div>
+                <div class="lr"><span class="t">Still open</span><span class="c">2</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="preview" hidden>
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>As the home visitor sees it</h3><span class="side"><span class="seg"><button type="button" class="on">Kinyarwanda</button><button type="button">English</button></span></span></div>
+              <div style="max-width:380px;border-radius:var(--r-lg);box-shadow:var(--lift-overlay);padding:1.25rem;background:var(--surface)">
+                <p style="font-size:.75rem;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase">Icyiciro 6 &middot; Ikibazo 3 muri 30</p>
+                <p style="font-size:1.05rem;font-weight:600;margin:.6rem 0 1rem;letter-spacing:-.016em">Umubyeyi w&rsquo;umugabo yari ahari?</p>
+                <div class="lr click"><span class="t">Yego</span></div>
+                <div class="lr click"><span class="t">Oya</span></div>
+                <div class="lr click"><span class="t">Nta mubyeyi w&rsquo;umugabo mu rugo</span></div>
+                <div style="display:flex;gap:.6rem;margin-top:1.1rem"><button class="btn sec sm" type="button">Subira inyuma</button><button class="btn sm" type="button">Komeza</button></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Why this is a preview, not a live form</h3></div>
+              <p style="font-size:.875rem;color:var(--ink-2);letter-spacing:-.014em">In the old system the screen called &ldquo;preview&rdquo; was a working, submittable form &mdash; anything typed into it entered the real data. This one cannot submit, and says so.</p>
+              <div class="lr" style="margin-top:.8rem"><span class="t">Submits to the database</span><span class="chip">No</span></div>
+              <div class="lr"><span class="t">Shows conditional logic</span><span class="chip ok"><i></i>Yes</span></div>
+              <div class="lr"><span class="t">Shows the tablet layout</span><span class="chip ok"><i></i>Yes</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="translate" hidden>
+          <div class="stats">
+            <div class="st"><div class="l">Translated</div>
+              <div class="vrow"><div class="v">30 <small>of 30</small></div><span class="delta up">100%</span></div>
+              <div class="d">Kinyarwanda</div><div class="trk"><i style="width:100%"></i></div></div>
+            <div class="st"><div class="l">Reviewed by a speaker</div>
+              <div class="vrow"><div class="v">24 <small>of 30</small></div><span class="delta down">6 left</span></div>
+              <div class="d">Translated is not the same as checked</div><div class="trk warn"><i style="width:80%"></i></div></div>
+            <div class="st"><div class="l">Last change</div>
+              <div class="vrow"><div class="v">14 <small>Oct</small></div></div>
+              <div class="d">C. Uwimana</div></div>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th style="width:3rem">#</th><th>English</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="mut">1</td><td>Date of visit</td><td>Itariki y&rsquo;urugendo</td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
+                <tr><td class="mut">2</td><td>Who was present?</td><td>Ninde wari ahari?</td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
+                <tr><td class="mut">3</td><td>Was the male caregiver present?</td><td>Umubyeyi w&rsquo;umugabo yari ahari?</td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
+                <tr><td class="mut">4</td><td>Which activities were completed?</td><td>Ni ibihe bikorwa byarangiye?</td><td><span class="chip warn"><i></i>Needs review</span></td></tr>
+                <tr><td class="mut">5</td><td>Any sign of harm or neglect?</td><td>Hari ikimenyetso cy&rsquo;ihohoterwa cyangwa kwirengagizwa?</td><td><span class="chip warn"><i></i>Needs review</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 5 of 30 &middot; the route keeps the project and module, so Back works</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>Translation used to be 79 empty inputs on one page at a route that dropped the project and module, so the breadcrumb could not take you back where you came from, and nothing told you how far along you were. Side by side, paginated, with a review state that is separate from &ldquo;a translation exists&rdquo;.</p>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="data" hidden>
+          <div class="filters">
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
+              <input type="text" id="fdSearch" placeholder="Search responses" aria-label="Search responses"></div>
+            <button class="fl"><span class="k">Place</span><b>Rwanda</b><span class="cv">&#9660;</span></button>
+            <button class="fl"><span class="k">Period</span><b>This cohort</b><span class="cv">&#9660;</span></button>
+            <span class="rt"><i></i>986 responses</span>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Household</th><th>Home visitor</th><th class="num">Date</th><th class="num">Minutes</th><th>Male caregiver</th><th>Flag</th></tr></thead>
+              <tbody>
+                <tr data-go="household"><td class="nm">HH-1007</td><td class="mut">M. Dusabe</td><td class="num mut">28 Oct</td><td class="num">42</td><td><span class="chip">Absent</span></td><td><span class="chip bad"><i></i>Risk raised</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1133</td><td class="mut">E. Mutesi</td><td class="num mut">30 Oct</td><td class="num">38</td><td><span class="chip ok"><i></i>Present</span></td><td class="mut">&mdash;</td></tr>
+                <tr data-go="household"><td class="nm">HH-1319</td><td class="mut">E. Mutesi</td><td class="num mut">31 Oct</td><td class="num">47</td><td><span class="chip ok"><i></i>Present</span></td><td class="mut">&mdash;</td></tr>
+                <tr data-go="household"><td class="nm">HH-1204</td><td class="mut">J. Kamanzi</td><td class="num mut">31 Oct</td><td class="num">53</td><td><span class="chip">Absent</span></td><td class="mut">&mdash;</td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 1&ndash;4 of 986</span>
+              <span class="side" style="margin-left:auto;display:flex;gap:.5rem">
+                <button class="btn sec sm" type="button">Deleted responses <span class="chip" style="margin-left:.35rem">3</span></button>
+                <button class="btn sec sm" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button></span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>This screen had six chained geography dropdowns, a field labelled &ldquo;Search andicator&rdquo;, and two separate links &mdash; &ldquo;Check Recycled&rdquo; and &ldquo;Recycled data&rdquo; &mdash; that went to the same recycle bin at a third URL shape. One place filter, one spelling, one way to the deleted responses.</p>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="reports" hidden>
+          <div class="sect"><div><h2>Report builder</h2><p>Ask a question of this form&rsquo;s 986 responses, save it, and have it sent on a schedule.</p></div>
+            <span class="side"><button class="btn" type="button" data-modal="report"><svg aria-hidden="true"><use href="#i-plus"/></svg>New report</button></span></div>
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>Saved from this form</h3></div>
+              <div class="lr click"><span class="t">Male caregiver attendance by district</span><span class="s">Weekly &rarr; NCDA</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click"><span class="t">Activities completed, by session</span><span class="s">Monthly</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click"><span class="t">Minutes per visit, by home visitor</span><span class="s">Manual</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click"><span class="t">Households flagged at session 6</span><span class="s">Manual</span><span class="ch">&rsaquo;</span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Male caregiver attendance by district</h3><span class="side"><a>Open</a></span></div>
+              <div class="hb">
+                <div class="hr hot"><span class="l">Nyaruguru</span><span class="t"><i style="width:24%"></i></span><span class="v">24%</span></div>
+                <div class="hr hot"><span class="l">Gisagara</span><span class="t"><i style="width:29%"></i></span><span class="v">29%</span></div>
+                <div class="hr"><span class="l">Nyamagabe</span><span class="t"><i style="width:33%"></i></span><span class="v">33%</span></div>
+                <div class="hr"><span class="l">Huye</span><span class="t"><i style="width:41%"></i></span><span class="v">41%</span></div>
+                <div class="hr"><span class="l">Kamonyi</span><span class="t"><i style="width:46%"></i></span><span class="v">46%</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>The point of this whole screen</p>
+            <p>The report builder is the most capable thing in the system you already own, and it sat at <code>/surveys/project/11/modules/22/form/9/ref/254/reports-builder</code> &mdash; five navigations deep, named in no menu, with the data, the per-form dashboard, the report list and the builder as four separate full-page navigations away from each other. They are four views of one form. They are tabs now.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ COHORTS ============ -->
+      <section class="screen" id="s-cohorts">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Cohorts</h1><p class="sub">A cohort decides which households get which session, and when. Changing one moves real families&rsquo; schedules.</p></div>
+            <div class="acts"><button class="btn" type="button" data-modal="cohort"><svg aria-hidden="true"><use href="#i-plus"/></svg>New cohort</button></div>
+          </div>
+        </div>
+        <div class="pad">
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Cohort</th><th>Districts</th><th class="num">Households</th><th class="num">Started</th><th>Current session</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Cohort 4</td><td class="mut">Huye, Gisagara, Nyamagabe</td><td class="num">2 210</td><td class="num mut">Jun 2026</td><td>6 of 12</td><td><span class="chip ok"><i></i>Running</span></td></tr>
+                <tr><td class="nm">Cohort 3</td><td class="mut">Huye, Nyaruguru</td><td class="num">1 884</td><td class="num mut">Jan 2026</td><td>12 of 12</td><td><span class="chip"><i></i>Complete</span></td></tr>
+                <tr><td class="nm">Cohort 2</td><td class="mut">Kamonyi, Muhanga</td><td class="num">1 402</td><td class="num mut">Mar 2025</td><td>12 of 12</td><td><span class="chip"><i></i>Complete</span></td></tr>
+                <tr><td class="nm">Cohort 5</td><td class="mut">Not assigned</td><td class="num">0</td><td class="num mut">&mdash;</td><td class="mut">&mdash;</td><td><span class="chip warn"><i></i>Draft</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>4 cohorts &middot; 5 496 households enrolled since 2025</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>A cohort was a settings row with District, Label and Status, and nothing told you how many families it moved. The household count is the whole point: editing Cohort 4 reschedules 2 210 families.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TRANSLATIONS ============ -->
+      <section class="screen" id="s-translations">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Translations</h1><p class="sub">The programme runs in Kinyarwanda. Anything still English-only reaches a home visitor in a language the household may not read.</p></div>
+            <div class="acts"><button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export strings</button></div>
+          </div>
+        </div>
+        <div class="pad">
+          <div class="stats">
+            <div class="st"><div class="l">Forms fully translated</div>
+              <div class="vrow"><div class="v">21 <small>of 34</small></div><span class="delta down">13 left</span></div>
+              <div class="d">62% of the form library</div><div class="trk warn"><i style="width:62%"></i></div></div>
+            <div class="st"><div class="l">Strings translated</div>
+              <div class="vrow"><div class="v">1 847 <small>of 2 390</small></div><span class="delta up">&uarr; 212</span></div>
+              <div class="d">Up 212 this month</div><div class="trk"><i style="width:77%"></i></div></div>
+            <div class="st"><div class="l">Reviewed by a speaker</div>
+              <div class="vrow"><div class="v">1 204 <small>of 1 847</small></div><span class="delta down">65%</span></div>
+              <div class="d">Translated is not the same as checked</div><div class="trk warn"><i style="width:65%"></i></div></div>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Form</th><th>Module</th><th class="num">Strings</th><th>Coverage</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr data-go="form"><td class="nm">Family conflict &mdash; visit record</td><td class="mut">Session 7</td><td class="num">34</td><td><div class="trk" style="margin:0;max-width:7rem"><i class="" style="width:0%"></i></div></td><td><span class="chip bad"><i></i>Not started</span></td></tr>
+                <tr data-go="form"><td class="nm">Fathers and caregiving &mdash; visit record</td><td class="mut">Session 8</td><td class="num">41</td><td><div class="trk" style="margin:0;max-width:7rem"><i style="width:12%"></i></div></td><td><span class="chip bad"><i></i>12%</span></td></tr>
+                <tr data-go="form"><td class="nm">Health referral &mdash; intake</td><td class="mut">Referral pilot</td><td class="num">28</td><td><div class="trk" style="margin:0;max-width:7rem"><i style="width:9%"></i></div></td><td><span class="chip bad"><i></i>9%</span></td></tr>
+                <tr data-go="form"><td class="nm">IZU supervision &mdash; weekly call</td><td class="mut">IZU supervision</td><td class="num">52</td><td><div class="trk" style="margin:0;max-width:7rem"><i style="width:39%"></i></div></td><td><span class="chip warn"><i></i>39%</span></td></tr>
+                <tr data-go="form"><td class="nm">Supervisor spot-check</td><td class="mut">Session 6</td><td class="num">18</td><td><div class="trk" style="margin:0;max-width:7rem"><i style="width:44%"></i></div></td><td><span class="chip warn"><i></i>44%</span></td></tr>
+                <tr data-go="form"><td class="nm">Visit record</td><td class="mut">Session 6</td><td class="num">30</td><td><div class="trk" style="margin:0;max-width:7rem"><i style="width:100%"></i></div></td><td><span class="chip ok"><i></i>Complete</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 6 of 34 &middot; sorted by what is furthest behind</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
           </div>
         </div>
       </section>
