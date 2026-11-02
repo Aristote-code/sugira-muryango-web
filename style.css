@@ -19,7 +19,7 @@
   --g600:#CECECE; --g700:#BBBBBB; --g800:#8D8D8D; --g900:#838383; --g1000:#646464; --g1100:#202020;
   --ink:var(--g1100); --ink-2:var(--g1000); --ink-3:var(--g900); --ink-4:var(--g700);
   --red:#E5484D; --red-bg:#FFEFEF; --red-line:#F7CFD1; --red-ink:#C62A2F;
-  --al-a:#AB1D22; --al-b:#D1363B;   /* alert header ramp */
+  --al-a:#7E2A2E; --al-m:#8E383C; --al-b:#A14449;  /* alert header ramp, muted brick */
   --amber:#FFC53D; --amber-bg:#FFF3D0; --amber-line:#F3DCA6; --amber-ink:#915930;
   --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
   --page:#FCFCFC; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
@@ -235,11 +235,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 
 /* Framed alert: a gradient header names the alert, a white panel sits inside the frame,
    and each thing needing action gets its own outlined row.
-   The ramp runs dark to lighter like the reference, but stays inside a range white text
-   survives: #AB1D22 is 7.17:1 and #D1363B is 4.88:1. --red (#E5484D) would be 3.91:1,
-   and the count sits at the light end, so the whole ramp has to hold. */
-.al{border-radius:var(--r-card);background:linear-gradient(90deg,var(--al-a),var(--al-b));
-  padding:0 4px 4px;box-shadow:var(--lift)}
+   The ramp is a muted brick — 50% to 41% saturation rather than the 71% to 63% of a vivid
+   red, which on a screen someone watches all day reads as alarm rather than seriousness.
+   Three stops on a slight diagonal so the ramp does not band. White holds throughout:
+   9.30:1, 7.26:1, 6.11:1. */
+.al{border-radius:var(--r-card);
+  background:linear-gradient(105deg,var(--al-a) 0%,var(--al-m) 55%,var(--al-b) 100%);
+  padding:0 3px 3px;box-shadow:var(--lift)}
 .al.is-shut{padding-bottom:0}
 .al-hd{display:flex;align-items:center;gap:.55rem;width:100%;border:0;background:none;cursor:pointer;
   color:#fff;font-family:var(--ui);font-weight:600;font-size:.9rem;letter-spacing:-.012em;
@@ -247,7 +249,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 .al-hd:hover{background:rgba(255,255,255,.1)}
 .al-hd:focus-visible{outline:2px solid #fff;outline-offset:-3px}
 .al-hd svg{width:17px;height:17px;flex:none;fill:none}
-.al-hd .ct{margin-left:auto;font-size:.79rem;font-weight:500;color:rgba(255,255,255,.84);letter-spacing:-.008em}
+.al-hd .ct{margin-left:auto;font-size:.79rem;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:-.008em}
 .al-hd .cv{flex:none;opacity:.78;transform:rotate(90deg);transition:transform .16s ease}
 .al-hd[aria-expanded="false"] .cv{transform:rotate(0)}
 @media (prefers-reduced-motion:reduce){.al-hd .cv{transition:none}}
@@ -422,6 +424,45 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 .bf .pg b{width:.9cqw;height:.9cqw;border-radius:50%;background:#443A43;display:block}
 .bf .pg b.on{background:#F1EDF0}
 .bf .nx{margin-left:auto}
+
+/* Drawer. Detail records open over the list they came from instead of replacing it,
+   and can be promoted to a full page. Geometry, elevation, scrim and easing are the
+   ClickUp drawer's: 880px, elevation-5, #00000099, 180ms cubic-bezier(.32,.72,0,1). */
+.dw[hidden]{display:none}
+.dw{position:fixed;inset:0;z-index:1000;display:flex;justify-content:flex-end}
+.dw-scrim{position:absolute;inset:0;background:#00000099;animation:dw-fade 120ms ease-out}
+.dw-panel{position:relative;width:100%;max-width:880px;background:var(--surface);
+  border-left:1px solid var(--line);box-shadow:0 20px 25px -5px #0000001B,0 8px 10px -6px #0000001B;
+  display:flex;flex-direction:column;min-height:0;animation:dw-in 180ms cubic-bezier(.32,.72,0,1)}
+@keyframes dw-in{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+@keyframes dw-fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.dw-scrim,.dw-panel{animation:none}}
+.dw-bar{display:flex;align-items:center;gap:.35rem;padding:.5rem .6rem;border-bottom:1px solid var(--line);
+  flex:none;background:var(--surface)}
+.dw-crumbs{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--ink-3);
+  min-width:0;overflow:hidden;white-space:nowrap;padding-inline:.3rem;letter-spacing:-.008em}
+.dw-crumbs b{color:var(--ink-2);font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.dw-crumbs .sep{color:var(--ink-4);flex:none}
+.dw-ico{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:0;
+  background:none;border-radius:var(--r-ctl);cursor:pointer;color:var(--ink-3);flex:none}
+.dw-ico:hover{background:var(--tint);color:var(--ink)}
+.dw-ico:focus-visible{outline:2px solid var(--b500);outline-offset:-2px}
+.dw-ico svg{width:16px;height:16px;fill:none}
+.dw-ico[hidden]{display:none}
+.dw-ico.go-right{margin-left:auto}
+.dw-body{flex:1;min-height:0;overflow:auto;background:var(--page);overscroll-behavior:contain}
+.dw-body .screen{display:block}
+.dw-body .phead{padding:1.25rem 1.35rem 0}
+.dw-body .phead h1{font-size:1.4rem}
+.dw-body .phead .big{width:48px;height:48px;font-size:1.05rem}
+.dw-body .phead .sub{max-width:62ch}
+.dw-body .tabs{padding:0 1.35rem;margin-top:1rem}
+.dw-body .pad{padding:1.35rem;gap:1.1rem}
+.dw-body .cols.c2,.dw-body .cols.c2e,.dw-body .cols.c3{grid-template-columns:1fr}
+.dw-body .stats{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+/* the list behind the drawer must not scroll with it */
+.shell.dw-open .scroll{overflow:hidden}
+@media (max-width:880px){.dw-panel{max-width:none;border-left:0}}
 
 /* modal */
 .scrim{position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:60}
