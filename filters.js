@@ -385,7 +385,7 @@
         $$('tbody tr', table).forEach(function (r) { r.classList.remove('f-out'); });
         return;
       }
-      var rows = $$('tbody tr', table);
+      var rows = $$('tbody tr', table).filter(function (r) { return !r.classList.contains('t-out'); });
       total += rows.length;
       rows.forEach(function (row) {
         var keep = cols.every(function (c) { return cellMatches(row, c.i, c.f.value); });

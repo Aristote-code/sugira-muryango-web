@@ -48,11 +48,12 @@
       var label = foot.querySelector('span:not(.pg)');
       var state = { page: 1 };
 
-      /* Filtering owns .f-out and paging owns .p-out, so neither can undo the
-         other. Paging only ever pages what the filters have left. */
+      /* Three things hide rows and each owns its own flag: the filter bar
+         (.f-out), the tab strip (.t-out) and paging (.p-out). Paging only ever
+         pages what the other two have left, so none of them can undo another. */
       function rows() {
         return $$('tbody tr', table).filter(function (r) {
-          return !r.classList.contains('f-out');
+          return !r.classList.contains('f-out') && !r.classList.contains('t-out');
         });
       }
 
@@ -333,6 +334,53 @@
     $$('.tq-btn', screen).forEach(function (b) {
       var t = b.textContent.trim();
       if (t === 'Filter' || t === 'Export') b.hidden = true;
+    });
+  });
+
+  /* ---- tabs that are views of one table ----
+     Nine screens had tabs with nothing behind them: clicking "Behind schedule"
+     or "Closed" changed the underline and nothing else. Where the tabs are
+     views of a single table they now select rows by tag, which composes with
+     the filter bar and paging instead of competing with them. Where they are
+     genuinely different content, they have panels. */
+  $$('.tabs').forEach(function (bar) {
+    var tabs = $$('.tab[data-tab]', bar);
+    if (!tabs.length) return;
+    var screen = bar.closest('.screen');
+    var table = screen && screen.querySelector('.tbl');
+    if (!table) return;
+
+    function select(tag) {
+      var total = 0, shown = 0;
+      if (tag === 'all') tag = null;      // the "everything" tab names itself
+      $$('tbody tr', table).forEach(function (r) {
+        var tags = (r.getAttribute('data-tags') || '').split(' ');
+        var out = !!tag && tags.indexOf(tag) === -1;
+        r.classList.toggle('t-out', out);
+        total += 1;
+        if (!out) shown += 1;
+      });
+      var pg = screen.querySelector('.tfoot .pg');
+      if (pg && pg._render) { pg._render(); return; }
+
+      /* A table without a pager still has a footer, and it used to keep
+         announcing the figure for the first tab — "2 open cases" while the
+         Closed tab was showing. */
+      var label = screen.querySelector('.tfoot span:not(.pg)');
+      if (label) {
+        if (!label.dataset.base) label.dataset.base = label.innerHTML;
+        label.innerHTML = tag
+          ? 'Showing ' + shown + ' of ' + total
+          : label.dataset.base;
+      }
+    }
+
+    bar.addEventListener('click', function (e) {
+      var t = e.target.closest('.tab[data-tab]');
+      if (!t) return;
+      tabs.forEach(function (x) { x.classList.remove('on'); });
+      t.classList.add('on');
+      select(t.getAttribute('data-tab'));
     });
   });
 

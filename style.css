@@ -580,7 +580,11 @@ svg use{pointer-events:none}
 /* login sits outside the app chrome */
 .shell.bare .rail,.shell.bare .topbar{display:none}
 .shell.bare{grid-template-columns:1fr}
-.signin{min-height:100%;display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--page)}
+/* min-height:100% cannot resolve against a flex-sized .scroll, so the card sat
+   at the top instead of the middle. Let the sign-in screen grow to fill it. */
+.shell.bare .scroll{display:flex;flex-direction:column}
+.shell.bare .screen.live{flex:1;display:flex;min-height:0}
+.signin{flex:1;min-height:100%;display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--page)}
 .signin-card{width:min(400px,100%);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--lift-overlay);padding:2rem}
 .signin .mk{width:40px;height:40px;margin-bottom:1.2rem}
 .signin h1{font-size:24px;font-weight:600;letter-spacing:-.022em}
@@ -628,10 +632,12 @@ svg use{pointer-events:none}
 .tq{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;padding:0 0 .7rem}
 .tq-sp{margin-left:auto;display:flex;align-items:center;gap:.6rem}
 .tq-count{font-size:.75rem;color:var(--ink-3);font-variant-numeric:tabular-nums;letter-spacing:-.008em}
-.tq-btn{display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 7px;border-radius:7px;
-  border:1px solid var(--g600);background:var(--surface);color:var(--ink);
-  font-family:var(--ui);font-size:14px;line-height:16px;letter-spacing:-.01em;cursor:pointer}
-.tq-btn:hover{border-color:var(--ink-4)}
+/* Same metrics as .fl, so the generic table controls and the domain filter bar
+   read as one family rather than two filter systems that happen to share a page. */
+.tq-btn{display:inline-flex;align-items:center;gap:6px;height:var(--h-md);padding:0 12px;
+  border-radius:var(--r-filter);border:1px solid var(--line);background:var(--surface);
+  color:var(--ink-2);font-family:var(--ui);font-size:13.3333px;line-height:16px;cursor:pointer}
+.tq-btn:hover{border-color:var(--b300);background:var(--tint)}
 .tq-btn:focus-visible{outline:2px solid var(--b500);outline-offset:1px}
 .tq-btn svg{width:14px;height:14px;fill:none;flex:none;color:var(--ink-3)}
 .tq-btn .n{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;
@@ -816,7 +822,7 @@ tr.shut .nm{color:var(--ink-3);font-weight:500}
 .flclear:hover{color:var(--ink)}
 
 /* filtering and paging each own a flag, so neither can reveal what the other hid */
-tr.f-out,tr.p-out,.tr.f-out{display:none}
+tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .pg button[hidden]{display:none}
 .pg button:disabled{opacity:.4;cursor:default}
 .usermenu{position:fixed;z-index:var(--z-pop);min-width:12rem;background:var(--surface);
