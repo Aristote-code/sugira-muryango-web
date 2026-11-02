@@ -189,7 +189,7 @@
   var current = 'dashboard';
 
   function setNav(key) {
-    $$('.ni, .si').forEach(function (b) { b.classList.remove('on'); });
+    $$('.ni, .si').forEach(function (b) { b.classList.remove('on'); b.classList.remove('in'); });
     if (!key) return;
     var hit = $$('[data-go="' + key + '"]').filter(function (b) {
       return b.classList.contains('ni') || b.classList.contains('si');
@@ -198,10 +198,17 @@
     hit.classList.add('on');
     if (hit.classList.contains('si')) {
       var list = hit.closest('.subs');
-      if (list && list.hidden) {
-        list.hidden = false;
+      if (list) {
+        // Open the group you are inside. Arriving by drilling through a table
+        // used to leave it shut, so the rail showed no sign of where you were.
+        if (list.hidden) list.hidden = false;
         var owner = $('[aria-controls="' + list.id + '"]');
-        if (owner) owner.setAttribute('aria-expanded', 'true');
+        if (owner) {
+          owner.setAttribute('aria-expanded', 'true');
+          // Mark the section as well as the item: collapse the rail, or the
+          // group, and the only thing carrying the current place disappeared.
+          owner.classList.add('in');
+        }
       }
     }
   }

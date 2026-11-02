@@ -23,7 +23,7 @@
   --al-ink:#A82429; --al-edge:#F2C3C7;
   --amber:#FFC53D; --amber-bg:#FFF3D0; --amber-line:#F3DCA6; --amber-ink:#915930;
   --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
-  --page:#FCFCFC; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
+  --page:#F9F9F9; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
   --link:var(--b600);
   --z-drawer:1000; --z-pop:1100; --z-modal:2000; --z-toast:3000;
   --ui:"Inter","Helvetica Neue",Arial,sans-serif;
@@ -316,15 +316,15 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .lr.click:hover{background:var(--tint-2)}
 
 /* table — sits on the white surface so dense rows stay readable */
-.tbl{width:100%;border-collapse:collapse;font-size:13px;background:var(--surface)}
-.tbl th{text-align:left;font-size:13px;font-weight:500;letter-spacing:-.008em;color:var(--ink-3);
-  padding:.8rem 1.5rem;background:var(--tint);border-bottom:1px solid var(--line);white-space:nowrap;color:var(--ink-3)}
-.tbl td{padding:.85rem 1.5rem;border-bottom:1px solid var(--line-2);vertical-align:middle}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+.tbl th{text-align:left;font-size:12px;line-height:16px;font-weight:500;letter-spacing:0;color:var(--ink-3);
+  padding:8px 16px;background:var(--tint);border-bottom:1px solid var(--line);white-space:nowrap;color:var(--ink-3)}
+.tbl td{padding:10px 16px;line-height:16px;border-bottom:1px solid var(--line-2);vertical-align:middle}
 .tbl tbody tr{cursor:pointer}
-.tbl tbody tr:hover{background:var(--tint)}
+.tbl tbody tr:hover{background:#00000006}
 .tbl tbody tr:last-child td{border-bottom:0}
 .tbl .num{font-variant-numeric:tabular-nums;text-align:right}
-.tbl .nm{font-weight:700}
+.tbl .nm{font-weight:500}
 .tbl .mut{color:var(--ink-3)}
 .tblwrap{overflow-x:auto}
 /* On a wide display the name column absorbs the slack, so the figures stay grouped
@@ -788,25 +788,6 @@ tr.shut .nm{color:var(--ink-3);font-weight:500}
 /* filter popovers: ClickUp's surface, the old app's chaining, neither's waiting */
 .fl.on{border-color:var(--b300);background:var(--b50)}
 .fl.on b{color:var(--b700)}
-.flpop{position:fixed;z-index:var(--z-pop);min-width:14rem;max-width:22rem;
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
-  box-shadow:0 12px 32px rgba(54,19,47,.16),0 2px 6px rgba(0,0,0,.06);
-  padding:.35rem;max-height:min(24rem,60vh);display:flex;flex-direction:column}
-.flpop-h{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--ink-4);padding:.5rem .6rem .35rem}
-.flpop-s{margin:.1rem .2rem .3rem;padding:.4rem .6rem;border:1px solid var(--line);
-  border-radius:var(--r-ctl);font-family:var(--ui);font-size:13px;color:var(--ink);
-  background:var(--surface);width:calc(100% - .4rem)}
-.flpop-s:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 3px var(--b100)}
-.flpop-l{overflow-y:auto;display:flex;flex-direction:column;gap:1px}
-.flpop-o{display:flex;align-items:center;gap:.5rem;width:100%;text-align:left;border:0;
-  background:transparent;border-radius:var(--r-ctl);padding:.45rem .6rem;cursor:pointer;
-  font-family:var(--ui);font-size:13px;color:var(--ink-2);line-height:1.35}
-.flpop-o:hover{background:var(--g100);color:var(--ink)}
-.flpop-o:focus-visible{outline:2px solid var(--b400);outline-offset:-2px}
-.flpop-o.sel{background:var(--b50);color:var(--b700);font-weight:600}
-.flpop-o.sel::after{content:"\2713";margin-left:auto;font-weight:700}
-.flpop-o .dr{margin-left:auto;color:var(--ink-4);font-size:14px}
 .flsum{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:-.35rem 0 .9rem}
 .flsum-n{font-size:12px;color:var(--ink-3);margin-right:.2rem}
 .flchip{display:inline-flex;align-items:center;gap:.35rem;border:1px solid var(--b200);
@@ -840,3 +821,53 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   font-size:11px;color:rgba(255,255,255,.38);letter-spacing:.02em;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
 .shell.mini .buildstamp{display:none}
+
+/* ---------------------------------------------------------------------------
+   Menus, to ClickUp's measurements (see menu.js for where each number comes
+   from). The native <select> popup was the loudest generic note in the app:
+   another typeface, another highlight colour, another radius.
+--------------------------------------------------------------------------- */
+.cmenu{position:fixed;z-index:var(--z-pop);background:var(--surface);
+  border-radius:12px;padding:8px 0;
+  box-shadow:0 0 1px 0 #00000044,0 4px 6px -1px #0000001b,0 2px 4px -2px #0000001b;
+  display:flex;flex-direction:column;max-height:min(26rem,70vh)}
+.cmenu-l{overflow-y:auto;display:flex;flex-direction:column}
+.cmenu-i{display:flex;align-items:center;gap:8px;min-height:28px;margin:2px 8px 0;
+  padding:6px 8px;border:0;border-radius:7px;background:transparent;cursor:pointer;
+  font-family:var(--ui);font-size:14px;line-height:16px;color:var(--ink);text-align:left}
+.cmenu-i:first-child{margin-top:0}
+.cmenu-i:hover,.cmenu-i:focus-visible{background:#0000000f;outline:none}
+.cmenu-i[disabled]{opacity:.5;cursor:default}
+.cmenu-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmenu-i.sel{font-weight:500}
+.cmenu-i.sel::after{content:"\2713";font-weight:700;color:var(--b600);margin-left:4px}
+.cmenu-i.sel:has(.cmenu-ch)::after{content:none}
+.cmenu-hint{font-size:12px;color:var(--ink-4);flex:none}
+.cmenu-ch{color:var(--ink-4);font-size:14px;flex:none;margin-left:4px}
+.cmenu-i.back .cmenu-t{color:var(--ink-3)}
+.cmenu-h{font-size:12px;line-height:16px;font-weight:500;color:var(--ink-3);
+  padding:6px 20px 6px 16px}
+.cmenu-sep{height:1px;background:var(--line);margin:8px 0}
+.cmenu-s{margin:0 8px 6px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;
+  font-family:var(--ui);font-size:14px;color:var(--ink);background:var(--surface);
+  width:calc(100% - 16px)}
+.cmenu-s:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 3px var(--b100)}
+
+/* the trigger that replaces a native select */
+.cselect{display:flex;align-items:center;gap:8px;width:100%;height:var(--h-lg);
+  padding:0 12px;border:1px solid var(--line);border-radius:var(--r-ctl);
+  background:var(--surface);color:var(--ink);font-family:var(--ui);font-size:14px;
+  cursor:pointer;text-align:left}
+.cselect:hover{border-color:var(--b300)}
+.cselect:focus-visible{outline:none;border-color:var(--b400);box-shadow:0 0 0 3px var(--b100)}
+.cselect[disabled]{opacity:.6;cursor:default;background:var(--tint)}
+.cselect-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cselect-c{color:var(--ink-4);font-size:11px;flex:none}
+.cselect-native{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;margin:0}
+
+/* The section you are inside, marked on the group as well as the item. With
+   the rail collapsed, or the group shut, the item was the only thing carrying
+   the current place — so the rail showed nothing at all. */
+.ni.in{color:#fff}
+.ni.in svg{color:var(--b300)}
+.shell.mini .ni.in{background:var(--pill)}

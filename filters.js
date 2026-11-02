@@ -176,8 +176,6 @@
     }
   }
 
-  var openPop = null;
-
   function keyOf(btn) {
     var k = btn.querySelector('.k');
     return k ? k.textContent.trim().toLowerCase() : null;
@@ -196,119 +194,60 @@
     btn.setAttribute('aria-label', keyOf(btn) + ': ' + v);
   }
 
-  function closePop() {
-    if (!openPop) return;
-    if (openPop.el.parentNode) openPop.el.parentNode.removeChild(openPop.el);
-    openPop.btn.setAttribute('aria-expanded', 'false');
-    openPop = null;
-  }
-
-  function makePop(btn, rows, title) {
-    closePop();
-    var pop = document.createElement('div');
-    pop.className = 'flpop';
-    pop.setAttribute('role', 'dialog');
-    pop.setAttribute('aria-label', title || keyOf(btn));
-
-    if (title) {
-      var h = document.createElement('div');
-      h.className = 'flpop-h';
-      h.textContent = title;
-      pop.appendChild(h);
-    }
-
-    var list = document.createElement('div');
-    list.className = 'flpop-l';
-    pop.appendChild(list);
-
-    // A long list gets a filter of its own, or it is the old 2,632-option bug.
-    if (rows.length > 8) {
-      var s = document.createElement('input');
-      s.type = 'text';
-      s.className = 'flpop-s';
-      s.placeholder = 'Search ' + keyOf(btn);
-      s.setAttribute('aria-label', 'Search ' + keyOf(btn));
-      pop.insertBefore(s, list);
-      s.addEventListener('input', function () {
-        var q = s.value.toLowerCase();
-        $$('.flpop-o', list).forEach(function (o) {
-          o.hidden = q && o.textContent.toLowerCase().indexOf(q) === -1;
-        });
-      });
-      setTimeout(function () { s.focus(); }, 0);
-    }
-
-    rows.forEach(function (r) {
-      var o = document.createElement('button');
-      o.type = 'button';
-      o.className = 'flpop-o' + (r.on ? ' sel' : '') + (r.drill ? ' drill' : '');
-      o.textContent = r.label;
-      if (r.drill) {
-        var c = document.createElement('span');
-        c.className = 'dr';
-        c.textContent = '›';
-        o.appendChild(c);
-      }
-      o.addEventListener('click', function (e) {
-        e.stopPropagation();
-        r.pick();
-      });
-      list.appendChild(o);
-    });
-
-    document.body.appendChild(pop);
-    var r = btn.getBoundingClientRect();
-    pop.style.top = (r.bottom + 6) + 'px';
-    var left = Math.min(r.left, window.innerWidth - pop.offsetWidth - 12);
-    pop.style.left = Math.max(12, left) + 'px';
-
-    btn.setAttribute('aria-expanded', 'true');
-    openPop = { el: pop, btn: btn };
-  }
-
-  /* Place drills one level at a time, which is the chained search the old data
-     filter wanted — minus having to pick all six before anything happened. */
-  function openPlace(btn, path) {
-    path = path || [];
-    var rows = [], node = PLACES, title = 'Rwanda';
-
-    if (path.length === 0) {
-      rows.push({ label: 'Rwanda — everywhere', on: valueOf(btn) === 'Rwanda',
-        pick: function () { setValue(btn, 'Rwanda'); closePop(); apply(btn); } });
-      Object.keys(PLACES).forEach(function (p) {
-        rows.push({ label: p, drill: true, pick: function () { openPlace(btn, [p]); } });
-      });
-    } else if (path.length === 1) {
-      title = path[0];
-      node = PLACES[path[0]];
-      rows.push({ label: '‹ Rwanda', pick: function () { openPlace(btn, []); } });
-      Object.keys(node).forEach(function (d) {
-        rows.push({ label: d, drill: true, on: valueOf(btn) === d,
-          pick: function () { openPlace(btn, [path[0], d]); } });
-      });
-    } else {
-      title = path[1];
-      rows.push({ label: '‹ ' + path[0], pick: function () { openPlace(btn, [path[0]]); } });
-      rows.push({ label: 'All of ' + path[1], on: valueOf(btn) === path[1],
-        pick: function () { setValue(btn, path[1]); closePop(); apply(btn); } });
-      PLACES[path[0]][path[1]].forEach(function (s) {
-        rows.push({ label: s, on: valueOf(btn) === s,
-          pick: function () { setValue(btn, s); closePop(); apply(btn); } });
-      });
-    }
-    makePop(btn, rows, title);
-  }
-
-  function openList(btn, dim) {
+  /* Place opens as nested flyouts rather than a drill-down.
+     Replacing the list each time threw away the context you were choosing
+     within: by the third tap you could no longer see that Ngoma was in the
+     Eastern Province. ClickUp's submenus open beside their trigger and leave
+     the trail on screen, which is also how the old system's six chained boxes
+     wanted to behave before they were crammed into one column. */
+  function placeItems(btn) {
     var cur = valueOf(btn);
-    var rows = [{ label: dim.all, on: cur === dim.all,
-      pick: function () { setValue(btn, dim.all); closePop(); apply(btn); } }];
+    var pick = function (v) {
+      return function () { setValue(btn, v); window.SugiraMenu.close(); apply(btn); };
+    };
+    var rows = [{ label: 'All of Rwanda', selected: cur === 'Rwanda', onPick: pick('Rwanda') },
+                { separator: true }];
+
+    Object.keys(PLACES).forEach(function (prov) {
+      rows.push({
+        label: prov,
+        hint: Object.keys(PLACES[prov]).length + '',
+        submenu: function () {
+          var sub = [{ label: 'All of ' + prov, selected: cur === prov, onPick: pick(prov) },
+                     { separator: true }];
+          Object.keys(PLACES[prov]).forEach(function (d) {
+            sub.push({
+              label: d,
+              hint: PLACES[prov][d].length + '',
+              submenu: function () {
+                var s2 = [{ label: 'All of ' + d, selected: cur === d, onPick: pick(d) },
+                          { separator: true }];
+                PLACES[prov][d].forEach(function (sec) {
+                  s2.push({ label: sec, selected: cur === sec, onPick: pick(sec) });
+                });
+                return s2;
+              }
+            });
+          });
+          return sub;
+        }
+      });
+    });
+    return rows;
+  }
+
+  function listItems(btn, dim) {
+    var cur = valueOf(btn);
+    var pick = function (v) {
+      return function () { setValue(btn, v); window.SugiraMenu.close(); apply(btn); };
+    };
+    var rows = [{ label: dim.all, selected: cur === dim.all, onPick: pick(dim.all) }];
+    if (dim.options.length) rows.push({ separator: true });
     dim.options.forEach(function (o) {
       if (o === dim.all) return;
-      rows.push({ label: o, on: cur === o,
-        pick: function () { setValue(btn, o); closePop(); apply(btn); } });
+      rows.push({ label: o, selected: cur === o, onPick: pick(o) });
     });
-    makePop(btn, rows);
+    return rows;
   }
 
   /* ---- applying ---- */
@@ -481,12 +420,12 @@
     // filter starts at its "everything" value whatever the markup happened to
     // say. A screen that loads already filtered hides rows nobody excluded.
     if (!dim.always) setValue(btn, dim.all);
-    btn.setAttribute('aria-haspopup', 'dialog');
+    btn.setAttribute('aria-haspopup', 'menu');
     btn.setAttribute('aria-expanded', 'false');
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (openPop && openPop.btn === btn) { closePop(); return; }
-      if (dim.tree) openPlace(btn, []); else openList(btn, dim);
+      window.SugiraMenu.show(btn, dim.tree ? placeItems(btn) : listItems(btn, dim),
+                             { width: dim.tree ? 220 : 200 });
     });
   });
 
@@ -527,9 +466,5 @@
     }
   };
 
-  document.addEventListener('click', function () { closePop(); });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && openPop) { var b = openPop.btn; closePop(); b.focus(); }
-  });
-  window.addEventListener('resize', closePop);
+  // Dismissal, Escape and reposition-on-resize all belong to the shared menu now.
 })();

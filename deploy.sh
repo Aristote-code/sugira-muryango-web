@@ -105,7 +105,7 @@ fi
 # scripts/audit-tokens.py came to be served from the live site. Forgetting to
 # add an asset here fails loudly the first time a page is opened; forgetting to
 # delete one fails silently, in public.
-site="index.html app.js filters.js actions.js style.css logo.svg netlify.toml"
+site="index.html app.js menu.js filters.js actions.js style.css logo.svg netlify.toml"
 for f in $site; do
   if [ ! -e "$tmp/$f" ]; then
     echo "deploy aborted — $f is missing from $sha."
@@ -136,7 +136,7 @@ fi
 # The delimiter is '#', not '|': the alternation below uses '|', and sed reads
 # the first one as the end of the expression.
 tmpfile=$(mktemp)
-sed -E "s#(src|href)=\"(app\.js|filters\.js|actions\.js|style\.css|logo\.svg)\"#\1=\"\2?v=$sha\"#g" \
+sed -E "s#(src|href)=\"(app\.js|menu\.js|filters\.js|actions\.js|style\.css|logo\.svg)\"#\1=\"\2?v=$sha\"#g" \
   "$pub/index.html" > "$tmpfile" && mv "$tmpfile" "$pub/index.html"
 versioned=$(grep -o "?v=$sha" "$pub/index.html" | wc -l | tr -d ' ')
 if [ "$versioned" -lt 4 ]; then
