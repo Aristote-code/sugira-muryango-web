@@ -31,7 +31,7 @@
   /* ClickUp control scale: heights xs/sm/md/lg, button radii by size, tag + chip radii */
   --h-xs:24px; --h-sm:28px; --h-md:32px; --h-lg:40px;
   --r-btn-sm:.375rem; --r-btn-md:.4375rem; --r-btn-lg:.5rem;
-  --r-tag:.625rem; --r-chip:.75rem; --r-filter:1rem; --r-count:.25rem;
+  --r-tag:.625rem; --r-chip:6px; --r-filter:1rem; --r-count:.25rem;
   --lh-16:16.008px;
   --lift:0 0 1px 0 #00000044, 0 1px 2px 0 #0000000E;
   --lift-overlay:0 0 1px 0 #00000044, 0 4px 6px -1px #0000001B, 0 2px 4px -2px #0000001B;
@@ -176,7 +176,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 
 /* ---------------- controls ---------------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid transparent;
-  border-radius:var(--r-btn-md);cursor:pointer;height:var(--h-md);padding:0 12px;
+  border-radius:var(--r-btn-lg);cursor:pointer;height:var(--h-md);padding:0 12px;
   font-size:14px;line-height:var(--lh-16);font-weight:500;letter-spacing:-.006em;
   background:var(--b500);color:#fff;white-space:nowrap}
 .btn:hover{background:var(--b600)}
@@ -201,7 +201,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .search svg{width:15px;height:15px;color:var(--ink-4);fill:none;flex:none}
 .search input{border:0;background:none;outline:none;font-family:inherit;font-size:13.3333px;color:var(--ink);width:100%;min-width:0}
 .search input::placeholder{color:var(--ink-4)}
-.seg{display:inline-flex;height:var(--h-md);background:var(--tint);border-radius:var(--r-btn-md);padding:2px;gap:2px}
+.seg{display:inline-flex;height:var(--h-md);background:var(--tint);border-radius:var(--r-btn-lg);padding:2px;gap:2px}
 .seg button{border:0;background:none;cursor:pointer;height:var(--h-sm);padding:0 8px;font-size:14px;
   line-height:16.002px;font-weight:500;color:var(--ink-3);border-radius:.3125rem;letter-spacing:-.006em}
 .seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--lift)}
@@ -209,7 +209,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 /* ---------------- chips ---------------- */
 .chip{display:inline-flex;align-items:center;gap:4px;min-height:20px;padding:0 6px;
   font-size:12px;line-height:var(--lh-16);font-weight:500;letter-spacing:0;
-  border-radius:var(--r-tag);background:var(--tint-2);color:var(--ink-2);white-space:nowrap}
+  border-radius:var(--r-chip);background:var(--tint-2);color:var(--ink-2);white-space:nowrap}
 .chip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
 .chip.ok{background:var(--green-bg);color:var(--green-ink)}
 .chip.warn{background:var(--amber-bg);color:var(--amber-ink)}
@@ -499,11 +499,9 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 @media (max-width:880px){.dw.as-modal{padding:0}.dw.as-modal .dw-panel{border-radius:0}.dw-layout{display:none}}
 
 /* modal */
-.scrim{position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:var(--z-modal)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .scrim{background:rgba(10,8,11,.74)}}
-:root[data-theme="dark"] .scrim{background:rgba(10,8,11,.74)}
+.scrim{position:fixed;inset:0;background:#00000099;display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:var(--z-modal)}
 .scrim[hidden]{display:none}
-.modal{background:var(--surface);border-radius:var(--r-lg);width:min(520px,100%);box-shadow:var(--lift-modal);overflow:hidden}
+.modal{background:var(--surface);border-radius:var(--r-card);width:min(520px,100%);box-shadow:var(--lift-modal);overflow:hidden}
 .modal .mh{display:flex;align-items:center;gap:.8rem;padding:1.2rem 1.4rem}
 .modal .mh h3{font-size:18px;flex:1;font-weight:700}
 .modal .mh button{background:none;border:0;cursor:pointer;color:var(--ink-3);padding:.28rem;border-radius:7px;display:flex}
