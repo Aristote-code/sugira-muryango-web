@@ -122,6 +122,25 @@ from its compiled `tokens.css` rather than eyeballed.
 | Success | `#30A46C` / ink `#18794E` | ClickUp |
 | Type | Inter | The SUGIRA Figma file, kept over ClickUp's system stack |
 
+### Controls
+
+Every control takes ClickUp's own component tokens, resolved from its compiled
+`tokens.css` rather than estimated:
+
+| Control | Value |
+| --- | --- |
+| Control heights | 24 / 28 / 32 / 40 (`size.control.xs…lg`) |
+| Button | 32 high, radius 7, 14px — small: 28, radius 6, 12px |
+| Chip (tag) | radius 10, 12px / 16.008 line, 20 high |
+| Filter pill, search | 32 high, radius 16, 13.3333px (`chip.filter`) |
+| Segmented control | outer 32 radius 7 pad 2, inner 28 radius 5, 14px |
+| Underline tabs | 35 high, 14px |
+| Table | header and rows 13px |
+| Pagination | 28 square, radius 6 |
+
+**The navigation rail is deliberately exempt** and was not touched: 268px, its own
+37px items at radius 10, and pill counts at `radius.full`.
+
 Cards carry ClickUp's elevation ring instead of a hairline border — in that system the
 ring *is* the edge, which is why `elevation.border-1` is named the way it is.
 
