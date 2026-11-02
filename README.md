@@ -47,6 +47,15 @@ progress bars and chart bars. Card surfaces stay white.
 red at 357 is 47 degrees away and still reads as an alarm. A nearer brand hue would
 have collapsed the two.
 
+## Icons
+
+Hugeicons Pro, **Stroke / Rounded** throughout — 26 symbols defined once in an inline
+SVG sprite at the top of `index.html` and referenced with `<use href="#i-name">`.
+
+Each symbol carries its own `stroke="currentColor"` and per-path stroke widths (Hugeicons
+uses 2px for dot accents against 1.5px elsewhere), so CSS sets `color` rather than `stroke`
+on icon rules. Setting `stroke` there would override the symbol and flatten those accents.
+
 ## Accessibility notes
 
 - The active navigation item carries a colour bar as well as a background change,
