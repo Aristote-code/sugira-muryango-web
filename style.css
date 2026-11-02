@@ -339,19 +339,19 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .tfoot .pg button.on{background:var(--b500);color:#fff;border-color:var(--b500)}
 
 /* timeline */
-.tl{display:grid;gap:.1rem}
-.te{display:grid;grid-template-columns:36px 1fr auto;gap:.9rem;padding:.8rem 0;border-top:1px solid var(--line-2)}
-.te:first-child{border-top:0}
-.te .ic{width:36px;height:36px;border-radius:50%;background:var(--b100);display:flex;align-items:center;justify-content:center}
-.te .ic svg{width:17px;height:17px;color:var(--b600);fill:none}
-.te .ic.ok{background:var(--green-bg)}.te .ic.ok svg{color:var(--green)}
-.te .ic.warn{background:var(--red-bg)}.te .ic.warn svg{color:var(--red)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .te .ic{background:rgba(162,58,145,.2)}:root:not([data-theme="light"]) .te .ic svg{color:var(--b300)}}
-:root[data-theme="dark"] .te .ic{background:rgba(162,58,145,.2)}:root[data-theme="dark"] .te .ic svg{color:var(--b300)}
-.te h4{font-size:14px;font-weight:700}
-.te p{font-size:14px;color:var(--ink-2);margin-top:.14rem}
-.te a{color:var(--link);font-size:13px;font-weight:600;cursor:pointer;display:inline-block;margin-top:.25rem;text-decoration:none}
-.te .when{font-size:13px;color:var(--ink-3);white-space:nowrap}
+.tl{display:grid;gap:1px}
+.te{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:start;
+  min-height:32px;padding:6px 8px;border-radius:var(--r-ctl);border:0}
+.te:hover{background:#00000006}
+.te .ic{width:16px;height:16px;display:flex;align-items:center;justify-content:center;
+  background:none;border-radius:0;color:var(--ink-4);margin-top:1px}
+.te .ic svg{width:16px;height:16px;color:inherit;fill:none}
+.te .ic.ok{color:var(--green)}
+.te .ic.warn,.te .ic.bad{color:var(--red)}
+.te h4{font-size:13px;font-weight:500;line-height:16px;color:var(--ink)}
+.te p{font-size:12px;line-height:16px;color:var(--ink-3);margin-top:1px}
+.te .when{font-size:12px;line-height:16px;color:var(--ink-3);white-space:nowrap}
+.te a{color:var(--link);font-size:12px;font-weight:500;cursor:pointer;display:inline-block;margin-top:2px;text-decoration:none}
 
 /* module progress */
 .mods{display:grid;gap:.45rem}
