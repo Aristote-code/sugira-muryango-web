@@ -606,7 +606,7 @@ svg use{pointer-events:none}
 .tr .nm{font-weight:500;min-width:0}
 .tr .lv{font-size:.75rem;color:var(--ink-4);text-transform:uppercase;letter-spacing:.06em}
 .tr .rt{margin-left:auto;display:flex;gap:1.4rem;color:var(--ink-3);font-size:13px;font-variant-numeric:tabular-nums}
-.tr.d1{padding-left:.9rem}.tr.d2{padding-left:2.1rem}.tr.d3{padding-left:3.3rem}.tr.d4{padding-left:4.5rem}
+.tr.d0{padding-left:.9rem;font-weight:600;background:var(--tint)}.tr.d1{padding-left:2rem}.tr.d2{padding-left:3.2rem}.tr.d3{padding-left:4.4rem}.tr.d4{padding-left:5.6rem}
 
 /* login sits outside the app chrome */
 .shell.bare .rail,.shell.bare .topbar{display:none}
@@ -806,3 +806,6 @@ tr.shut .nm{color:var(--ink-3);font-weight:500}
 .rlock-a{display:flex;gap:.55rem;justify-content:center;margin:1.2rem 0 0;flex-wrap:wrap}
 .rlock-f{font-size:12px;color:var(--ink-3);margin-top:1rem;max-width:56ch}
 .offlimits{display:none}
+
+.tr.more .nm{color:var(--ink-3);font-style:italic}
+.tr.more .rt{color:var(--ink-3)}

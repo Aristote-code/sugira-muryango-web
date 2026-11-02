@@ -25,9 +25,9 @@
     project:      { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', null]],
                     nav: 'programme' },
     module:       { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', 'project'],
-                             ['Play and communication', null]], nav: 'programme' },
+                             ['The Importance of Good Health', null]], nav: 'programme' },
     form:         { crumbs: [['Programme', 'programme'], ['SUGIRA Muryango \u2014 core', 'project'],
-                             ['Play and communication', 'module'], ['Visit record', null]], nav: 'programme' },
+                             ['The Importance of Good Health', 'module'], ['Visit record', null]], nav: 'programme' },
     cohorts:      { crumbs: [['Programme', 'programme'], ['Cohorts', null]],              nav: 'cohorts' },
     translations: { crumbs: [['Programme', 'programme'], ['Translations', null]],         nav: 'translations' }
   };
@@ -51,7 +51,7 @@
     visit: {
       title: 'Log a visit',
       ok: 'Log visit',
-      body: '<div><label for="f-mod">Module</label><select id="f-mod"><option>7 — Problem solving</option><option>8 — Family conflict</option></select></div>' +
+      body: '<div><label for="f-mod">Module</label><select id="f-mod"><option>7 — The Importance of Good Nutrition</option><option>8 — Managing the Stresses of Parenting</option></select></div>' +
             '<div><label for="f-date">Date of visit</label><input id="f-date" type="date" value="2026-11-02"></div>' +
             '<div><label for="f-out">Outcome</label><select id="f-out"><option>Completed</option><option>Household absent</option><option>Road access</option><option>Security concern</option></select></div>',
       done: 'Visit logged — it will sync when the tablet next connects'
@@ -67,7 +67,7 @@
       title: 'Enrol a household',
       ok: 'Enrol',
       body: '<div><label for="f-care">Primary caregiver</label><input id="f-care" type="text" placeholder="Full name"></div>' +
-            '<div><label for="f-vill">Village</label><select id="f-vill"><option>Rango — Tumba — Huye</option><option>Cyarwa — Tumba — Huye</option><option>Mpare — Mbazi — Huye</option></select></div>' +
+            '<div><label for="f-vill">Village</label><select id="f-vill"><option>Kabare — Kibungo — Ngoma</option><option>Gatare — Kibungo — Ngoma</option><option>Mpare — Sake — Ngoma</option></select></div>' +
             '<div><label for="f-coh">Cohort</label><select id="f-coh"><option>Cohort 4</option><option>Cohort 5 (not yet started)</option></select></div>',
       done: 'Household enrolled in Cohort 4'
     },
@@ -81,7 +81,7 @@
     module: {
       title: 'Add a session',
       ok: 'Add session',
-      body: '<div><label for="f-mn">Session name</label><input id="f-mn" type="text" placeholder="e.g. Problem solving"></div>' +
+      body: '<div><label for="f-mn">Session name</label><input id="f-mn" type="text" placeholder="e.g. The Importance of Good Nutrition"></div>' +
             '<div><label for="f-mo">Position in the sequence</label><select id="f-mo"><option>After session 9</option><option>At the end</option><option>As a booster, outside the sequence</option></select></div>',
       done: 'Session added \u2014 it is not on the mobile app until you publish'
     },
@@ -97,7 +97,7 @@
       title: 'New cohort',
       ok: 'Create cohort',
       body: '<div><label for="f-cn">Cohort name</label><input id="f-cn" type="text" placeholder="e.g. Cohort 5"></div>' +
-            '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Huye</option><option>Gisagara</option><option>Nyamagabe</option></select></div>' +
+            '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Ngoma</option><option>Nyanza</option><option>Rubavu</option></select></div>' +
             '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>',
       done: 'Cohort created as a draft \u2014 no household is scheduled yet'
     },
@@ -115,14 +115,14 @@
       ok: 'Send invitation',
       body: '<div><label for="f-ie">Email</label><input id="f-ie" type="email" placeholder="name@fxbrwanda.org"></div>' +
             '<div><label for="f-ir">Role</label><select id="f-ir"><option>IZU at Village</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option><option>Sugira Muryango District lead (DTL)</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>HQ officer</option></select></div>' +
-            '<div><label for="f-ip">Where</label><select id="f-ip"><option>Tumba \u00b7 Huye</option><option>Rusatira \u00b7 Huye</option><option>Mbazi \u00b7 Huye</option><option>Kigembe \u00b7 Gisagara</option></select></div>' +
+            '<div><label for="f-ip">Where</label><select id="f-ip"><option>Kibungo \u00b7 Ngoma</option><option>Jarama \u00b7 Ngoma</option><option>Sake \u00b7 Ngoma</option><option>Kigoma \u00b7 Nyanza</option></select></div>' +
             '<p style="font-size:.82rem;color:var(--ink-3);margin:0">They set their own password from the invitation. No one else sees it.</p>',
       done: 'Invitation sent \u2014 they appear under Invited until they accept'
     },
     msettings: {
       title: 'Session settings',
       ok: 'Save for all 5 projects',
-      body: '<div><label for="f-sn">Session name</label><input id="f-sn" type="text" value="Play and communication"></div>' +
+      body: '<div><label for="f-sn">Session name</label><input id="f-sn" type="text" value="The Importance of Good Health"></div>' +
             '<div><label for="f-sd">Duration</label><input id="f-sd" type="text" value="42 minutes"></div>' +
             '<p class="m-lead">Five projects run this session. Saving changes it in all of them \u2014 open one to check before you do.</p>' +
             '<ul class="blast">' +
@@ -133,7 +133,7 @@
             '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Sector supervision</button><span class="w">supervision only</span></li>' +
             '</ul>' +
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Three of these are not yours to change. Ask the project owner first.</span></p>',
-      done: 'Saved \u2014 Play and communication changed in all 5 projects'
+      done: 'Saved \u2014 The Importance of Good Health changed in all 5 projects'
     },
     fpublish: {
       title: 'Publish to 2 sessions',
@@ -171,7 +171,7 @@
       title: 'Build a report',
       ok: 'Run report',
       body: '<div><label for="f-q">Question</label><select id="f-q"><option>Male caregiver attendance</option><option>Risk of harm by type</option><option>Household needs</option><option>Visits per module</option><option>Average minutes per module</option></select></div>' +
-            '<div><label for="f-sc">Scope</label><select id="f-sc"><option>All of Rwanda</option><option>Southern province</option><option>Huye district</option></select></div>' +
+            '<div><label for="f-sc">Scope</label><select id="f-sc"><option>All of Rwanda</option><option>Southern province</option><option>Ngoma district</option></select></div>' +
             '<div><label for="f-sch">Send it</label><select id="f-sch"><option>Don’t send, just show me</option><option>Weekly, Monday 06:00</option><option>Monthly, 1st at 06:00</option></select></div>',
       done: 'Report saved and queued'
     },
