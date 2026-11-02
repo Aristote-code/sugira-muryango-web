@@ -125,11 +125,21 @@
             <span class="rt"><i></i>Updated 09:42</span>
           </div>
 
-          <div class="alert">
-            <p class="t"><svg aria-hidden="true"><use href="#i-alert"/></svg>2 risk-of-harm cases are past their review date</p>
-            <div class="ar"><b>RH-0044</b><span>HH-1007 Mukamana &middot; Huye</span><span>2 days late</span><span class="go" data-go="case">Open &rsaquo;</span></div>
-            <div class="ar"><b>RH-0045</b><span>HH-1042 Nshimiyimana &middot; Nyamagabe</span><span>due today</span><span class="go" data-go="case">Open &rsaquo;</span></div>
-          </div>
+          <div class="al">
+                <button class="al-hd" type="button" aria-expanded="true" aria-controls="al-1">
+                  <svg aria-hidden="true"><use href="#i-alert"/></svg><span>Needs attention</span><span class="ct">2 risk-of-harm cases</span><svg class="cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
+                <div class="al-bd" id="al-1">
+                  <p class="al-lead">Both cases have passed the 72-hour review window. A supervisor review is required before either can be referred or closed.</p>
+                  <div class="al-row">
+                    <span class="al-what"><span class="lb">Case RH-0044</span><span class="nm">HH-1007 Mukamana &middot; Huye</span></span>
+                    <span class="al-act"><span class="chip bad"><i></i>2 days late</span><button class="btn sm" type="button" data-go="case">Open case</button></span>
+                  </div>
+                  <div class="al-row">
+                    <span class="al-what"><span class="lb">Case RH-0045</span><span class="nm">HH-1042 Nshimiyimana &middot; Nyamagabe</span></span>
+                    <span class="al-act"><span class="chip warn"><i></i>Due today</span><button class="btn sec sm" type="button" data-go="case">Open case</button></span>
+                  </div>
+                </div>
+              </div>
 
           <div class="stats">
             <div class="st"><div class="l">Visits done</div>
@@ -468,10 +478,13 @@
           <button class="tab" type="button">Closed</button>
         </div>
         <div class="pad">
-          <div class="alert">
-            <p class="t"><svg aria-hidden="true"><use href="#i-alert"/></svg>Both open cases are past their review date</p>
-            <div class="ar"><span>The protocol requires a supervisor review within 72 hours of a flag being raised.</span></div>
-          </div>
+          <div class="al">
+                <button class="al-hd" type="button" aria-expanded="true" aria-controls="al-2">
+                  <svg aria-hidden="true"><use href="#i-alert"/></svg><span>Review overdue</span><span class="ct">Both open cases</span><svg class="cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
+                <div class="al-bd" id="al-2">
+                  <p class="al-lead">The protocol requires a supervisor review within 72 hours of a flag being raised, and a referral to the sector social worker if it is substantiated. Neither case has been reviewed.</p>
+                </div>
+              </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Case</th><th>Household</th><th>Type</th><th>Who</th><th>Raised by</th><th class="num">Review due</th><th>Status</th></tr></thead>
@@ -515,11 +528,17 @@
           <button class="tab" type="button">Audit trail</button>
         </div>
         <div class="pad">
-          <div class="alert">
-            <p class="t"><svg aria-hidden="true"><use href="#i-alert"/></svg>Supervisor review was due 30 October</p>
-            <div class="ar"><span>Protocol: review within 72 hours, refer to the sector social worker if substantiated.</span>
-              <span class="go" data-modal="review">Record review now &rsaquo;</span></div>
-          </div>
+          <div class="al">
+                <button class="al-hd" type="button" aria-expanded="true" aria-controls="al-3">
+                  <svg aria-hidden="true"><use href="#i-alert"/></svg><span>Review overdue</span><span class="ct">RH-0044</span><svg class="cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
+                <div class="al-bd" id="al-3">
+                  <p class="al-lead">The supervisor review was due on 30 October. The protocol requires a review within 72 hours of a flag being raised, and a referral to the sector social worker if it is substantiated.</p>
+                  <div class="al-row">
+                    <span class="al-what"><span class="lb">Required now</span><span class="nm">Record the supervisor review</span></span>
+                    <span class="al-act"><span class="chip bad"><i></i>2 days late</span><button class="btn sm" type="button" data-modal="review">Record review</button></span>
+                  </div>
+                </div>
+              </div>
           <div class="cols c2">
             <div class="card">
               <div class="card-h"><h3>What was reported</h3></div>

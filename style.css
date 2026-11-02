@@ -232,6 +232,31 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 .callout .ch svg{width:14px;height:14px;fill:none}
 .callout p{font-size:.91rem;color:var(--ink-2);max-width:86ch}
 
+/* Framed alert: a coloured header names the alert, a white panel sits inside the frame,
+   and each thing needing action gets its own outlined row. The header is #C62A2F, not
+   --red (#E5484D) — white text on --red is 3.91:1, which fails at this size. */
+.al{border-radius:var(--r-card);background:var(--red-ink);padding:0 4px 4px;box-shadow:var(--lift)}
+.al.is-shut{padding-bottom:0}
+.al-hd{display:flex;align-items:center;gap:.55rem;width:100%;border:0;background:none;cursor:pointer;
+  color:#fff;font-family:var(--ui);font-weight:600;font-size:.9rem;letter-spacing:-.012em;
+  padding:.66rem .8rem;text-align:left;border-radius:var(--r-card) var(--r-card) 0 0}
+.al-hd:hover{background:rgba(255,255,255,.08)}
+.al-hd:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+.al-hd svg{width:17px;height:17px;flex:none;fill:none}
+.al-hd .ct{margin-left:auto;font-size:.79rem;font-weight:500;color:rgba(255,255,255,.84);letter-spacing:-.008em}
+.al-hd .cv{flex:none;opacity:.78;transform:rotate(90deg);transition:transform .16s ease}
+.al-hd[aria-expanded="false"] .cv{transform:rotate(0)}
+@media (prefers-reduced-motion:reduce){.al-hd .cv{transition:none}}
+.al-bd{background:var(--surface);border-radius:calc(var(--r-card) - 3px);padding:1.15rem 1.2rem;display:grid;gap:.85rem}
+.al-lead{font-size:1rem;color:var(--ink);letter-spacing:-.015em;max-width:92ch}
+.al-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:var(--r-ctl);padding:.8rem 1rem}
+.al-row:hover{border-color:var(--g600)}
+.al-what{min-width:0;display:grid;gap:.12rem}
+.al-what .lb{font-size:.78rem;color:var(--ink-3);letter-spacing:-.006em}
+.al-what .nm{font-size:1rem;font-weight:600;color:var(--link);letter-spacing:-.016em}
+.al-act{margin-left:auto;display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+
 /* alert — red is for a child at risk, amber for behind-schedule */
 .alert{background:var(--red-bg);border:1px solid var(--red-line);border-radius:var(--r-card);padding:1.1rem 1.25rem}
 .alert.warn{background:var(--amber-bg);border-color:var(--amber-line)}

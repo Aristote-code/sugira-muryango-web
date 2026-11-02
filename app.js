@@ -193,6 +193,18 @@
     if (m) { openModal(m.getAttribute('data-modal')); }
   });
 
+  // ---- framed alerts collapse to their header ----
+  $$('.al-hd').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var body = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!body) return;
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      body.hidden = open;
+      btn.closest('.al').classList.toggle('is-shut', open);
+    });
+  });
+
   // ---- rail collapse ----
   var rail = $('#rail');
   var railToggle = $('#railToggle');
