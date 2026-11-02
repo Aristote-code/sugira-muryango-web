@@ -495,6 +495,28 @@
           <button class="tab" type="button">Closed</button>
         </div>
         <div class="pad">
+          <div class="vas">
+            <span class="vas-l"><svg aria-hidden="true"><use href="#i-admin"/></svg>Viewing as</span>
+            <div class="vas-g" role="group" aria-label="View this screen as a different role">
+              <button class="vas-b on" type="button" data-roh="full">Sector lead &middot; Ngoma</button>
+              <button class="vas-b" type="button" data-roh="own">IZU at Village</button>
+              <button class="vas-b" type="button" data-roh="ref">District CPWO</button>
+              <button class="vas-b" type="button" data-roh="count">National NCDA</button>
+            </div>
+            <span class="vas-n">Nothing is saved &mdash; this switches the view so the policy can be seen before it is set.</span>
+          </div>
+          <div class="rnote" data-when="full">
+            <p><b>Full detail, Ngoma only.</b> A sector lead sees every case raised in their own sector, by name. Cases in Nyanza, Rubavu, Kirehe and Musanze are not on this list at all &mdash; not redacted, absent.</p>
+          </div>
+          <div class="rnote" data-when="own">
+            <p><b>Only what they raised.</b> The home visitor who filled in the form keeps access to that case so they can follow it up. Every other case in their own sector shows as a count.</p>
+          </div>
+          <div class="rnote" data-when="ref">
+            <p><b>Only what was referred to them.</b> The district child-protection officer receives a case when it is referred, and not before. RH-0044 has no referral recorded, so it stays closed to them.</p>
+          </div>
+          <div class="rnote" data-when="count">
+            <p><b>Counts, never names.</b> National oversight needs to know that two cases are open and both are late. It does not need to know which children. This is the level that does not exist today: <code>roh-list</code> would give them the table in full.</p>
+          </div>
           <div class="al">
                 <button class="al-hd" type="button" aria-expanded="true" aria-controls="al-2">
                   <svg aria-hidden="true"><use href="#i-alert"/></svg><span>Review overdue</span><span class="ct">Both open cases</span><svg class="cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
@@ -504,12 +526,19 @@
               </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Case</th><th>Household</th><th>Type</th><th>Who</th><th>Raised by</th><th class="num">Review due</th><th>Status</th></tr></thead>
+              <thead>
+                <tr><th>Case</th><th>Household</th><th>Type</th><th>Who</th><th>Raised by</th><th class="num">Review due</th><th>Status</th></tr></thead>
               <tbody>
-                <tr data-go="case"><td class="nm">RH-0044</td><td>HH-1007 Mukamana</td><td>Neglect</td><td>Child under 5</td><td>M. Dusabe</td><td class="num">30 Oct</td><td><span class="chip bad"><i></i>2 days late</span></td></tr>
-                <tr data-go="case"><td class="nm">RH-0045</td><td>HH-1042 Nshimiyimana</td><td>Physical</td><td>Child 5&ndash;17</td><td>J. Kamanzi</td><td class="num">1 Nov</td><td><span class="chip warn"><i></i>Due today</span></td></tr>
+                <tr data-go="case" data-open="full own"><td class="nm"><span class="r-open">RH-0044</span><span class="r-shut">Case&nbsp;1</span></td><td><span class="r-open">HH-1007 Mukamana</span><span class="r-shut"><span class="rd">household withheld</span></span></td><td><span class="r-open">Neglect</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td><span class="r-open">Child under 5</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td><span class="r-open">M. Dusabe</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td class="num">30 Oct</td><td><span class="chip bad"><i></i>2 days late</span></td></tr>
+                <tr data-go="case" data-open="full ref"><td class="nm"><span class="r-open">RH-0045</span><span class="r-shut">Case&nbsp;2</span></td><td><span class="r-open">HH-1042 Nshimiyimana</span><span class="r-shut"><span class="rd">household withheld</span></span></td><td><span class="r-open">Physical</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td><span class="r-open">Child 5&ndash;17</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td><span class="r-open">J. Kamanzi</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td class="num">1 Nov</td><td><span class="chip warn"><i></i>Due today</span></td></tr>
               </tbody>
             </table></div>
+            <div class="tfoot"><span><b>2 open cases</b> in Ngoma &middot; both past the 72-hour review window</span><span class="mut" data-when="count">Counts are visible to every role and are not a permission.</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>What this switch is deciding</p>
+            <p>Today there is one permission, <code>roh-list</code>, and it is all or nothing: a role either sees this table in full or cannot reach the screen. Splitting it into <b>a count everyone sees</b> and <b>a detail four roles see</b> is the design proposal, and the four buttons above are the four answers that split allows.</p>
+            <p>Which roles belong in which band is a safeguarding decision, not a design one. Every option is built and switchable so it can be chosen in the room rather than guessed at here.</p>
           </div>
         </div>
       </section>
@@ -526,6 +555,16 @@
             </span>
           </div>
           <h1>Neglect &mdash; child under five</h1>
+          <div class="vas inrec">
+            <span class="vas-l"><svg aria-hidden="true"><use href="#i-admin"/></svg>Viewing as</span>
+            <div class="vas-g" role="group" aria-label="View this screen as a different role">
+              <button class="vas-b on" type="button" data-roh="full">Sector lead &middot; Ngoma</button>
+              <button class="vas-b" type="button" data-roh="own">IZU at Village</button>
+              <button class="vas-b" type="button" data-roh="ref">District CPWO</button>
+              <button class="vas-b" type="button" data-roh="count">National NCDA</button>
+            </div>
+            <span class="vas-n">Nothing is saved &mdash; this switches the view so the policy can be seen before it is set.</span>
+          </div>
           <div class="pg" id="pg-case">
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg><span>Status</span></span><span class="v"><span class="pg-badge bad">Review overdue</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Household</span></span><span class="v"><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>HH-1007 Mukamana</button></span></div>
@@ -545,12 +584,24 @@
             The caregiver reported losing the household health insurance card in August.</p>
         </div>
         <div class="tabs">
-          <button class="tab on" type="button">Case</button>
-          <button class="tab" type="button">Actions</button>
-          <button class="tab" type="button">Referrals</button>
-          <button class="tab" type="button">Audit trail</button>
+          <button class="tab on" type="button" data-panel="case">Case</button>
+          <button class="tab" type="button" data-panel="actions">Actions</button>
+          <button class="tab" type="button" data-panel="referrals">Referrals</button>
+          <button class="tab" type="button" data-panel="audit">Audit trail <span class="chip" style="margin-left:.4rem">9</span></button>
         </div>
-        <div class="pad">
+        <div class="lockwrap" data-open="full own">
+          <div class="rlock">
+            <span class="rlock-i"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg></span>
+            <h3>This case is not open to you</h3>
+            <p>RH-0044 was raised in Mukarange sector on 28 October and has no referral recorded. Your role reaches the count, not the record. Opening it would be logged against your name either way.</p>
+            <div class="rlock-a">
+              <button class="btn" type="button" data-modal="rohask"><svg aria-hidden="true"><use href="#i-admin"/></svg>Request access</button>
+              <button class="btn sec" type="button" data-go="safeguarding">Back to the list</button>
+            </div>
+            <p class="rlock-f">A request goes to the sector lead who holds the case. If it is granted it is time-boxed, written to the audit trail, and shown to the home visitor who raised the flag.</p>
+          </div>
+        </div>
+        <div class="pad" data-panelid="case">
           <div class="al">
                 <button class="al-hd" type="button" aria-expanded="true" aria-controls="al-3">
                   <svg aria-hidden="true"><use href="#i-alert"/></svg><span>Review overdue</span><span class="ct">RH-0044</span><svg class="cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
@@ -587,13 +638,68 @@
               <div class="card">
                 <div class="card-h"><h3>Who can see this case</h3></div>
                 <div class="lr"><span class="t">M. Dusabe</span><span class="s">Home visitor &middot; raised it</span></div>
-                <div class="lr"><span class="t">C. Uwimana</span><span class="s">Sector supervisor</span></div>
+                <div class="lr"><span class="t">C. Uwimana</span><span class="s">Sugira Muryango Sector lead &middot; Ngoma</span></div>
                 <div class="lr"><span class="t">Social worker, Huye</span><span class="s">On referral only</span></div>
                 <p style="font-size:13px;color:var(--ink-3);margin-top:.8rem">Case detail is restricted by role. Everyone else sees a count only.</p>
               </div>
             </div>
           </div>
         </div>
+        <div class="pad" data-panelid="actions" hidden>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Action</th><th>Owner</th><th class="num">Due</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Supervisor review</td><td>C. Uwimana &middot; Sector lead</td><td class="num">30 Oct</td><td><span class="chip bad"><i></i>2 days late</span></td></tr>
+                <tr><td class="nm">Refer to district child-protection officer</td><td class="mut">unassigned</td><td class="num mut">on review</td><td><span class="chip">Not started</span></td></tr>
+                <tr><td class="nm">Health post follow-up &mdash; growth check</td><td class="mut">unassigned</td><td class="num mut">&mdash;</td><td><span class="chip">Not started</span></td></tr>
+                <tr><td class="nm">Replace household health insurance card</td><td class="mut">unassigned</td><td class="num mut">&mdash;</td><td><span class="chip">Not started</span></td></tr>
+                <tr><td class="nm">Re-check at Module 7 visit</td><td>M. Dusabe &middot; IZU</td><td class="num">11 Nov</td><td><span class="chip">Scheduled</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>5 actions &middot; 1 overdue &middot; 3 unassigned</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>Three actions have no owner</p>
+            <p>The protocol names the steps but the system never asks who is doing them, so &ldquo;not started&rdquo; and &ldquo;nobody has been asked&rdquo; look identical. An action without an owner and a date cannot become overdue, which is why this case sat for two days without anything turning red.</p>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="referrals" hidden>
+          <div class="card">
+            <div class="card-h"><h3>No referral has been made</h3></div>
+            <p style="font-size:14px;color:var(--ink-2);max-width:70ch">The protocol requires a referral to the district child-protection officer when a flag is substantiated. Substantiation happens at the supervisor review, which has not been recorded &mdash; so the referral cannot be raised yet, and the case is stuck behind a step that is two days late.</p>
+            <div class="lr" style="margin-top:1rem"><span class="t">District NCDA Child Protection &amp; Welfare Officer</span><span class="s">Ngoma &middot; would receive this case</span></div>
+            <div class="lr"><span class="t">Sector social worker</span><span class="s">Mukarange &middot; copied on referral</span></div>
+            <div style="margin-top:1.1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+              <button class="btn" type="button" data-modal="review">Record the review first</button>
+              <button class="btn sec" type="button" disabled>Refer &mdash; needs a review</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="audit" hidden>
+          <div class="card">
+            <div class="card-h"><h3>Every touch of this case</h3><span class="s">9 entries &middot; written whether or not the case was opened</span></div>
+            <div class="tl">
+              <div class="te"><span class="ic warn"><svg aria-hidden="true"><use href="#i-alert"/></svg></span><div><h4>Flag raised</h4><p>M. Dusabe &middot; IZU at Village &middot; Module 6 visit, question 5</p></div><span class="when">28 Oct 11:42</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-message"/></svg></span><div><h4>Supervisor notified</h4><p>SMS to C. Uwimana &middot; delivered 11:43</p></div><span class="when">28 Oct 11:42</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg></span><div><h4>Case opened in full</h4><p>C. Uwimana &middot; Sector lead &middot; Ngoma</p></div><span class="when">28 Oct 14:07</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg></span><div><h4>Case opened in full</h4><p>M. Dusabe &middot; raised this flag</p></div><span class="when">29 Oct 08:15</span></div>
+              <div class="te"><span class="ic bad"><svg aria-hidden="true"><use href="#i-admin"/></svg></span><div><h4>Access requested</h4><p>P. Habimana &middot; National NCDA &middot; reason given: &ldquo;monthly safeguarding summary&rdquo;</p></div><span class="when">29 Oct 16:30</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-check"/></svg></span><div><h4>Access declined</h4><p>C. Uwimana &middot; &ldquo;counts are enough for the summary&rdquo;</p></div><span class="when">29 Oct 17:02</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-clock"/></svg></span><div><h4>Review window closed</h4><p>72 hours elapsed with no review recorded</p></div><span class="when">30 Oct 11:42</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-message"/></svg></span><div><h4>Escalation sent</h4><p>District lead, Ngoma &middot; automatic on breach</p></div><span class="when">30 Oct 11:42</span></div>
+              <div class="te"><span class="ic bad"><svg aria-hidden="true"><use href="#i-alert"/></svg></span><div><h4>Second escalation</h4><p>District lead, Ngoma &middot; still unreviewed after 24 hours</p></div><span class="when">31 Oct 11:42</span></div>
+            </div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>Why the refused request is in the log</p>
+            <p>A safeguarding audit trail that records only successful opens cannot answer the question it exists to answer: <em>who tried</em>. The declined request on 29 October is the most informative line here, and in the current system it would not exist &mdash; <code>userlogs-list</code> is the only logging permission, and nothing records a read.</p>
+            <p>The entries above are append-only. There is deliberately no delete control on this panel, which is also the argument against <code>roh-delete</code>.</p>
+          </div>
+        </div>
+
       </section>
 
       <!-- ============ FIELD STATUS ============ -->
@@ -725,17 +831,38 @@
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Project</th><th class="num">Modules</th><th class="num">Forms</th><th class="num">Cohorts</th><th class="num">Households</th><th>Translation</th></tr></thead>
+              <thead>
+                <tr><th>Project, exactly as it is stored</th><th>On the tablet</th><th>Status</th></tr></thead>
               <tbody>
-                <tr data-go="project"><td class="nm">SUGIRA Muryango &mdash; core</td><td class="num">14</td><td class="num">34</td><td class="num">4</td><td class="num">2 210</td><td><span class="chip ok"><i></i>100%</span></td></tr>
-                <tr data-go="project"><td class="nm">Male engagement booster</td><td class="num">2</td><td class="num">6</td><td class="num">4</td><td class="num">2 210</td><td><span class="chip warn"><i></i>62%</span></td></tr>
-                <tr data-go="project"><td class="nm">IZU supervision</td><td class="num">1</td><td class="num">4</td><td class="num">&mdash;</td><td class="num">486 <span class="mut">IZU</span></td><td><span class="chip warn"><i></i>39%</span></td></tr>
-                <tr data-go="project"><td class="nm">Health referral pilot</td><td class="num">3</td><td class="num">5</td><td class="num">1</td><td class="num">214</td><td><span class="chip bad"><i></i>9%</span></td></tr>
-                <tr data-go="project"><td class="nm">Household enrolment</td><td class="num">1</td><td class="num">2</td><td class="num">4</td><td class="num">2 210</td><td><span class="chip ok"><i></i>100%</span></td></tr>
-                <tr data-go="project"><td class="nm">Sector supervision in action</td><td class="num">1</td><td class="num">3</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>44%</span></td></tr>
+                <tr data-go="project"><td class="nm">Household Module Tracking</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">Household Tracking Project <span class="chip warn"><i></i>near-duplicate</span></td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">Household Enrollment</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">Risk of Harm/other family problems Management</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">FCG participation and interaction form</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">Play Collaborative Meetings</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">IZU at Village Demographics</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">IZU Cell Coordinator Demographics</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">IZU Cell Coordinator Telephone Supervision management</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">IZU Sector Coordinator Telephone Supervision</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">District Performance Evaluation of Sugira Muryango program</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">IZU Sector Coordinator Demographics</td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">SLA User Management</td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">SM PROGRAM REPORTS BY SM STAFF</td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">Women Economic Empowerment</td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">IZU Self-Efficacy</td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">SM END OF WEEK REPORT</td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">Think Aloud testing without Module <span class="chip warn"><i></i>test</span></td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="project"><td class="nm">Test Project <span class="chip warn"><i></i>test</span></td><td><span class="chip">Not on the app</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+              
               </tbody>
             </table></div>
-            <div class="tfoot"><span>6 active &middot; 15 archived</span></div>
+            <div class="tfoot"><span>19 projects, all marked Active &middot; 11 reach the tablet</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>What a project is has drifted</p>
+            <p>These nineteen names are copied from the live list. Some are projects. <b>&ldquo;FCG participation and interaction form&rdquo;</b> and <b>&ldquo;District Performance Evaluation of Sugira Muryango program&rdquo;</b> are forms. <b>&ldquo;SLA User Management&rdquo;</b> is an admin screen. <b>&ldquo;Test Project&rdquo;</b> and <b>&ldquo;Think Aloud testing without Module&rdquo;</b> are test scaffolding, both still Active.</p>
+            <p><b>&ldquo;Household Module Tracking&rdquo; and &ldquo;Household Tracking Project&rdquo;</b> are separate records. A second list in the same system adds four more, among them <em>ubworozi bw&rsquo;inkoko</em> &mdash; chicken farming.</p>
+            <p>Every one of these is free text, like the 112 permission names and the ten role names. That is the single defect underneath most of this audit: <b>the system asks people to type identifiers.</b></p>
           </div>
           <div class="callout">
             <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
@@ -752,7 +879,7 @@
             <span class="rec-id">PRJ-11</span>
             <span class="acts"><button class="btn sec sm" type="button">Project settings</button><button class="btn sm" type="button" data-modal="module"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add module</button></span>
           </div>
-          <h1>SUGIRA Muryango &mdash; core</h1>
+          <h1>Household Module Tracking</h1>
           <div class="pg" id="pg-project">
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Status</span></span><span class="v"><span class="pg-badge ok">Active</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Modules</span></span><span class="v"><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-programme"/></svg>14 sessions</button><span class="conseq">12 shared with other projects</span></span></div>
@@ -778,21 +905,36 @@
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th style="width:3rem">#</th><th>Session</th><th class="num">Forms</th><th class="num">Median minutes</th><th>Languages</th><th>Delivered</th></tr></thead>
+              <thead>
+                <tr><th style="width:3rem">#</th><th>Session</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
               <tbody>
-                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">Welcome session</td><td class="num">1</td><td class="num">28</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>2 210</span></td></tr>
-                <tr data-go="module"><td class="mut">1</td><td class="nm">Getting to know you</td><td class="num">2</td><td class="num">41</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>2 180</span></td></tr>
-                <tr data-go="module"><td class="mut">2</td><td class="nm">Daily routines</td><td class="num">2</td><td class="num">38</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>2 044</span></td></tr>
-                <tr data-go="module"><td class="mut">3</td><td class="nm">Play materials</td><td class="num">3</td><td class="num">44</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>1 902</span></td></tr>
-                <tr data-go="module"><td class="mut">4</td><td class="nm">Responsive feeding</td><td class="num">2</td><td class="num">51</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip ok"><i></i>1 768</span></td></tr>
-                <tr data-go="module"><td class="mut">5</td><td class="nm">Problem solving</td><td class="num">2</td><td class="num">39</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip warn"><i></i>1 204</span></td></tr>
-                <tr data-go="module"><td class="mut">6</td><td class="nm">Play and communication</td><td class="num">3</td><td class="num">42</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip warn"><i></i>986</span></td></tr>
-                <tr data-go="module"><td class="mut">7</td><td class="nm">Family conflict</td><td class="num">2</td><td class="num">47</td><td><span class="chip warn"><i></i>EN only</span></td><td><span class="chip warn"><i></i>742</span></td></tr>
-                <tr data-go="module"><td class="mut">8</td><td class="nm">Fathers and caregiving</td><td class="num">3</td><td class="num">52</td><td><span class="chip warn"><i></i>EN only</span></td><td><span class="chip bad"><i></i>488</span></td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">Welcome session</td><td class="mut">Guhana ikaze</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">1</td><td class="nm">1.Family Narrative</td><td class="mut">1.Amateka y&rsquo;umuryango</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">2</td><td class="nm">2.The Importance of Early Stimulation &amp; Play</td><td class="mut">2.Akamaro ko gukangura ubwonko hakiri kare no gukina</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">3</td><td class="nm">3.Building Early Communication Skills</td><td class="mut">3.Kubaka ubumenyi bwo kuvuga kakiri kare</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">4</td><td class="nm">4.The Importance of Good Hygiene</td><td class="mut">4.Akamaro k&rsquo;isuku n&rsquo;isukura</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">5</td><td class="nm">5.The Importance of Good Nutrition</td><td class="mut">5.Akamaro k&rsquo;imirire myiza</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">6</td><td class="nm">6.The Importance of Good Health</td><td class="mut">6. Akamaro k&rsquo;ubuzima bwiza</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">7</td><td class="nm">7.Managing the Stresses of Parenting and Family Life</td><td class="mut">7.Guhangana n&rsquo; imihangayiko yo kurera</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">8</td><td class="nm">8.Resolving Conflicts in the Home</td><td class="mut">8.Gukemura amakimbirane mu rugo</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">9</td><td class="nm">9.The Important Role that Everyone Plays in Raising a Baby Well</td><td class="mut">9.Akamaro buri wese agira mu kurera neza umwana</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">10</td><td class="nm">10.Good Parenting is Better than Being Born Well</td><td class="mut">10.Uburere bwiza</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">11</td><td class="nm">11.Making the Home a Place Where a Baby&rsquo;s Brain Can Grow</td><td class="mut">11.Guhindura mu rugo nk&rsquo;ahantu hatekanye</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">12</td><td class="nm">12.With a United Family, Anything is Possible</td><td class="mut">12.Umuryango ushyizehamwe nta kiwunanira <span class="chip warn"><i></i>stub</span></td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">Closing session</td><td class="mut">Gusoza ibiganiro</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">3-Month Booster Session</td><td class="mut">Ikiganiro Nshimangira cya Nyuma y&rsquo;amezi 3</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">6-Month Booster Session</td><td class="mut">Ikiganiro Nshimangirabiganiro cya Nyuma y&rsquo;amezi 6</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">12-Month Booster Session</td><td class="mut">Ikiganiro Nshimangirabiganiro cya Nyuma y&rsquo;amezi 12</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+              
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Showing 9 of 14 &middot; sessions 9&ndash;12 and 2 boosters below</span>
+            <div class="tfoot"><span>17 sessions &middot; 12 core, a welcome, a closing and three boosters</span>
               <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>The session number lives inside the name</p>
+            <p>Sessions are stored as <code>1.Family Narrative</code>, <code>2.The Importance of Early Stimulation &amp; Play</code> and so on &mdash; the order is part of the title, not a field. Reordering the curriculum means retyping every name, and sorting the list sorts <code>10.</code> and <code>11.</code> above <code>2.</code>.</p>
+            <p>Both languages are present for all seventeen, which is better than the rest of the system manages. One is thin: session 12&rsquo;s Kinyarwanda description is the single word <em>Kinya</em>, a placeholder that reached production.</p>
           </div>
           <div class="callout">
             <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
@@ -838,7 +980,7 @@
               <tbody>
                 <tr data-go="form"><td class="nm">Visit record</td><td class="mut">Home visitor</td><td class="num">30</td><td class="num">986</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="num mut">14 Oct</td></tr>
                 <tr data-go="form"><td class="nm">Caregiver observation</td><td class="mut">Home visitor</td><td class="num">12</td><td class="num">986</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="num mut">2 Sep</td></tr>
-                <tr data-go="form"><td class="nm">Supervisor spot-check</td><td class="mut">Sector supervisor</td><td class="num">8</td><td class="num">141</td><td><span class="chip warn"><i></i>EN only</span></td><td class="num mut">21 Aug</td></tr>
+                <tr data-go="form"><td class="nm">Supervisor spot-check</td><td class="mut">Sector lead (SLA)</td><td class="num">8</td><td class="num">141</td><td><span class="chip warn"><i></i>EN only</span></td><td class="num mut">21 Aug</td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>3 forms in this module &middot; 2 archived</span></div>
@@ -1034,22 +1176,29 @@
       <section class="screen" id="s-cohorts">
         <div class="phead">
           <div class="row">
-            <div><h1>Cohorts</h1><p class="sub">A cohort decides which households get which session, and when. Changing one moves real families&rsquo; schedules.</p></div>
+            <div><h1>Cohorts</h1><p class="sub">A cohort decides which households get which session, and when. Changing one moves real families&rsquo; schedules. Five districts run the programme: Kirehe, Musanze, Ngoma, Nyanza and Rubavu.</p></div>
             <div class="acts"><button class="btn" type="button" data-modal="cohort"><svg aria-hidden="true"><use href="#i-plus"/></svg>New cohort</button></div>
           </div>
         </div>
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Cohort</th><th>Districts</th><th class="num">Households</th><th class="num">Started</th><th>Current session</th><th>Status</th></tr></thead>
+              <thead>
+                <tr><th>Cohort</th><th>Districts, exactly as they are stored</th><th class="num">Added</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td class="nm">Cohort 4</td><td class="mut">Huye, Gisagara, Nyamagabe</td><td class="num">2 210</td><td class="num mut">Jun 2026</td><td>6 of 12</td><td><span class="chip ok"><i></i>Running</span></td></tr>
-                <tr><td class="nm">Cohort 3</td><td class="mut">Huye, Nyaruguru</td><td class="num">1 884</td><td class="num mut">Jan 2026</td><td>12 of 12</td><td><span class="chip"><i></i>Complete</span></td></tr>
-                <tr><td class="nm">Cohort 2</td><td class="mut">Kamonyi, Muhanga</td><td class="num">1 402</td><td class="num mut">Mar 2025</td><td>12 of 12</td><td><span class="chip"><i></i>Complete</span></td></tr>
-                <tr><td class="nm">Cohort 5</td><td class="mut">Not assigned</td><td class="num">0</td><td class="num mut">&mdash;</td><td class="mut">&mdash;</td><td><span class="chip warn"><i></i>Draft</span></td></tr>
+                <tr><td class="nm">1</td><td class="mut">Kirehe (1-4- 2026) &middot; Musanze (1-12-2025) &middot; Ngoma (1 - 2026) &middot; Nyanza (1-2026) &middot; Rubavu (1-2026)</td><td class="num mut">23 Jun 2025</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr><td class="nm">2</td><td class="mut">Kirehe (2-08-2026) &middot; Musanze (2-06-2026) &middot; Ngoma (2-2026) &middot; Nyanza (2-2026) &middot; Rubavu (2-2026)</td><td class="num mut">23 Jun 2025</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr><td class="nm">3</td><td class="mut"><span class="rd">None</span></td><td class="num mut">23 Jun 2025</td><td><span class="chip warn"><i></i>Active, empty</span></td></tr>
+                <tr><td class="nm">4</td><td class="mut"><span class="rd">None</span></td><td class="num mut">23 Jun 2025</td><td><span class="chip warn"><i></i>Active, empty</span></td></tr>
+              
               </tbody>
             </table></div>
-            <div class="tfoot"><span>4 cohorts &middot; 5 496 households enrolled since 2025</span></div>
+            <div class="tfoot"><span>4 cohorts, all Active &middot; two hold no districts</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>Two of the four are empty, and all four say Active</p>
+            <p>Cohorts 3 and 4 hold no districts at all, yet carry the same green Active badge as the two that are running. &ldquo;Active&rdquo; here means the row was not switched off &mdash; it says nothing about whether any family is in it.</p>
+            <p>The district codes are typed too, and it shows: <code>Kirehe (1-4- 2026)</code> and <code>Ngoma (1 - 2026)</code> carry stray spaces that <code>Nyanza (1-2026)</code> does not. They are reproduced above exactly as stored. If a report ever groups by this string, those three are three different districts.</p>
           </div>
           <div class="callout">
             <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
@@ -1125,13 +1274,13 @@
               <thead><tr><th>Person</th><th>Role</th><th>Where</th><th>Projects</th><th class="num">Last active</th><th>Status</th></tr></thead>
               <tbody>
                 <tr data-go="role"><td class="nm">A. Gahimana</td><td>M&amp;E officer</td><td class="mut">National</td><td class="mut">All projects</td><td class="num mut">now</td><td><span class="chip ok"><i></i>Active</span></td></tr>
-                <tr data-go="role"><td class="nm">C. Uwimana</td><td>Sector supervisor</td><td class="mut">Tumba &middot; Huye</td><td class="mut">Core, Male engagement</td><td class="num mut">1 hour</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-go="role"><td class="nm">C. Uwimana</td><td>Sugira Muryango Sector lead (SLA)</td><td class="mut">Mukarange &middot; Ngoma</td><td class="mut">Tracking, Enrollment, Risk of harm</td><td class="num mut">1 hour</td><td><span class="chip ok"><i></i>Active</span></td></tr>
                 <tr data-go="role"><td class="nm">M. Dusabe</td><td>Home visitor</td><td class="mut">Rusatira &middot; Huye</td><td class="mut">SUGIRA core</td><td class="num mut">2 days</td><td><span class="chip warn"><i></i>Delayed sync</span></td></tr>
                 <tr data-go="role"><td class="nm">E. Mutesi</td><td>Home visitor</td><td class="mut">Tumba &middot; Huye</td><td class="mut">SUGIRA core</td><td class="num mut">6 days</td><td><span class="chip bad"><i></i>Not reporting</span></td></tr>
                 <tr data-go="role"><td class="nm">J. Kamanzi</td><td>Home visitor</td><td class="mut">Kigembe &middot; Gisagara</td><td class="mut">SUGIRA core</td><td class="num mut">3 days</td><td><span class="chip ok"><i></i>Active</span></td></tr>
                 <tr data-go="role"><td class="nm">P. Niyonkuru</td><td>IZU cell coordinator</td><td class="mut">Rango cell &middot; Tumba</td><td class="mut">IZU supervision</td><td class="num mut">4 hours</td><td><span class="chip ok"><i></i>Active</span></td></tr>
                 <tr data-go="role"><td class="nm">Social worker, Huye</td><td>Social worker</td><td class="mut">Huye district</td><td class="mut">On referral only</td><td class="num mut">yesterday</td><td><span class="chip ok"><i></i>Active</span></td></tr>
-                <tr data-go="role"><td class="nm">T. Mukamana</td><td>Sector supervisor</td><td class="mut">Mbazi &middot; Huye</td><td class="mut">SUGIRA core</td><td class="num mut">&mdash;</td><td><span class="chip warn"><i></i>Invited 2 days ago</span></td></tr>
+                <tr data-go="role"><td class="nm">T. Mukamana</td><td>Sugira Muryango Sector lead (SLA)</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="mut">Household Module Tracking</td><td class="num mut">&mdash;</td><td><span class="chip warn"><i></i>Invited 2 days ago</span></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 8 of 193 &middot; 3 invitations outstanding</span>
@@ -1157,26 +1306,32 @@
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Role</th><th>Operates at</th><th>Programme</th><th>Can open a risk-of-harm case</th><th class="num">People</th></tr></thead>
+              <thead>
+                <tr><th>Role, exactly as it is stored</th><th>Notified at</th><th>Which households it may see</th><th>Risk-of-harm detail</th><th class="num">People</th></tr></thead>
               <tbody>
-                <tr data-go="role"><td class="nm">Home visitor</td><td class="mut">Cell</td><td class="mut">One project</td><td><span class="chip">Raise only</span></td><td class="num">164</td></tr>
-                <tr data-go="role"><td class="nm">Sector supervisor</td><td class="mut">Sector</td><td class="mut">Selected projects</td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">17</td></tr>
-                <tr data-go="role"><td class="nm">IZU cell coordinator</td><td class="mut">Cell</td><td class="mut">IZU supervision</td><td><span class="chip">Raise only</span></td><td class="num">6</td></tr>
-                <tr data-go="role"><td class="nm">District coordinator</td><td class="mut">District</td><td class="mut">All projects</td><td><span class="chip warn"><i></i>Counts only</span></td><td class="num">3</td></tr>
-                <tr data-go="role"><td class="nm">Social worker</td><td class="mut">District</td><td class="mut">On referral only</td><td><span class="chip bad"><i></i>Referred cases</span></td><td class="num">2</td></tr>
-                <tr data-go="role"><td class="nm">M&amp;E officer</td><td class="mut">National</td><td class="mut">All projects</td><td><span class="chip warn"><i></i>Counts only</span></td><td class="num">2</td></tr>
-                <tr data-go="role"><td class="nm">Administrator</td><td class="mut">National</td><td class="mut">All projects</td><td><span class="chip warn"><i></i>Counts only</span></td><td class="num">1</td></tr>
+                <tr data-go="role"><td class="nm">admin</td><td class="mut">National</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">1</td></tr>
+                <tr data-go="role"><td class="nm">BC office</td><td class="mut">National</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">4</td></tr>
+                <tr data-go="role"><td class="nm">Sugira Muryango coordination office</td><td class="mut">National</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">6</td></tr>
+                <tr data-go="role"><td class="nm">Sugira Muryango District lead (DTL)</td><td class="mut">District</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">5</td></tr>
+                <tr data-go="role"><td class="nm">Sugira Muryango Sector lead (SLA)</td><td class="mut">Sector</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">17</td></tr>
+                <tr data-go="role"><td class="nm">HQ officer</td><td class="mut">National</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">3</td></tr>
+                <tr data-go="role"><td class="nm">IZU Cell Coordinator (ICC)</td><td class="mut">National, Province, District, Sector, Cell <span class="chip bad"><i></i>all five</span></td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">84</td></tr>
+                <tr data-go="role"><td class="nm">IZU at Village</td><td class="mut">District, Sector, Cell <span class="chip warn"><i></i>not village</span></td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">412</td></tr>
+                <tr data-go="role"><td class="nm">National NCDA Government Official</td><td class="mut">National</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">2</td></tr>
+                <tr data-go="role"><td class="nm">District NCDA Child protection and Welfare Officer (CPWO)</td><td class="mut">District</td><td><span class="chip warn"><i></i>Not set</span></td><td><span class="chip bad"><i></i>Full detail</span></td><td class="num">5</td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>7 roles &middot; 195 assignments</span></div>
+            <div class="tfoot"><span>10 roles, read from the live system &middot; 539 people</span></div>
           </div>
           <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>Why there were twenty-one</p>
-            <p>The client described roles as scoped two ways at once &mdash; <b>&ldquo;the position is the national level &hellip; this is the sector level&rdquo;</b> and <b>&ldquo;project level &hellip; you can create a role to set your level&rdquo;</b>. The old system had no way to express either, so the place and the project got baked into role <em>names</em> and the list grew to twenty-one. Pulling those two axes out of the name leaves seven real roles.</p>
+            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>A role cannot say which households it may see</p>
+            <p>The form that creates a role has exactly four fields: a <b>name</b> typed as free text, <b>&ldquo;Is the role for stakeholders?&rdquo;</b> as Yes/No, <b>Notification location levels</b>, and 112 permission checkboxes. That is the whole role.</p>
+            <p>The levels look like scope but are not. The form says so itself: <em>&ldquo;Select the location level(s) used to notify users with this role.&rdquo;</em> They route notifications. <b>Nothing in a role limits which households, sectors or districts its holders can open</b> &mdash; so a sector lead and a national officer with the same ticks see the same national data, and the column above is honest about it.</p>
+            <p>Two rows show what follows. <b>IZU Cell Coordinator</b> is notified at all five levels from National down to Cell; <b>IZU at Village</b> is notified at District, Sector and Cell but not Village, despite its name. Those are routing accidents today. The moment the levels are made to govern access, they become the thing that decides who can read a child&rsquo;s case &mdash; which is why the next screen separates them.</p>
           </div>
           <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>Still to confirm with the client</p>
-            <p>The two-axis model is read from a recording that Whisper rendered loosely, with no Kinyarwanda. It matches the route structure and the 21-role mess, but it has not been confirmed against the database. If a role turns out to be scoped only by place, or only by project, this screen changes shape.</p>
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>Why the place belongs on the person, not in the name</p>
+            <p>The client described this directly &mdash; <b>&ldquo;the position is the national level &hellip; this is the sector level&rdquo;</b> and <b>&ldquo;project level &hellip; you can create a role to set your level&rdquo;</b>. With no field for either, both get written into role names, and the list fills with near-duplicates. Keeping the level on the role and the <em>place</em> on the assignment means one sector-lead role serves all 17 sectors instead of 17 roles.</p>
           </div>
         </div>
       </section>
@@ -1187,7 +1342,7 @@
           <div class="row">
             <span class="big"><svg aria-hidden="true" style="width:26px;height:26px;color:#fff"><use href="#i-admin"/></svg></span>
             <div style="min-width:0">
-              <h1>Sector supervisor</h1>
+              <h1>Sugira Muryango Sector lead (SLA)</h1>
               <div class="meta">
                 <span><svg aria-hidden="true"><use href="#i-admin"/></svg>17 people hold this role</span>
                 <span><svg aria-hidden="true"><use href="#i-location"/></svg>Operates at sector level</span>
@@ -1212,54 +1367,54 @@
             <div class="tblwrap"><table class="pm">
               <thead><tr><th>What</th><th class="a">See</th><th class="a">Add</th><th class="a">Change</th><th class="a">Archive</th></tr></thead>
               <tbody>
-                <tr><td><span class="obj">Households</span><span class="hint">Within the sector they are assigned to</span></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Add households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Change households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
-                <tr><td><span class="obj">Visits</span><span class="hint">Recorded on the tablet, reviewed here</span></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Add visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Change visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
-                <tr class="guarded"><td><span class="obj">Risk-of-harm case detail</span><span class="hint">The names, the account of what was seen, the referral. Everyone else sees a count.</span></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See case detail"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Raise a case"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Record a review"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick locked" type="button" disabled aria-label="Cases cannot be archived"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
-                <tr><td><span class="obj">Programme</span><span class="hint">Projects, sessions and forms</span></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Add to programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Change programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
-                <tr><td><span class="obj">Reports</span><span class="hint">Build, save and schedule</span></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Add reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Change reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
-                <tr><td><span class="obj">People &amp; roles</span><span class="hint">Only an administrator changes who can do what</span></td>
-                  <td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See people"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick locked" type="button" disabled aria-label="Cannot add people"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick locked" type="button" disabled aria-label="Cannot change people"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td>
-                  <td class="a"><button class="tick locked" type="button" disabled aria-label="Cannot archive people"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr><td><span class="obj">Households</span><span class="hint">Every household, its members, and which sessions it has had</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr0">20 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See Households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Add Households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Change Households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive Households"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr0" hidden><td colspan="5"><div class="pills"><code>admittedfamily-create</code><code>admittedfamily-delete</code><code>admittedfamily-edit</code><code>admittedfamily-list</code><code>family-create</code><code>family-delete</code><code>family-edit</code><code>family-list</code><code>familymember-create</code><code>familymember-delete</code><code>familymember-edit</code><code>familymember-list</code><code>familymodule-create</code><code>familymodule-delete</code><code>familymodule-edit</code><code>familymodule-list</code><code>householdenrollment-create</code><code>householdenrollment-delete</code><code>householdenrollment-edit</code><code>householdenrollment-list</code></div></td></tr>
+                <tr><td><span class="obj">Visits</span><span class="hint">Recorded on the tablet, reviewed here</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr1">5 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See Visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Add Visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Change Visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive Visits"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr1" hidden><td colspan="5"><div class="pills"><code>View-collected-data</code><code>sessioninaction-create</code><code>sessioninaction-edit</code><code>sessioninaction-list</code><code>submit-form</code></div></td></tr>
+                <tr class="guarded"><td><span class="obj">Risk-of-harm cases</span><span class="hint">The names, the account of what was seen, the referral</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr2">4 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See Risk-of-harm cases"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Add Risk-of-harm cases"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Change Risk-of-harm cases"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick locked" type="button" disabled aria-pressed="false" aria-label="Archive Risk-of-harm cases"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr2" hidden><td colspan="5"><div class="pills"><code>roh-create</code><code>roh-delete</code><code>roh-edit</code><code>roh-list</code></div></td></tr>
+                <tr><td><span class="obj">Programme</span><span class="hint">Projects, sessions, forms, questions, languages</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr3">29 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See Programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Add Programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Change Programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive Programme"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr3" hidden><td colspan="5"><div class="pills"><code>can-archive-project</code><code>can-translate-forms</code><code>construct-create</code><code>construct-delete</code><code>construct-edit</code><code>construct-list</code><code>create-form-version</code><code>form-create</code><code>form-delete</code><code>form-edit</code><code>form-list</code><code>forms-list</code><code>language-create</code><code>language-delete</code><code>language-edit</code><code>language-list</code><code>manage-cohort</code><code>module-create</code><code>module-delete</code><code>module-edit</code><code>module-list</code><code>project-create</code><code>project-delete</code><code>project-edit</code><code>project-list</code><code>question-create</code><code>question-delete</code><code>question-edit</code><code>question-list</code></div></td></tr>
+                <tr><td><span class="obj">Reports</span><span class="hint">Build, save, schedule and export</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr4">15 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See Reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Add Reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="Change Reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive Reports"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr4" hidden><td colspan="5"><div class="pills"><code>build-reports</code><code>customreport-list</code><code>export-data</code><code>generalreport-create</code><code>generalreport-delete</code><code>generalreport-edit</code><code>generalreport-list</code><code>indicator-create</code><code>indicator-delete</code><code>indicator-edit</code><code>indicator-list</code><code>reports-create</code><code>reports-delete</code><code>reports-edit</code><code>reports-list</code></div></td></tr>
+                <tr><td><span class="obj">Field support</span><span class="hint">Videos, guidance, FAQs, feedback</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr5">19 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See Field support"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Add Field support"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Change Field support"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive Field support"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr5" hidden><td colspan="5"><div class="pills"><code>category-create</code><code>category-delete</code><code>category-edit</code><code>category-list</code><code>feedback-create</code><code>feedback-delete</code><code>feedback-edit</code><code>feedback-list</code><code>help-create</code><code>help-list</code><code>instruction-create</code><code>instruction-delete</code><code>instruction-edit</code><code>instruction-list</code><code>manage-community</code><code>resource-create</code><code>resource-delete</code><code>resource-edit</code><code>resource-list</code></div></td></tr>
+                <tr><td><span class="obj">People &amp; access</span><span class="hint">Who may use the system and what they may do</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr6">17 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See People and access"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick locked" type="button" disabled aria-pressed="false" aria-label="Add People and access"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick locked" type="button" disabled aria-pressed="false" aria-label="Change People and access"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick locked" type="button" disabled aria-pressed="false" aria-label="Archive People and access"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr6" hidden><td colspan="5"><div class="pills"><code>permission-create</code><code>permission-delete</code><code>permission-edit</code><code>permission-list</code><code>profile-create</code><code>profile-delete</code><code>profile-edit</code><code>profile-list</code><code>role-create</code><code>role-delete</code><code>role-edit</code><code>role-list</code><code>user-create</code><code>user-delete</code><code>user-edit</code><code>user-list</code><code>userlogs-list</code></div></td></tr>
+                <tr><td><span class="obj">Maintenance</span><span class="hint">Deleted records and monitoring forms</span><button class="pm-count" type="button" aria-expanded="false" aria-controls="pr7">3 permissions</button></td><td class="a"><button class="tick on" type="button" aria-pressed="true" aria-label="See Maintenance"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Add Maintenance"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Change Maintenance"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td><td class="a"><button class="tick" type="button" aria-pressed="false" aria-label="Archive Maintenance"><svg aria-hidden="true"><use href="#i-check"/></svg></button></td></tr>
+                <tr class="pm-sub" id="pr7" hidden><td colspan="5"><div class="pills"><code>checklist-list</code><code>monitoring-forms-list</code><code>recycle-data</code></div></td></tr>
               </tbody>
             </table></div>
           </div>
           <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>A permission used to be <b>a free-text string typed into a field called &ldquo;Name&rdquo;</b>, and the list of them ran to <b>twelve pages</b> with Copy, Excel, CSV and PDF export buttons on it. The only screen where a role met a permission offered <b>&ldquo;Check all&rdquo; across every permission</b> as a primary control &mdash; and both ends of that flow were unreachable from the navigation. A fixed grid of objects against actions cannot drift, cannot be misspelled, and shows the shape of a role at a glance.</p>
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What the real permission list contains</p>
+            <p>Recovered from the captures: <b>112 distinct permissions across 30 objects</b>, each a free-text string typed into a field called &ldquo;Name&rdquo;, listed over twelve pages with Copy, Excel, CSV and PDF export buttons on them. The only screen where a role met a permission offered <b>&ldquo;Check all&rdquo;</b> as its primary control &mdash; and both ends of that flow were unreachable from the navigation.</p>
+            <p>What free text produced, in their own data:</p>
+            <ul style="margin:.2rem 0 .9rem 1.1rem;padding:0;font-size:.91rem;color:var(--ink-2);max-width:86ch">
+              <li><code>form-list</code> and <code>forms-list</code> both exist &mdash; the same permission, typed twice.</li>
+              <li><code>View-collected-data</code> is the only one with a capital letter.</li>
+              <li>Ten names follow no convention at all: <code>build-reports</code>, <code>recycle-data</code>, <code>submit-form</code>, <code>manage-cohort</code> and six more.</li>
+              <li>Seven objects have an incomplete set &mdash; <code>sessioninaction</code> can be created and edited but never deleted; <code>userlogs</code>, <code>checklist</code> and <code>customreport</code> have only <code>-list</code>.</li>
+              <li><b>Five different words mean a family:</b> <code>family</code>, <code>familymember</code>, <code>familymodule</code>, <code>admittedfamily</code>, <code>householdenrollment</code>.</li>
+            </ul>
+            <p>Eight rows cover all 112. Open any row to see exactly which it replaces &mdash; the grid is also the migration map.</p>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>Two things the current permissions cannot express</p>
+            <p><b>There is no way to separate seeing a count from opening a case.</b> <code>roh-list</code> is all or nothing, so anyone who can see that two cases exist can read both children&rsquo;s records. The <em>See</em> column here means case detail; counts are available to every role and are not a permission.</p>
+            <p><b><code>roh-delete</code> exists.</b> A risk-of-harm case can be deleted outright. Archive is disabled above and cases are closed, never removed &mdash; a safeguarding record that can vanish is not a record.</p>
           </div>
         </div>
 
         <div class="pad" data-panelid="scope" hidden>
-          <div class="axes">
+          <div class="axes a3">
             <div class="axis">
-              <h4>Where it operates</h4>
-              <p>The level, not the place. The place itself is chosen when the role is given to a person, so one role serves all 17 sectors.</p>
+              <h4>Notified at <span class="axis-tag now">exists today</span></h4>
+              <p>The only levels a role carries now. They decide where a notification is sent &mdash; nothing more.</p>
               <div class="levels">
                 <button class="lvl" type="button"><span class="dot"></span>National<span class="n">whole programme</span></button>
-                <button class="lvl" type="button"><span class="ind" style="width:.7rem"></span><span class="dot"></span>Province<span class="n">5</span></button>
-                <button class="lvl" type="button"><span class="ind" style="width:1.4rem"></span><span class="dot"></span>District<span class="n">6</span></button>
+                <button class="lvl" type="button"><span class="ind" style="width:0.7rem"></span><span class="dot"></span>Province<span class="n">5</span></button>
+                <button class="lvl" type="button"><span class="ind" style="width:1.4rem"></span><span class="dot"></span>District<span class="n">5 in use</span></button>
                 <button class="lvl on" type="button"><span class="ind" style="width:2.1rem"></span><span class="dot"></span>Sector<span class="n">17 in use</span></button>
                 <button class="lvl" type="button"><span class="ind" style="width:2.8rem"></span><span class="dot"></span>Cell<span class="n">84</span></button>
                 <button class="lvl" type="button"><span class="ind" style="width:3.5rem"></span><span class="dot"></span>Village<span class="n">412</span></button>
@@ -1267,22 +1422,37 @@
               </div>
             </div>
             <div class="axis">
-              <h4>Which programme</h4>
-              <p>The second axis the client described. A role can be limited to particular projects rather than everything the organisation runs.</p>
+              <h4>May open records at <span class="axis-tag new">new</span></h4>
+              <p>The field the role form has no equivalent of. The level, not the place: the place is chosen when the role is given to a person, so one role serves all 17 sectors.</p>
               <div class="levels">
-                <button class="lvl" type="button"><span class="dot"></span>All projects</button>
-                <button class="lvl on" type="button"><span class="dot"></span>Selected projects<span class="n">2</span></button>
+                <button class="lvl" type="button"><span class="dot"></span>National<span class="n">whole programme</span></button>
+                <button class="lvl" type="button"><span class="ind" style="width:0.7rem"></span><span class="dot"></span>Province<span class="n">5</span></button>
+                <button class="lvl" type="button"><span class="ind" style="width:1.4rem"></span><span class="dot"></span>District<span class="n">5 in use</span></button>
+                <button class="lvl on" type="button"><span class="ind" style="width:2.1rem"></span><span class="dot"></span>Sector<span class="n">17 in use</span></button>
+                <button class="lvl" type="button"><span class="ind" style="width:2.8rem"></span><span class="dot"></span>Cell<span class="n">84</span></button>
+                <button class="lvl" type="button"><span class="ind" style="width:3.5rem"></span><span class="dot"></span>Village<span class="n">412</span></button>
+                <button class="lvl" type="button"><span class="ind" style="width:4.2rem"></span><span class="dot"></span>IZU<span class="n">486</span></button>
+              </div>
+              <p class="axis-foot">Set to Sector, a holder sees their own sector&rsquo;s households and no others. Left unset &mdash; as every one of the ten roles is today &mdash; it means the whole country.</p>
+            </div>
+            <div class="axis">
+              <h4>Which programme <span class="axis-tag new">new</span></h4>
+              <p>The second axis the client described. Nineteen projects run in this system; a role rarely needs all of them.</p>
+              <div class="levels">
+                <button class="lvl" type="button"><span class="dot"></span>All 19 projects</button>
+                <button class="lvl on" type="button"><span class="dot"></span>Selected<span class="n">3</span></button>
               </div>
               <div style="margin-top:.85rem;display:grid;gap:.4rem">
-                <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px">SUGIRA Muryango &mdash; core</span></span><span class="al-act"><span class="chip ok"><i></i>Included</span></span></div>
-                <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px">Male engagement booster</span></span><span class="al-act"><span class="chip ok"><i></i>Included</span></span></div>
-                <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px;color:var(--ink-3)">IZU supervision</span></span><span class="al-act"><span class="chip">Not included</span></span></div>
+                <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px">Household Module Tracking</span></span><span class="al-act"><span class="chip ok"><i></i>Included</span></span></div>
+                <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px">Household Enrollment</span></span><span class="al-act"><span class="chip ok"><i></i>Included</span></span></div>
+                <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px">Risk of Harm / other family problems</span></span><span class="al-act"><span class="chip ok"><i></i>Included</span></span></div>
+                <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px;color:var(--ink-3)">IZU Cell Coordinator Telephone Supervision</span></span><span class="al-act"><span class="chip">Not included</span></span></div>
               </div>
             </div>
           </div>
           <div class="callout">
             <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>The relationship this screen exists for</p>
-            <p>A person does not simply <em>have</em> a role. They hold a role <b>at a place</b>, <b>within a programme</b>. C. Uwimana is a sector supervisor <em>in Tumba</em> for <em>core and male engagement</em>; the same role in Mbazi is a different assignment of the same role. Separating those three things &mdash; the permissions, the level, the person&rsquo;s place &mdash; is what collapses twenty-one roles into seven.</p>
+            <p>A person does not simply <em>have</em> a role. They hold a role <b>at a place</b>, <b>within a programme</b>. C. Uwimana is a sector lead <em>in Mukarange</em> for <em>three of the nineteen projects</em>; the same role in Jarama is a different assignment of the same role. Separating the three &mdash; the permissions, the level, the person&rsquo;s place &mdash; is what lets ten roles cover 539 people without a single new role being typed.</p>
           </div>
         </div>
 
@@ -1291,10 +1461,10 @@
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Person</th><th>Where</th><th>Projects</th><th class="num">Held since</th></tr></thead>
               <tbody>
-                <tr data-go="people"><td class="nm">C. Uwimana</td><td class="mut">Tumba &middot; Huye</td><td class="mut">Core, Male engagement</td><td class="num mut">Jun 2026</td></tr>
-                <tr data-go="people"><td class="nm">B. Nkurunziza</td><td class="mut">Rusatira &middot; Huye</td><td class="mut">Core</td><td class="num mut">Jun 2026</td></tr>
-                <tr data-go="people"><td class="nm">F. Uwamahoro</td><td class="mut">Mbazi &middot; Huye</td><td class="mut">Core</td><td class="num mut">Mar 2026</td></tr>
-                <tr data-go="people"><td class="nm">T. Mukamana</td><td class="mut">Kigembe &middot; Gisagara</td><td class="mut">Core</td><td class="num mut">invited</td></tr>
+                <tr data-go="people"><td class="nm">C. Uwimana</td><td class="mut">Mukarange &middot; Ngoma</td><td class="mut">Tracking, Enrollment, Risk of harm</td><td class="num mut">Jun 2025</td></tr>
+                <tr data-go="people"><td class="nm">B. Nkurunziza</td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">Tracking, Enrollment</td><td class="num mut">Jun 2025</td></tr>
+                <tr data-go="people"><td class="nm">F. Uwamahoro</td><td class="mut">Busasamana &middot; Nyanza</td><td class="mut">Tracking, Enrollment</td><td class="num mut">Jan 2026</td></tr>
+                <tr data-go="people"><td class="nm">T. Mukamana</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="mut">Tracking</td><td class="num mut">invited</td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 4 of 17 &middot; each row is one assignment of this role at one place</span></div>
@@ -1361,7 +1531,7 @@
             <div class="card">
               <div class="card-h"><h3>Activity</h3><span class="side"><a>See all</a></span></div>
               <div class="lr"><span class="t">C. Uwimana recorded a review</span><span class="s">RH-0044</span><span class="c">09:41</span></div>
-              <div class="lr"><span class="t">A. Gahimana changed a role</span><span class="s">Sector supervisor</span><span class="c">08:12</span></div>
+              <div class="lr"><span class="t">A. Gahimana changed a role</span><span class="s">Sugira Muryango Sector lead (SLA)</span><span class="c">08:12</span></div>
               <div class="lr"><span class="t">T. Mukamana was invited</span><span class="s">Mbazi &middot; Huye</span><span class="c">yesterday</span></div>
               <div class="lr"><span class="t">Form published to the mobile app</span><span class="s">Visit record</span><span class="c">14 Oct</span></div>
             </div>

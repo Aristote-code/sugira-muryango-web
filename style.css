@@ -743,7 +743,66 @@ svg use{pointer-events:none}
   font-size:12px;line-height:16px;color:var(--amber-ink);background:var(--amber-bg);
   border:1px solid var(--amber-line);border-radius:8px}
 .m-note svg{width:14px;height:14px;flex:none;fill:none;margin-top:1px}
+
+.pm-count{display:inline-block;margin-top:.45rem;border:1px solid var(--line);background:var(--surface);
+  border-radius:var(--r-pill);padding:.1rem .55rem;font-family:var(--ui);font-size:11px;font-weight:500;
+  color:var(--ink-3);cursor:pointer;letter-spacing:0}
+.pm-count:hover{border-color:var(--b300);color:var(--b600)}
+.pm-count[aria-expanded="true"]{background:var(--b50);border-color:var(--b300);color:var(--b700)}
+.pm-sub td{background:var(--tint);padding:.7rem 1rem}
+.pills{display:flex;flex-wrap:wrap;gap:.3rem}
+.pills code{font-size:12px;background:var(--surface);border:1px solid var(--line);
+  border-radius:4px;padding:.1rem .4rem;color:var(--ink-2)}
 /* A confirm must never push its own Cancel button off a short screen: the body
    scrolls, the header and the footer stay where the hand expects them. */
 .modal{display:flex;flex-direction:column;max-height:calc(100vh - 3rem)}
 .modal .mb{overflow:auto;min-height:0;grid-auto-rows:max-content}
+
+.axes.a3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:1180px){.axes.a3{grid-template-columns:1fr}}
+.axis h4{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.axis-tag{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  border-radius:var(--r-pill);padding:.12rem .45rem;border:1px solid}
+.axis-tag.now{background:var(--g100);border-color:var(--line);color:var(--ink-3)}
+.axis-tag.new{background:var(--b50);border-color:var(--b200);color:var(--b700)}
+.axis-foot{font-size:12px;color:var(--ink-3);margin:.8rem 0 0;line-height:1.5}
+
+/* viewing-as: the risk-of-harm access bands, switchable */
+.vas{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:1rem}
+.vas.inrec{margin:.7rem 0 .2rem}
+.vas-l{display:inline-flex;align-items:center;gap:.35rem;font-size:12px;font-weight:600;
+  color:var(--ink-3);letter-spacing:.01em}
+.vas-l svg{width:14px;height:14px}
+.vas-g{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-ctl);
+  background:var(--surface);padding:2px;gap:2px;flex-wrap:wrap}
+.vas-b{border:0;background:transparent;border-radius:calc(var(--r-ctl) - 2px);
+  padding:.34rem .7rem;font-family:var(--ui);font-size:13px;font-weight:500;
+  color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.vas-b:hover{background:var(--g100);color:var(--ink-1)}
+.vas-b.on{background:var(--b500);color:#fff}
+.vas-n{font-size:12px;color:var(--ink-3)}
+.rnote{border:1px solid var(--line);background:var(--tint);border-radius:var(--r-ctl);
+  padding:.75rem .95rem;margin-bottom:1rem}
+.rnote p{font-size:13px;color:var(--ink-2);line-height:1.55;margin:0;max-width:92ch}
+.rnote code{font-size:12px}
+
+/* a redacted row keeps its shape so the count stays readable */
+.r-shut{display:none}
+tr.shut .r-open{display:none}
+tr.shut .r-shut{display:inline}
+tr.shut{cursor:default}
+tr.shut .nm{color:var(--ink-3);font-weight:500}
+.rd{color:var(--ink-3);font-style:italic;font-size:13px}
+
+/* the locked case */
+.lockwrap{padding:0 var(--gutter) 1.4rem}
+.rlock{border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);
+  box-shadow:var(--lift);padding:2.2rem 1.6rem;text-align:center;max-width:46rem;margin:0 auto}
+.rlock-i{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;
+  border-radius:50%;background:var(--al-a);color:var(--al-ink);margin-bottom:.9rem}
+.rlock-i svg{width:22px;height:22px}
+.rlock h3{font-size:18px;margin-bottom:.4rem}
+.rlock p{font-size:14px;color:var(--ink-2);line-height:1.6;max-width:52ch;margin:0 auto}
+.rlock-a{display:flex;gap:.55rem;justify-content:center;margin:1.2rem 0 0;flex-wrap:wrap}
+.rlock-f{font-size:12px;color:var(--ink-3);margin-top:1rem;max-width:56ch}
+.offlimits{display:none}

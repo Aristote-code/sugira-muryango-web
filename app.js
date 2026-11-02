@@ -16,7 +16,7 @@
     content:      { crumbs: [['Field support', null]],                                   nav: 'content' },
     people:       { crumbs: [['People', null]],                                           nav: 'people' },
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
-    role:         { crumbs: [['Roles & access', 'roles'], ['Sector supervisor', null]],   nav: 'roles' },
+    role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },
     system:       { crumbs: [['System', null]],                                           nav: 'system' },
     login:        { crumbs: [['Sign in', null]],                                          nav: null },
@@ -33,6 +33,14 @@
   };
 
   var MODALS = {
+    rohask: {
+      title: 'Request access to RH-0044',
+      ok: 'Send request',
+      body: '<div><label for="f-why">Why you need the case detail</label><textarea id="f-why" placeholder="Required. The sector lead who holds the case reads this, and it is kept in the audit trail whether the request is granted or refused."></textarea></div>' +
+            '<div><label for="f-how">For how long</label><select id="f-how"><option>Until the case closes</option><option>7 days</option><option>24 hours</option></select></div>' +
+            '<div><label for="f-tell">Who is told</label><select id="f-tell" disabled><option>The sector lead, and the home visitor who raised the flag</option></select></div>',
+      done: 'Request sent to C. Uwimana — recorded in the audit trail'
+    },
     note: {
       title: 'Add a note',
       ok: 'Save note',
@@ -81,7 +89,7 @@
       title: 'New form',
       ok: 'Create form',
       body: '<div><label for="f-fn">Form name</label><input id="f-fn" type="text" placeholder="e.g. Caregiver observation"></div>' +
-            '<div><label for="f-fw">Filled in by</label><select id="f-fw"><option>Home visitor</option><option>Sector supervisor</option><option>IZU cell coordinator</option></select></div>' +
+            '<div><label for="f-fw">Filled in by</label><select id="f-fw"><option>IZU at Village</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option></select></div>' +
             '<p style="font-size:.82rem;color:var(--ink-3);margin:0">Created in this session, not imported from a global library.</p>',
       done: 'Form created in Session 6'
     },
@@ -106,7 +114,7 @@
       title: 'Invite someone',
       ok: 'Send invitation',
       body: '<div><label for="f-ie">Email</label><input id="f-ie" type="email" placeholder="name@fxbrwanda.org"></div>' +
-            '<div><label for="f-ir">Role</label><select id="f-ir"><option>Home visitor</option><option>Sector supervisor</option><option>IZU cell coordinator</option><option>District coordinator</option><option>Social worker</option><option>M&amp;E officer</option></select></div>' +
+            '<div><label for="f-ir">Role</label><select id="f-ir"><option>IZU at Village</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option><option>Sugira Muryango District lead (DTL)</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>HQ officer</option></select></div>' +
             '<div><label for="f-ip">Where</label><select id="f-ip"><option>Tumba \u00b7 Huye</option><option>Rusatira \u00b7 Huye</option><option>Mbazi \u00b7 Huye</option><option>Kigembe \u00b7 Gisagara</option></select></div>' +
             '<p style="font-size:.82rem;color:var(--ink-3);margin:0">They set their own password from the invitation. No one else sees it.</p>',
       done: 'Invitation sent \u2014 they appear under Invited until they accept'
@@ -139,7 +147,7 @@
       done: 'Published \u2014 live in Session 6 and Session 9'
     },
     rsave: {
-      title: 'Save Sector supervisor',
+      title: 'Save Sugira Muryango Sector lead (SLA)',
       ok: 'Save for 17 people',
       body: '<p class="m-lead">A role is not held in one place. Saving it changes what every holder can reach, in every project it covers.</p>' +
             '<ul class="blast">' +
@@ -388,6 +396,8 @@
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-go]');
     if (t) {
+      // A redacted row is not a link. Nothing behind it is reachable.
+      if (t.classList.contains('shut')) return;
       var key = t.getAttribute('data-go');
       // A chip inside a confirm sends you off to look; the confirm cannot stay behind it.
       if (!scrim.hidden) closeModal();
@@ -407,6 +417,59 @@
     e.stopPropagation();
     var row = m.closest('.pgr');
     if (row) row.classList.add('is-open');
+  });
+
+  // ---- risk of harm: switch the role looking at the screen ----
+  /* Nothing here is saved. The four bands are what splitting roh-list into a
+     count and a detail makes possible, and the client picks between them. */
+  function applyRoh(mode) {
+    $$('.vas-b').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-roh') === mode);
+    });
+    $$('[data-open]').forEach(function (el) {
+      var ok = el.getAttribute('data-open').split(' ').indexOf(mode) > -1;
+      if (el.classList.contains('lockwrap')) { el.hidden = ok; }
+      else {
+        el.classList.toggle('shut', !ok);
+        if (el.tagName === 'TR') {
+          if (ok) { el.setAttribute('tabindex', '0'); el.setAttribute('role', 'link'); }
+          else { el.removeAttribute('tabindex'); el.removeAttribute('role'); }
+        }
+      }
+    });
+    // the case body is only reachable when the case itself is
+    var caseOpen = ['full', 'own'].indexOf(mode) > -1;
+    var sc = document.getElementById('s-case');
+    if (sc) {
+      $$('[data-panelid]', sc).forEach(function (x) { x.classList.toggle('offlimits', !caseOpen); });
+      var bar = sc.querySelector('.tabs');
+      if (bar) bar.hidden = !caseOpen;
+      var rec = sc.querySelector('.pg');
+      if (rec) rec.classList.toggle('offlimits', !caseOpen);
+      var desc = sc.querySelector('.rec-desc');
+      if (desc) desc.hidden = !caseOpen;
+      var acts = sc.querySelector('.rec-top .acts');
+      if (acts) acts.hidden = !caseOpen;
+    }
+    $$('[data-when]').forEach(function (x) {
+      x.hidden = x.getAttribute('data-when') !== mode;
+    });
+    document.body.setAttribute('data-roh', mode);
+  }
+  $$('.vas-b').forEach(function (b) {
+    b.addEventListener('click', function () { applyRoh(b.getAttribute('data-roh')); });
+  });
+  if (document.querySelector('.vas-b')) applyRoh('full');
+
+  // ---- each grid row lists the permissions it replaces ----
+  $$('.pm-count').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var sub = document.getElementById(b.getAttribute('aria-controls'));
+      if (!sub) return;
+      var open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', String(!open));
+      sub.hidden = open;
+    });
   });
 
   // ---- permission grid ----
@@ -533,8 +596,11 @@
   // ---- table rows route ----
   $$('.tbl tbody tr[data-go]').forEach(function (tr) {
     tr.setAttribute('tabindex', '0');
+    tr.setAttribute('role', 'link');
     tr.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); go(tr.getAttribute('data-go')); }
+      if (e.key === 'Enter' && !tr.classList.contains('shut')) {
+        e.preventDefault(); go(tr.getAttribute('data-go'));
+      }
     });
   });
 
