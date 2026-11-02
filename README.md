@@ -112,6 +112,19 @@ Each symbol carries its own `stroke="currentColor"` and per-path stroke widths (
 uses 2px for dot accents against 1.5px elsewhere), so CSS sets `color` rather than `stroke`
 on icon rules. Setting `stroke` there would override the symbol and flatten those accents.
 
+## Logo
+
+`logo.svg` is the mark, also inlined into the rail and used as the favicon.
+
+It sits on a **white chip**, not directly on the rail: its two primary colours are
+`#AD21A0` magenta at 2.71:1 and `#2C49CD` blue at 2.28:1 against the rail's `#36132F`,
+so the mark would half-disappear on it. On white they read at 6.00:1 and 7.14:1.
+
+The logo's magenta `#AD21A0` and the UI primary `#A23A91` are 4 degrees apart in hue
+and within 0.1 of each other in contrast — effectively the same colour, the logo's
+being the more saturated. The UI keeps its own value; swap `--b500` if you want them
+identical.
+
 ## Accessibility notes
 
 - The active navigation item carries a colour bar as well as a background change,
