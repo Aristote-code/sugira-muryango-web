@@ -133,8 +133,10 @@ fi
 # cache entry made for a different one, so this removes the question rather
 # than answering it. The filenames on disk are untouched; only the references
 # in the published page carry ?v=.
+# The delimiter is '#', not '|': the alternation below uses '|', and sed reads
+# the first one as the end of the expression.
 tmpfile=$(mktemp)
-sed -E "s|(src|href)=\"(app\.js|filters\.js|actions\.js|style\.css|logo\.svg)\"|\1=\"\2?v=$sha\"|g" \
+sed -E "s#(src|href)=\"(app\.js|filters\.js|actions\.js|style\.css|logo\.svg)\"#\1=\"\2?v=$sha\"#g" \
   "$pub/index.html" > "$tmpfile" && mv "$tmpfile" "$pub/index.html"
 versioned=$(grep -o "?v=$sha" "$pub/index.html" | wc -l | tr -d ' ')
 if [ "$versioned" -lt 4 ]; then
