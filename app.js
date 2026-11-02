@@ -264,16 +264,44 @@
   var scrollEl = $('#scroll');
   var current = 'dashboard';
 
+  // The rail row that started the current move, so the row you actually
+  // clicked is the row that lights up. Several rows can name one screen —
+  // "All households", "Behind schedule" and "Enrolment" are all the households
+  // list — and keying the highlight off the screen alone always lit the first
+  // of them, so the other two looked dead however often you clicked them.
+  var navFrom = null;
+
   function setNav(key) {
+    var from = navFrom; navFrom = null;
     $$('.ni, .si').forEach(function (b) { b.classList.remove('on'); b.classList.remove('in'); });
     if (!key) return;
-    // A section header and its first sub-item can name the same screen. The
-    // sub-item is the more specific place, so it takes the highlight and the
-    // header is marked as the section you are in.
-    var cands = $$('[data-go="' + key + '"]').filter(function (b) {
-      return b.classList.contains('ni') || b.classList.contains('si');
-    });
-    var hit = cands.filter(function (b) { return b.classList.contains('si'); })[0] || cands[0];
+    var hit = null;
+    if (from && from.getAttribute('data-go') === key &&
+        (from.classList.contains('ni') || from.classList.contains('si'))) hit = from;
+    if (!hit) {
+      var cands = $$('[data-go="' + key + '"]').filter(function (b) {
+        return b.classList.contains('ni') || b.classList.contains('si');
+      });
+      // A header and its own first child name the same screen. Arriving with
+      // no click of your own — a crumb, a table drill-through — means the
+      // plain unfiltered view, which is that child.
+      var pair = null;
+      cands.forEach(function (b) {
+        var pid = b.classList.contains('ni') && b.getAttribute('aria-controls');
+        if (!pid) return;
+        var child = cands.filter(function (c) {
+          var list = c.classList.contains('si') && c.closest('.subs');
+          return list && list.id === pid;
+        })[0];
+        if (child) pair = child;
+      });
+      // Failing that, the row that owns the screen outright beats a sub-item in
+      // another group that merely cross-links to it: land on Field status and
+      // the footer item is where you are, not "Supervision" under Visits.
+      hit = pair ||
+            cands.filter(function (b) { return b.classList.contains('ni'); })[0] ||
+            cands[0];
+    }
     if (!hit) return;
     hit.classList.add('on');
     // Landing on a header itself (a group with no sub-item for this screen)
@@ -520,9 +548,12 @@
       // A redacted row is not a link. Nothing behind it is reachable.
       if (t.classList.contains('shut')) return;
       var key = t.getAttribute('data-go');
+      // Remember the rail row this came from, if it is one, so setNav can light
+      // the row you picked rather than the first one naming the same screen.
+      navFrom = t.closest('.ni, .si');
       // A chip inside a confirm sends you off to look; the confirm cannot stay behind it.
       if (!scrim.hidden) closeModal();
-      if (DRAWERABLE[key]) openDrawer(key); else go(key);
+      if (DRAWERABLE[key]) { navFrom = null; openDrawer(key); } else go(key);
       return;
     }
     var toast = e.target.closest('[data-toast]');
