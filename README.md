@@ -22,6 +22,30 @@ npx serve .
 | `style.css` | Design tokens and every component |
 | `app.js` | Routing, breadcrumbs, nav state, tabs, modals, toasts |
 
+### All thirteen statistics
+
+The dashboard carries every statistic from the system it replaces, none relegated
+to a report:
+
+| # | Original chart | Here |
+| --- | --- | --- |
+| 1 | Risk of Harm Status | Alert band, only when a review is overdue |
+| 2 | Visits Conducted | Stat tile with denominator and direction |
+| 3 | Izu Status | Stat tile |
+| 4 | Male Caregiver Attendance | Stat tile |
+| 5 | Household visited by module and District | Shaded district x module matrix |
+| 6 | Risk of Harm Type Breakdown | Ranked bars |
+| 7 | Risk of Harm Victim Category | Ranked bars |
+| 8 | Average Time Spent by Module | Columns, flagged `Needs validating` |
+| 9 | Male Caregiver Attendance by District | Ranked bars, lowest first |
+| 10 | Household Needs Breakdown | Ranked bars |
+| 11 | IZU Weekly Telephone Supervision | Stat tile with the deadline |
+| 12 | Reasons for Not Visiting IZU | Top five of thirty, ranked |
+| 13 | Visits Conducted Per Module | Columns |
+
+The twelve-row module table from the original is the one thing dropped: it duplicated
+chart 13 exactly and sat directly beneath it.
+
 Screens: Dashboard · Households · Household detail · Visits · Safeguarding ·
 Case detail · Field status · Reports · Wall board · and a marked placeholder for
 routes in the information architecture that this pass does not cover.

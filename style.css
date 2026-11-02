@@ -334,6 +334,10 @@ button{font-family:inherit}
 .mr b.s3{background:var(--b500)}.mr b.s4{background:var(--b700)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mr b.s1{background:#3A2236}:root:not([data-theme="light"]) .mr b.s2{background:#6B3360}}
 :root[data-theme="dark"] .mr b.s1{background:#3A2236}:root[data-theme="dark"] .mr b.s2{background:#6B3360}
+.rk{display:grid;gap:.55rem}
+.rkr{display:grid;grid-template-columns:1.1rem 1fr auto;gap:.7rem;align-items:baseline;font-size:.875rem;color:var(--ink-2);letter-spacing:-.014em}
+.rkr em{font-style:normal;font-size:.75rem;color:var(--ink-4);font-variant-numeric:tabular-nums}
+.rkr b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 .legend{display:flex;flex-wrap:wrap;gap:.3rem .95rem;margin-top:.85rem;font-size:.75rem;color:var(--ink-3)}
 .legend span{display:inline-flex;align-items:center;gap:.35rem}
 .legend i{width:12px;height:12px;border-radius:3px;display:block}
