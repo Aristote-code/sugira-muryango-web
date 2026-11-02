@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Oversight and case management for the SUGIRA Muryango home-visiting programme.">
+<title>SUGIRA Muryango</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2336132F'/%3E%3Crect x='9' y='9' width='14' height='14' rx='4' fill='%23A23A91'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="shell">
+
+  <!-- ==================== RAIL ==================== -->
+  <nav class="rail" id="rail" aria-label="Main">
+    <div class="brandrow">
+      <span class="mark"></span>
+      <span class="wordmark">SUGIRA</span>
+      <button class="railtoggle" id="railToggle" type="button" aria-label="Collapse navigation">
+        <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg>
+      </button>
+    </div>
+
+    <div class="navgrp">
+      <button class="ni on" type="button" data-go="dashboard">
+        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        <span class="tx">Dashboard</span></button>
+
+      <button class="ni" type="button" aria-expanded="true" aria-controls="g-hh">
+        <svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg>
+        <span class="tx">Households</span><svg class="cr" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+      <ul class="subs" id="g-hh">
+        <li><button class="si" type="button" data-go="households"><span class="tx">All households</span><span class="ct">2 210</span></button></li>
+        <li><button class="si" type="button" data-go="households"><span class="tx">Behind schedule</span><span class="ct">148</span></button></li>
+        <li><button class="si" type="button" data-go="households"><span class="tx">Enrolment</span></button></li>
+      </ul>
+
+      <button class="ni" type="button" aria-expanded="true" aria-controls="g-vs">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+        <span class="tx">Visits</span><svg class="cr" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+      <ul class="subs" id="g-vs">
+        <li><button class="si" type="button" data-go="visits"><span class="tx">This week</span><span class="ct">1 842</span></button></li>
+        <li><button class="si" type="button" data-go="visits"><span class="tx">Missed</span><span class="ct">368</span></button></li>
+        <li><button class="si" type="button" data-go="visits"><span class="tx">Supervision</span></button></li>
+      </ul>
+
+      <button class="ni" type="button" aria-expanded="true" aria-controls="g-sf">
+        <svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8.2 8 9 4.5-.8 8-4 8-9V6Z"/></svg>
+        <span class="tx">Safeguarding</span><span class="ct sig">2</span><svg class="cr" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+      <ul class="subs" id="g-sf">
+        <li><button class="si" type="button" data-go="safeguarding"><span class="tx">Open cases</span><span class="ct sig">2</span></button></li>
+        <li><button class="si" type="button" data-go="safeguarding"><span class="tx">Closed cases</span></button></li>
+      </ul>
+    </div>
+
+    <div class="navgrp">
+      <p class="rlabel">Set up and run</p>
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-pr">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        <span class="tx">Programme</span><svg class="cr" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+      <ul class="subs" id="g-pr" hidden>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">Projects</span></button></li>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">Modules &amp; sessions</span></button></li>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">Forms</span></button></li>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">Cohorts</span></button></li>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">Translations</span></button></li>
+      </ul>
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-rp">
+        <svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>
+        <span class="tx">Reports</span><svg class="cr" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+      <ul class="subs" id="g-rp" hidden>
+        <li><button class="si" type="button" data-go="reports"><span class="tx">Saved reports</span></button></li>
+        <li><button class="si" type="button" data-go="reports"><span class="tx">Build a report</span></button></li>
+        <li><button class="si" type="button" data-go="wall"><span class="tx">Wall board</span></button></li>
+      </ul>
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-ad">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c.9-3.6 3.9-5.6 7.5-5.6s6.6 2 7.5 5.6"/></svg>
+        <span class="tx">Administration</span><svg class="cr" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+      <ul class="subs" id="g-ad" hidden>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">People</span></button></li>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">Roles &amp; access</span></button></li>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">Places</span></button></li>
+        <li><button class="si" type="button" data-go="empty"><span class="tx">System</span></button></li>
+      </ul>
+    </div>
+
+    <div class="railfoot">
+      <button class="ni" type="button" data-go="field">
+        <svg viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 4 12L16 12h5"/></svg>
+        <span class="tx">Field status</span><span class="ct">19</span></button>
+      <button class="ni" type="button" data-go="empty">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
+        <span class="tx">Settings</span></button>
+    </div>
+  </nav>
+
+  <!-- ==================== MAIN ==================== -->
+  <div class="main">
+    <div class="topbar">
+      <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"><b>Dashboard</b></nav>
+      <div class="tools">
+        <button class="userchip" type="button">
+          <span class="av">AG</span>
+          <span class="who"><b>A. Gahimana</b><span>National M&amp;E</span></span>
+          <span class="cv">&#9660;</span></button>
+      </div>
+    </div>
+
+    <div class="scroll" id="scroll">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="screen live" id="s-dashboard">
+        <div class="pad">
+          <div class="filters">
+            <button class="fl"><span class="k">Place</span><b>Rwanda</b><span class="cv">&#9660;</span></button>
+            <button class="fl"><span class="k">Cohort</span><b>All</b><span class="cv">&#9660;</span></button>
+            <button class="fl"><span class="k">Period</span><b>This week</b><span class="cv">&#9660;</span></button>
+            <span class="rt"><i></i>Updated 09:42</span>
+          </div>
+
+          <div class="alert">
+            <p class="t"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18.2A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>2 risk-of-harm cases are past their review date</p>
+            <div class="ar"><b>RH-0044</b><span>HH-1007 Mukamana &middot; Huye</span><span>2 days late</span><span class="go" data-go="case">Open &rsaquo;</span></div>
+            <div class="ar"><b>RH-0045</b><span>HH-1042 Nshimiyimana &middot; Nyamagabe</span><span>due today</span><span class="go" data-go="case">Open &rsaquo;</span></div>
+          </div>
+
+          <div class="stats">
+            <div class="st"><div class="l">Visits done</div><div class="v">1 842 <small>of 2 210</small></div>
+              <div class="d"><b>&darr; 83%</b> from 91% last week</div><div class="trk"><i style="width:83%"></i></div></div>
+            <div class="st"><div class="l">Behind the cohort</div><div class="v">148 <small>of 2 210</small></div>
+              <div class="d"><b>&uarr;</b> from 102 last week</div><div class="trk warn"><i style="width:7%"></i></div></div>
+            <div class="st"><div class="l">Reported today</div><div class="v">174 <small>of 193</small></div>
+              <div class="d">19 not synced &middot; provisional</div><div class="trk"><i style="width:90%"></i></div></div>
+          </div>
+
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>Worst five sectors this week</h3><span class="side"><a data-go="households">See all</a></span></div>
+              <div class="lr click" data-go="households"><span class="t">Rusatira</span><span class="s">Huye</span><span class="c">61%</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-go="households"><span class="t">Kigembe</span><span class="s">Gisagara</span><span class="c">67%</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-go="households"><span class="t">Tumba</span><span class="s">Huye</span><span class="c">72%</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-go="households"><span class="t">Mbazi</span><span class="s">Huye</span><span class="c">74%</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-go="households"><span class="t">Save</span><span class="s">Gisagara</span><span class="c">78%</span><span class="ch">&rsaquo;</span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Not reporting</h3><span class="side"><a data-go="field">Field status</a></span></div>
+              <div class="lr click" data-go="field"><span class="t">Nyamagabe</span><span class="s">6 visitors</span><span class="c">3 days</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-go="field"><span class="t">Nyaruguru</span><span class="s">8 visitors</span><span class="c">2 days</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-go="field"><span class="t">Huye</span><span class="s">5 visitors</span><span class="c">6 days</span><span class="ch">&rsaquo;</span></div>
+            </div>
+          </div>
+
+          <div class="cols c2e">
+            <div class="card">
+              <div class="card-h"><h3>Visits conducted per module</h3></div>
+              <div class="bars">
+                <div class="bc"><span class="tk"><i style="height:62%"></i></span><u>1</u></div>
+                <div class="bc"><span class="tk"><i style="height:71%"></i></span><u>2</u></div>
+                <div class="bc"><span class="tk"><i style="height:84%"></i></span><u>3</u></div>
+                <div class="bc"><span class="tk"><i style="height:96%"></i></span><u>4</u></div>
+                <div class="bc"><span class="tk"><i style="height:78%"></i></span><u>5</u></div>
+                <div class="bc lo"><span class="tk"><i style="height:54%"></i></span><u>6</u></div>
+                <div class="bc lo"><span class="tk"><i style="height:41%"></i></span><u>7</u></div>
+                <div class="bc lo"><span class="tk"><i style="height:33%"></i></span><u>8</u></div>
+                <div class="bc lo"><span class="tk"><i style="height:22%"></i></span><u>9</u></div>
+                <div class="bc lo"><span class="tk"><i style="height:16%"></i></span><u>10</u></div>
+                <div class="bc lo"><span class="tk"><i style="height:9%"></i></span><u>11</u></div>
+                <div class="bc lo"><span class="tk"><i style="height:4%"></i></span><u>12</u></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Male caregiver attendance by district</h3></div>
+              <div class="hb">
+                <div class="hr hot"><span class="l">Nyaruguru</span><span class="t"><i style="width:24%"></i></span><span class="v">24%</span></div>
+                <div class="hr hot"><span class="l">Gisagara</span><span class="t"><i style="width:29%"></i></span><span class="v">29%</span></div>
+                <div class="hr"><span class="l">Nyamagabe</span><span class="t"><i style="width:33%"></i></span><span class="v">33%</span></div>
+                <div class="hr"><span class="l">Huye</span><span class="t"><i style="width:41%"></i></span><span class="v">41%</span></div>
+                <div class="hr"><span class="l">Kamonyi</span><span class="t"><i style="width:46%"></i></span><span class="v">46%</span></div>
+                <div class="hr"><span class="l">Muhanga</span><span class="t"><i style="width:52%"></i></span><span class="v">52%</span></div>
+              </div>
+              <div class="legend"><span><i style="background:var(--amber)"></i>Below the 30% threshold</span></div>
+            </div>
+            <div class="card wide">
+              <div class="card-h"><h3>Households reached, district &times; module</h3></div>
+              <div class="tblwrap"><div class="mx">
+                <div class="mr"><span class="lb"></span><span class="hd">1</span><span class="hd">2</span><span class="hd">3</span><span class="hd">4</span><span class="hd">5</span><span class="hd">6</span><span class="hd">7</span><span class="hd">8</span><span class="hd">9</span><span class="hd">10</span><span class="hd">11</span><span class="hd">12</span></div>
+                <div class="mr"><span class="lb">Nyaruguru</span><b class="s4"></b><b class="s4"></b><b class="s3"></b><b class="s3"></b><b class="s2"></b><b class="s2"></b><b class="s1"></b><b class="s1"></b><b></b><b></b><b></b><b></b></div>
+                <div class="mr"><span class="lb">Gisagara</span><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s3"></b><b class="s3"></b><b class="s2"></b><b class="s2"></b><b class="s1"></b><b class="s1"></b><b></b><b></b><b></b></div>
+                <div class="mr"><span class="lb">Nyamagabe</span><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s3"></b><b class="s3"></b><b class="s2"></b><b class="s1"></b><b class="s1"></b><b></b><b></b><b></b></div>
+                <div class="mr"><span class="lb">Huye</span><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s3"></b><b class="s3"></b><b class="s2"></b><b class="s1"></b><b class="s1"></b><b></b><b></b></div>
+                <div class="mr"><span class="lb">Kamonyi</span><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s3"></b><b class="s2"></b><b class="s2"></b><b class="s1"></b><b></b><b></b></div>
+                <div class="mr"><span class="lb">Muhanga</span><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s4"></b><b class="s3"></b><b class="s3"></b><b class="s2"></b><b class="s1"></b><b class="s1"></b><b></b></div>
+              </div></div>
+              <div class="legend">
+                <span><i style="background:var(--line-2)"></i>Not started</span>
+                <span><i style="background:var(--b100)"></i>Under 25%</span>
+                <span><i style="background:var(--b300)"></i>25&ndash;50%</span>
+                <span><i style="background:var(--b500)"></i>50&ndash;75%</span>
+                <span><i style="background:var(--b700)"></i>Over 75%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-h"><h3>Reports</h3>
+              <span class="side">
+                <button class="btn sec sm" type="button" data-go="wall">Wall board</button>
+                <button class="btn sm" type="button" data-go="reports">Build a report</button>
+              </span></div>
+            <p style="font-size:.88rem;color:var(--ink-2)">The other eight stats live here, filterable to any place and saveable as a scheduled report.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOUSEHOLDS ============ -->
+      <section class="screen" id="s-households">
+        <div class="phead">
+          <div class="row">
+            <div>
+              <h1>Households</h1>
+              <p class="sub">2 210 enrolled across six districts. 148 are behind their cohort schedule.</p>
+            </div>
+            <div class="acts">
+              <button class="btn sec" type="button"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4M4 21h16"/></svg>Export CSV</button>
+              <button class="btn" type="button" data-modal="enrol"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Enrol household</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">All <span class="chip" style="margin-left:.4rem">2 210</span></button>
+          <button class="tab" type="button">Behind schedule</button>
+          <button class="tab" type="button">No visit in 30 days</button>
+          <button class="tab" type="button">Open risk of harm</button>
+        </div>
+        <div class="pad">
+          <div class="filters">
+            <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+              <input type="text" id="hhSearch" placeholder="Search by household ID or caregiver" aria-label="Search households"></div>
+            <button class="fl"><span class="k">District</span><b>All</b><span class="cv">&#9660;</span></button>
+            <button class="fl"><span class="k">Cohort</span><b>4</b><span class="cv">&#9660;</span></button>
+            <button class="fl"><span class="k">Status</span><b>Any</b><span class="cv">&#9660;</span></button>
+          </div>
+
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr>
+                <th>Household</th><th>Caregiver</th><th>Place</th><th>Module</th>
+                <th class="num">Last visit</th><th>Status</th>
+              </tr></thead>
+              <tbody>
+                <tr data-go="household"><td class="nm">HH-1007</td><td>Mukamana Jeanne</td><td class="mut">Tumba &middot; Huye</td><td>6 of 12</td><td class="num mut">2 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1042</td><td>Nshimiyimana Claude</td><td class="mut">Kigembe &middot; Gisagara</td><td>4 of 12</td><td class="num mut">9 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-0988</td><td>Uwase Marie</td><td class="mut">Rusatira &middot; Huye</td><td>3 of 12</td><td class="num mut">21 days ago</td><td><span class="chip warn"><i></i>Behind</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1133</td><td>Habimana Eric</td><td class="mut">Mbazi &middot; Huye</td><td>7 of 12</td><td class="num mut">4 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1204</td><td>Ingabire Alice</td><td class="mut">Save &middot; Gisagara</td><td>5 of 12</td><td class="num mut">6 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-0871</td><td>Niyonsenga Paul</td><td class="mut">Tumba &middot; Huye</td><td>2 of 12</td><td class="num mut">34 days ago</td><td><span class="chip warn"><i></i>Behind</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1319</td><td>Mukandayisenga Rose</td><td class="mut">Kigembe &middot; Gisagara</td><td>9 of 12</td><td class="num mut">3 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1456</td><td>Bizimana Jean</td><td class="mut">Mbazi &middot; Huye</td><td>1 of 12</td><td class="num mut">&mdash;</td><td><span class="chip">Not started</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot">
+              <span>Showing 1&ndash;8 of 2 210</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">3</button><button type="button">&rsaquo;</button></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOUSEHOLD DETAIL ============ -->
+      <section class="screen" id="s-household">
+        <div class="phead">
+          <div class="row">
+            <span class="big">MJ</span>
+            <div style="min-width:0">
+              <h1>Mukamana Jeanne</h1>
+              <div class="meta">
+                <span><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/></svg>HH-1007</span>
+                <span><svg viewBox="0 0 24 24"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>Rango cell &middot; Tumba &middot; Huye</span>
+                <span><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2.2 2A16 16 0 0 1 3 6.2 2 2 0 0 1 5 4Z"/></svg>+250 78 555 0192</span>
+              </div>
+              <div class="tags">
+                <span class="chip brand">Cohort 4</span>
+                <span class="chip bad"><i></i>Risk of harm open</span>
+                <span class="chip warn"><i></i>Behind schedule</span>
+              </div>
+            </div>
+            <div class="acts">
+              <button class="btn sec" type="button" data-modal="note"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Add note</button>
+              <button class="btn" type="button" data-modal="visit"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>Log a visit</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">Overview</button>
+          <button class="tab" type="button">Visits</button>
+          <button class="tab" type="button">Children</button>
+          <button class="tab" type="button">Risk of harm</button>
+          <button class="tab" type="button">Consent</button>
+        </div>
+        <div class="pad">
+          <div class="callout">
+            <p class="ch"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><path d="m7.8 7.8 2.1 2.1M14.1 14.1l2.1 2.1"/></svg>Where this household stands</p>
+            <p>Six of twelve modules delivered. The household is four weeks behind the Cohort 4 schedule after two missed visits in October, and has an open risk-of-harm case overdue for review since 30 October.</p>
+          </div>
+
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>Visit history</h3><span class="side"><a>See all 14</a></span></div>
+              <div class="tl">
+                <div class="te"><span class="ic warn"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18.2A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+                  <div><h4>Risk of harm raised</h4><p>Neglect &middot; child under 5 &middot; raised by M. Dusabe</p><a data-go="case">Open case RH-0044</a></div>
+                  <span class="when">28 Oct</span></div>
+                <div class="te"><span class="ic ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+                  <div><h4>Module 6 &mdash; Play and communication</h4><p>42 minutes &middot; caregiver present &middot; male caregiver absent</p><a>View form</a></div>
+                  <span class="when">28 Oct</span></div>
+                <div class="te"><span class="ic"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+                  <div><h4>Visit not completed</h4><p>Household absent &middot; second attempt</p></div>
+                  <span class="when">14 Oct</span></div>
+                <div class="te"><span class="ic ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+                  <div><h4>Module 5 &mdash; Responsive feeding</h4><p>51 minutes &middot; both caregivers present</p><a>View form</a></div>
+                  <span class="when">30 Sep</span></div>
+              </div>
+            </div>
+
+            <div style="display:grid;gap:1.1rem;align-content:start">
+              <div class="card">
+                <div class="card-h"><h3>Session progress</h3><span class="side"><span class="chip warn">4 weeks behind</span></span></div>
+                <div class="mods">
+                  <div class="mod done"><span class="dot">&#10003;</span><span class="nm">1 &mdash; Welcome</span><span class="wh">12 Jun</span></div>
+                  <div class="mod done"><span class="dot">&#10003;</span><span class="nm">2 &mdash; Getting to know you</span><span class="wh">26 Jun</span></div>
+                  <div class="mod done"><span class="dot">&#10003;</span><span class="nm">3 &mdash; Daily routines</span><span class="wh">17 Jul</span></div>
+                  <div class="mod done"><span class="dot">&#10003;</span><span class="nm">4 &mdash; Play materials</span><span class="wh">21 Aug</span></div>
+                  <div class="mod done"><span class="dot">&#10003;</span><span class="nm">5 &mdash; Responsive feeding</span><span class="wh">30 Sep</span></div>
+                  <div class="mod done"><span class="dot">&#10003;</span><span class="nm">6 &mdash; Play and communication</span><span class="wh">28 Oct</span></div>
+                  <div class="mod now"><span class="dot">7</span><span class="nm">7 &mdash; Problem solving</span><span class="wh">Overdue</span></div>
+                  <div class="mod"><span class="dot">8</span><span class="nm">8 &mdash; Family conflict</span><span class="wh">&mdash;</span></div>
+                  <div class="mod"><span class="dot">9</span><span class="nm">9 &mdash; Fathers and caregiving</span><span class="wh">&mdash;</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-h"><h3>Details</h3></div>
+                <div class="kv">
+                  <div><div class="k">Children</div><div class="v">3</div></div>
+                  <div><div class="k">Under 5</div><div class="v">2</div></div>
+                  <div><div class="k">Visits done</div><div class="v">6</div></div>
+                  <div><div class="k">Visits missed</div><div class="v">2</div></div>
+                  <div><div class="k">Home visitor</div><div class="v" style="font-size:.9rem">M. Dusabe</div></div>
+                  <div><div class="k">Enrolled</div><div class="v" style="font-size:.9rem">12 Jun 2026</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ VISITS ============ -->
+      <section class="screen" id="s-visits">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Visits</h1><p class="sub">1 842 of 2 210 due this week. 368 missed, oldest 34 days.</p></div>
+            <div class="acts"><button class="btn sec" type="button"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4M4 21h16"/></svg>Export CSV</button></div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">This week</button>
+          <button class="tab" type="button">Missed <span class="chip warn" style="margin-left:.4rem">368</span></button>
+          <button class="tab" type="button">Supervision</button>
+          <button class="tab" type="button">Awaiting sign-off</button>
+        </div>
+        <div class="pad">
+          <div class="filters">
+            <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+              <input type="text" id="vSearch" placeholder="Search by household or visitor" aria-label="Search visits"></div>
+            <button class="fl"><span class="k">District</span><b>All</b><span class="cv">&#9660;</span></button>
+            <button class="fl"><span class="k">Module</span><b>Any</b><span class="cv">&#9660;</span></button>
+            <span class="rt"><i></i>Updated 09:42</span>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Date</th><th>Household</th><th>Module</th><th>Home visitor</th><th class="num">Minutes</th><th>Outcome</th></tr></thead>
+              <tbody>
+                <tr data-go="household"><td class="mut">31 Oct</td><td class="nm">HH-1319</td><td>9 &mdash; Fathers and caregiving</td><td>E. Mutesi</td><td class="num">47</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
+                <tr data-go="household"><td class="mut">31 Oct</td><td class="nm">HH-1204</td><td>5 &mdash; Responsive feeding</td><td>J. Kamanzi</td><td class="num">53</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
+                <tr data-go="household"><td class="mut">30 Oct</td><td class="nm">HH-0871</td><td>2 &mdash; Getting to know you</td><td>M. Dusabe</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>Household absent</span></td></tr>
+                <tr data-go="household"><td class="mut">30 Oct</td><td class="nm">HH-1133</td><td>7 &mdash; Problem solving</td><td>E. Mutesi</td><td class="num">38</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
+                <tr data-go="household"><td class="mut">28 Oct</td><td class="nm">HH-1007</td><td>6 &mdash; Play and communication</td><td>M. Dusabe</td><td class="num">42</td><td><span class="chip bad"><i></i>Risk flagged</span></td></tr>
+                <tr data-go="household"><td class="mut">28 Oct</td><td class="nm">HH-0988</td><td>3 &mdash; Daily routines</td><td>J. Kamanzi</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>Road access</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 1&ndash;6 of 1 842</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SAFEGUARDING ============ -->
+      <section class="screen" id="s-safeguarding">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Safeguarding</h1><p class="sub">Two open cases. Both are past the 72-hour review window.</p></div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">Open <span class="chip bad" style="margin-left:.4rem">2</span></button>
+          <button class="tab" type="button">Under review</button>
+          <button class="tab" type="button">Closed</button>
+        </div>
+        <div class="pad">
+          <div class="alert">
+            <p class="t"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18.2A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>Both open cases are past their review date</p>
+            <div class="ar"><span>The protocol requires a supervisor review within 72 hours of a flag being raised.</span></div>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Case</th><th>Household</th><th>Type</th><th>Who</th><th>Raised by</th><th class="num">Review due</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr data-go="case"><td class="nm">RH-0044</td><td>HH-1007 Mukamana</td><td>Neglect</td><td>Child under 5</td><td>M. Dusabe</td><td class="num">30 Oct</td><td><span class="chip bad"><i></i>2 days late</span></td></tr>
+                <tr data-go="case"><td class="nm">RH-0045</td><td>HH-1042 Nshimiyimana</td><td>Physical</td><td>Child 5&ndash;17</td><td>J. Kamanzi</td><td class="num">1 Nov</td><td><span class="chip warn"><i></i>Due today</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CASE DETAIL ============ -->
+      <section class="screen" id="s-case">
+        <div class="phead">
+          <div class="row">
+            <span class="big" style="background:var(--amber)">RH</span>
+            <div style="min-width:0">
+              <h1>RH-0044</h1>
+              <div class="meta">
+                <span><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/></svg>HH-1007 Mukamana Jeanne</span>
+                <span><svg viewBox="0 0 24 24"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>Tumba &middot; Huye</span>
+                <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Raised 28 Oct by M. Dusabe</span>
+              </div>
+              <div class="tags">
+                <span class="chip bad"><i></i>Review 2 days late</span>
+                <span class="chip">Neglect</span>
+                <span class="chip">Child under 5</span>
+              </div>
+            </div>
+            <div class="acts">
+              <button class="btn sec" type="button" data-modal="note">Add note</button>
+              <button class="btn" type="button" data-modal="review"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>Record review</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">Case</button>
+          <button class="tab" type="button">Actions</button>
+          <button class="tab" type="button">Referrals</button>
+          <button class="tab" type="button">Audit trail</button>
+        </div>
+        <div class="pad">
+          <div class="alert">
+            <p class="t"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18.2A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>Supervisor review was due 30 October</p>
+            <div class="ar"><span>Protocol: review within 72 hours, refer to the sector social worker if substantiated.</span>
+              <span class="go" data-modal="review">Record review now &rsaquo;</span></div>
+          </div>
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>What was reported</h3></div>
+              <p style="font-size:.9rem;color:var(--ink-2)">During the Module 6 visit the home visitor recorded that the youngest child, aged 2, showed signs of inadequate feeding and had not attended the health post for a scheduled growth check. The caregiver reported losing the household health insurance card in August.</p>
+              <div class="card-h" style="margin-top:1.3rem"><h3>Case timeline</h3></div>
+              <div class="tl">
+                <div class="te"><span class="ic warn"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18.2A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+                  <div><h4>Flag raised at visit</h4><p>Module 6 &middot; M. Dusabe</p></div><span class="when">28 Oct</span></div>
+                <div class="te"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3Z"/></svg></span>
+                  <div><h4>Supervisor notified</h4><p>SMS to sector supervisor &middot; delivered</p></div><span class="when">28 Oct</span></div>
+                <div class="te"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+                  <div><h4>Review window closed</h4><p>No review recorded within 72 hours</p></div><span class="when">30 Oct</span></div>
+              </div>
+            </div>
+            <div style="display:grid;gap:1.1rem;align-content:start">
+              <div class="card">
+                <div class="card-h"><h3>Required next steps</h3></div>
+                <div class="lr"><span class="t">Supervisor review</span><span class="chip bad">Overdue</span></div>
+                <div class="lr"><span class="t">Refer to social worker</span><span class="chip">Not started</span></div>
+                <div class="lr"><span class="t">Health post follow-up</span><span class="chip">Not started</span></div>
+                <div class="lr"><span class="t">Re-check at next visit</span><span class="chip">Not started</span></div>
+              </div>
+              <div class="card">
+                <div class="card-h"><h3>Who can see this case</h3></div>
+                <div class="lr"><span class="t">M. Dusabe</span><span class="s">Home visitor &middot; raised it</span></div>
+                <div class="lr"><span class="t">C. Uwimana</span><span class="s">Sector supervisor</span></div>
+                <div class="lr"><span class="t">Social worker, Huye</span><span class="s">On referral only</span></div>
+                <p style="font-size:.8rem;color:var(--ink-3);margin-top:.8rem">Case detail is restricted by role. Everyone else sees a count only.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FIELD STATUS ============ -->
+      <section class="screen" id="s-field">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Field status</h1><p class="sub">174 of 193 home visitors have reported today. Until the rest sync, every figure on the dashboard is provisional.</p></div>
+          </div>
+        </div>
+        <div class="pad">
+          <div class="stats">
+            <div class="st"><div class="l">Reported today</div><div class="v">174 <small>of 193</small></div><div class="trk"><i style="width:90%"></i></div></div>
+            <div class="st"><div class="l">Silent over 48 hours</div><div class="v">19</div><div class="d"><b>&uarr;</b> from 11 yesterday</div></div>
+            <div class="st"><div class="l">Longest silence</div><div class="v">6 <small>days</small></div><div class="d">E. Mutesi &middot; Huye</div></div>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Home visitor</th><th>Place</th><th class="num">Households</th><th class="num">Last sync</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">E. Mutesi</td><td class="mut">Tumba &middot; Huye</td><td class="num">31</td><td class="num">6 days</td><td><span class="chip bad"><i></i>Not reporting</span></td></tr>
+                <tr><td class="nm">M. Dusabe</td><td class="mut">Rusatira &middot; Huye</td><td class="num">28</td><td class="num">2 days</td><td><span class="chip warn"><i></i>Delayed</span></td></tr>
+                <tr><td class="nm">J. Kamanzi</td><td class="mut">Kigembe &middot; Gisagara</td><td class="num">26</td><td class="num">3 days</td><td><span class="chip warn"><i></i>Delayed</span></td></tr>
+                <tr><td class="nm">A. Nyirahabimana</td><td class="mut">Save &middot; Gisagara</td><td class="num">30</td><td class="num">2 hours</td><td><span class="chip ok"><i></i>Reporting</span></td></tr>
+                <tr><td class="nm">P. Hakizimana</td><td class="mut">Mbazi &middot; Huye</td><td class="num">24</td><td class="num">40 minutes</td><td><span class="chip ok"><i></i>Reporting</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ REPORTS ============ -->
+      <section class="screen" id="s-reports">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Reports</h1><p class="sub">Build a question once, save it, and have it sent on a schedule.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button" data-go="wall"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8"/></svg>Wall board</button>
+              <button class="btn" type="button" data-modal="report"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Build a report</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button">Saved</button>
+          <button class="tab" type="button">Scheduled</button>
+          <button class="tab" type="button">Shared with me</button>
+        </div>
+        <div class="pad">
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Report</th><th>Covers</th><th>Owner</th><th class="num">Last run</th><th>Schedule</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Male caregiver attendance by district</td><td class="mut">All districts &middot; Cohort 4</td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td><span class="chip ok"><i></i>Weekly &rarr; NCDA</span></td></tr>
+                <tr><td class="nm">Risk of harm &mdash; type and victim</td><td class="mut">All districts &middot; 12 months</td><td class="mut">C. Uwimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td></tr>
+                <tr><td class="nm">Household needs breakdown</td><td class="mut">Huye, Gisagara</td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td><span class="chip">Manual</span></td></tr>
+                <tr><td class="nm">IZU status and supervision</td><td class="mut">All districts</td><td class="mut">M&amp;E team</td><td class="num mut">27 Oct</td><td><span class="chip ok"><i></i>Weekly</span></td></tr>
+                <tr><td class="nm">Average minutes per module</td><td class="mut">All districts</td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td><span class="chip warn"><i></i>Needs validation</span></td></tr>
+                <tr><td class="nm">Reasons IZU supervision missed</td><td class="mut">All districts &middot; Quarter</td><td class="mut">M&amp;E team</td><td class="num mut">14 Oct</td><td><span class="chip">Manual</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>6 saved reports</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ WALL BOARD ============ -->
+      <section class="screen" id="s-wall">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Wall board</h1><p class="sub">Three boards rotating on a timer, for the screen in the office. No navigation, nobody touches it.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button">Edit boards</button>
+              <button class="btn" type="button" data-toast="Opened full screen on the office display">Cast to display</button>
+            </div>
+          </div>
+        </div>
+        <div class="pad">
+          <div class="board">
+            <div class="bt"><span class="bn">SUGIRA MURYANGO</span><span class="bs"><b>RWANDA</b> &middot; All cohorts &middot; This week</span>
+              <span class="bl"><i></i>UPDATED 09:42</span></div>
+            <div class="ba"><span class="l">2 RISK-OF-HARM CASES OPEN</span><span class="d">1 past its review date &mdash; Huye, Tumba</span></div>
+            <div class="bg3">
+              <div class="bcell"><div class="cl">Visits this week</div><div class="cv">1 842 <small>of 2 210</small></div><div class="cd">83% &middot; down from 91% last week</div></div>
+              <div class="bcell"><div class="cl">Households enrolled</div><div class="cv">2 210</div><div class="cd">148 behind the cohort schedule</div></div>
+              <div class="bcell sig"><div class="cl">Reported today</div><div class="cv">174 <small>of 193</small></div><div class="cd">19 not synced &mdash; figures provisional</div></div>
+            </div>
+            <div class="bch"><div class="cl">Visits conducted per module</div>
+              <div class="bcols">
+                <div class="bcol on"><span class="tk"><i style="height:62%"></i></span><u>M1</u></div>
+                <div class="bcol on"><span class="tk"><i style="height:71%"></i></span><u>M2</u></div>
+                <div class="bcol on"><span class="tk"><i style="height:84%"></i></span><u>M3</u></div>
+                <div class="bcol on"><span class="tk"><i style="height:96%"></i></span><u>M4</u></div>
+                <div class="bcol on"><span class="tk"><i style="height:78%"></i></span><u>M5</u></div>
+                <div class="bcol"><span class="tk"><i style="height:54%"></i></span><u>M6</u></div>
+                <div class="bcol"><span class="tk"><i style="height:41%"></i></span><u>M7</u></div>
+                <div class="bcol"><span class="tk"><i style="height:33%"></i></span><u>M8</u></div>
+                <div class="bcol"><span class="tk"><i style="height:22%"></i></span><u>M9</u></div>
+                <div class="bcol"><span class="tk"><i style="height:16%"></i></span><u>M10</u></div>
+                <div class="bcol"><span class="tk"><i style="height:9%"></i></span><u>M11</u></div>
+                <div class="bcol"><span class="tk"><i style="height:4%"></i></span><u>M12</u></div>
+              </div></div>
+            <div class="bf"><span class="pg"><b class="on"></b><b></b><b></b></span><span>Board 1 &mdash; Coverage</span>
+              <span class="nx">NEXT: PARTICIPATION &amp; QUALITY &middot; 20s</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EMPTY ============ -->
+      <section class="screen" id="s-empty">
+        <div class="pad">
+          <div class="card">
+            <div class="empty">
+              <span class="ei"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>
+              <h4>Not designed yet</h4>
+              <p>This screen is in the information architecture but outside the first design pass. The chrome, tokens and components above all apply to it.</p>
+              <button class="btn sec sm" type="button" data-go="dashboard">Back to dashboard</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+<div class="scrim" id="scrim" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="mh"><h3 id="mTitle">Add a note</h3>
+      <button type="button" id="mClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div class="mb" id="mBody"></div>
+    <div class="mf"><button class="btn sec" type="button" id="mCancel">Cancel</button>
+      <button class="btn" type="button" id="mOk">Save</button></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js" defer></script>
+</body>
+</html>
