@@ -124,6 +124,24 @@ if grep -q 'class="buildstamp"' "$pub/index.html"; then
     "$pub/index.html" > "$tmpfile" && mv "$tmpfile" "$pub/index.html"
 fi
 
+# Version every asset URL with the commit.
+#
+# The headers already say must-revalidate, and the server is demonstrably
+# serving the new files, yet a browser can still hold an old app.js or
+# style.css against a fresh index.html — and the result looks exactly like a
+# failed deploy. A URL that changes with the commit cannot be served from a
+# cache entry made for a different one, so this removes the question rather
+# than answering it. The filenames on disk are untouched; only the references
+# in the published page carry ?v=.
+tmpfile=$(mktemp)
+sed -E "s|(src|href)=\"(app\.js|filters\.js|actions\.js|style\.css|logo\.svg)\"|\1=\"\2?v=$sha\"|g" \
+  "$pub/index.html" > "$tmpfile" && mv "$tmpfile" "$pub/index.html"
+versioned=$(grep -o "?v=$sha" "$pub/index.html" | wc -l | tr -d ' ')
+if [ "$versioned" -lt 4 ]; then
+  echo "deploy aborted — only $versioned asset references were versioned, expected at least 4."
+  exit 1
+fi
+
 echo "deploying $sha from a clean checkout:"
 printf '      %s\n' $site
 echo
