@@ -19,6 +19,7 @@
   --g600:#CECECE; --g700:#BBBBBB; --g800:#8D8D8D; --g900:#838383; --g1000:#646464; --g1100:#202020;
   --ink:var(--g1100); --ink-2:var(--g1000); --ink-3:var(--g900); --ink-4:var(--g700);
   --red:#E5484D; --red-bg:#FFEFEF; --red-line:#F7CFD1; --red-ink:#C62A2F;
+  --al-a:#AB1D22; --al-b:#D1363B;   /* alert header ramp */
   --amber:#FFC53D; --amber-bg:#FFF3D0; --amber-line:#F3DCA6; --amber-ink:#915930;
   --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
   --page:#FCFCFC; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
@@ -232,15 +233,18 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 .callout .ch svg{width:14px;height:14px;fill:none}
 .callout p{font-size:.91rem;color:var(--ink-2);max-width:86ch}
 
-/* Framed alert: a coloured header names the alert, a white panel sits inside the frame,
-   and each thing needing action gets its own outlined row. The header is #C62A2F, not
-   --red (#E5484D) — white text on --red is 3.91:1, which fails at this size. */
-.al{border-radius:var(--r-card);background:var(--red-ink);padding:0 4px 4px;box-shadow:var(--lift)}
+/* Framed alert: a gradient header names the alert, a white panel sits inside the frame,
+   and each thing needing action gets its own outlined row.
+   The ramp runs dark to lighter like the reference, but stays inside a range white text
+   survives: #AB1D22 is 7.17:1 and #D1363B is 4.88:1. --red (#E5484D) would be 3.91:1,
+   and the count sits at the light end, so the whole ramp has to hold. */
+.al{border-radius:var(--r-card);background:linear-gradient(90deg,var(--al-a),var(--al-b));
+  padding:0 4px 4px;box-shadow:var(--lift)}
 .al.is-shut{padding-bottom:0}
 .al-hd{display:flex;align-items:center;gap:.55rem;width:100%;border:0;background:none;cursor:pointer;
   color:#fff;font-family:var(--ui);font-weight:600;font-size:.9rem;letter-spacing:-.012em;
   padding:.66rem .8rem;text-align:left;border-radius:var(--r-card) var(--r-card) 0 0}
-.al-hd:hover{background:rgba(255,255,255,.08)}
+.al-hd:hover{background:rgba(255,255,255,.1)}
 .al-hd:focus-visible{outline:2px solid #fff;outline-offset:-3px}
 .al-hd svg{width:17px;height:17px;flex:none;fill:none}
 .al-hd .ct{margin-left:auto;font-size:.79rem;font-weight:500;color:rgba(255,255,255,.84);letter-spacing:-.008em}
