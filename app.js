@@ -542,3 +542,324 @@
   var start = (location.hash || '').slice(1);
   go(SCREENS[start] ? start : 'dashboard');
 })();
+
+
+/* ---------------------------------------------------------------------------
+   Query bar: filter, sort, choose columns, export.
+
+   Written as progressive enhancement — it finds every .tbl in the document and
+   wires itself on, so no table markup needs to know about it.
+
+   Shapes follow ClickUp's measured components: SortBadge beside a sorted column
+   title, a Filters popover of field / operator / value rows with an And / Or
+   match, and a column picker. The client asked for exactly this loop and kept
+   tying it to export: "if we use the filter, we can export the filter" [33:14],
+   "you can use the columns to export it" [59:29].
+--------------------------------------------------------------------------- */
+(function () {
+  'use strict';
+  var ICON = {
+    filter: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    cols:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z M10 4v16 M16 4v16" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/></svg>',
+    down:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    asc:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    desc:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    x:      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    plus:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    tick:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+  var UNIT = { minute: 1, hour: 60, day: 1440, week: 10080, month: 43800, year: 525600 };
+
+  /* A cell's sortable magnitude, or null when it has none.
+     Handles "1 842", "83%", "6 of 12", "2 days ago", "40 minutes", "—". */
+  function magnitude(text) {
+    var t = text.trim().toLowerCase();
+    if (!t || t === '—' || t === '-') return null;
+    var rel = t.match(/(\d+(?:\.\d+)?)\s*(minute|hour|day|week|month|year)s?/);
+    if (rel) return parseFloat(rel[1]) * UNIT[rel[2]];
+    if (/^now$/.test(t)) return 0;
+    var of = t.match(/^([\d\s,.]+)\s*of\s/);
+    if (of) return parseFloat(of[1].replace(/[\s,]/g, ''));
+    var plain = t.replace(/[\s,]/g, '').replace(/%$/, '');
+    if (/^-?\d+(\.\d+)?$/.test(plain)) return parseFloat(plain);
+    return null;
+  }
+  function cellText(td) { return (td.textContent || '').replace(/\s+/g, ' ').trim(); }
+
+  function enhance(table) {
+    var head = table.tHead, body = table.tBodies[0];
+    if (!head || !body || !body.rows.length) return;
+    var ths = Array.prototype.slice.call(head.rows[0].cells);
+    var rows = Array.prototype.slice.call(body.rows).filter(function (r) { return r.cells.length === ths.length; });
+    if (rows.length < 2 || ths.length < 2) return;
+
+    var cols = ths.map(function (th, i) {
+      var label = cellText(th) || ('Column ' + (i + 1));
+      var vals = rows.map(function (r) { return cellText(r.cells[i]); });
+      var nums = vals.map(magnitude).filter(function (n) { return n !== null; });
+      var distinct = vals.filter(function (v, k, a) { return v && a.indexOf(v) === k; });
+      return {
+        i: i, label: label, th: th,
+        numeric: nums.length >= Math.ceil(vals.length * 0.6),
+        enumish: distinct.length > 1 && distinct.length <= Math.max(4, rows.length / 2),
+        options: distinct.sort(),
+        shown: true
+      };
+    });
+
+    var host = table.closest('.card') || table.closest('.tblwrap');
+    if (!host || !host.parentNode) return;
+
+    /* The card's own "Showing 1-8 of 2 210" line and its pager describe the
+       unfiltered page. Once a filter is on they would contradict the toolbar,
+       so keep the original text and swap it while filtering. */
+    var foot = host.querySelector('.tfoot');
+    var footLabel = foot && foot.querySelector('span:not(.pg)');
+    var footText = footLabel ? footLabel.textContent : null;
+    var pager = foot && foot.querySelector('.pg');
+    var state = { sort: null, match: 'and', filters: [] };
+
+    /* ---- toolbar ---- */
+    var bar = document.createElement('div');
+    bar.className = 'tq';
+    bar.innerHTML =
+      '<button class="tq-btn" type="button" data-q="filter" aria-expanded="false">' + ICON.filter + 'Filter</button>' +
+      '<button class="tq-btn" type="button" data-q="cols" aria-expanded="false">' + ICON.cols + 'Columns</button>' +
+      '<span class="tq-sp"><span class="tq-count"></span>' +
+      '<button class="tq-btn" type="button" data-q="export">' + ICON.down + 'Export</button></span>';
+    host.parentNode.insertBefore(bar, host);
+
+    var filterBtn = bar.querySelector('[data-q="filter"]');
+    var colsBtn = bar.querySelector('[data-q="cols"]');
+    var count = bar.querySelector('.tq-count');
+
+    /* ---- popovers ---- */
+    function popover(cls) {
+      var p = document.createElement('div');
+      p.className = 'qpop' + (cls ? ' ' + cls : '');
+      p.hidden = true;
+      document.body.appendChild(p);
+      return p;
+    }
+    var fPop = popover(), cPop = popover('narrow');
+
+    function place(pop, btn) {
+      var r = btn.getBoundingClientRect();
+      pop.hidden = false;
+      var w = pop.offsetWidth;
+      var left = Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - w - 16);
+      pop.style.left = Math.max(window.scrollX + 8, left) + 'px';
+      pop.style.top = (r.bottom + window.scrollY + 6) + 'px';
+    }
+    function shut() {
+      [fPop, cPop].forEach(function (p) { p.hidden = true; });
+      [filterBtn, colsBtn].forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
+    }
+
+    /* ---- filters ---- */
+    function ops(col) {
+      return col.numeric
+        ? [['eq', 'is'], ['gt', 'more than'], ['lt', 'less than'], ['empty', 'is empty'], ['nempty', 'is not empty']]
+        : [['has', 'contains'], ['eq', 'is'], ['ne', 'is not'], ['empty', 'is empty'], ['nempty', 'is not empty']];
+    }
+    function drawFilters() {
+      fPop.innerHTML =
+        '<div class="qpop-h"><h4>Filters</h4><button class="x" type="button" aria-label="Close">' + ICON.x + '</button></div>' +
+        '<div class="qmatch"><button type="button" data-m="and">And</button><button type="button" data-m="or">Or</button></div>' +
+        '<div class="qrows"></div>' +
+        '<button class="qadd" type="button">' + ICON.plus + 'Add filter</button>';
+      fPop.querySelector('.x').onclick = shut;
+      fPop.querySelectorAll('.qmatch button').forEach(function (b) {
+        b.classList.toggle('on', b.dataset.m === state.match);
+        b.onclick = function () { state.match = b.dataset.m; drawFilters(); apply(); };
+      });
+      var wrap = fPop.querySelector('.qrows');
+      if (!state.filters.length) wrap.innerHTML = '<p class="qempty">No filters yet. Add one to narrow this table.</p>';
+      state.filters.forEach(function (f, idx) {
+        var col = cols[f.col];
+        var row = document.createElement('div');
+        row.className = 'qrow';
+        var fieldSel = '<select aria-label="Field">' + cols.map(function (c) {
+          return '<option value="' + c.i + '"' + (c.i === f.col ? ' selected' : '') + '>' + c.label + '</option>';
+        }).join('') + '</select>';
+        var opSel = '<select aria-label="Operator">' + ops(col).map(function (o) {
+          return '<option value="' + o[0] + '"' + (o[0] === f.op ? ' selected' : '') + '>' + o[1] + '</option>';
+        }).join('') + '</select>';
+        var val;
+        if (f.op === 'empty' || f.op === 'nempty') val = '<span></span>';
+        else if (col.enumish && !col.numeric) val = '<select aria-label="Value"><option value="">Choose…</option>' + col.options.map(function (o) {
+          return '<option' + (o === f.val ? ' selected' : '') + '>' + o + '</option>';
+        }).join('') + '</select>';
+        else val = '<input type="' + (col.numeric ? 'number' : 'text') + '" aria-label="Value" value="' + (f.val || '').replace(/"/g, '&quot;') + '" placeholder="Value">';
+        row.innerHTML = fieldSel + opSel + val + '<button class="clr" type="button" aria-label="Remove filter">' + ICON.x + '</button>';
+        var sels = row.querySelectorAll('select, input');
+        sels[0].onchange = function () { f.col = +this.value; f.op = ops(cols[f.col])[0][0]; f.val = ''; drawFilters(); apply(); };
+        sels[1].onchange = function () { f.op = this.value; drawFilters(); apply(); };
+        if (sels[2]) sels[2].oninput = sels[2].onchange = function () { f.val = this.value; apply(); };
+        row.querySelector('.clr').onclick = function () { state.filters.splice(idx, 1); drawFilters(); apply(); };
+        wrap.appendChild(row);
+      });
+      fPop.querySelector('.qadd').onclick = function () {
+        state.filters.push({ col: 0, op: ops(cols[0])[0][0], val: '' });
+        drawFilters(); apply();
+      };
+    }
+    function drawCols() {
+      cPop.innerHTML = '<div class="qcols"></div>';
+      var w = cPop.querySelector('.qcols');
+      cols.forEach(function (c) {
+        var shownCount = cols.filter(function (x) { return x.shown; }).length;
+        var locked = c.shown && shownCount <= 1;
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'qcol' + (c.shown ? ' on' : '') + (locked ? ' locked' : '');
+        b.innerHTML = '<span class="bx">' + ICON.tick + '</span><span>' + c.label + '</span>';
+        b.onclick = function () { if (locked) return; c.shown = !c.shown; drawCols(); apply(); };
+        w.appendChild(b);
+      });
+    }
+
+    /* ---- sorting ---- */
+    cols.forEach(function (c) {
+      c.th.classList.add('srt');
+      c.th.innerHTML = '<span class="ttl">' + c.th.innerHTML + '</span>';
+      c.th.setAttribute('tabindex', '0');
+      c.th.setAttribute('role', 'button');
+      function cycle() {
+        if (!state.sort || state.sort.col !== c.i) state.sort = { col: c.i, dir: 'asc' };
+        else if (state.sort.dir === 'asc') state.sort.dir = 'desc';
+        else state.sort = null;
+        apply();
+      }
+      c.th.onclick = cycle;
+      c.th.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cycle(); } };
+    });
+
+    /* ---- apply ---- */
+    function passes(row) {
+      if (!state.filters.length) return true;
+      var results = state.filters.map(function (f) {
+        var col = cols[f.col], txt = cellText(row.cells[col.i]), low = txt.toLowerCase();
+        var v = (f.val || '').toString().trim(), lv = v.toLowerCase();
+        var n = magnitude(txt), fn = parseFloat(v);
+        switch (f.op) {
+          case 'empty':  return !txt || txt === '—';
+          case 'nempty': return !!txt && txt !== '—';
+          case 'has':    return !v || low.indexOf(lv) >= 0;
+          case 'ne':     return !v || low !== lv;
+          case 'gt':     return isNaN(fn) || (n !== null && n > fn);
+          case 'lt':     return isNaN(fn) || (n !== null && n < fn);
+          case 'eq':     return !v || (col.numeric ? (n !== null && n === fn) : low === lv);
+          default:       return true;
+        }
+      });
+      return state.match === 'and' ? results.every(Boolean) : results.some(Boolean);
+    }
+    var empty = null;
+    function apply() {
+      var shown = 0;
+      rows.forEach(function (r) {
+        var ok = passes(r);
+        r.hidden = !ok;
+        r.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      });
+      if (state.sort) {
+        var c = cols[state.sort.col], sign = state.sort.dir === 'asc' ? 1 : -1;
+        rows.slice().sort(function (a, b) {
+          var ta = cellText(a.cells[c.i]), tb = cellText(b.cells[c.i]);
+          var na = magnitude(ta), nb = magnitude(tb);
+          if (na !== null && nb !== null) return (na - nb) * sign;
+          if (na !== null) return -1 * sign;
+          if (nb !== null) return 1 * sign;
+          return ta.localeCompare(tb) * sign;
+        }).forEach(function (r) { body.appendChild(r); });
+      }
+      cols.forEach(function (c) {
+        c.th.style.display = c.shown ? '' : 'none';
+        rows.forEach(function (r) { r.cells[c.i].style.display = c.shown ? '' : 'none'; });
+        var old = c.th.querySelector('.sortb');
+        if (old) old.remove();
+        if (state.sort && state.sort.col === c.i) {
+          var b = document.createElement('span');
+          b.className = 'sortb';
+          b.innerHTML = state.sort.dir === 'asc' ? ICON.asc : ICON.desc;
+          b.setAttribute('aria-label', state.sort.dir === 'asc' ? 'Sorted ascending' : 'Sorted descending');
+          c.th.querySelector('.ttl').appendChild(b);
+        }
+      });
+      var active = state.filters.filter(function (f) {
+        return f.op === 'empty' || f.op === 'nempty' || (f.val && String(f.val).trim());
+      }).length;
+      filterBtn.classList.toggle('on', active > 0);
+      filterBtn.innerHTML = ICON.filter + 'Filter' + (active ? '<span class="n">' + active + '</span>' : '');
+      var hiddenCols = cols.filter(function (c) { return !c.shown; }).length;
+      colsBtn.classList.toggle('on', hiddenCols > 0);
+      colsBtn.innerHTML = ICON.cols + 'Columns' + (hiddenCols ? '<span class="n">' + (cols.length - hiddenCols) + '</span>' : '');
+      count.textContent = shown === rows.length ? (rows.length + ' rows') : (shown + ' of ' + rows.length);
+      if (footLabel) {
+        var filtered = shown !== rows.length;
+        footLabel.textContent = filtered
+          ? (shown === 0 ? 'No rows match' : 'Showing ' + shown + ' matching row' + (shown === 1 ? '' : 's'))
+          : footText;
+        if (pager) pager.hidden = filtered;
+      }
+      if (!empty) {
+        empty = document.createElement('p');
+        empty.className = 'tq-none';
+        empty.textContent = 'Nothing matches these filters.';
+        body.parentNode.parentNode.insertBefore(empty, body.parentNode.nextSibling);
+      }
+      empty.hidden = shown !== 0;
+    }
+
+    /* ---- export reflects exactly what is on screen ---- */
+    function csv() {
+      var use = cols.filter(function (c) { return c.shown; });
+      var lines = [use.map(function (c) { return q(c.label); }).join(',')];
+      rows.forEach(function (r) {
+        if (r.style.display === 'none') return;
+        lines.push(use.map(function (c) { return q(cellText(r.cells[c.i])); }).join(','));
+      });
+      return lines.join('\r\n');
+      function q(s) { return '"' + String(s).replace(/"/g, '""') + '"'; }
+    }
+    bar.querySelector('[data-q="export"]').onclick = function () {
+      var blob = new Blob(['﻿' + csv()], { type: 'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'sugira-export.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    };
+
+    filterBtn.onclick = function (e) {
+      e.stopPropagation();
+      var open = fPop.hidden;
+      shut();
+      if (open) { drawFilters(); place(fPop, filterBtn); filterBtn.setAttribute('aria-expanded', 'true'); }
+    };
+    colsBtn.onclick = function (e) {
+      e.stopPropagation();
+      var open = cPop.hidden;
+      shut();
+      if (open) { drawCols(); place(cPop, colsBtn); colsBtn.setAttribute('aria-expanded', 'true'); }
+    };
+    document.addEventListener('click', function (e) {
+      if (!fPop.contains(e.target) && !cPop.contains(e.target) && !bar.contains(e.target)) shut();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
+
+    apply();
+  }
+
+  function init() {
+    Array.prototype.slice.call(document.querySelectorAll('table.tbl')).forEach(function (t) {
+      if (t.dataset.enhanced) return;
+      t.dataset.enhanced = '1';
+      try { enhance(t); } catch (err) { /* one bad table must not stop the rest */ }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();

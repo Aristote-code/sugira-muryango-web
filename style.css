@@ -648,6 +648,82 @@ svg use{pointer-events:none}
 .conseq{font-size:11px;line-height:13.2px;color:var(--amber-ink);white-space:nowrap}
 .conseq.plain{color:var(--ink-3)}
 
+
+/* ---------------- query bar: filter, sort, columns, export ----------------
+   Built to ClickUp's measured specs. SelectTrigger: 28 high, r7, 1px border.strong,
+   padding 0 7, gap 4. SortBadge: 20x18, r10, bg.selected, 12px icon in link colour.
+   FilterRow: field 143 / operator 104 / value flex / clear 32 r8, row 32, gap 4.
+   QueryPopover: surface, elevation.border-3, r12, 640 wide.
+   The client asked for this loop repeatedly: filter, choose columns, export
+   — "if we use the filter, we can export the filter" [33:14]. */
+.tq{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;padding:0 0 .7rem}
+.tq-sp{margin-left:auto;display:flex;align-items:center;gap:.6rem}
+.tq-count{font-size:.75rem;color:var(--ink-3);font-variant-numeric:tabular-nums;letter-spacing:-.008em}
+.tq-btn{display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 7px;border-radius:7px;
+  border:1px solid var(--g600);background:var(--surface);color:var(--ink);
+  font-family:var(--ui);font-size:14px;line-height:16px;letter-spacing:-.01em;cursor:pointer}
+.tq-btn:hover{border-color:var(--ink-4)}
+.tq-btn:focus-visible{outline:2px solid var(--b500);outline-offset:1px}
+.tq-btn svg{width:14px;height:14px;fill:none;flex:none;color:var(--ink-3)}
+.tq-btn .n{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;
+  padding:0 4px;border-radius:var(--r-pill);background:var(--b500);color:#fff;font-size:11px;font-weight:600}
+.tq-btn.on{border-color:var(--b400);background:var(--b50)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tq-btn.on{background:rgba(162,58,145,.14)}}
+:root[data-theme="dark"] .tq-btn.on{background:rgba(162,58,145,.14)}
+
+/* sortable column titles */
+.tbl th.srt{cursor:pointer;user-select:none}
+.tbl th.srt .ttl{display:inline-flex;align-items:center;gap:4px;color:var(--ink-3)}
+.tbl th.srt:hover .ttl{color:var(--ink-2)}
+.sortb{display:inline-flex;width:20px;height:18px;align-items:center;justify-content:center;
+  border-radius:10px;border:1px solid var(--b200);background:var(--b50);flex:none}
+.sortb svg{width:12px;height:12px;fill:none;color:var(--b600)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sortb{background:rgba(162,58,145,.16);border-color:rgba(162,58,145,.4)}
+  :root:not([data-theme="light"]) .sortb svg{color:var(--b300)}}
+:root[data-theme="dark"] .sortb{background:rgba(162,58,145,.16);border-color:rgba(162,58,145,.4)}
+:root[data-theme="dark"] .sortb svg{color:var(--b300)}
+
+/* popovers */
+.qpop{position:absolute;z-index:70;background:var(--surface);border-radius:12px;
+  box-shadow:var(--lift-overlay);border:1px solid var(--line);padding:15px;
+  width:min(640px,calc(100vw - 2rem));max-height:min(70vh,520px);overflow:auto}
+.qpop.narrow{width:min(280px,calc(100vw - 2rem));padding:8px;border-radius:8px}
+.qpop[hidden]{display:none!important}
+.qpop-h{display:flex;align-items:center;gap:.5rem;margin-bottom:10px}
+.qpop-h h4{font-size:14px;line-height:16px;font-weight:500;color:var(--ink)}
+.qpop-h .x{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+  border-radius:6px;border:0;background:none;cursor:pointer;color:var(--ink-3)}
+.qpop-h .x:hover{background:var(--tint);color:var(--ink)}
+.qpop-h .x svg{width:13px;height:13px;fill:none}
+.qmatch{display:inline-flex;background:var(--tint);border-radius:7px;padding:2px;gap:2px;margin-bottom:8px}
+.qmatch button{border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;font-weight:500;
+  color:var(--ink-3);padding:3px 10px;border-radius:5px}
+.qmatch button.on{background:var(--surface);color:var(--ink);box-shadow:var(--lift)}
+.qrows{display:grid;gap:4px}
+.qrow{display:grid;grid-template-columns:143px 104px minmax(0,1fr) 32px;gap:4px;align-items:center;min-height:32px}
+.qrow select,.qrow input{height:28px;border-radius:7px;border:1px solid var(--g600);background:var(--surface);
+  color:var(--ink);font-family:var(--ui);font-size:14px;line-height:16px;padding:0 7px;min-width:0;width:100%}
+.qrow select:hover,.qrow input:hover{border-color:var(--ink-4)}
+.qrow .clr{width:32px;height:32px;border-radius:8px;border:0;background:none;cursor:pointer;color:var(--ink-3);
+  display:inline-flex;align-items:center;justify-content:center}
+.qrow .clr:hover{background:var(--red-bg);color:var(--red-ink)}
+.qrow .clr svg{width:13px;height:13px;fill:none}
+.qadd{margin-top:8px;display:inline-flex;align-items:center;gap:5px;border:0;background:none;cursor:pointer;
+  font-family:var(--ui);font-size:14px;font-weight:500;color:var(--link);padding:4px 6px;border-radius:6px}
+.qadd:hover{background:var(--b50)}
+.qadd svg{width:13px;height:13px;fill:none}
+.qempty{font-size:14px;color:var(--ink-3);padding:6px 2px 2px}
+.qcols{display:grid;gap:1px}
+.qcol{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;border:0;background:none;
+  cursor:pointer;font-family:var(--ui);font-size:14px;color:var(--ink);text-align:left;width:100%}
+.qcol:hover{background:var(--tint)}
+.qcol .bx{width:16px;height:16px;border-radius:4px;border:1px solid var(--g600);flex:none;
+  display:inline-flex;align-items:center;justify-content:center;color:transparent}
+.qcol.on .bx{background:var(--b500);border-color:var(--b500);color:#fff}
+.qcol .bx svg{width:10px;height:10px;fill:none}
+.qcol.locked{opacity:.5;cursor:not-allowed}
+.tq-none{padding:1.6rem 1rem;text-align:center;color:var(--ink-3);font-size:.875rem}
+
 /* ---------------- save-time consequence ----------------
    A record five projects share cannot be saved quietly. The confirm names what
    else moves, by name, as the same chip used in the record — so you can open it
