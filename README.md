@@ -116,9 +116,13 @@ on icon rules. Setting `stroke` there would override the symbol and flatten thos
 
 `logo.svg` is the mark, also inlined into the rail and used as the favicon.
 
-It sits on a **white chip**, not directly on the rail: its two primary colours are
-`#AD21A0` magenta at 2.71:1 and `#2C49CD` blue at 2.28:1 against the rail's `#36132F`,
-so the mark would half-disappear on it. On white they read at 6.00:1 and 7.14:1.
+**In the rail it is set solid white** — 16.3:1 against the rail's `#36132F`, and it
+reads as one unit with the wordmark beside it. The CSS recolours the paths with
+`fill: currentColor`, so the file itself is untouched.
+
+Its own colours could not sit on the rail directly: `#AD21A0` magenta measures 2.71:1
+there and `#2C49CD` blue 2.28:1. `logo.svg` keeps them, for the favicon and anywhere
+the mark appears on a light ground.
 
 The logo's magenta `#AD21A0` and the UI primary `#A23A91` are 4 degrees apart in hue
 and within 0.1 of each other in contrast — effectively the same colour, the logo's

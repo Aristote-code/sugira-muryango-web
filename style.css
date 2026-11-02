@@ -76,11 +76,11 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;col
 .shell.mini .rail{padding:20px 14px}
 @media (max-width:880px){.rail{overflow:visible}}
 .brandrow{display:flex;align-items:center;gap:.65rem;padding:0 .3rem .9rem;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:1.05rem}
-/* The logo sits on white: its magenta (2.7:1) and blue (2.3:1) are too close to the
-   rail to read on it directly. */
-.mark{width:32px;height:32px;border-radius:9px;background:#fff;flex:none;display:flex;
-  align-items:center;justify-content:center;padding:3px;box-shadow:0 0 0 1px rgba(255,255,255,.16)}
+/* In the rail the mark is set solid white (16.3:1 on #36132F). logo.svg keeps its
+   real colours for the favicon and anywhere it appears on a light ground. */
+.mark{width:30px;height:30px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff}
 .logomark{width:100%;height:100%;display:block}
+.logomark path{fill:currentColor}
 .wordmark{color:#fff;font-weight:800;font-size:1.05rem;letter-spacing:-.025em;flex:1;min-width:0;white-space:nowrap;overflow:hidden}
 .railtoggle{background:none;border:0;color:rgba(255,255,255,.52);cursor:pointer;padding:.28rem;border-radius:7px;display:flex}
 .railtoggle:hover{color:#fff;background:rgba(255,255,255,.1)}
