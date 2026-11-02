@@ -71,6 +71,22 @@ Screens: Dashboard · Households · Household detail · Visits · Safeguarding �
 Case detail · Field status · Reports · Wall board · and a marked placeholder for
 routes in the information architecture that this pass does not cover.
 
+### Drawers
+
+A record opens **over** the list it came from, not instead of it: households, cases,
+forms, projects and modules are drawers. The screens that *list* them stay pages.
+
+- **Open as a full page** in the drawer header promotes it to the page route and sets
+  the hash, so it can still be linked and bookmarked.
+- Opening a record from inside a drawer replaces the content and shows a **back**
+  arrow; the breadcrumb carries the whole trail.
+- Escape pops one level, then closes. Focus is trapped while open and returned to the
+  row afterwards. The list behind does not scroll.
+- Below 880px the panel is full-bleed.
+
+Geometry is the ClickUp drawer's: 880px, elevation-5, a `#00000099` scrim, and a
+180ms `cubic-bezier(.32, .72, 0, 1)` slide, all honouring `prefers-reduced-motion`.
+
 Deep links work — `#households`, `#case`, `#wall` and so on.
 
 ## Design system

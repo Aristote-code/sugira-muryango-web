@@ -148,23 +148,116 @@
     });
   }
 
+  function resetTabs(root) {
+    var tabbed = root.querySelector('.tab[data-panel]');
+    if (!tabbed) return;
+    $$('.tab[data-panel]', root).forEach(function (t, i) { t.classList.toggle('on', i === 0); });
+    var first = tabbed.getAttribute('data-panel');
+    $$('[data-panelid]', root).forEach(function (x) {
+      x.hidden = x.getAttribute('data-panelid') !== first;
+    });
+  }
+
+  // ---- drawer: a record opens over the list it came from ----
+  // Records open in the drawer; the screens that *list* them stay pages.
+  var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1 };
+  var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
+  var dwStack = [], dwHeld = null, dwReturn = null;
+
+  function dwRelease() {
+    if (dwHeld) { scrollEl.appendChild(dwHeld); dwHeld = null; }
+  }
+
+  function dwTeardown() {
+    dwRelease();
+    dw.hidden = true;
+    dwStack = [];
+    var shell = document.querySelector('.shell');
+    if (shell) shell.classList.remove('dw-open');
+  }
+
+  function dwRender() {
+    var key = dwStack[dwStack.length - 1];
+    var def = SCREENS[key];
+    var sec = document.getElementById('s-' + key);
+    if (!def || !sec) { dwStack.pop(); return; }
+    dwRelease();
+    dwHeld = sec;
+    dwBody.appendChild(sec);
+    resetTabs(sec);
+
+    dwCrumbs.innerHTML = '';
+    def.crumbs.forEach(function (part, i) {
+      if (i) {
+        var sep = document.createElement('span');
+        sep.className = 'sep';
+        sep.textContent = '\u203A';
+        dwCrumbs.appendChild(sep);
+      }
+      var last = i === def.crumbs.length - 1;
+      var node = document.createElement(last ? 'b' : 'span');
+      node.textContent = part[0];
+      dwCrumbs.appendChild(node);
+    });
+    dwPanel.setAttribute('aria-label', def.crumbs[def.crumbs.length - 1][0]);
+    var back = dw.querySelector('[data-dw="back"]');
+    if (back) back.hidden = dwStack.length < 2;
+    dwBody.scrollTop = 0;
+  }
+
+  function openDrawer(key) {
+    if (!SCREENS[key] || !document.getElementById('s-' + key)) return;
+    var opening = dw.hidden;
+    if (opening) { dwReturn = document.activeElement; dwStack = []; }
+    dwStack.push(key);
+    dwRender();
+    dw.hidden = false;
+    var shell = document.querySelector('.shell');
+    if (shell) shell.classList.add('dw-open');
+    if (opening) {
+      var c = dw.querySelector('[data-dw="close"]');
+      if (c) c.focus();
+    }
+  }
+
+  function closeDrawer() {
+    if (dw.hidden) return;
+    var back = dwReturn;
+    dwTeardown();
+    dwReturn = null;
+    if (back && back.focus && document.contains(back)) back.focus();
+  }
+
+  function popDrawer() {
+    if (dwStack.length < 2) { closeDrawer(); return; }
+    dwStack.pop();
+    dwRender();
+  }
+
+  dw.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-dw]');
+    if (!t) return;
+    var action = t.getAttribute('data-dw');
+    if (action === 'close') closeDrawer();
+    else if (action === 'back') popDrawer();
+    else if (action === 'expand') {
+      var key = dwStack[dwStack.length - 1];
+      dwReturn = null;
+      if (key) go(key); else closeDrawer();
+    }
+  });
+
   function go(key) {
     var def = SCREENS[key];
     if (!def) return;
+    if (!dw.hidden) dwTeardown();
     var next = document.getElementById('s-' + key);
     if (!next) return;
     $$('.screen').forEach(function (s) { s.classList.remove('live'); });
     next.classList.add('live');
     setCrumbs(def.crumbs);
     setNav(def.nav);
-    var tabbed = next.querySelector('.tab[data-panel]');
-    if (tabbed) {
-      $$('.tab[data-panel]', next).forEach(function (t, i) { t.classList.toggle('on', i === 0); });
-      var first = tabbed.getAttribute('data-panel');
-      $$('[data-panelid]', next).forEach(function (x) {
-        x.hidden = x.getAttribute('data-panelid') !== first;
-      });
-    }
+    resetTabs(next);
     current = key;
     if (scrollEl) scrollEl.scrollTop = 0;
     try {
@@ -186,7 +279,11 @@
   // ---- anything carrying data-go routes ----
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-go]');
-    if (t) { go(t.getAttribute('data-go')); return; }
+    if (t) {
+      var key = t.getAttribute('data-go');
+      if (DRAWERABLE[key]) openDrawer(key); else go(key);
+      return;
+    }
     var toast = e.target.closest('[data-toast]');
     if (toast) { say(toast.getAttribute('data-toast')); return; }
     var m = e.target.closest('[data-modal]');
@@ -264,6 +361,16 @@
     say(msg);
   });
   document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && scrim.hidden && !dw.hidden) { popDrawer(); return; }
+    if (e.key === 'Tab' && scrim.hidden && !dw.hidden) {
+      var f = $$('button, a[href], textarea, input, select, [tabindex]:not([tabindex="-1"])', dwPanel)
+        .filter(function (n) { return n.offsetParent !== null; });
+      if (f.length) {
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
     if (e.key === 'Escape' && !scrim.hidden) closeModal();
     if (e.key === 'Tab' && !scrim.hidden) {
       var f = $$('button, textarea, input, select, [tabindex]:not([tabindex="-1"])', scrim)
