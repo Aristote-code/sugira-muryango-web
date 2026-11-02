@@ -359,6 +359,15 @@
     if (m) { openModal(m.getAttribute('data-modal')); }
   });
 
+  // ---- a relationship row with more than three links expands in place ----
+  document.addEventListener('click', function (e) {
+    var m = e.target.closest('[data-more]');
+    if (!m) return;
+    e.stopPropagation();
+    var row = m.closest('.pgr');
+    if (row) row.classList.add('is-open');
+  });
+
   // ---- permission grid ----
   $$('.tick').forEach(function (t) {
     if (t.disabled) return;

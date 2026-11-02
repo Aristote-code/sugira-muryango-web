@@ -625,3 +625,25 @@ svg use{pointer-events:none}
 .signin .btn{width:100%;justify-content:center;margin-top:1.3rem}
 .signin .alt{text-align:center;margin-top:1rem;font-size:13px}
 .signin .alt a{color:var(--link);font-weight:600;cursor:pointer;text-decoration:none}
+
+/* ---------------- relationships ----------------
+   Records already name their relationships — "Home visitor: M. Dusabe", "Cases raised: 14" —
+   but all 86 property values were dead ends. These make the value navigable.
+   The chip is ClickUp's own measured RelationshipChips spec (max 136 x 20, 1px border, r6,
+   padding 0 4, 11/13.2), which already sits on the token scale. */
+.pgr .v{flex-wrap:wrap}
+.rel{display:inline-flex;align-items:center;gap:4px;max-width:136px;height:20px;
+  border:1px solid var(--line);border-radius:6px;padding:0 4px;background:var(--surface);
+  font-family:var(--ui);font-size:11px;line-height:13.2px;color:var(--ink);cursor:pointer;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-width:0}
+.rel:hover{border-color:var(--b300);color:var(--b700);background:var(--b50)}
+.rel:focus-visible{outline:2px solid var(--b500);outline-offset:1px}
+.rel svg{width:11px;height:11px;flex:none;fill:none;color:var(--ink-4)}
+.rel:hover svg{color:var(--b500)}
+.rel.more{color:var(--ink-3);border-style:dashed}
+.pgr .v .rel.hid{display:none}
+.pgr.is-open .v .rel.hid{display:inline-flex}
+.pgr.is-open .v .rel.more{display:none}
+/* what changing this would affect — the reason the relationship matters */
+.conseq{font-size:11px;line-height:13.2px;color:var(--amber-ink);white-space:nowrap}
+.conseq.plain{color:var(--ink-3)}
