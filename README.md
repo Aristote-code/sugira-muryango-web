@@ -184,6 +184,53 @@ and within 0.1 of each other in contrast — effectively the same colour, the lo
 being the more saturated. The UI keeps its own value; swap `--b500` if you want them
 identical.
 
+## The twelve flows
+
+Every flow in `ux-case-study/notes/10-flows.md` has a home, and each is walked
+end to end in the browser rather than assumed:
+
+| | Flow | Where it lives |
+| --- | --- | --- |
+| F1 | Get in | Sign in, outside the app chrome |
+| F2 | Create a project | Programme |
+| F3 | Build a module | Project |
+| F4 | Build a form | Session |
+| F5 | Translate a form | Form, Translate tab |
+| F6 | Read collected data | Form, Data and Reports tabs |
+| F7 | Monitor the field | Field status |
+| F8 | Follow up on a household | Households, household record |
+| F9 | Enrol and track | Households, Visits |
+| F10 | Add a user | People |
+| F11 | Define a role | Roles & access, role editor |
+| F12 | Publish content | Field support |
+
+## The role model
+
+The client described roles scoped two ways at once:
+
+> "the position is the national level ... this is the sector level" — [09:57]
+> "project level ... you can create a role to set your level" — [09:28]
+
+So a role is three things that the old system collapsed into one:
+
+1. **What it can do** — a fixed grid of objects against actions, not free-text
+   permission strings across twelve pages.
+2. **What level it operates at** — national down to IZU. The *level*, not the
+   place; the place is bound per person.
+3. **Which programme** — all projects, or selected ones.
+
+A person therefore holds a role **at a place, within a programme**. That is why
+twenty-one roles — three of them called Test — collapse to seven.
+
+Content inherits the same model: documents carry a "Visible to" set of roles,
+because the client said "access to the details by roles, that is the permission"
+[44:04].
+
+**Unverified.** This model is read from a transcript Whisper rendered loosely,
+with no Kinyarwanda. It fits the route structure and the 21-role mess, but it has
+not been checked against the database. If roles turn out to be scoped by place
+only, or by project only, the role editor changes shape.
+
 ## Accessibility notes
 
 - The active navigation item carries a colour bar as well as a background change,

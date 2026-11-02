@@ -75,6 +75,14 @@
         <li><button class="si" type="button" data-go="reports"><span class="tx">Build a report</span></button></li>
         <li><button class="si" type="button" data-go="wall"><span class="tx">Wall board</span></button></li>
       </ul>
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-fs">
+        <svg aria-hidden="true"><use href="#i-support"/></svg>
+        <span class="tx">Field support</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
+      <ul class="subs" id="g-fs" hidden>
+        <li><button class="si" type="button" data-go="content"><span class="tx">Videos &amp; documents</span></button></li>
+        <li><button class="si" type="button" data-go="content"><span class="tx">FAQs</span></button></li>
+        <li><button class="si" type="button" data-go="content"><span class="tx">Feedback</span><span class="ct sig">7</span></button></li>
+      </ul>
       <button class="ni" type="button" aria-expanded="false" aria-controls="g-ad">
         <svg aria-hidden="true"><use href="#i-admin"/></svg>
         <span class="tx">Administration</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
@@ -1380,6 +1388,104 @@
             <p class="err" id="li-err" hidden>Check your email and password and try again.</p>
             <button class="btn" type="button" data-go="dashboard">Sign in</button>
             <p class="alt"><a data-toast="A reset link would be sent to that address">Forgotten your password?</a></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FIELD SUPPORT ============ -->
+      <section class="screen" id="s-content">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Field support</h1><p class="sub">What a home visitor can open on the tablet: the session videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button">Reorder</button>
+              <button class="btn" type="button" data-modal="publish"><svg aria-hidden="true"><use href="#i-plus"/></svg>Publish something</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-panel="videos">Videos <span class="chip" style="margin-left:.4rem">24</span></button>
+          <button class="tab" type="button" data-panel="docs">Documents <span class="chip" style="margin-left:.4rem">41</span></button>
+          <button class="tab" type="button" data-panel="faqs">FAQs</button>
+          <button class="tab" type="button" data-panel="feedback">Feedback <span class="chip warn" style="margin-left:.4rem">7</span></button>
+        </div>
+
+        <div class="pad" data-panelid="videos">
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Video</th><th>For</th><th>Languages</th><th>Visible to</th><th class="num">Opened</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Playing with everyday objects</td><td class="mut">Session 3 &middot; Play materials</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">Home visitors</td><td class="num">1 844</td></tr>
+                <tr><td class="nm">Feeding a child who refuses</td><td class="mut">Session 5 &middot; Responsive feeding</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">Home visitors</td><td class="num">1 602</td></tr>
+                <tr><td class="nm">Talking with fathers</td><td class="mut">Session 9 &middot; Fathers and caregiving</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut">Home visitors</td><td class="num">388</td></tr>
+                <tr><td class="nm">Recognising signs of harm</td><td class="mut">Safeguarding protocol</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip bad"><i></i>Supervisors and above</span></td><td class="num">214</td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 4 of 24 &middot; all play on the tablet offline once downloaded</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>Help content was scattered across five unrelated screens &mdash; videos at <code>/help</code> titled &ldquo;Intervention Videos&rdquo; in the menu and &ldquo;VIDEO INTERVENTION TUTORIALS&rdquo; on the page, documents under Settings, FAQ categories and FAQ questions as two separate lists with no stated relationship, and an Instructions page with <b>zero interactive elements on it</b>. The screen that was supposed to publish posts, <code>/settings/posts</code>, returned a 404 from a link inside the app.</p>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="docs" hidden>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Document</th><th>Folder</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Safeguarding protocol</td><td class="mut">Policy</td><td><span class="chip bad"><i></i>Supervisors, social workers</span></td><td class="num mut">1.2 MB</td><td class="num mut">12 Sep</td></tr>
+                <tr><td class="nm">Home visit checklist</td><td class="mut">Field</td><td class="mut">Everyone</td><td class="num mut">240 KB</td><td class="num mut">3 Oct</td></tr>
+                <tr><td class="nm">Referral form &mdash; health post</td><td class="mut">Field</td><td class="mut">Home visitors, supervisors</td><td class="num mut">88 KB</td><td class="num mut">21 Aug</td></tr>
+                <tr><td class="nm">Quarterly report to NCDA</td><td class="mut">Reporting</td><td><span class="chip warn"><i></i>M&amp;E only</span></td><td class="num mut">3.4 MB</td><td class="num mut">1 Oct</td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>41 documents in 4 folders</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-admin"/></svg>This is where content meets the role model</p>
+            <p>The client was explicit that documents are gated by role &mdash; <b>&ldquo;you can select the roles&rdquo;</b>, <b>&ldquo;access to the details by roles, that is the permission&rdquo;</b>. So &ldquo;Visible to&rdquo; is a column here and reads from the same seven roles as <a data-go="roles" style="color:var(--link);font-weight:600;cursor:pointer">Roles &amp; access</a>. The safeguarding protocol is not something every home visitor should be able to download.</p>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="faqs" hidden>
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>Categories</h3><span class="side"><a>Add</a></span></div>
+              <div class="lr click"><span class="t">Using the tablet</span><span class="c">9</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click"><span class="t">Recording a visit</span><span class="c">14</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click"><span class="t">When a household is absent</span><span class="c">6</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click"><span class="t">Raising a safeguarding concern</span><span class="c">11</span><span class="ch">&rsaquo;</span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Using the tablet</h3><span class="side"><span class="chip">9 questions</span></span></div>
+              <div class="lr"><span class="t">What happens if I lose signal mid-visit?</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="t">How do I know a visit has synced?</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="t">The form will not let me continue</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="t">Changing a visit after it was sent</span><span class="ch">&rsaquo;</span></div>
+            </div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>Categories and questions lived at <code>/faqcategories</code> and <code>/faqquestions</code> as two unconnected lists &mdash; nothing on either screen said a question belonged to a category. Picking a category now shows its questions.</p>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="feedback" hidden>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>From</th><th>About</th><th class="num">Sent</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">M. Dusabe</td><td>Session 6 form takes too long on a slow tablet</td><td class="num mut">2 days</td><td><span class="chip warn"><i></i>Unread</span></td></tr>
+                <tr><td class="nm">E. Mutesi</td><td>Kinyarwanda wording on question 14 is unclear</td><td class="num mut">4 days</td><td><span class="chip warn"><i></i>Unread</span></td></tr>
+                <tr><td class="nm">J. Kamanzi</td><td>Cannot download the referral form offline</td><td class="num mut">1 week</td><td><span class="chip ok"><i></i>Answered</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>7 unread of 42</span></div>
+          </div>
+          <div class="callout">
+            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
+            <p>The navigation pointed at <code>/userfeedbacks/create</code> &mdash; the form for <em>submitting</em> feedback. The list of what people had actually sent was at <code>/userfeedbacks</code>, which nothing linked to. Staff could file feedback into a place no one could read.</p>
           </div>
         </div>
       </section>

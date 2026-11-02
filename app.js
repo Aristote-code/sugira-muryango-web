@@ -13,6 +13,7 @@
     wall:         { crumbs: [['Reports', 'reports'], ['Wall board', null]],               nav: 'wall' },
     empty:        { crumbs: [['Not designed yet', null]],                                 nav: null },
 
+    content:      { crumbs: [['Field support', null]],                                   nav: 'content' },
     people:       { crumbs: [['People', null]],                                           nav: 'people' },
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
     role:         { crumbs: [['Roles & access', 'roles'], ['Sector supervisor', null]],   nav: 'roles' },
@@ -91,6 +92,15 @@
             '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Huye</option><option>Gisagara</option><option>Nyamagabe</option></select></div>' +
             '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>',
       done: 'Cohort created as a draft \u2014 no household is scheduled yet'
+    },
+    publish: {
+      title: 'Publish to the field',
+      ok: 'Publish',
+      body: '<div><label for="f-pw">What</label><select id="f-pw"><option>A video</option><option>A document</option><option>An FAQ answer</option></select></div>' +
+            '<div><label for="f-pt">Title</label><input id="f-pt" type="text" placeholder="e.g. Recognising signs of harm"></div>' +
+            '<div><label for="f-pv">Visible to</label><select id="f-pv"><option>Everyone</option><option>Home visitors</option><option>Supervisors and above</option><option>Social workers only</option></select></div>' +
+            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">Visibility reads from the same roles as Roles &amp; access.</p>',
+      done: 'Published \u2014 it appears on the tablet at the next sync'
     },
     invite: {
       title: 'Invite someone',
