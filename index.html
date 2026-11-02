@@ -30,7 +30,7 @@
         <svg aria-hidden="true"><use href="#i-dashboard"/></svg>
         <span class="tx">Dashboard</span></button>
 
-      <button class="ni" type="button" aria-expanded="true" aria-controls="g-hh">
+      <button class="ni" type="button" aria-expanded="true" aria-controls="g-hh" data-go="households" data-view="clear">
         <svg aria-hidden="true"><use href="#i-households"/></svg>
         <span class="tx">Households</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-hh">
@@ -39,7 +39,7 @@
         <li><button class="si" type="button" data-go="households" data-view="filter:status=Not started"><span class="tx">Enrolment</span></button></li>
       </ul>
 
-      <button class="ni" type="button" aria-expanded="true" aria-controls="g-vs">
+      <button class="ni" type="button" aria-expanded="true" aria-controls="g-vs" data-go="visits" data-view="clear">
         <svg aria-hidden="true"><use href="#i-visits"/></svg>
         <span class="tx">Visits</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-vs">
@@ -48,7 +48,7 @@
         <li><button class="si" type="button" data-go="visits" data-view="go:field"><span class="tx">Supervision</span></button></li>
       </ul>
 
-      <button class="ni" type="button" aria-expanded="true" aria-controls="g-sf">
+      <button class="ni" type="button" aria-expanded="true" aria-controls="g-sf" data-go="safeguarding" data-view="tab:Open">
         <svg aria-hidden="true"><use href="#i-safeguarding"/></svg>
         <span class="tx">Safeguarding</span><span class="ct sig">2</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-sf">
@@ -59,7 +59,7 @@
 
     <div class="navgrp">
       <p class="rlabel">Set up and run</p>
-      <button class="ni" type="button" aria-expanded="false" aria-controls="g-pr">
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-pr" data-go="programme">
         <svg aria-hidden="true"><use href="#i-programme"/></svg>
         <span class="tx">Programme</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-pr" hidden>
@@ -67,7 +67,7 @@
         <li><button class="si" type="button" data-go="cohorts"><span class="tx">Cohorts</span><span class="ct">4</span></button></li>
         <li><button class="si" type="button" data-go="translations"><span class="tx">Translations</span><span class="ct sig">13</span></button></li>
       </ul>
-      <button class="ni" type="button" aria-expanded="false" aria-controls="g-rp">
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-rp" data-go="reports" data-view="tab:Saved">
         <svg aria-hidden="true"><use href="#i-reports"/></svg>
         <span class="tx">Reports</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-rp" hidden>
@@ -83,7 +83,7 @@
       <button class="ni" type="button" data-go="community">
         <svg aria-hidden="true"><use href="#i-message"/></svg>
         <span class="tx">Community</span><span class="ct sig">3</span></button>
-      <button class="ni" type="button" aria-expanded="false" aria-controls="g-fs">
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-fs" data-go="content" data-view="tab:Videos">
         <svg aria-hidden="true"><use href="#i-support"/></svg>
         <span class="tx">Field support</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-fs" hidden>
@@ -91,7 +91,7 @@
         <li><button class="si" type="button" data-go="content" data-view="tab:FAQs"><span class="tx">FAQs</span></button></li>
         <li><button class="si" type="button" data-go="content" data-view="tab:Feedback"><span class="tx">Feedback</span><span class="ct sig">7</span></button></li>
       </ul>
-      <button class="ni" type="button" aria-expanded="false" aria-controls="g-ad">
+      <button class="ni" type="button" aria-expanded="false" aria-controls="g-ad" data-go="people">
         <svg aria-hidden="true"><use href="#i-admin"/></svg>
         <span class="tx">Administration</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-ad" hidden>

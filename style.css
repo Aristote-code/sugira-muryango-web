@@ -115,7 +115,9 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .ni .tx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ni .ct{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.66);background:rgba(255,255,255,.12);border-radius:var(--r-pill);padding:.08rem .45rem;flex:none}
 .ni .ct.sig{color:#fff;background:#C62A2F}
-.ni .cr{opacity:.55;transition:transform .16s ease}
+/* The chevron is its own control now, so it needs a hit area you can land on.
+   content-box plus the matching negative margin buys 6px without moving the row. */
+.ni .cr{opacity:.55;transition:transform .16s ease;box-sizing:content-box;padding:3px;margin:-3px}
 .ni[aria-expanded="true"] .cr{transform:rotate(90deg)}
 @media (prefers-reduced-motion:reduce){.ni,.ni .cr{transition:none}}
 .subs{list-style:none;margin:.1rem 0 .35rem;padding:0;position:relative}

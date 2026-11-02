@@ -267,11 +267,21 @@
   function setNav(key) {
     $$('.ni, .si').forEach(function (b) { b.classList.remove('on'); b.classList.remove('in'); });
     if (!key) return;
-    var hit = $$('[data-go="' + key + '"]').filter(function (b) {
+    // A section header and its first sub-item can name the same screen. The
+    // sub-item is the more specific place, so it takes the highlight and the
+    // header is marked as the section you are in.
+    var cands = $$('[data-go="' + key + '"]').filter(function (b) {
       return b.classList.contains('ni') || b.classList.contains('si');
-    })[0];
+    });
+    var hit = cands.filter(function (b) { return b.classList.contains('si'); })[0] || cands[0];
     if (!hit) return;
     hit.classList.add('on');
+    // Landing on a header itself (a group with no sub-item for this screen)
+    // should still show what is inside it.
+    if (hit.classList.contains('ni') && hit.getAttribute('aria-controls')) {
+      var own = document.getElementById(hit.getAttribute('aria-controls'));
+      if (own) { own.hidden = false; hit.setAttribute('aria-expanded', 'true'); }
+    }
     if (hit.classList.contains('si')) {
       var list = hit.closest('.subs');
       if (list) {
@@ -468,14 +478,38 @@
     } catch (e) { /* hash writes can be refused in embedded views */ }
   }
 
-  // ---- navigation groups expand inline ----
+  // ---- navigation groups ----
+  // The row and the chevron used to be one control, so a section header could
+  // only fold its own list: clicking "Households" shut the thing you had just
+  // aimed at and went nowhere. The row now opens the section it names; the
+  // chevron — and the arrow keys — fold it.
   $$('.ni[aria-controls]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var panel = document.getElementById(btn.getAttribute('aria-controls'));
-      if (!panel) return;
-      var open = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!open));
-      panel.hidden = open;
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!panel) return;
+    function fold(open) {
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    }
+    btn.addEventListener('click', function (e) {
+      if (e.target.closest('.cr')) {
+        // The chevron folds and does nothing else, or a group you are standing
+        // in could never be collapsed. Stop here so the row does not also route.
+        e.stopPropagation();
+        fold(btn.getAttribute('aria-expanded') !== 'true');
+        return;
+      }
+      // Arriving at a section always opens it. Toggling on the row is what made
+      // the list vanish under the pointer.
+      fold(true);
+    });
+    // The chevron is a pointer target, so folding needs the keys a tree gives
+    // you as well; Enter and Space stay with the row and navigate.
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' && btn.getAttribute('aria-expanded') !== 'true') {
+        e.preventDefault(); fold(true);
+      } else if (e.key === 'ArrowLeft' && btn.getAttribute('aria-expanded') === 'true') {
+        e.preventDefault(); fold(false);
+      }
     });
   });
 
