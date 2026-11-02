@@ -11,25 +11,74 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 sha=$(git rev-parse --short HEAD)
-msg=${1:-"Deploy $sha"}
 
+allow_dirty=0
+msg=""
+for a in "$@"; do
+  case "$a" in
+    --allow-dirty) allow_dirty=1 ;;
+    *) [ -z "$msg" ] && msg="$a" ;;
+  esac
+done
+msg=${msg:-"Deploy $sha"}
+
+# A dirty tree is refused, not noted.
+#
+# What this replaces was a note saying "these will NOT be deployed", which then
+# carried on. It was accurate and it did not help: it prints at the very top of
+# the output, where piping through `tail` removes it. Both deploys that went
+# wrong on 2 Nov were silent in this same shape — a blocked commit left HEAD on
+# an older revision, the export was a sound older tree, every check passed, and
+# the live site quietly stayed behind. Nothing was broken. It just was not what
+# anyone meant.
+#
+# If the edits really are unrelated to what is being shipped, say so.
 if [ -n "$(git status --porcelain)" ]; then
-  echo "note: uncommitted changes in the working tree — they will NOT be deployed:"
+  if [ "$allow_dirty" -eq 0 ]; then
+    echo "deploy refused — the working tree has uncommitted changes:"
+    git status --short | sed 's/^/      /'
+    echo
+    echo "  $sha would ship WITHOUT them."
+    echo
+    echo "  If you just made a commit and the pre-commit hook blocked it, this is"
+    echo "  that: HEAD is still the commit before it. Fix the checks and commit,"
+    echo "  or re-run with --allow-dirty if these edits are unrelated."
+    exit 1
+  fi
+  echo "note: --allow-dirty — these stay out of the deploy:"
   git status --short | sed 's/^/      /'
   echo
 fi
 
-# Production only ever serves main. Each session now works in its own worktree,
-# and `git rev-parse HEAD` inside one is that branch's tip, not main's — so
-# without this guard a session could put its own unmerged branch live from its
-# own checkout, and the deploy would look perfectly clean while doing it. This
-# rule used to live in an agreement between sessions; it belongs in the script.
+# Production only ever serves main, and only ever its tip.
+#
+# Each session works in its own worktree, so HEAD is that branch's tip, not
+# main's. Being an *ancestor* of main is not enough: a HEAD sitting behind main
+# is a perfectly valid commit that ships last week's site while every check
+# passes. Require the exact commit.
 git fetch -q origin main 2>/dev/null || true
-if ! git merge-base --is-ancestor HEAD origin/main 2>/dev/null; then
-  echo "deploy refused — $sha ($(git rev-parse --abbrev-ref HEAD)) is not on origin/main."
+remote=$(git rev-parse origin/main 2>/dev/null || true)
+head=$(git rev-parse HEAD)
+
+if [ -z "$remote" ]; then
+  echo "deploy refused — cannot read origin/main, so there is nothing to check"
+  echo "                 this deploy against."
+  exit 1
+fi
+
+if [ "$head" != "$remote" ]; then
+  branch=$(git rev-parse --abbrev-ref HEAD)
+  echo "deploy refused — $sha ($branch) is not the tip of origin/main."
   echo
-  echo "  The live site only ever serves main. Merge this branch into main and push"
-  echo "  it, then deploy from a checkout whose HEAD is on main."
+  if git merge-base --is-ancestor "$head" "$remote" 2>/dev/null; then
+    behind=$(git rev-list --count "$head..$remote")
+    echo "  HEAD is $behind commit(s) behind main. Deploying it would put older"
+    echo "  content live, and every check would pass while doing it."
+    echo "  Merge origin/main, then deploy."
+  else
+    echo "  The live site only ever serves main. Merge this branch into main and"
+    echo "  push it, then deploy from a checkout whose HEAD is on main."
+  fi
   exit 1
 fi
 
