@@ -647,3 +647,27 @@ svg use{pointer-events:none}
 /* what changing this would affect — the reason the relationship matters */
 .conseq{font-size:11px;line-height:13.2px;color:var(--amber-ink);white-space:nowrap}
 .conseq.plain{color:var(--ink-3)}
+
+/* ---------------- save-time consequence ----------------
+   A record five projects share cannot be saved quietly. The confirm names what
+   else moves, by name, as the same chip used in the record — so you can open it
+   and look before you decide — and the button carries the count, which puts the
+   scope in the verb rather than in prose nobody reads. */
+.blast{margin:0;padding:0;list-style:none;border:1px solid var(--line);border-radius:8px;
+  overflow:hidden;background:var(--surface)}
+.blast li{display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border-top:1px solid var(--line-2);min-width:0}
+.blast li:first-child{border-top:0}
+.blast li .rel{flex:none}
+.blast li .w{font-size:12px;line-height:14px;color:var(--ink-3);min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.blast li .w b{color:var(--ink-2);font-weight:600}
+.m-lead{margin:0;font-size:13px;line-height:18px;color:var(--ink-2)}
+.m-note{display:flex;gap:8px;align-items:flex-start;margin:0;padding:8px 10px;
+  font-size:12px;line-height:16px;color:var(--amber-ink);background:var(--amber-bg);
+  border:1px solid var(--amber-line);border-radius:8px}
+.m-note svg{width:14px;height:14px;flex:none;fill:none;margin-top:1px}
+/* A confirm must never push its own Cancel button off a short screen: the body
+   scrolls, the header and the footer stay where the hand expects them. */
+.modal{display:flex;flex-direction:column;max-height:calc(100vh - 3rem)}
+.modal .mb{overflow:auto;min-height:0;grid-auto-rows:max-content}

@@ -111,6 +111,45 @@
             '<p style="font-size:.82rem;color:var(--ink-3);margin:0">They set their own password from the invitation. No one else sees it.</p>',
       done: 'Invitation sent \u2014 they appear under Invited until they accept'
     },
+    msettings: {
+      title: 'Session settings',
+      ok: 'Save for all 5 projects',
+      body: '<div><label for="f-sn">Session name</label><input id="f-sn" type="text" value="Play and communication"></div>' +
+            '<div><label for="f-sd">Duration</label><input id="f-sd" type="text" value="42 minutes"></div>' +
+            '<p class="m-lead">Five projects run this session. Saving changes it in all of them \u2014 open one to check before you do.</p>' +
+            '<ul class="blast">' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>SUGIRA &mdash; core</button><span class="w"><b>2 210</b> households</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Male engagement</button><span class="w"><b>410</b> households</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Health referral</button><span class="w"><b>188</b> households</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>IZU supervision</button><span class="w">supervision only</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Sector supervision</button><span class="w">supervision only</span></li>' +
+            '</ul>' +
+            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Three of these are not yours to change. Ask the project owner first.</span></p>',
+      done: 'Saved \u2014 Play and communication changed in all 5 projects'
+    },
+    fpublish: {
+      title: 'Publish to 2 sessions',
+      ok: 'Publish to both',
+      body: '<p class="m-lead">Visit record is not only Session 6\u2019s form. Publishing changes it everywhere it appears.</p>' +
+            '<ul class="blast">' +
+            '<li><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Session 6</button><span class="w"><b>986</b> responses already recorded</span></li>' +
+            '<li><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Session 9</button><span class="w"><b>412</b> responses already recorded</span></li>' +
+            '</ul>' +
+            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Question 5 opens safeguarding cases. 2 are still open against the current wording.</span></p>',
+      done: 'Published \u2014 live in Session 6 and Session 9'
+    },
+    rsave: {
+      title: 'Save Sector supervisor',
+      ok: 'Save for 17 people',
+      body: '<p class="m-lead">A role is not held in one place. Saving it changes what every holder can reach, in every project it covers.</p>' +
+            '<ul class="blast">' +
+            '<li><button class="rel" type="button" data-go="people"><svg aria-hidden="true"><use href="#i-admin"/></svg>17 people</button><span class="w">hold this role today</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>SUGIRA &mdash; core</button><span class="w">sector level</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Male engagement</button><span class="w">sector level</span></li>' +
+            '</ul>' +
+            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>This role can open risk-of-harm detail. Narrowing it hides open cases from the people working them.</span></p>',
+      done: 'Role saved \u2014 17 people are affected'
+    },
     role: {
       title: 'New role',
       ok: 'Create role',
@@ -350,6 +389,8 @@
     var t = e.target.closest('[data-go]');
     if (t) {
       var key = t.getAttribute('data-go');
+      // A chip inside a confirm sends you off to look; the confirm cannot stay behind it.
+      if (!scrim.hidden) closeModal();
       if (DRAWERABLE[key]) openDrawer(key); else go(key);
       return;
     }
@@ -442,7 +483,8 @@
     mOk.textContent = def.ok;
     scrim.hidden = false;
     var first = mBody.querySelector('textarea, input, select');
-    if (first) first.focus();
+    // A confirm with no fields focuses Cancel, never the button that does the thing.
+    if (first) first.focus(); else $('#mCancel').focus();
   }
   function closeModal() {
     scrim.hidden = true;
