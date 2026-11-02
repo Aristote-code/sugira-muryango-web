@@ -65,7 +65,7 @@
    Removing that attribute restores automatic light/dark. */
 :root[data-theme="light"]{color-scheme:light}
 *{box-sizing:border-box}
-html,body{height:100%}
+html,body{font-family:var(--ui);height:100%}
 body{margin:0;background:var(--page);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.5;letter-spacing:-.011em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 h1,h2,h3,h4{margin:0;font-weight:700;line-height:1.25;letter-spacing:-.02em;text-wrap:balance}
 p{margin:0}
@@ -89,7 +89,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .mark{width:30px;height:30px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff}
 .logomark{width:100%;height:100%;display:block}
 .logomark path{fill:currentColor}
-.wordmark{color:#fff;font-weight:800;font-size:1.05rem;letter-spacing:-.025em;flex:1;min-width:0;white-space:nowrap;overflow:hidden}
+.wordmark{color:#fff;font-weight:800;font-size:16px;letter-spacing:-.025em;flex:1;min-width:0;white-space:nowrap;overflow:hidden}
 .railtoggle{background:none;border:0;color:rgba(255,255,255,.52);cursor:pointer;padding:.28rem;border-radius:7px;display:flex}
 .railtoggle:hover{color:#fff;background:rgba(255,255,255,.1)}
 .railtoggle svg{width:16px;height:16px;fill:none}
@@ -98,18 +98,18 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .shell.mini .ni{justify-content:center;padding-inline:0}
 .navgrp{display:flex;flex-direction:column;gap:2px}
 .navgrp+.navgrp{margin-top:1.15rem}
-.rlabel{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.42);padding:0 .6rem .45rem}
+.rlabel{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.42);padding:0 .6rem .45rem}
 .ni{display:flex;align-items:center;gap:.7rem;width:100%;text-align:left;border:0;background:none;cursor:pointer;
   color:rgba(255,255,255,.82);font-size:.875rem;font-weight:500;padding:.56rem .65rem;border-radius:10px;position:relative;
   transition:background .13s ease,color .13s ease}
 .ni:hover{background:rgba(255,255,255,.08);color:#fff}
 .ni:focus-visible{outline:2px solid var(--b300);outline-offset:1px}
 .ni.on{background:var(--pill);color:#fff;font-weight:600}
-.ni.on::before{content:"";position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:3px;height:22px;background:var(--b400);border-radius:0 3px 3px 0}
+.ni.on::before{content:"";position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:3px;height:22px;background:var(--b400);border-radius:0 4px 4px 0}
 .shell.mini .ni.on::before{left:-14px}
 .ni svg{width:19px;height:19px;flex:none;fill:none}
 .ni .tx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ni .ct{font-size:.7rem;font-weight:700;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.66);background:rgba(255,255,255,.12);border-radius:var(--r-pill);padding:.08rem .45rem;flex:none}
+.ni .ct{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.66);background:rgba(255,255,255,.12);border-radius:var(--r-pill);padding:.08rem .45rem;flex:none}
 .ni .ct.sig{color:#fff;background:var(--red)}
 .ni .cr{opacity:.55;transition:transform .16s ease}
 .ni[aria-expanded="true"] .cr{transform:rotate(90deg)}
@@ -117,13 +117,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .subs{list-style:none;margin:.1rem 0 .35rem;padding:0;position:relative}
 .subs::before{content:"";position:absolute;left:1.45rem;top:.1rem;bottom:.42rem;width:1px;background:rgba(255,255,255,.18)}
 .si{display:flex;align-items:center;gap:.5rem;width:100%;text-align:left;border:0;background:none;cursor:pointer;
-  color:rgba(255,255,255,.66);font-size:.82rem;padding:.4rem .65rem .4rem 2.2rem;border-radius:9px;position:relative}
+  color:rgba(255,255,255,.66);font-size:13px;padding:.4rem .65rem .4rem 2.2rem;border-radius:8px;position:relative}
 .si::before{content:"";position:absolute;left:1.45rem;top:50%;width:.48rem;height:1px;background:rgba(255,255,255,.24)}
 .si:hover{background:rgba(255,255,255,.07);color:#fff}
 .si:focus-visible{outline:2px solid var(--b300);outline-offset:1px}
 .si.on{color:#fff;font-weight:600;background:rgba(255,255,255,.09)}
 .si .tx{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.si .ct{font-size:.7rem;font-weight:700;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.58)}
+.si .ct{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.58)}
 .si .ct.sig{color:#FFA2A2}
 .railfoot{margin-top:auto;padding-top:1.1rem;display:flex;flex-direction:column;gap:2px}
 
@@ -266,7 +266,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .al-hd .cv{flex:none;opacity:.7;transform:rotate(90deg);transition:transform .16s ease}
 .al-hd[aria-expanded="false"] .cv{transform:rotate(0)}
 @media (prefers-reduced-motion:reduce){.al-hd .cv{transition:none}}
-.al-bd{background:var(--surface);border:1px solid var(--al-edge);border-radius:calc(var(--r-card) - 3px);
+.al-bd{background:var(--surface);border:1px solid var(--al-edge);border-radius:var(--r-ctl);
   padding:1.15rem 1.2rem;display:grid;gap:.85rem}
 .al-lead{font-size:1rem;color:var(--ink);letter-spacing:-.015em;max-width:92ch}
 .al-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
@@ -776,7 +776,7 @@ svg use{pointer-events:none}
 .vas-l svg{width:14px;height:14px}
 .vas-g{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-ctl);
   background:var(--surface);padding:2px;gap:2px;flex-wrap:wrap}
-.vas-b{border:0;background:transparent;border-radius:calc(var(--r-ctl) - 2px);
+.vas-b{border:0;background:transparent;border-radius:6px;
   padding:.34rem .7rem;font-family:var(--ui);font-size:13px;font-weight:500;
   color:var(--ink-2);cursor:pointer;white-space:nowrap}
 .vas-b:hover{background:var(--g100);color:var(--ink-1)}

@@ -321,6 +321,21 @@
     }, 60);
   });
 
+  /* ---- one filter surface per screen ----
+     A screen with a domain filter bar was also carrying the generic table
+     bar's Filter and Export, so there were two ways to filter and three to
+     export the same rows, each with its own idea of what was applied. The
+     domain bar wins where it exists: it knows the place hierarchy, the
+     cohorts and the sessions. Columns and column sorting stay, because the
+     domain bar does not do those. */
+  $$('.screen').forEach(function (screen) {
+    if (!screen.querySelector('.filters')) return;
+    $$('.tq-btn', screen).forEach(function (b) {
+      var t = b.textContent.trim();
+      if (t === 'Filter' || t === 'Export') b.hidden = true;
+    });
+  });
+
   pagers();
 
   // the filter module hides rows; tell the pagers so they re-page what is left
