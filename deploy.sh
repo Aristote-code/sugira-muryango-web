@@ -114,6 +114,26 @@ for f in $site; do
   cp "$tmp/$f" "$pub/$f"
 done
 
+# Stamp the build into the page. "I'm not seeing the changes" is otherwise
+# unanswerable without opening devtools, and it was a fair question: the one
+# thing nobody could check was which version was on screen.
+stamp="$sha · $(date -u '+%d %b %H:%M') UTC"
+if grep -q 'class="buildstamp"' "$pub/index.html"; then
+  tmpfile=$(mktemp)
+  sed "s|<p class=\"buildstamp\"\(.*\)>working copy</p>|<p class=\"buildstamp\"\1>$stamp</p>|" \
+    "$pub/index.html" > "$tmpfile" && mv "$tmpfile" "$pub/index.html"
+fi
+
 echo "deploying $sha from a clean checkout:"
 printf '      %s\n' $site
-netlify deploy --prod --dir "$pub" --message "$msg"
+echo
+
+# Only the production URL is printed. The per-deploy "unique deploy URL" that
+# netlify also prints is a permanent snapshot of one build: open one of those
+# and you keep seeing that version for ever, no matter how often this runs.
+# Two of them had already been handed out that way.
+netlify deploy --prod --dir "$pub" --message "$msg" \
+  | grep -vi 'unique deploy url'
+
+echo
+echo "live at https://sugira-muryango.netlify.app  (build $sha)"

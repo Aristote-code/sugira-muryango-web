@@ -73,7 +73,6 @@
       <ul class="subs" id="g-rp" hidden>
         <li><button class="si" type="button" data-go="reports" data-view="tab:Saved"><span class="tx">Saved reports</span></button></li>
         <li><button class="si" type="button" data-go="reports" data-view="modal:report"><span class="tx">Build a report</span></button></li>
-        <li><button class="si" type="button" data-go="wall"><span class="tx">Wall board</span></button></li>
       </ul>
       <button class="ni" type="button" aria-expanded="false" aria-controls="g-fs">
         <svg aria-hidden="true"><use href="#i-support"/></svg>
@@ -104,6 +103,9 @@
       <button class="ni" type="button" data-go="login">
         <svg aria-hidden="true"><use href="#i-chevronLeft"/></svg>
         <span class="tx">Sign out</span></button>
+      <!-- Stamped by deploy.sh, so which build you are looking at is visible
+           rather than guessed at. Reads "working copy" when served locally. -->
+      <p class="buildstamp" title="Which build this is">working copy</p>
     </div>
   </nav>
 
@@ -287,8 +289,7 @@
           <div class="card">
             <div class="card-h"><h3>Reports</h3>
               <span class="side">
-                <button class="btn sec sm" type="button" data-go="wall">Wall board</button>
-                <button class="btn sm" type="button" data-go="reports">Build a report</button>
+<button class="btn sm" type="button" data-go="reports">Build a report</button>
               </span></div>
             <p style="font-size:.875rem;color:var(--ink-3);letter-spacing:-.014em">Every statistic above, saved as a question you can re-run, schedule or send to NCDA.</p>
           </div>
@@ -723,8 +724,7 @@
           <div class="row">
             <div><h1>Reports</h1><p class="sub">Build a question once, save it, and have it sent on a schedule.</p></div>
             <div class="acts">
-              <button class="btn sec" type="button" data-go="wall"><svg aria-hidden="true"><use href="#i-monitor"/></svg>Wall board</button>
-              <button class="btn" type="button" data-modal="report"><svg aria-hidden="true"><use href="#i-plus"/></svg>Build a report</button>
+<button class="btn" type="button" data-modal="report"><svg aria-hidden="true"><use href="#i-plus"/></svg>Build a report</button>
             </div>
           </div>
         </div>
@@ -747,48 +747,6 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>6 saved reports</span></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ WALL BOARD ============ -->
-      <section class="screen" id="s-wall">
-        <div class="phead">
-          <div class="row">
-            <div><h1>Wall board</h1><p class="sub">Three boards rotating on a timer, for the screen in the office. No navigation, nobody touches it.</p></div>
-            <div class="acts">
-              <button data-toast="Board layout is set per display" class="btn sec" type="button">Edit boards</button>
-              <button data-cast class="btn" type="button" data-toast="Opened full screen on the office display">Cast to display</button>
-            </div>
-          </div>
-        </div>
-        <div class="pad">
-          <div class="board">
-            <div class="bt"><span class="bn">SUGIRA MURYANGO</span><span class="bs"><b>RWANDA</b> &middot; All cohorts &middot; This week</span>
-              <span class="bl"><i></i>UPDATED 09:42</span></div>
-            <div class="ba"><span class="l">2 RISK-OF-HARM CASES OPEN</span><span class="d">1 past its review date &mdash; Ngoma, Kibungo</span></div>
-            <div class="bg3">
-              <div class="bcell"><div class="cl">Visits this week</div><div class="cv">1 842 <small>of 2 210</small></div><div class="cd">83% &middot; down from 91% last week</div></div>
-              <div class="bcell"><div class="cl">Households enrolled</div><div class="cv">2 210</div><div class="cd">148 behind the cohort schedule</div></div>
-              <div class="bcell sig"><div class="cl">Reported today</div><div class="cv">174 <small>of 193</small></div><div class="cd">19 not synced &mdash; figures provisional</div></div>
-            </div>
-            <div class="bch"><div class="cl">Visits conducted per module</div>
-              <div class="bcols">
-                <div class="bcol on"><span class="tk"><i style="height:62%"></i></span><u>M1</u></div>
-                <div class="bcol on"><span class="tk"><i style="height:71%"></i></span><u>M2</u></div>
-                <div class="bcol on"><span class="tk"><i style="height:84%"></i></span><u>M3</u></div>
-                <div class="bcol on"><span class="tk"><i style="height:96%"></i></span><u>M4</u></div>
-                <div class="bcol on"><span class="tk"><i style="height:78%"></i></span><u>M5</u></div>
-                <div class="bcol"><span class="tk"><i style="height:54%"></i></span><u>M6</u></div>
-                <div class="bcol"><span class="tk"><i style="height:41%"></i></span><u>M7</u></div>
-                <div class="bcol"><span class="tk"><i style="height:33%"></i></span><u>M8</u></div>
-                <div class="bcol"><span class="tk"><i style="height:22%"></i></span><u>M9</u></div>
-                <div class="bcol"><span class="tk"><i style="height:16%"></i></span><u>M10</u></div>
-                <div class="bcol"><span class="tk"><i style="height:9%"></i></span><u>M11</u></div>
-                <div class="bcol"><span class="tk"><i style="height:4%"></i></span><u>M12</u></div>
-              </div></div>
-            <div class="bf"><span class="pg"><b class="on"></b><b></b><b></b></span><span>Board 1 &mdash; Coverage</span>
-              <span class="nx">NEXT: PARTICIPATION &amp; QUALITY &middot; 20s</span></div>
           </div>
         </div>
       </section>

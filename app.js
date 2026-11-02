@@ -10,7 +10,6 @@
     "case":       { crumbs: [['Safeguarding', 'safeguarding'], ['RH-0044', null]],        nav: 'safeguarding' },
     field:        { crumbs: [['Field status', null]],                                     nav: 'field' },
     reports:      { crumbs: [['Reports', null]],                                          nav: 'reports' },
-    wall:         { crumbs: [['Reports', 'reports'], ['Wall board', null]],               nav: 'wall' },
     empty:        { crumbs: [['Not designed yet', null]],                                 nav: null },
 
     content:      { crumbs: [['Field support', null]],                                   nav: 'content' },

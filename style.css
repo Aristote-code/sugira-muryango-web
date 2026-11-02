@@ -408,38 +408,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .empty h4{font-size:1rem}
 .empty p{font-size:14px;color:var(--ink-3);max-width:46ch}
 
-/* wall board */
-.board{container-type:inline-size;aspect-ratio:16/9;background:#17141A;color:#F1EDF0;display:flex;flex-direction:column;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--lift)}
-.bt{display:flex;align-items:center;gap:2cqw;padding:1.6cqw 2.2cqw;border-bottom:1px solid #322A31}
-.bt .bn{font-weight:800;font-size:1.9cqw;color:#D98FC7}
-.bt .bs{font-size:1.5cqw;color:#A098A0}
-.bt .bs b{color:#F1EDF0;font-weight:700}
-.bt .bl{margin-left:auto;font-size:1.2cqw;color:#A098A0;display:flex;align-items:center;gap:.7cqw}
-.bt .bl i{width:.8cqw;height:.8cqw;border-radius:50%;background:#58B894}
-.ba{display:flex;align-items:center;gap:1.6cqw;padding:1.3cqw 2.2cqw;background:#3A161A;border-bottom:1px solid #6B2A30}
-.ba .l{font-weight:800;font-size:1.8cqw;color:#FF9A9C}
-.ba .d{font-size:1.5cqw;color:#C9A5A7}
-.bg3{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#322A31;min-height:0}
-.bcell{background:#17141A;padding:1.7cqw 2.2cqw;display:flex;flex-direction:column;justify-content:center;min-width:0}
-.bcell .cl{font-size:1.15cqw;letter-spacing:.11em;text-transform:uppercase;color:#908890;margin-bottom:.9cqw}
-.bcell .cv{font-size:5.4cqw;font-weight:800;line-height:.95;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
-.bcell .cv small{font-size:2cqw;font-weight:400;color:#908890;letter-spacing:0}
-.bcell .cd{font-size:1.4cqw;color:#A098A0;margin-top:.8cqw}
-.bcell.sig .cv{color:#FF9A9C}
-.bch{padding:1.5cqw 2.2cqw 1.8cqw;border-top:1px solid #322A31}
-.bch .cl{font-size:1.15cqw;letter-spacing:.11em;text-transform:uppercase;color:#908890;margin-bottom:1.1cqw}
-.bcols{display:grid;grid-template-columns:repeat(12,1fr);gap:.9cqw;height:10cqw}
-.bcol{display:grid;grid-template-rows:1fr auto;gap:.5cqw;min-height:0}
-.bcol .tk{display:flex;align-items:flex-end;min-height:0}
-.bcol i{display:block;width:100%;background:#6E5F6C;border-radius:.3cqw .3cqw 0 0}
-.bcol.on i{background:#C566B4}
-.bcol u{text-decoration:none;font-size:1.05cqw;color:#908890;text-align:center}
-.bf{display:flex;align-items:center;gap:1.4cqw;padding:1.1cqw 2.2cqw;border-top:1px solid #322A31;font-size:1.3cqw;color:#908890}
-.bf .pg{display:flex;gap:.6cqw}
-.bf .pg b{width:.9cqw;height:.9cqw;border-radius:50%;background:#443A43;display:block}
-.bf .pg b.on{background:#F1EDF0}
-.bf .nx{margin-left:auto}
-
 /* Drawer. Detail records open over the list they came from instead of replacing it,
    and can be promoted to a full page. Geometry, elevation, scrim and easing are the
    ClickUp drawer's: 880px, elevation-5, #00000099, 180ms cubic-bezier(.32,.72,0,1). */
@@ -860,3 +828,9 @@ tr.f-out,tr.p-out,.tr.f-out{display:none}
 .usermenu-i:hover{background:var(--g100);color:var(--ink)}
 .usermenu-i:focus-visible{outline:2px solid var(--b400);outline-offset:-2px}
 .more-extra{margin-right:.3rem}
+
+/* which build is on screen, so "I'm not seeing the changes" is checkable */
+.buildstamp{margin:.9rem .6rem 0;padding-top:.7rem;border-top:1px solid rgba(255,255,255,.12);
+  font-size:11px;color:rgba(255,255,255,.38);letter-spacing:.02em;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.shell.mini .buildstamp{display:none}
