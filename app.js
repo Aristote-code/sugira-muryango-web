@@ -10,6 +10,9 @@
     "case":       { crumbs: [['Safeguarding', 'safeguarding'], ['RH-0044', null]],        nav: 'safeguarding' },
     field:        { crumbs: [['Field status', null]],                                     nav: 'field' },
     reports:      { crumbs: [['Reports', null]],                                          nav: 'reports' },
+    followups:    { crumbs: [['Follow-ups', null]],                                      nav: 'followups' },
+    community:    { crumbs: [['Community', null]],                                       nav: 'community' },
+    izu:          { crumbs: [['IZU performance', null]],                                 nav: 'izu' },
     content:      { crumbs: [['Field support', null]],                                   nav: 'content' },
     people:       { crumbs: [['People', null]],                                           nav: 'people' },
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
@@ -30,6 +33,30 @@
   };
 
   var MODALS = {
+    furule: {
+      title: 'New follow-up rule',
+      ok: 'Create rule',
+      body: '<div><label for="f-ruf">On this form</label><select id="f-ruf"><option>Household Referral Checklist</option><option>Anthropometric measurement</option><option>Household Module Tracking</option><option>FCG participation tracking</option></select></div>' +
+            '<div><label for="f-rua">When this answer is given</label><select id="f-rua"><option>A referral is ticked</option><option>Weight-for-age is below &minus;2</option><option>Two sessions missed in a row</option></select></div>' +
+            '<div><label for="f-rud">Someone must act within</label><select id="f-rud"><option>2 days</option><option>7 days</option><option>14 days</option><option>Immediately</option></select></div>' +
+            '<div><label for="f-ruw">Who owns it</label><select id="f-ruw"><option>The IZU who filled the form in</option><option>The sector lead</option><option>The cell coordinator</option></select></div>',
+      done: 'Rule created — it applies to forms filled in from now on'
+    },
+    post: {
+      title: 'Post to everyone',
+      ok: 'Post',
+      body: '<div><label for="f-pow">Who sees it</label><select id="f-pow"><option>Every home visitor</option><option>One district</option><option>One sector</option></select></div>' +
+            '<div><label for="f-pot">Your post</label><textarea id="f-pot" placeholder="Do not name a household or a child. Posts are visible to every home visitor in the programme."></textarea></div>',
+      done: 'Posted — it appears on the tablet at the next sync'
+    },
+    score: {
+      title: 'Record a supervision',
+      ok: 'Save score',
+      body: '<div><label for="f-sci">IZU</label><select id="f-sci"><option>M. Dusabe — IZU-0142</option><option>E. Mutesi — IZU-0117</option><option>J. Kamanzi — IZU-0208</option></select></div>' +
+            '<div><label for="f-scm">Session you sat in on</label><select id="f-scm"><option>6. The Importance of Good Health</option><option>5. The Importance of Good Nutrition</option><option>4. The Importance of Good Hygiene</option></select></div>' +
+            '<div><label for="f-scn">What you saw</label><textarea id="f-scn" placeholder="The score is a training signal. Say what would help, not what went wrong."></textarea></div>',
+      done: 'Supervision recorded'
+    },
     archive: {
       title: 'Archive this form',
       ok: 'Archive',

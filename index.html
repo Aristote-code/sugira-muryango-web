@@ -74,6 +74,15 @@
         <li><button class="si" type="button" data-go="reports" data-view="tab:Saved"><span class="tx">Saved reports</span></button></li>
         <li><button class="si" type="button" data-go="reports" data-view="modal:report"><span class="tx">Build a report</span></button></li>
       </ul>
+      <button class="ni" type="button" data-go="followups">
+        <svg aria-hidden="true"><use href="#i-clock"/></svg>
+        <span class="tx">Follow-ups</span><span class="ct sig">6</span></button>
+      <button class="ni" type="button" data-go="izu">
+        <svg aria-hidden="true"><use href="#i-check"/></svg>
+        <span class="tx">IZU performance</span><span class="ct">344</span></button>
+      <button class="ni" type="button" data-go="community">
+        <svg aria-hidden="true"><use href="#i-message"/></svg>
+        <span class="tx">Community</span><span class="ct sig">3</span></button>
       <button class="ni" type="button" aria-expanded="false" aria-controls="g-fs">
         <svg aria-hidden="true"><use href="#i-support"/></svg>
         <span class="tx">Field support</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
@@ -1573,6 +1582,158 @@
             <p class="err" id="li-err" hidden>Check your email and password and try again.</p>
             <button class="btn" type="button" data-go="dashboard">Sign in</button>
             <p class="alt"><a data-toast="A reset link would be sent to that address">Forgotten your password?</a></p>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ============ FOLLOW-UPS ============ -->
+      <section class="screen" id="s-followups">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Follow-ups</h1><p class="sub">An answer on a form can oblige someone to go back. These are the obligations that are open, who owns each one, and how long it has been waiting.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button>
+              <button class="btn" type="button" data-modal="furule"><svg aria-hidden="true"><use href="#i-plus"/></svg>New rule</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-tab="all">Open<span class="chip" style="margin-left:.4rem">24</span></button>
+          <button class="tab" type="button" data-tab="late">Overdue<span class="chip bad" style="margin-left:.4rem">6</span></button>
+          <button class="tab" type="button" data-tab="done">Closed</button>
+          <button class="tab" type="button" data-panel="rules">Rules<span class="chip" style="margin-left:.4rem">9</span></button>
+        </div>
+        <div class="pad" data-panelid="list">
+          <div class="filters">
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
+              <input type="text" id="fuSearch" placeholder="Search by household or form" aria-label="Search follow-ups"></div>
+            <button class="fl" type="button"><span class="k">District</span><b>All</b><span class="cv">&#9660;</span></button>
+            <button class="fl" type="button"><span class="k">Status</span><b>Any</b><span class="cv">&#9660;</span></button>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Follow-up</th><th>Household</th><th>Place</th><th>Raised by</th><th class="num">Waiting</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr data-tags="all late" data-go="household"><td class="nm">Health post referral not confirmed</td><td>HH-1007 Mukamana</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">Household Referral Checklist</td><td class="num">11 days</td><td><span class="chip bad"><i></i>Overdue</span></td></tr>
+                <tr data-tags="all late" data-go="household"><td class="nm">Insurance card replacement</td><td>HH-1007 Mukamana</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">Household Referral Checklist</td><td class="num">11 days</td><td><span class="chip bad"><i></i>Overdue</span></td></tr>
+                <tr data-tags="all late" data-go="household"><td class="nm">Repeat growth check</td><td>HH-1042 Nshimiyimana</td><td class="mut">Kigoma &middot; Nyanza</td><td class="mut">Anthropometric measurement</td><td class="num">9 days</td><td><span class="chip bad"><i></i>Overdue</span></td></tr>
+                <tr data-tags="all" data-go="household"><td class="nm">Caregiver missed two sessions</td><td>HH-0871 Niyonsenga</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="mut">Household Module Tracking</td><td class="num">4 days</td><td><span class="chip warn"><i></i>Open</span></td></tr>
+                <tr data-tags="all" data-go="household"><td class="nm">Father not attending FCG</td><td>HH-1133 Habimana</td><td class="mut">Mahama &middot; Kirehe</td><td class="mut">FCG participation tracking</td><td class="num">3 days</td><td><span class="chip warn"><i></i>Open</span></td></tr>
+                <tr data-tags="all" data-go="household"><td class="nm">Session did not occur &mdash; reason unrecorded</td><td>HH-1319 Mukandayisenga</td><td class="mut">Kinigi &middot; Musanze</td><td class="mut">When session did not occur</td><td class="num">2 days</td><td><span class="chip warn"><i></i>Open</span></td></tr>
+                <tr data-tags="done" data-go="household"><td class="nm">Health post referral confirmed</td><td>HH-1204 Ingabire</td><td class="mut">Busasamana &middot; Nyanza</td><td class="mut">Household Referral Checklist</td><td class="num mut">&mdash;</td><td><span class="chip ok"><i></i>Closed 24 Oct</span></td></tr>
+                <tr data-tags="done" data-go="household"><td class="nm">Repeat growth check</td><td>HH-0988 Uwase</td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">Anthropometric measurement</td><td class="num mut">&mdash;</td><td><span class="chip ok"><i></i>Closed 21 Oct</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 1&ndash;5 of 8</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="rules" hidden>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>When this answer is given</th><th>On this form</th><th>Someone must</th><th class="num">Within</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">A referral is ticked</td><td class="mut">Household Referral Checklist</td><td>Confirm the household attended</td><td class="num">7 days</td><td><span class="chip ok"><i></i>On</span></td></tr>
+                <tr><td class="nm">Weight-for-age is below &minus;2</td><td class="mut">Anthropometric measurement</td><td>Repeat the measurement</td><td class="num">14 days</td><td><span class="chip ok"><i></i>On</span></td></tr>
+                <tr><td class="nm">Two sessions missed in a row</td><td class="mut">Household Module Tracking</td><td>Visit and record why</td><td class="num">7 days</td><td><span class="chip ok"><i></i>On</span></td></tr>
+                <tr><td class="nm">Session did not occur</td><td class="mut">When session did not occur</td><td>Record a reason</td><td class="num">2 days</td><td><span class="chip ok"><i></i>On</span></td></tr>
+                <tr><td class="nm">Father absent twice</td><td class="mut">FCG participation tracking</td><td>Contact the father</td><td class="num">14 days</td><td><span class="chip ok"><i></i>On</span></td></tr>
+                <tr><td class="nm">Risk of harm answered yes</td><td class="mut">Risk of Harm / Emergency Case</td><td>Open a case</td><td class="num">immediately</td><td><span class="chip ok"><i></i>On</span></td></tr>
+                <tr><td class="nm">Any answer</td><td class="mut">Test Hidden</td><td>Nothing</td><td class="num mut">&mdash;</td><td><span class="chip"><i></i>Off</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>7 of 9 rules are on &middot; a rule that fires with nobody named produces an obligation nobody owns</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ COMMUNITY ============ -->
+      <section class="screen" id="s-community">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Community</h1><p class="sub">Home visitors post to each other from the tablet. Anything a reader reports arrives here, and nothing is removed without a reason being recorded.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button" data-toast="Guidance is shown above the composer on the tablet">Posting guidance</button>
+              <button class="btn" type="button" data-modal="post"><svg aria-hidden="true"><use href="#i-plus"/></svg>Post to everyone</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-tab="all">All posts<span class="chip" style="margin-left:.4rem">412</span></button>
+          <button class="tab" type="button" data-tab="flag">Reported<span class="chip bad" style="margin-left:.4rem">3</span></button>
+          <button class="tab" type="button" data-tab="hidden">Hidden</button>
+        </div>
+        <div class="pad">
+          <div class="filters">
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
+              <input type="text" id="coSearch" placeholder="Search posts" aria-label="Search posts"></div>
+            <button class="fl" type="button"><span class="k">District</span><b>All</b><span class="cv">&#9660;</span></button>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Posted by</th><th>Post</th><th>Place</th><th class="num">Comments</th><th class="num">Likes</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr data-tags="all flag"><td class="nm">M. Dusabe</td><td>A caregiver asked me what to do when a child refuses every food&hellip;</td><td class="mut">Jarama &middot; Ngoma</td><td class="num">14</td><td class="num">31</td><td><span class="chip bad"><i></i>Reported &times;2</span></td></tr>
+                <tr data-tags="all flag"><td class="nm">J. Kamanzi</td><td>Photo of a household&rsquo;s play corner</td><td class="mut">Kigoma &middot; Nyanza</td><td class="num">6</td><td class="num">22</td><td><span class="chip bad"><i></i>Reported &mdash; shows a child</span></td></tr>
+                <tr data-tags="all flag"><td class="nm">E. Mutesi</td><td>Asking for a lift to Mahama on Thursday</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">2</td><td class="num">1</td><td><span class="chip bad"><i></i>Reported &mdash; off topic</span></td></tr>
+                <tr data-tags="all"><td class="nm">C. Uwimana</td><td>Reminder: the booster session needs the growth card present</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">9</td><td class="num">48</td><td><span class="chip ok"><i></i>Visible</span></td></tr>
+                <tr data-tags="all"><td class="nm">P. Niyonkuru</td><td>How I explain the hand-washing session to fathers</td><td class="mut">Kabare cell &middot; Kibungo</td><td class="num">17</td><td class="num">63</td><td><span class="chip ok"><i></i>Visible</span></td></tr>
+                <tr data-tags="hidden"><td class="nm">T. Mukamana</td><td class="mut">Hidden on 18 October</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="num">0</td><td class="num">4</td><td><span class="chip"><i></i>Hidden &mdash; named a household</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 1&ndash;5 of 6</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ IZU PERFORMANCE ============ -->
+      <section class="screen" id="s-izu">
+        <div class="phead">
+          <div class="row">
+            <div><h1>IZU performance</h1><p class="sub">Whether a session was delivered the way it was designed, scored by the cell coordinator who sat in on it. A low grade is a training need, not a disciplinary one.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button>
+              <button class="btn" type="button" data-modal="score"><svg aria-hidden="true"><use href="#i-plus"/></svg>Record a supervision</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:.4rem">344</span></button>
+          <button class="tab" type="button" data-tab="low">Needs support<span class="chip warn" style="margin-left:.4rem">2</span></button>
+          <button class="tab" type="button" data-tab="high">Strong</button>
+        </div>
+        <div class="pad">
+          <div class="filters">
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
+              <input type="text" id="izSearch" placeholder="Search by IZU name or code" aria-label="Search IZU"></div>
+            <button class="fl" type="button"><span class="k">District</span><b>All</b><span class="cv">&#9660;</span></button>
+            <button class="fl" type="button"><span class="k">Module</span><b>Any</b><span class="cv">&#9660;</span></button>
+          </div>
+          <div class="stats">
+            <div class="st"><div class="l">Sessions supervised</div><div class="vrow"><div class="v">344 <small>of 486</small></div><span class="delta">71%</span></div><div class="d">Every IZU should be sat with once a module</div><div class="trk"><i style="width:71%"></i></div></div>
+            <div class="st"><div class="l">Average fidelity</div><div class="vrow"><div class="v">78<small>%</small></div><span class="delta">B</span></div><div class="d">Across all five districts this cohort</div><div class="trk"><i style="width:78%"></i></div></div>
+            <div class="st"><div class="l">Below 60%</div><div class="vrow"><div class="v">2 <small>of 486</small></div></div><div class="d">Both in their first three months</div><div class="trk warn"><i style="width:4%"></i></div></div>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>IZU</th><th>Place</th><th>Session</th><th class="num">Cross-module</th><th class="num">Play</th><th class="num">Family</th><th class="num">Module</th><th>Fidelity</th></tr></thead>
+              <tbody>
+                <tr data-tags="all high"><td class="nm">M. Dusabe <span class="mut">IZU-0142</span></td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">6. Good Health</td><td class="num">92%</td><td class="num">88%</td><td class="num">90%</td><td class="num">86%</td><td><span class="chip ok"><i></i>A &middot; 89%</span></td></tr>
+                <tr data-tags="all high"><td class="nm">J. Kamanzi <span class="mut">IZU-0208</span></td><td class="mut">Kigoma &middot; Nyanza</td><td class="mut">5. Good Nutrition</td><td class="num">84%</td><td class="num">81%</td><td class="num">79%</td><td class="num">88%</td><td><span class="chip ok"><i></i>B &middot; 83%</span></td></tr>
+                <tr data-tags="all"><td class="nm">E. Mutesi <span class="mut">IZU-0117</span></td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">9. Everyone&rsquo;s Role</td><td class="num">76%</td><td class="num">71%</td><td class="num">74%</td><td class="num">69%</td><td><span class="chip"><i></i>C &middot; 73%</span></td></tr>
+                <tr data-tags="all low"><td class="nm">A. Nyirahabimana <span class="mut">IZU-0391</span></td><td class="mut">Busoro &middot; Nyanza</td><td class="mut">3. Communication</td><td class="num">61%</td><td class="num">52%</td><td class="num">58%</td><td class="num">49%</td><td><span class="chip warn"><i></i>D &middot; 55%</span></td></tr>
+                <tr data-tags="all low"><td class="nm">B. Uwamahoro <span class="mut">IZU-0433</span></td><td class="mut">Kinigi &middot; Musanze</td><td class="mut">2. Early Stimulation</td><td class="num">58%</td><td class="num">47%</td><td class="num">61%</td><td class="num">51%</td><td><span class="chip warn"><i></i>D &middot; 54%</span></td></tr>
+                <tr data-tags="all high"><td class="nm">F. Uwase <span class="mut">IZU-0260</span></td><td class="mut">Nyundo &middot; Rubavu</td><td class="mut">4. Good Hygiene</td><td class="num">89%</td><td class="num">85%</td><td class="num">91%</td><td class="num">87%</td><td><span class="chip ok"><i></i>A &middot; 88%</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Showing 1&ndash;5 of 6</span>
+              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span>
+            </div>
           </div>
         </div>
       </section>
