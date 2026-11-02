@@ -25,6 +25,7 @@
   --green:#30A46C; --green-bg:#E9F9EE; --green-line:#BFE8CE; --green-ink:#18794E;
   --page:#FCFCFC; --card:#FFFFFF; --surface:#FFFFFF; --line:var(--g300); --line-2:var(--g200);
   --link:var(--b600);
+  --z-drawer:1000; --z-pop:1100; --z-modal:2000; --z-toast:3000;
   --ui:"Inter","Helvetica Neue",Arial,sans-serif;
   --r-xs:.125rem; --r-ctl:.5rem; --r-card:.75rem; --r-lg:1rem; --r-pill:666px;
   /* ClickUp control scale: heights xs/sm/md/lg, button radii by size, tag + chip radii */
@@ -443,7 +444,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
    and can be promoted to a full page. Geometry, elevation, scrim and easing are the
    ClickUp drawer's: 880px, elevation-5, #00000099, 180ms cubic-bezier(.32,.72,0,1). */
 .dw[hidden]{display:none}
-.dw{position:fixed;inset:0;z-index:1000;display:flex;justify-content:flex-end}
+.dw{position:fixed;inset:0;z-index:var(--z-drawer);display:flex;justify-content:flex-end}
 .dw-scrim{position:absolute;inset:0;background:#00000099;animation:dw-fade 120ms ease-out}
 .dw-panel{position:relative;width:100%;max-width:880px;background:var(--surface);
   border-left:1px solid var(--line);box-shadow:0 20px 25px -5px #0000001B,0 8px 10px -6px #0000001B;
@@ -530,7 +531,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 @media (max-width:880px){.dw.as-modal{padding:0}.dw.as-modal .dw-panel{border-radius:0}.dw-layout{display:none}}
 
 /* modal */
-.scrim{position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:60}
+.scrim{position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:var(--z-modal)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .scrim{background:rgba(10,8,11,.74)}}
 :root[data-theme="dark"] .scrim{background:rgba(10,8,11,.74)}
 .scrim[hidden]{display:none}
@@ -548,7 +549,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .modal textarea{min-height:96px}
 .modal .mf{display:flex;gap:.6rem;justify-content:flex-end;padding:1.05rem 1.4rem;background:var(--tint);border-top:1px solid var(--line)}
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--brand);color:#fff;font-size:14px;font-weight:600;
-  padding:.68rem 1.2rem;border-radius:var(--r-pill);z-index:80;box-shadow:0 10px 28px rgba(54,19,47,.3)}
+  padding:.68rem 1.2rem;border-radius:var(--r-pill);z-index:var(--z-toast);box-shadow:0 10px 28px rgba(54,19,47,.3)}
 .toast[hidden]{display:none}
 
 /* standalone document: the artifact skeleton used to provide these */
@@ -684,7 +685,7 @@ svg use{pointer-events:none}
 :root[data-theme="dark"] .sortb svg{color:var(--b300)}
 
 /* popovers */
-.qpop{position:absolute;z-index:70;background:var(--surface);border-radius:12px;
+.qpop{position:absolute;z-index:var(--z-pop);background:var(--surface);border-radius:12px;
   box-shadow:var(--lift-overlay);border:1px solid var(--line);padding:15px;
   width:min(640px,calc(100vw - 2rem));max-height:min(70vh,520px);overflow:auto}
 .qpop.narrow{width:min(280px,calc(100vw - 2rem));padding:8px;border-radius:8px}
@@ -809,3 +810,39 @@ tr.shut .nm{color:var(--ink-3);font-weight:500}
 
 .tr.more .nm{color:var(--ink-3);font-style:italic}
 .tr.more .rt{color:var(--ink-3)}
+
+/* filter popovers: ClickUp's surface, the old app's chaining, neither's waiting */
+.fl.on{border-color:var(--b300);background:var(--b50)}
+.fl.on b{color:var(--b700)}
+.flpop{position:fixed;z-index:var(--z-pop);min-width:14rem;max-width:22rem;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  box-shadow:0 12px 32px rgba(54,19,47,.16),0 2px 6px rgba(0,0,0,.06);
+  padding:.35rem;max-height:min(24rem,60vh);display:flex;flex-direction:column}
+.flpop-h{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-4);padding:.5rem .6rem .35rem}
+.flpop-s{margin:.1rem .2rem .3rem;padding:.4rem .6rem;border:1px solid var(--line);
+  border-radius:var(--r-ctl);font-family:var(--ui);font-size:13px;color:var(--ink);
+  background:var(--surface);width:calc(100% - .4rem)}
+.flpop-s:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 3px var(--b100)}
+.flpop-l{overflow-y:auto;display:flex;flex-direction:column;gap:1px}
+.flpop-o{display:flex;align-items:center;gap:.5rem;width:100%;text-align:left;border:0;
+  background:transparent;border-radius:var(--r-ctl);padding:.45rem .6rem;cursor:pointer;
+  font-family:var(--ui);font-size:13px;color:var(--ink-2);line-height:1.35}
+.flpop-o:hover{background:var(--g100);color:var(--ink)}
+.flpop-o:focus-visible{outline:2px solid var(--b400);outline-offset:-2px}
+.flpop-o.sel{background:var(--b50);color:var(--b700);font-weight:600}
+.flpop-o.sel::after{content:"\2713";margin-left:auto;font-weight:700}
+.flpop-o .dr{margin-left:auto;color:var(--ink-4);font-size:14px}
+.flsum{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:-.35rem 0 .9rem}
+.flsum-n{font-size:12px;color:var(--ink-3);margin-right:.2rem}
+.flchip{display:inline-flex;align-items:center;gap:.35rem;border:1px solid var(--b200);
+  background:var(--b50);color:var(--b700);border-radius:var(--r-pill);
+  padding:.18rem .5rem .18rem .45rem;font-family:var(--ui);font-size:12px;cursor:pointer}
+.flchip .k{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--b400)}
+.flchip .x{font-size:13px;color:var(--b400)}
+.flchip:hover{border-color:var(--b400)}
+.flchip:hover .x{color:var(--b700)}
+.flclear{border:0;background:transparent;color:var(--ink-3);font-family:var(--ui);
+  font-size:12px;cursor:pointer;text-decoration:underline;padding:.2rem .3rem}
+.flclear:hover{color:var(--ink)}

@@ -153,13 +153,13 @@
               </div>
 
           <div class="stats">
-            <div class="st"><div class="l">Visits done</div>
+            <div class="st" data-tile="visits"><div class="l">Visits done</div>
               <div class="vrow"><div class="v">1 842 <small>of 2 210</small></div><span class="delta down">&darr; 83%</span></div>
               <div class="d">Down from 91% last week</div><div class="trk"><i style="width:83%"></i></div></div>
-            <div class="st"><div class="l">Behind the cohort</div>
+            <div class="st" data-tile="behind"><div class="l">Behind the cohort</div>
               <div class="vrow"><div class="v">148 <small>of 2 210</small></div><span class="delta down">&uarr; 46</span></div>
               <div class="d">Up from 102 last week</div><div class="trk warn"><i style="width:7%"></i></div></div>
-            <div class="st"><div class="l">Reported today</div>
+            <div class="st" data-tile="reported"><div class="l">Reported today</div>
               <div class="vrow"><div class="v">174 <small>of 193</small></div><span class="delta down">19 silent</span></div>
               <div class="d">Figures provisional until they sync</div><div class="trk"><i style="width:90%"></i></div></div>
           </div>
@@ -238,13 +238,13 @@
           <div class="sect"><div><h2>Quality, safeguarding and needs</h2><p>The remaining programme statistics, on the same scope as everything above.</p></div></div>
 
           <div class="stats">
-            <div class="st"><div class="l">IZU active</div>
+            <div class="st" data-tile="izu"><div class="l">IZU active</div>
               <div class="vrow"><div class="v">412 <small>of 486</small></div><span class="delta up">85%</span></div>
               <div class="d">74 dormant this quarter</div><div class="trk"><i style="width:85%"></i></div></div>
-            <div class="st"><div class="l">Male caregiver attendance</div>
+            <div class="st" data-tile="male"><div class="l">Male caregiver attendance</div>
               <div class="vrow"><div class="v">38<small>%</small></div><span class="delta up">&uarr; 4</span></div>
               <div class="d">of 2 210 households &middot; up from 34%</div><div class="trk"><i style="width:38%"></i></div></div>
-            <div class="st"><div class="l">Supervision calls done</div>
+            <div class="st" data-tile="supervision"><div class="l">Supervision calls done</div>
               <div class="vrow"><div class="v">344 <small>of 486</small></div><span class="delta down">9 days left</span></div>
               <div class="d">71% of this month&rsquo;s expected calls</div><div class="trk warn"><i style="width:71%"></i></div></div>
           </div>
@@ -327,18 +327,18 @@
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead><tr>
-                <th>Household</th><th>Caregiver</th><th>Place</th><th>Module</th>
+                <th>Household</th><th>Caregiver</th><th>Place</th><th>Cohort</th><th>Module</th>
                 <th class="num">Last visit</th><th>Status</th>
               </tr></thead>
               <tbody>
-                <tr data-go="household"><td class="nm">HH-1007</td><td>Mukamana Jeanne</td><td class="mut">Kibungo &middot; Ngoma</td><td>6 of 12</td><td class="num mut">2 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
-                <tr data-go="household"><td class="nm">HH-1042</td><td>Nshimiyimana Claude</td><td class="mut">Kigoma &middot; Nyanza</td><td>4 of 12</td><td class="num mut">9 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
-                <tr data-go="household"><td class="nm">HH-0988</td><td>Uwase Marie</td><td class="mut">Jarama &middot; Ngoma</td><td>3 of 12</td><td class="num mut">21 days ago</td><td><span class="chip warn"><i></i>Behind</span></td></tr>
-                <tr data-go="household"><td class="nm">HH-1133</td><td>Habimana Eric</td><td class="mut">Sake &middot; Ngoma</td><td>7 of 12</td><td class="num mut">4 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
-                <tr data-go="household"><td class="nm">HH-1204</td><td>Ingabire Alice</td><td class="mut">Save &middot; Nyanza</td><td>5 of 12</td><td class="num mut">6 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
-                <tr data-go="household"><td class="nm">HH-0871</td><td>Niyonsenga Paul</td><td class="mut">Kibungo &middot; Ngoma</td><td>2 of 12</td><td class="num mut">34 days ago</td><td><span class="chip warn"><i></i>Behind</span></td></tr>
-                <tr data-go="household"><td class="nm">HH-1319</td><td>Mukandayisenga Rose</td><td class="mut">Kigoma &middot; Nyanza</td><td>9 of 12</td><td class="num mut">3 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
-                <tr data-go="household"><td class="nm">HH-1456</td><td>Bizimana Jean</td><td class="mut">Sake &middot; Ngoma</td><td>1 of 12</td><td class="num mut">&mdash;</td><td><span class="chip">Not started</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1007</td><td>Mukamana Jeanne</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">1</td><td>6 of 12</td><td class="num mut">2 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1042</td><td>Nshimiyimana Claude</td><td class="mut">Kigoma &middot; Nyanza</td><td class="mut">2</td><td>4 of 12</td><td class="num mut">9 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-0988</td><td>Uwase Marie</td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">1</td><td>3 of 12</td><td class="num mut">21 days ago</td><td><span class="chip warn"><i></i>Behind</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1133</td><td>Habimana Eric</td><td class="mut">Sake &middot; Ngoma</td><td class="mut">1</td><td>7 of 12</td><td class="num mut">4 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1204</td><td>Ingabire Alice</td><td class="mut">Save &middot; Nyanza</td><td class="mut">2</td><td>5 of 12</td><td class="num mut">6 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-0871</td><td>Niyonsenga Paul</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">2</td><td>2 of 12</td><td class="num mut">34 days ago</td><td><span class="chip warn"><i></i>Behind</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1319</td><td>Mukandayisenga Rose</td><td class="mut">Kigoma &middot; Nyanza</td><td class="mut">1</td><td>9 of 12</td><td class="num mut">3 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-go="household"><td class="nm">HH-1456</td><td>Bizimana Jean</td><td class="mut">Sake &middot; Ngoma</td><td class="mut">2</td><td>1 of 12</td><td class="num mut">&mdash;</td><td><span class="chip">Not started</span></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot">
@@ -387,11 +387,6 @@
           <button class="tab" type="button">Consent</button>
         </div>
         <div class="pad">
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>Where this household stands</p>
-            <p>Six of twelve modules delivered. The household is four weeks behind the Cohort 4 schedule after two missed visits in October, and has an open risk-of-harm case overdue for review since 30 October.</p>
-          </div>
-
           <div class="cols c2">
             <div class="card">
               <div class="card-h"><h3>Visit history</h3><span class="side"><a>See all 14</a></span></div>
@@ -466,14 +461,14 @@
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Date</th><th>Household</th><th>Module</th><th>IZU at Village</th><th class="num">Minutes</th><th>Outcome</th></tr></thead>
+              <thead><tr><th>Date</th><th>Household</th><th>Place</th><th>Module</th><th>IZU at Village</th><th class="num">Minutes</th><th>Outcome</th></tr></thead>
               <tbody>
-                <tr data-go="household"><td class="mut">31 Oct</td><td class="nm">HH-1319</td><td>9 &mdash; Resolving Conflicts in the Home</td><td>E. Mutesi</td><td class="num">47</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
-                <tr data-go="household"><td class="mut">31 Oct</td><td class="nm">HH-1204</td><td>5 &mdash; The Importance of Good Hygiene</td><td>J. Kamanzi</td><td class="num">53</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
-                <tr data-go="household"><td class="mut">30 Oct</td><td class="nm">HH-0871</td><td>2 &mdash; Family Narrative</td><td>M. Dusabe</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>Household absent</span></td></tr>
-                <tr data-go="household"><td class="mut">30 Oct</td><td class="nm">HH-1133</td><td>7 &mdash; The Importance of Good Nutrition</td><td>E. Mutesi</td><td class="num">38</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
-                <tr data-go="household"><td class="mut">28 Oct</td><td class="nm">HH-1007</td><td>6 &mdash; The Importance of Good Health</td><td>M. Dusabe</td><td class="num">42</td><td><span class="chip bad"><i></i>Risk flagged</span></td></tr>
-                <tr data-go="household"><td class="mut">28 Oct</td><td class="nm">HH-0988</td><td>3 &mdash; Early Stimulation &amp; Play</td><td>J. Kamanzi</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>Road access</span></td></tr>
+                <tr data-go="household"><td class="mut">31 Oct</td><td class="nm">HH-1319</td><td class="mut">Zaza &middot; Ngoma</td><td>9 &mdash; Resolving Conflicts in the Home</td><td>E. Mutesi</td><td class="num">47</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
+                <tr data-go="household"><td class="mut">31 Oct</td><td class="nm">HH-1204</td><td class="mut">Mukingo &middot; Nyanza</td><td>5 &mdash; The Importance of Good Hygiene</td><td>J. Kamanzi</td><td class="num">53</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
+                <tr data-go="household"><td class="mut">30 Oct</td><td class="nm">HH-0871</td><td class="mut">Nyundo &middot; Rubavu</td><td>2 &mdash; Family Narrative</td><td>M. Dusabe</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>Household absent</span></td></tr>
+                <tr data-go="household"><td class="mut">30 Oct</td><td class="nm">HH-1133</td><td class="mut">Mahama &middot; Kirehe</td><td>7 &mdash; The Importance of Good Nutrition</td><td>E. Mutesi</td><td class="num">38</td><td><span class="chip ok"><i></i>Completed</span></td></tr>
+                <tr data-go="household"><td class="mut">28 Oct</td><td class="nm">HH-1007</td><td class="mut">Kinigi &middot; Musanze</td><td>6 &mdash; The Importance of Good Health</td><td>M. Dusabe</td><td class="num">42</td><td><span class="chip bad"><i></i>Risk flagged</span></td></tr>
+                <tr data-go="household"><td class="mut">28 Oct</td><td class="nm">HH-0988</td><td class="mut">Kibungo &middot; Ngoma</td><td>3 &mdash; Early Stimulation &amp; Play</td><td>J. Kamanzi</td><td class="num">&mdash;</td><td><span class="chip warn"><i></i>Road access</span></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 1&ndash;6 of 1 842</span>
@@ -534,11 +529,6 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span><b>2 open cases</b> in Ngoma &middot; both past the 72-hour review window</span><span class="mut" data-when="count">Counts are visible to every role and are not a permission.</span></div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>What this switch is deciding</p>
-            <p>Today there is one permission, <code>roh-list</code>, and it is all or nothing: a role either sees this table in full or cannot reach the screen. Splitting it into <b>a count everyone sees</b> and <b>a detail four roles see</b> is the design proposal, and the four buttons above are the four answers that split allows.</p>
-            <p>Which roles belong in which band is a safeguarding decision, not a design one. Every option is built and switchable so it can be chosen in the room rather than guessed at here.</p>
           </div>
         </div>
       </section>
@@ -659,10 +649,6 @@
             </table></div>
             <div class="tfoot"><span>5 actions &middot; 1 overdue &middot; 3 unassigned</span></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>Three actions have no owner</p>
-            <p>The protocol names the steps but the system never asks who is doing them, so &ldquo;not started&rdquo; and &ldquo;nobody has been asked&rdquo; look identical. An action without an owner and a date cannot become overdue, which is why this case sat for two days without anything turning red.</p>
-          </div>
         </div>
 
         <div class="pad" data-panelid="referrals" hidden>
@@ -692,11 +678,6 @@
               <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-message"/></svg></span><div><h4>Escalation sent</h4><p>District lead, Ngoma &middot; automatic on breach</p></div><span class="when">30 Oct 11:42</span></div>
               <div class="te"><span class="ic bad"><svg aria-hidden="true"><use href="#i-alert"/></svg></span><div><h4>Second escalation</h4><p>District lead, Ngoma &middot; still unreviewed after 24 hours</p></div><span class="when">31 Oct 11:42</span></div>
             </div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>Why the refused request is in the log</p>
-            <p>A safeguarding audit trail that records only successful opens cannot answer the question it exists to answer: <em>who tried</em>. The declined request on 29 October is the most informative line here, and in the current system it would not exist &mdash; <code>userlogs-list</code> is the only logging permission, and nothing records a read.</p>
-            <p>The entries above are append-only. There is deliberately no delete control on this panel, which is also the argument against <code>roh-delete</code>.</p>
           </div>
         </div>
 
@@ -858,16 +839,6 @@
             </table></div>
             <div class="tfoot"><span>19 projects, all marked Active &middot; 11 reach the tablet</span></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>What a project is has drifted</p>
-            <p>These nineteen names are copied from the live list. Some are projects. <b>&ldquo;FCG participation and interaction form&rdquo;</b> and <b>&ldquo;District Performance Evaluation of Sugira Muryango program&rdquo;</b> are forms. <b>&ldquo;SLA User Management&rdquo;</b> is an admin screen. <b>&ldquo;Test Project&rdquo;</b> and <b>&ldquo;Think Aloud testing without Module&rdquo;</b> are test scaffolding, both still Active.</p>
-            <p><b>&ldquo;Household Module Tracking&rdquo; and &ldquo;Household Tracking Project&rdquo;</b> are separate records. A second list in the same system adds four more, among them <em>ubworozi bw&rsquo;inkoko</em> &mdash; chicken farming.</p>
-            <p>Every one of these is free text, like the 112 permission names and the ten role names. That is the single defect underneath most of this audit: <b>the system asks people to type identifiers.</b></p>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>The old system had two projects screens at two routes &mdash; one in the menu, one unreachable &mdash; each with its own create form asking for different fields. This is the one screen and the one way in. Archived projects are a tab, not a separate page.</p>
-          </div>
         </div>
       </section>
 
@@ -931,15 +902,6 @@
             <div class="tfoot"><span>17 sessions &middot; 12 core, a welcome, a closing and three boosters</span>
               <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>The session number lives inside the name</p>
-            <p>Sessions are stored as <code>1.Family Narrative</code>, <code>2.The Importance of Early Stimulation &amp; Play</code> and so on &mdash; the order is part of the title, not a field. Reordering the curriculum means retyping every name, and sorting the list sorts <code>10.</code> and <code>11.</code> above <code>2.</code>.</p>
-            <p>Both languages are present for all seventeen, which is better than the rest of the system manages. One is thin: session 12&rsquo;s Kinyarwanda description is the single word <em>Kinya</em>, a placeholder that reached production.</p>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>The old list printed every session twice &mdash; once in English, once in Kinyarwanda &mdash; so fourteen modules read as twenty-eight rows and you could not tell which pair belonged together. One row per session now, with the languages it exists in as a column. &ldquo;EN only&rdquo; is the work queue.</p>
-          </div>
         </div>
       </section>
 
@@ -984,10 +946,6 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>3 forms in this module &middot; 2 archived</span></div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>Forms used to be <strong>created</strong> in a global library and <strong>imported</strong> into a module &mdash; two different verbs for one object, and no way to go from &ldquo;I need a form for this session&rdquo; to a new form. There was also a global archive and a per-module archive, with nothing on either screen saying which one you were looking at. One verb, one archive, scoped to where you are.</p>
           </div>
         </div>
       </section>
@@ -1108,10 +1066,6 @@
             <div class="tfoot"><span>Showing 5 of 30 &middot; the route keeps the project and module, so Back works</span>
               <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>Translation used to be 79 empty inputs on one page at a route that dropped the project and module, so the breadcrumb could not take you back where you came from, and nothing told you how far along you were. Side by side, paginated, with a review state that is separate from &ldquo;a translation exists&rdquo;.</p>
-          </div>
         </div>
 
         <div class="pad" data-panelid="data" hidden>
@@ -1137,10 +1091,6 @@
                 <button class="btn sec sm" type="button">Deleted responses <span class="chip" style="margin-left:.35rem">3</span></button>
                 <button class="btn sec sm" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button></span></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>This screen had six chained geography dropdowns, a field labelled &ldquo;Search andicator&rdquo;, and two separate links &mdash; &ldquo;Check Recycled&rdquo; and &ldquo;Recycled data&rdquo; &mdash; that went to the same recycle bin at a third URL shape. One place filter, one spelling, one way to the deleted responses.</p>
-          </div>
         </div>
 
         <div class="pad" data-panelid="reports" hidden>
@@ -1164,10 +1114,6 @@
                 <div class="hr"><span class="l">Musanze</span><span class="t"><i style="width:46%"></i></span><span class="v">46%</span></div>
               </div>
             </div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>The point of this whole screen</p>
-            <p>The report builder is the most capable thing in the system you already own, and it sat at <code>/surveys/project/11/modules/22/form/9/ref/254/reports-builder</code> &mdash; five navigations deep, named in no menu, with the data, the per-form dashboard, the report list and the builder as four separate full-page navigations away from each other. They are four views of one form. They are tabs now.</p>
           </div>
         </div>
       </section>
@@ -1194,15 +1140,6 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>4 cohorts, all Active &middot; two hold no districts</span></div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>Two of the four are empty, and all four say Active</p>
-            <p>Cohorts 3 and 4 hold no districts at all, yet carry the same green Active badge as the two that are running. &ldquo;Active&rdquo; here means the row was not switched off &mdash; it says nothing about whether any family is in it.</p>
-            <p>The district codes are typed too, and it shows: <code>Kirehe (1-4- 2026)</code> and <code>Ngoma (1 - 2026)</code> carry stray spaces that <code>Nyanza (1-2026)</code> does not. They are reproduced above exactly as stored. If a report ever groups by this string, those three are three different districts.</p>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>A cohort was a settings row with District, Label and Status, and nothing told you how many families it moved. The household count is the whole point: editing Cohort 4 reschedules 2 210 families.</p>
           </div>
         </div>
       </section>
@@ -1286,10 +1223,6 @@
             <div class="tfoot"><span>Showing 8 of 193 &middot; 3 invitations outstanding</span>
               <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>Adding a user meant picking one of <b>21 roles from a flat radio list</b> — three of them called &ldquo;Test role&rdquo;, &ldquo;Test role 2&rdquo; and &ldquo;Test notification&rdquo; — and then <b>typing the person&rsquo;s password on their behalf</b> and confirming it. There was nowhere to say which place the role applied to. Here the place is its own column because it is its own thing, and people are invited by email rather than issued a password by an administrator.</p>
-          </div>
         </div>
       </section>
 
@@ -1322,16 +1255,6 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>10 roles, read from the live system &middot; 539 people</span></div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>A role cannot say which households it may see</p>
-            <p>The form that creates a role has exactly four fields: a <b>name</b> typed as free text, <b>&ldquo;Is the role for stakeholders?&rdquo;</b> as Yes/No, <b>Notification location levels</b>, and 112 permission checkboxes. That is the whole role.</p>
-            <p>The levels look like scope but are not. The form says so itself: <em>&ldquo;Select the location level(s) used to notify users with this role.&rdquo;</em> They route notifications. <b>Nothing in a role limits which households, sectors or districts its holders can open</b> &mdash; so a sector lead and a national officer with the same ticks see the same national data, and the column above is honest about it.</p>
-            <p>Two rows show what follows. <b>IZU Cell Coordinator</b> is notified at all five levels from National down to Cell; <b>IZU at Village</b> is notified at District, Sector and Cell but not Village, despite its name. Those are routing accidents today. The moment the levels are made to govern access, they become the thing that decides who can read a child&rsquo;s case &mdash; which is why the next screen separates them.</p>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>Why the place belongs on the person, not in the name</p>
-            <p>The client described this directly &mdash; <b>&ldquo;the position is the national level &hellip; this is the sector level&rdquo;</b> and <b>&ldquo;project level &hellip; you can create a role to set your level&rdquo;</b>. With no field for either, both get written into role names, and the list fills with near-duplicates. Keeping the level on the role and the <em>place</em> on the assignment means one sector-lead role serves all 17 sectors instead of 17 roles.</p>
           </div>
         </div>
       </section>
@@ -1386,24 +1309,6 @@
               </tbody>
             </table></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What the real permission list contains</p>
-            <p>Recovered from the captures: <b>112 distinct permissions across 30 objects</b>, each a free-text string typed into a field called &ldquo;Name&rdquo;, listed over twelve pages with Copy, Excel, CSV and PDF export buttons on them. The only screen where a role met a permission offered <b>&ldquo;Check all&rdquo;</b> as its primary control &mdash; and both ends of that flow were unreachable from the navigation.</p>
-            <p>What free text produced, in their own data:</p>
-            <ul style="margin:.2rem 0 .9rem 1.1rem;padding:0;font-size:.91rem;color:var(--ink-2);max-width:86ch">
-              <li><code>form-list</code> and <code>forms-list</code> both exist &mdash; the same permission, typed twice.</li>
-              <li><code>View-collected-data</code> is the only one with a capital letter.</li>
-              <li>Ten names follow no convention at all: <code>build-reports</code>, <code>recycle-data</code>, <code>submit-form</code>, <code>manage-cohort</code> and six more.</li>
-              <li>Seven objects have an incomplete set &mdash; <code>sessioninaction</code> can be created and edited but never deleted; <code>userlogs</code>, <code>checklist</code> and <code>customreport</code> have only <code>-list</code>.</li>
-              <li><b>Five different words mean a family:</b> <code>family</code>, <code>familymember</code>, <code>familymodule</code>, <code>admittedfamily</code>, <code>householdenrollment</code>.</li>
-            </ul>
-            <p>Eight rows cover all 112. Open any row to see exactly which it replaces &mdash; the grid is also the migration map.</p>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-alert"/></svg>Two things the current permissions cannot express</p>
-            <p><b>There is no way to separate seeing a count from opening a case.</b> <code>roh-list</code> is all or nothing, so anyone who can see that two cases exist can read both children&rsquo;s records. The <em>See</em> column here means case detail; counts are available to every role and are not a permission.</p>
-            <p><b><code>roh-delete</code> exists.</b> A risk-of-harm case can be deleted outright. Archive is disabled above and cases are closed, never removed &mdash; a safeguarding record that can vanish is not a record.</p>
-          </div>
         </div>
 
         <div class="pad" data-panelid="scope" hidden>
@@ -1449,10 +1354,6 @@
                 <div class="al-row" style="padding:.6rem .8rem"><span class="al-what"><span class="nm" style="font-size:14px;color:var(--ink-3)">IZU Cell Coordinator Telephone Supervision</span></span><span class="al-act"><span class="chip">Not included</span></span></div>
               </div>
             </div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>The relationship this screen exists for</p>
-            <p>A person does not simply <em>have</em> a role. They hold a role <b>at a place</b>, <b>within a programme</b>. C. Uwimana is a sector lead <em>in Kibungo</em> for <em>three of the nineteen projects</em>; the same role in Jarama is a different assignment of the same role. Separating the three &mdash; the permissions, the level, the person&rsquo;s place &mdash; is what lets ten roles cover 539 people without a single new role being typed.</p>
           </div>
         </div>
 
@@ -1520,11 +1421,6 @@
               <div class="tr d2 more"><span class="nm">12 more sectors</span><span class="lv">not shown</span><span class="rt"><span>66 households</span><span>15 staff</span></span></div>
             </div>
             </div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>Why this is a screen and not a dropdown</p>
-            <p>The hierarchy existed only as <b>2,632 dropdown options rendered inline</b> on the monitoring screen, and as <b>six chained search boxes</b> on the data filter, while AJAX endpoints that fetch exactly this on demand sat unused. It is a thing in its own right: roles scope to it, households belong to it, and every filter in the product reads from it.</p>
-            <p>Cells, villages and IZU sit below the sectors here and load when a sector is opened &mdash; the same endpoints, used the way they were built to be used. The five districts are the ones the cohorts name: <b>Kirehe, Musanze, Ngoma, Nyanza and Rubavu</b>, which between them span four of Rwanda&rsquo;s five provinces.</p>
           </div>
         </div>
       </section>
@@ -1616,10 +1512,6 @@
             </table></div>
             <div class="tfoot"><span>Showing 4 of 24 &middot; all play on the tablet offline once downloaded</span></div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>Help content was scattered across five unrelated screens &mdash; videos at <code>/help</code> titled &ldquo;Intervention Videos&rdquo; in the menu and &ldquo;VIDEO INTERVENTION TUTORIALS&rdquo; on the page, documents under Settings, FAQ categories and FAQ questions as two separate lists with no stated relationship, and an Instructions page with <b>zero interactive elements on it</b>. The screen that was supposed to publish posts, <code>/settings/posts</code>, returned a 404 from a link inside the app.</p>
-          </div>
         </div>
 
         <div class="pad" data-panelid="docs" hidden>
@@ -1634,10 +1526,6 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>41 documents in 4 folders</span></div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-admin"/></svg>This is where content meets the role model</p>
-            <p>The client was explicit that documents are gated by role &mdash; <b>&ldquo;you can select the roles&rdquo;</b>, <b>&ldquo;access to the details by roles, that is the permission&rdquo;</b>. So &ldquo;Visible to&rdquo; is a column here and reads from the same seven roles as <a data-go="roles" style="color:var(--link);font-weight:600;cursor:pointer">Roles &amp; access</a>. The safeguarding protocol is not something every home visitor should be able to download.</p>
           </div>
         </div>
 
@@ -1658,10 +1546,6 @@
               <div class="lr"><span class="t">Changing a visit after it was sent</span><span class="ch">&rsaquo;</span></div>
             </div>
           </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>Categories and questions lived at <code>/faqcategories</code> and <code>/faqquestions</code> as two unconnected lists &mdash; nothing on either screen said a question belonged to a category. Picking a category now shows its questions.</p>
-          </div>
         </div>
 
         <div class="pad" data-panelid="feedback" hidden>
@@ -1675,10 +1559,6 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>7 unread of 42</span></div>
-          </div>
-          <div class="callout">
-            <p class="ch"><svg aria-hidden="true"><use href="#i-sparkle"/></svg>What changed here</p>
-            <p>The navigation pointed at <code>/userfeedbacks/create</code> &mdash; the form for <em>submitting</em> feedback. The list of what people had actually sent was at <code>/userfeedbacks</code>, which nothing linked to. Staff could file feedback into a place no one could read.</p>
           </div>
         </div>
       </section>
@@ -1737,5 +1617,6 @@
 <div class="toast" id="toast" hidden></div>
 
 <script src="app.js" defer></script>
+<script src="filters.js" defer></script>
 </body>
 </html>

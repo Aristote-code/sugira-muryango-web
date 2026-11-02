@@ -9,14 +9,30 @@ DIR="${1:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 HERE=$(cd "$(dirname "$0")" && pwd)
 fail=0
 
-if [ -f "$DIR/app.js" ]; then
-  if node --check "$DIR/app.js" 2>/tmp/cu-node-err; then
-    echo "  app.js: parses"
+# Every script the site ships, not just app.js. filters.js was added to the
+# deploy allowlist without being added here, which would have let a syntax
+# error in it reach production with every check reporting green.
+for js in "$DIR"/*.js; do
+  [ -f "$js" ] || continue
+  name=$(basename "$js")
+  if node --check "$js" 2>/tmp/cu-node-err; then
+    echo "  $name: parses"
   else
-    echo "  app.js: SYNTAX ERROR — this would deploy a dead site"
+    echo "  $name: SYNTAX ERROR — this would deploy a dead site"
     sed 's/^/      /' /tmp/cu-node-err
     fail=1
   fi
+done
+
+# A script the page loads but the deploy does not ship is a 404 at runtime.
+if [ -f "$DIR/index.html" ] && [ -f "$DIR/deploy.sh" ]; then
+  for src in $(grep -o '<script src="[^"]*"' "$DIR/index.html" | sed 's/.*src="//;s/"//'); do
+    case "$src" in http*) continue ;; esac
+    if ! grep -q "$src" "$DIR/deploy.sh"; then
+      echo "  $src: loaded by index.html but missing from the deploy allowlist"
+      fail=1
+    fi
+  done
 fi
 
 if [ -f "$DIR/style.css" ]; then
