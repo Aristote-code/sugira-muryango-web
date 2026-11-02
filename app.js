@@ -19,6 +19,7 @@
     role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },
     system:       { crumbs: [['System', null]],                                           nav: 'system' },
+    settings:     { crumbs: [['Settings', null]],                                        nav: 'settings' },
     profile:      { crumbs: [['Your profile', null]],                                   nav: null },
     login:        { crumbs: [['Sign in', null]],                                          nav: null },
 
@@ -34,6 +35,29 @@
   };
 
   var MODALS = {
+    setint: {
+      title: 'Change the interval between sessions',
+      ok: 'Change it',
+      body: '<div><label for="f-si">Interval</label><select id="f-si"><option>Two weeks</option><option>Three weeks</option><option>Four weeks</option></select></div>' +
+            '<div><label for="f-sw">Apply to</label><select id="f-sw"><option>Sessions not yet delivered</option><option>Cohort 2 only</option></select></div>' +
+            '<p style="font-size:13px;color:var(--ink-2);line-height:1.6">This reschedules 994 households in Cohort 2. Cohort 1 is past session 6, so only its remaining sessions move.</p>',
+      done: 'Interval changed — 994 households rescheduled'
+    },
+    setroh: {
+      title: 'Change the review window',
+      ok: 'Change it',
+      body: '<div><label for="f-sr">A supervisor review is due within</label><select id="f-sr"><option>72 hours</option><option>48 hours</option><option>24 hours</option></select></div>' +
+            '<p style="font-size:13px;color:var(--ink-2);line-height:1.6">Two cases are open and both are already past 72 hours. Shortening the window does not reopen closed cases, but it will mark more of them late.</p>',
+      done: 'Review window changed'
+    },
+    cleanup: {
+      title: 'Clean up training data',
+      ok: 'Upload and preview',
+      body: '<p style="font-size:14px;color:var(--ink-2);line-height:1.6">Upload a CSV of the accounts used in training. Nothing is removed until you have seen the preview and confirmed it.</p>' +
+            '<div><label for="f-cu">CSV file</label><input id="f-cu" type="file"></div>' +
+            '<div><label for="f-cc">Match on</label><select id="f-cc"><option>Email</option><option>Phone number</option></select></div>',
+      done: 'Uploaded — review the preview before anything is removed'
+    },
     profile: {
       title: 'Edit profile',
       ok: 'Save',

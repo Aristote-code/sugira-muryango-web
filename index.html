@@ -106,7 +106,7 @@
       <button class="ni" type="button" data-go="field">
         <svg aria-hidden="true"><use href="#i-fieldstatus"/></svg>
         <span class="tx">Field status</span><span class="ct">19</span></button>
-      <button class="ni" type="button" data-go="system">
+      <button class="ni" type="button" data-go="settings">
         <svg aria-hidden="true"><use href="#i-settings"/></svg>
         <span class="tx">Settings</span></button>
       <button class="ni" type="button" data-go="login">
@@ -1677,11 +1677,125 @@
         </div>
       </section>
 
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="screen" id="s-settings">
+        <div class="phead">
+          <div class="row">
+            <div><h1>Settings</h1><p class="sub">The rules the whole programme runs on. Changing one here changes it for every district, every tablet and every household at once, so each says what it will move.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button" data-go="system">Activity &amp; maintenance</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-panel="sprog">Programme</button>
+          <button class="tab" type="button" data-panel="ssafe">Safeguarding</button>
+          <button class="tab" type="button" data-panel="slang">Languages</button>
+          <button class="tab" type="button" data-panel="stablet">Tablet</button>
+          <button class="tab" type="button" data-panel="sdata">Data</button>
+        </div>
+
+        <div class="pad" data-panelid="sprog">
+          <div class="cols c2e">
+            <div class="card">
+              <div class="card-h"><h3>The programme</h3></div>
+              <div class="lr"><span class="t">Name</span><span class="s">SUGIRA Muryango</span></div>
+              <div class="lr"><span class="t">Run by</span><span class="s">FXB Rwanda, with Boston College</span></div>
+              <div class="lr"><span class="t">Districts</span><span class="s">Kirehe, Musanze, Ngoma, Nyanza, Rubavu</span><span class="c"><button class="rel" type="button" data-go="places">Places</button></span></div>
+              <div class="lr"><span class="t">Curriculum</span><span class="s">12 sessions, a welcome, a closing and three boosters</span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>How a visit is scheduled</h3></div>
+              <div class="lr"><span class="t">Interval between sessions</span><span class="s">Two weeks</span><span class="c"><button class="rel" type="button" data-modal="setint">Change</button></span></div>
+              <div class="lr"><span class="t">Counts as behind after</span><span class="s">One missed interval</span></div>
+              <div class="lr"><span class="t">Counts as a missed visit after</span><span class="s">30 days with no session</span></div>
+              <div class="lr"><span class="t">Booster sessions at</span><span class="s">3, 6 and 12 months after closing</span></div>
+              <p style="font-size:13px;color:var(--ink-2);margin-top:.9rem;max-width:58ch">Moving the interval reschedules every household that has not yet had its next session. Cohort 1 is past session 6, so only the sessions after it would move.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="ssafe" hidden>
+          <div class="card">
+            <div class="card-h"><h3>The risk-of-harm protocol</h3></div>
+            <div class="lr"><span class="t">Supervisor review due within</span><span class="s">72 hours of a flag being raised</span><span class="c"><button class="rel" type="button" data-modal="setroh">Change</button></span></div>
+            <div class="lr"><span class="t">If the window passes</span><span class="s">The district lead is notified, then again after 24 hours</span></div>
+            <div class="lr"><span class="t">If substantiated</span><span class="s">Referred to the district child-protection officer</span></div>
+            <div class="lr"><span class="t">Who may open a case in full</span><span class="s">Four roles, set per role</span><span class="c"><button class="rel" type="button" data-go="roles">Roles</button></span></div>
+            <div class="lr"><span class="t">Counts are visible to</span><span class="s">Everyone &mdash; a count is not a permission</span></div>
+          </div>
+          <div class="card">
+            <div class="card-h"><h3>What cannot be done to a case</h3></div>
+            <div class="lr"><span class="t">Deleting a case</span><span class="s">Not possible, for anyone</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
+            <div class="lr"><span class="t">Editing the account of what was seen</span><span class="s">Corrections are appended, never overwritten</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
+            <div class="lr"><span class="t">Opening a case without it being logged</span><span class="s">Every open is written to the trail</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
+            <p style="font-size:13px;color:var(--ink-2);margin-top:.9rem;max-width:62ch">These three are deliberately not switches. A safeguarding record that can be deleted, quietly edited or read without trace is not a record, and a setting that can turn that off is a setting someone will eventually turn off.</p>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="slang" hidden>
+          <div class="cols c2e">
+            <div class="card">
+              <div class="card-h"><h3>Languages</h3></div>
+              <div class="lr"><span class="t">Kinyarwanda</span><span class="s">The language of the visit</span><span class="c"><span class="chip ok"><i></i>Required</span></span></div>
+              <div class="lr"><span class="t">English</span><span class="s">The language of the office</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+              <div class="lr"><span class="t">French</span><span class="s">Not used by the programme</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>What happens to untranslated text</h3></div>
+              <div class="lr"><span class="t">A form with missing Kinyarwanda</span><span class="s">Cannot be published to the tablet</span><span class="c"><span class="chip ok"><i></i>Blocked</span></span></div>
+              <div class="lr"><span class="t">An instruction with missing Kinyarwanda</span><span class="s">Shows in English with a warning</span><span class="c"><span class="chip warn"><i></i>Allowed</span></span></div>
+              <div class="lr"><span class="t">Outstanding</span><span class="s">13 of 34 forms</span><span class="c"><button class="rel" type="button" data-go="translations">Translations</button></span></div>
+              <p style="font-size:13px;color:var(--ink-2);margin-top:.9rem;max-width:58ch">Blocking publication is the only setting here that has teeth. Without it, English-only text reaches a household that cannot read it.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="stablet" hidden>
+          <div class="cols c2e">
+            <div class="card">
+              <div class="card-h"><h3>Sync</h3></div>
+              <div class="lr"><span class="t">Tablets sync</span><span class="s">Whenever there is a connection</span></div>
+              <div class="lr"><span class="t">A visit is held on the device for</span><span class="s">Up to 30 days offline</span></div>
+              <div class="lr"><span class="t">Figures are marked provisional</span><span class="s">Until every expected tablet has reported</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+              <div class="lr"><span class="t">Not reporting after</span><span class="s">48 hours</span><span class="c"><button class="rel" type="button" data-go="field">Field status</button></span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>What the tablet carries</h3></div>
+              <div class="lr"><span class="t">Session videos</span><span class="s">24 items, 1.2 GB</span><span class="c"><span class="chip ok"><i></i>Offline</span></span></div>
+              <div class="lr"><span class="t">Written guidance</span><span class="s">41 documents</span><span class="c"><span class="chip ok"><i></i>Offline</span></span></div>
+              <div class="lr"><span class="t">Household list</span><span class="s">Only the households that visitor is assigned</span><span class="c"><span class="chip ok"><i></i>Scoped</span></span></div>
+              <div class="lr"><span class="t">Risk-of-harm detail</span><span class="s">Never stored on the device</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pad" data-panelid="sdata" hidden>
+          <div class="cols c2e">
+            <div class="card">
+              <div class="card-h"><h3>Keeping and removing</h3></div>
+              <div class="lr"><span class="t">Deleted responses</span><span class="s">Recoverable for 30 days, then gone</span><span class="c"><button class="rel" type="button" data-go="system">Recycle bin</button></span></div>
+              <div class="lr"><span class="t">Training data</span><span class="s">Removed by CSV, not by hand</span><span class="c"><button class="rel" type="button" data-modal="cleanup">Clean up</button></span></div>
+              <div class="lr"><span class="t">A household that leaves</span><span class="s">Archived with its visits, never deleted</span></div>
+              <div class="lr"><span class="t">Audit trail</span><span class="s">Kept for the life of the programme</span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Getting data out</h3></div>
+              <div class="lr"><span class="t">CSV export</span><span class="s">Any table, filters included</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
+              <div class="lr"><span class="t">Scheduled reports</span><span class="s">4 running, to NCDA and the M&amp;E team</span><span class="c"><button class="rel" type="button" data-go="reports">Reports</button></span></div>
+              <div class="lr"><span class="t">Exports include names</span><span class="s">Only for roles that can already see them</span><span class="c"><span class="chip ok"><i></i>Scoped</span></span></div>
+              <div class="lr"><span class="t">Risk-of-harm detail in exports</span><span class="s">Never, in any export</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ============ SYSTEM ============ -->
       <section class="screen" id="s-system">
         <div class="phead">
           <div class="row">
-            <div><h1>System</h1><p class="sub">Activity, data maintenance and the settings that affect everyone.</p></div>
+            <div><h1>System</h1><p class="sub">Who did what, and the housekeeping that keeps the data honest. The rules themselves live in Settings.</p></div>
           </div>
         </div>
         <div class="pad">
