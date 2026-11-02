@@ -55,6 +55,34 @@ PY
   else
     echo "  icons: every <use> resolves"
   fi
+
+  # Every screen must close every div it opens.
+  #
+  # This has cost real screens twice. A stray </div> inside a section closes
+  # the scroll container early, and the browser then lays the sections after
+  # it out below that container: Field support opened to 288px of blank page,
+  # and later a whole run of screens rendered hundreds of pixels down. Nothing
+  # looks wrong in the source, which is why it survived two reviews.
+  unbalanced=$(python3 - "$DIR/index.html" <<'PY'
+import re, sys
+h = open(sys.argv[1], encoding="utf-8").read()
+bad = []
+for m in re.finditer(r'<section class="screen[^"]*" id="(s-[a-z]+)">', h):
+    sid, a = m.group(1), m.start()
+    b = h.index("</section>", a)
+    blk = h[a:b]
+    o, c = len(re.findall(r"<div\b", blk)), len(re.findall(r"</div>", blk))
+    if o != c:
+        bad.append("%s(%+d)" % (sid, o - c))
+print(",".join(bad))
+PY
+)
+  if [ -n "$unbalanced" ]; then
+    echo "  markup: unbalanced <div> in -> $unbalanced"
+    fail=1
+  else
+    echo "  markup: every screen closes its divs"
+  fi
 fi
 
 [ "$fail" -eq 0 ] && echo "  all checks passed" || echo "  CHECKS FAILED"
