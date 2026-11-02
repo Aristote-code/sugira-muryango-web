@@ -583,7 +583,11 @@
     mBody.innerHTML = def.body;
     mOk.textContent = def.ok;
     scrim.hidden = false;
-    var first = mBody.querySelector('textarea, input, select');
+    // Build the custom controls before choosing what to focus. A <select> is
+    // now visually hidden behind its own trigger, so focusing the first
+    // "input, select" put the caret on something nobody can see.
+    if (window.SugiraMenu) window.SugiraMenu.enhance(mBody);
+    var first = mBody.querySelector('textarea, input:not([type="hidden"]), .cselect');
     // A confirm with no fields focuses Cancel, never the button that does the thing.
     if (first) first.focus(); else $('#mCancel').focus();
   }

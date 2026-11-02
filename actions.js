@@ -24,6 +24,57 @@
     say._t = setTimeout(function () { t.hidden = true; }, 2600);
   }
 
+  /* ---- nothing to show ----
+     Filtering down to zero left a column header standing over blank space,
+     with the only explanation in small grey type in the footer and a pager
+     still offering page one. The row that replaces the body says what
+     happened and carries the way out of it. */
+  function syncEmpty(table) {
+    if (!table) return;
+    var body = table.tBodies[0];
+    if (!body) return;
+    var real = $$('tr', body).filter(function (r) { return !r.classList.contains('t-empty'); });
+    var shown = real.filter(function (r) {
+      return !r.classList.contains('f-out') && !r.classList.contains('t-out') && !r.classList.contains('p-out');
+    });
+    var row = body.querySelector('tr.t-empty');
+    var screen = table.closest('.screen');
+    var bar = screen && screen.querySelector('.filters');
+    var pg = screen && screen.querySelector('.tfoot .pg');
+
+    if (shown.length) {
+      if (row) row.remove();
+      if (pg) pg.hidden = false;
+      return;
+    }
+    if (pg) pg.hidden = true;
+    if (row) return;
+
+    var cols = $$('thead th', table).length || 1;
+    row = document.createElement('tr');
+    row.className = 't-empty';
+    var td = document.createElement('td');
+    td.colSpan = cols;
+    var p = document.createElement('p');
+    p.textContent = 'Nothing here matches what you have narrowed to.';
+    td.appendChild(p);
+    if (bar) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn sec sm';
+      b.textContent = 'Clear the filters';
+      b.addEventListener('click', function () {
+        var clr = bar.parentNode.querySelector('.flclear');
+        if (clr) { clr.click(); return; }
+        var inp = bar.querySelector('.search input');
+        if (inp) { inp.value = ''; inp.dispatchEvent(new Event('input', { bubbles: true })); }
+      });
+      td.appendChild(b);
+    }
+    row.appendChild(td);
+    body.appendChild(row);
+  }
+
   function tableNear(el) {
     var card = el.closest('.card');
     var t = card && $('.tbl', card);
@@ -80,6 +131,7 @@
           b.classList.toggle('on', n === state.page);
         });
 
+        syncEmpty(table);
         if (label) {
           label.textContent = list.length
             ? 'Showing ' + (from + 1) + '–' + to + ' of ' + list.length
@@ -360,6 +412,7 @@
         total += 1;
         if (!out) shown += 1;
       });
+      syncEmpty(table);
       var pg = screen.querySelector('.tfoot .pg');
       if (pg && pg._render) { pg._render(); return; }
 
@@ -390,5 +443,8 @@
   var reflow = function () {
     $$('.tfoot .pg').forEach(function (pg) { if (pg._render) pg._render(); });
   };
-  document.addEventListener('filters:applied', reflow);
+  document.addEventListener('filters:applied', function () {
+    reflow();
+    $$('.tbl').forEach(syncEmpty);
+  });
 })();
