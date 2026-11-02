@@ -19,20 +19,52 @@ if [ -n "$(git status --porcelain)" ]; then
   echo
 fi
 
-if ! git merge-base --is-ancestor HEAD "origin/$(git rev-parse --abbrev-ref HEAD)" 2>/dev/null; then
-  echo "warning: HEAD is not on the remote yet. Push first if you want the live site"
-  echo "         to match what is on GitHub."
+# Production only ever serves main. Each session now works in its own worktree,
+# and `git rev-parse HEAD` inside one is that branch's tip, not main's — so
+# without this guard a session could put its own unmerged branch live from its
+# own checkout, and the deploy would look perfectly clean while doing it. This
+# rule used to live in an agreement between sessions; it belongs in the script.
+git fetch -q origin main 2>/dev/null || true
+if ! git merge-base --is-ancestor HEAD origin/main 2>/dev/null; then
+  echo "deploy refused — $sha ($(git rev-parse --abbrev-ref HEAD)) is not on origin/main."
   echo
+  echo "  The live site only ever serves main. Merge this branch into main and push"
+  echo "  it, then deploy from a checkout whose HEAD is on main."
+  exit 1
 fi
 
 tmp=$(mktemp -d)
-cleanup() { git worktree remove --force "$tmp" >/dev/null 2>&1 || true; rm -rf "$tmp"; }
+pub=$(mktemp -d)
+cleanup() { git worktree remove --force "$tmp" >/dev/null 2>&1 || true; rm -rf "$tmp" "$pub"; }
 trap cleanup EXIT
 
 git worktree add -q --detach "$tmp" HEAD
 
-# these live in the repo but are not part of the site
-rm -f "$tmp/deploy.sh" "$tmp/README.md"
+# Check what is about to ship, not what happens to be on disk. The pre-commit
+# hook validates a commit as it is made, but `git commit --no-verify` slips past
+# it, so the exported tree gets checked too.
+if ! sh "$tmp/scripts/check.sh" "$tmp"; then
+  echo
+  echo "deploy aborted — $sha would put a broken site live."
+  exit 1
+fi
 
-echo "deploying $sha from a clean checkout"
-netlify deploy --prod --dir "$tmp" --message "$msg"
+# The site, named explicitly. This is an allowlist rather than a list of files
+# to delete, because the repository also holds build tooling, git hooks and this
+# script. With a blocklist every tool file added later ships until someone
+# remembers to exclude it — which is how scripts/check.sh and
+# scripts/audit-tokens.py came to be served from the live site. Forgetting to
+# add an asset here fails loudly the first time a page is opened; forgetting to
+# delete one fails silently, in public.
+site="index.html app.js style.css logo.svg netlify.toml"
+for f in $site; do
+  if [ ! -e "$tmp/$f" ]; then
+    echo "deploy aborted — $f is missing from $sha."
+    exit 1
+  fi
+  cp "$tmp/$f" "$pub/$f"
+done
+
+echo "deploying $sha from a clean checkout:"
+printf '      %s\n' $site
+netlify deploy --prod --dir "$pub" --message "$msg"
