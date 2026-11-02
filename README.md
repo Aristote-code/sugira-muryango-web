@@ -6,6 +6,24 @@ Oversight and case management for the SUGIRA Muryango home-visiting programme
 This is a **design prototype**: a static, click-through front end with representative
 data. There is no backend and no real programme data in it.
 
+## Checks
+
+```bash
+sh scripts/check.sh        # app.js parses, tokens on scale, every icon resolves
+sh scripts/deploy.sh "msg" # the same checks, then deploy
+```
+
+A `pre-commit` hook runs those checks against the **staged** content, not the
+working tree — the two differ mid-write, and that is how a half-written `app.js`
+once reached production. After cloning, enable it:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+`netlify deploy --dir .` skips the build step, so `netlify.toml` cannot guard a
+deploy. Use `scripts/deploy.sh` rather than calling the CLI directly.
+
 ## Running it
 
 No build step. Serve the folder:

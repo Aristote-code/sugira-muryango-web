@@ -1,0 +1,23 @@
+#!/bin/sh
+# Check what is about to be committed, not what happens to be on disk.
+# Two sessions share this checkout, so the two can differ mid-write.
+set -u
+root=$(git rev-parse --show-toplevel)
+staged=$(mktemp -d)
+trap 'rm -rf "$staged"' EXIT
+
+git diff --cached --name-only --diff-filter=ACM -z \
+  | tr '\0' '\n' \
+  | while IFS= read -r f; do
+      [ -n "$f" ] || continue
+      case "$f" in app.js|style.css|index.html) ;; *) continue ;; esac
+      git show ":$f" > "$staged/$f" 2>/dev/null
+    done
+
+echo "pre-commit: checking staged content"
+if ! sh "$root/scripts/check.sh" "$staged"; then
+  echo ""
+  echo "Commit blocked. Fix the above, or bypass with: git commit --no-verify"
+  exit 1
+fi
+exit 0
