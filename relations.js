@@ -205,6 +205,10 @@
     at.parentNode.insertBefore(pad, at.nextSibling);
   }
 
+  /* The drawer's side pane shows the same ties in a narrower column, so the
+     map is read from there rather than written twice. */
+  window.SUGIRA_RELATIONS = R;
+
   function mount() {
     Object.keys(R).forEach(function (k) { build(k, R[k]); });
   }

@@ -535,6 +535,9 @@
     var back = dw.querySelector('[data-dw="back"]');
     if (back) back.hidden = dwStack.length < 2;
     dwBody.scrollTop = 0;
+    /* the side pane fills itself from here, so the record's own markup
+       stays as it is and goes back to the page untouched on close */
+    document.dispatchEvent(new CustomEvent('drawer:render', { detail: { key: key } }));
   }
 
   function openDrawer(key) {
