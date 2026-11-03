@@ -175,8 +175,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 
 /* ---------------- controls ---------------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid transparent;
-  border-radius:var(--button-lg-radius);cursor:pointer;height:var(--size-control-md);padding:0 12px;
-  font-size:14px;line-height:var(--lh-16);font-weight:500;
+  border-radius:var(--button-lg-radius);cursor:pointer;height:var(--button-lg-height);
+  padding:0 12px;font-size:var(--button-lg-font-size);line-height:var(--lh-16);font-weight:500;
   background:var(--button-primary-bg-default);color:var(--button-primary-content);white-space:nowrap}
 .btn:hover{background:var(--button-primary-bg-hover)}
 .btn:active{background:var(--button-primary-bg-pressed)}
@@ -188,10 +188,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .btn.danger{background:var(--button-danger-bg-default);color:var(--button-danger-content)}
 .btn.danger:hover{background:var(--button-danger-bg-hover)}
 .btn:disabled{opacity:var(--button-disabled-opacity);cursor:not-allowed}
-.btn.sm{height:var(--size-control-xs);padding:0 8px;font-size:12px;border-radius:var(--button-sm-radius);gap:4px}
+.btn.sm{height:var(--button-sm-height);padding:0 8px;font-size:var(--button-sm-font-size);border-radius:var(--button-sm-radius);gap:4px}
 .btn.sm svg{width:14px;height:14px}
-.fl{display:inline-flex;align-items:center;gap:4px;height:var(--size-control-xs);font-size:12px;line-height:var(--lh-16);color:var(--color-content-secondary);
-  background:var(--color-bg-surface);border:1px solid var(--color-border-default);border-radius:var(--chip-radius);padding:0 6px;cursor:pointer}
+.fl{display:inline-flex;align-items:center;gap:4px;height:var(--chip-height);
+  font-size:var(--chip-outline-font-size);line-height:var(--chip-outline-line-height);
+  color:var(--chip-content);background:var(--color-bg-surface);
+  border:1px solid var(--color-border-default);border-radius:var(--chip-radius);
+  padding:0 6px;cursor:pointer}
 .fl:hover{background:var(--color-bg-hover)}
 .fl .k{font-size:12px;font-weight:500;color:var(--color-content-secondary)}
 .fl b{font-weight:500;color:var(--color-content-primary)}
@@ -200,7 +203,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .filters > .end,.tq > .end,.pm-top > .end{margin-left:auto;display:flex;align-items:center;gap:4px;flex:none}
 .end .acts{display:flex;align-items:center;gap:4px}
 .end .acts[hidden]{display:none}
-.end .btn{height:var(--size-control-xs);padding:0 8px;font-size:12px;border-radius:var(--button-sm-radius);gap:4px}
+.end .btn{height:var(--button-sm-height);padding:0 8px;font-size:var(--button-sm-font-size);border-radius:var(--button-sm-radius);gap:4px}
 .end .btn svg{width:14px;height:14px}
 .filters > .rt{margin-left:auto}
 .filters .rt{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--color-content-secondary)}
@@ -767,12 +770,15 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .pg{display:grid;margin-top:16px}
 @media (min-width:1360px){.pg{grid-template-columns:1fr 1fr;column-gap:40px}}
 .dw-body .pg,.dw.as-sidebar .pg{grid-template-columns:1fr}
-.pgr{display:grid;grid-template-columns:max(var(--property-grid-property-label-width),150px) minmax(0,1fr);align-items:center;min-height:var(--size-control-md);gap:6px}
-.pgr .k{display:flex;align-items:center;gap:6px;font-size:14px;line-height:16px;color:var(--color-content-secondary);min-width:0}
+.pgr{display:grid;grid-template-columns:var(--property-grid-property-label-width) minmax(0,1fr);align-items:center;min-height:var(--size-control-md);gap:6px}
+.pgr .k{display:flex;align-items:center;gap:6px;height:var(--size-control-md);font-size:var(--property-grid-font-size);line-height:16px;color:var(--color-content-secondary);min-width:0}
 .pgr .k svg{width:16px;height:16px;flex:none;fill:none;color:var(--x-clickup-color-content-placeholder)}
 .pgr .k span{min-width:0}
-.pgr .v{display:flex;align-items:center;gap:8px;min-height:24px;padding:2px 8px;border-radius:6px;
-  font-size:14px;line-height:16px;color:var(--color-content-primary);min-width:0;flex-wrap:wrap}
+.pgr .v{display:flex;align-items:center;gap:8px;min-height:var(--size-control-md);
+  max-width:var(--property-grid-property-value-max-width);padding:2px 8px;
+  border-radius:var(--x-clickup-radii-3);
+  font-size:var(--property-grid-property-value-font-size);line-height:16px;
+  color:var(--color-content-primary);min-width:0;flex-wrap:wrap}
 .pgr .v:hover{background:var(--color-bg-hover)}
 /* The dash is the value, not decoration, so it reads at the text bar. */
 .pgr .v.empty{color:var(--color-content-secondary)}
@@ -937,7 +943,8 @@ svg use{pointer-events:none}
    padding 0 4, 11/13.2), which already sits on the token scale. */
 .pgr .v{flex-wrap:wrap}
 .rel{display:inline-flex;align-items:center;gap:4px;max-width:136px;height:20px;
-  border:1px solid var(--color-border-default);border-radius:6px;padding:0 4px;background:var(--color-bg-surface);
+  border:1px solid var(--color-border-default);border-radius:var(--x-clickup-radii-3);
+  padding:0 4px;background:var(--color-bg-surface);
   font-family:var(--ui);font-size:11px;line-height:16px;color:var(--color-content-primary);cursor:pointer;
   overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-width:0}
 .rel:hover{border-color:var(--x-clickup-color-border-primary-low-contrast);color:var(--x-clickup-color-background-primary-pressed);background:var(--color-bg-primary-subtle)}
