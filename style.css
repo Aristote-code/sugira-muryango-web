@@ -439,6 +439,28 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mr b.s1{background:#3A2236}:root:not([data-theme="light"]) .mr b.s2{background:#6B3360}}
 :root[data-theme="dark"] .mr b.s1{background:#3A2236}:root[data-theme="dark"] .mr b.s2{background:#6B3360}
 .rk{display:grid;gap:8px}
+/* Place comparison. One row per place, the bar neutral and the accent kept for
+   the place the reader is being pointed at — the leader or the laggard. */
+/* Row actions. Quiet links, not buttons — a table of buttons reads as a toolbar
+   per row and drowns the data the row is actually for. */
+.rowacts{white-space:nowrap}
+.rowacts a{display:inline-block;margin-right:12px;font-size:13px;color:var(--link);cursor:pointer}
+.rowacts a:last-child{margin-right:0}
+.rowacts a:hover{text-decoration:underline}
+/* A video preview is the one dark surface in the app: it is standing in for
+   the frame itself, not for a panel. */
+.vprev{display:flex;align-items:center;justify-content:center;gap:8px;height:200px;
+  border-radius:var(--r-ctl);background:var(--g1100);color:#fff;font-size:13px}
+.vprev svg{width:32px;height:32px;fill:currentColor}
+.cmp{display:grid;gap:12px;margin-top:16px}
+.cmpr{display:grid;grid-template-columns:96px minmax(0,1fr) 56px 40px;gap:12px;align-items:center;
+  font-size:13px;color:var(--ink-2)}
+.cmpl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmpb{height:8px;border-radius:4px;background:var(--tint-2);overflow:hidden}
+.cmpb i{display:block;height:100%;background:var(--g700);border-radius:4px}
+.cmpr.lead .cmpb i{background:var(--b500)}
+.cmpr b{font-weight:600;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.cmpr em{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--ink-3);text-align:right}
 .rkr{display:grid;grid-template-columns:1.1rem 1fr auto;gap:12px;align-items:baseline;font-size:.875rem;color:var(--ink-2)}
 .rkr em{font-style:normal;font-size:.75rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .rkr b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
@@ -508,7 +530,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .pg{display:grid;margin-top:16px}
 @media (min-width:1360px){.pg{grid-template-columns:1fr 1fr;column-gap:40px}}
 .dw-body .pg,.dw.as-sidebar .pg{grid-template-columns:1fr}
-.pgr{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:center;min-height:32px;gap:6px}
+.pgr{display:grid;grid-template-columns:160px minmax(0,1fr);align-items:center;min-height:32px;gap:6px}
 .pgr .k{display:flex;align-items:center;gap:6px;font-size:14px;line-height:16px;color:var(--ink-3);min-width:0}
 .pgr .k svg{width:16px;height:16px;flex:none;fill:none;color:var(--ink-4)}
 .pgr .k span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

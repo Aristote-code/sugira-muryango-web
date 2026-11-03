@@ -121,12 +121,31 @@
             '<div><label for="f-tell">Who is told</label><select id="f-tell" disabled><option>The sector lead, and the home visitor who raised the flag</option></select></div>',
       done: 'Request sent to C. Uwimana — recorded in the audit trail'
     },
-    note: {
-      title: 'Add a note',
-      ok: 'Save note',
-      body: '<div><label for="f-note">Note</label><textarea id="f-note" placeholder="What should the next visitor know?"></textarea></div>' +
-            '<div><label for="f-vis">Who can see it</label><select id="f-vis"><option>This household’s team</option><option>Supervisors only</option><option>Everyone with access to the sector</option></select></div>',
-      done: 'Note saved to HH-1007'
+    vprev: {
+      title: 'Playing with everyday objects',
+      ok: 'Open the full video',
+      body: '<div class="vprev"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg><span>4 min 12 s</span></div>' +
+            '<div class="kv"><div><div class="k">For</div><div class="v" style="font-size:14px">Session 3 \u2014 Building Early Communication Skills</div></div>' +
+            '<div><div class="k">Languages</div><div class="v" style="font-size:14px">EN \u00b7 RW</div></div>' +
+            '<div><div class="k">Visible to</div><div class="v" style="font-size:14px">Everyone</div></div>' +
+            '<div><div class="k">Opened</div><div class="v" style="font-size:14px">1 204 times</div></div></div>',
+      done: 'Opening the full video'
+    },
+    upd: {
+      title: 'Add an update',
+      ok: 'Save update',
+      body: '<div><label for="f-ud">Date</label><input id="f-ud" type="date" value="2026-11-03"></div>' +
+            '<div><label for="f-us">Status</label><select id="f-us"><option>Active</option><option>Stabilised</option></select></div>' +
+            '<div><label for="f-uc">Update</label><textarea id="f-uc" placeholder="What has changed since the last update?"></textarea></div>',
+      done: 'Update added'
+    },
+    refer: {
+      title: 'Record a follow-up',
+      ok: 'Save follow-up',
+      body: '<div><label for="f-rd">Date</label><input id="f-rd" type="date" value="2026-11-03"></div>' +
+            '<div><label for="f-ro">Outcome</label><select id="f-ro"><option>Seen at the health centre</option><option>Did not attend</option><option>Referred on</option><option>Closed — stabilised</option></select></div>' +
+            '<div><label for="f-rn">What came back</label><textarea id="f-rn" placeholder="What the referral found, in the referrer’s words"></textarea></div>',
+      done: 'Follow-up recorded on RF-0112'
     },
     visit: {
       title: 'Log a visit',
@@ -544,6 +563,10 @@
   // ---- anything carrying data-go routes ----
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-go]');
+    // A control inside a clickable row belongs to the control, not the row —
+    // otherwise an Edit button in a table row would just open the row.
+    var inner = e.target.closest('[data-modal]');
+    if (t && inner && t !== inner && t.contains(inner)) t = null;
     if (t) {
       // A redacted row is not a link. Nothing behind it is reachable.
       if (t.classList.contains('shut')) return;
