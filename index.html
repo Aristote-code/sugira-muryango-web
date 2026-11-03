@@ -97,6 +97,7 @@
       <ul class="subs" id="g-ad" hidden>
         <li><button class="si" type="button" data-go="people"><span class="tx">People</span><span class="ct">539</span></button></li>
         <li><button class="si" type="button" data-go="roles"><span class="tx">Roles &amp; access</span><span class="ct">10</span></button></li>
+        <li><button class="si" type="button" data-go="permissions"><span class="tx">Permissions</span><span class="ct">112</span></button></li>
         <li><button class="si" type="button" data-go="places"><span class="tx">Places</span></button></li>
         <li><button class="si" type="button" data-go="system"><span class="tx">System</span><span class="ct sig">1</span></button></li>
       </ul>
@@ -1551,19 +1552,17 @@
 
       <!-- ============ PERMISSIONS ============ -->
       <section class="screen" id="s-permissions">
-        <div class="rec">
-          <div class="rec-top">
-            <span class="rec-type"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> Permissions</span>
-            <span class="rec-id">112 in all</span>
-            <span class="acts">
-              <button class="btn sec sm" type="button" data-toast="Changes discarded &mdash; nothing was saved">Discard</button>
-              <button class="btn sm" type="button" data-toast="Saved &mdash; it takes effect the next time they sign in"><svg aria-hidden="true"><use href="#i-check"/></svg> Save</button>
-            </span>
+        <div class="phead">
+          <div class="row">
+            <div><h1>Permissions</h1><p class="sub">One permission is one thing you may do to one object. The eight
+              groups below are how people talk about them; the names inside each group are what the system actually
+              stores. A <b>position</b> grants them in bulk. A <b>person</b> inherits the position and may hold
+              exceptions to it.</p></div>
+            <div class="acts">
+              <button class="btn sec" type="button" data-toast="Changes discarded &mdash; nothing was saved">Discard</button>
+              <button class="btn" type="button" data-toast="Saved &mdash; it takes effect the next time they sign in"><svg aria-hidden="true"><use href="#i-check"/></svg>Save</button>
+            </div>
           </div>
-          <h1>Every permission, and who has it</h1>
-          <p class="rec-desc">One permission is one thing you may do to one object. The eight groups below are
-            how people talk about them; the names inside each group are what the system actually stores. A
-            <b>position</b> grants them in bulk. A <b>person</b> inherits the position and may hold exceptions to it.</p>
         </div>
         <div class="pad"><div id="permBody"></div></div>
       </section>
