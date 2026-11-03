@@ -862,7 +862,7 @@
     var footLabel = foot && foot.querySelector('span:not(.pg)');
     var footText = footLabel ? footLabel.textContent : null;
     var pager = foot && foot.querySelector('.pg');
-    var state = { sort: null, match: 'and', filters: [] };
+    var state = { sort: null, facets: {}, text: {}, range: {}, openCol: null };
 
     /* ---- toolbar ---- */
     var bar = document.createElement('div');
@@ -901,53 +901,165 @@
       [filterBtn, colsBtn].forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
     }
 
-    /* ---- filters ---- */
-    function ops(col) {
-      return col.numeric
-        ? [['eq', 'is'], ['gt', 'more than'], ['lt', 'less than'], ['empty', 'is empty'], ['nempty', 'is not empty']]
-        : [['has', 'contains'], ['eq', 'is'], ['ne', 'is not'], ['empty', 'is empty'], ['nempty', 'is not empty']];
+    /* ---- filters ----
+
+       Deliberately not a query builder. ClickUp's field / operator / value
+       rows with an And / Or match were the wrong shape for this data: nobody
+       reading a visit register wants to say "Outcome is not empty". They want
+       to say Kirehe, not completed, Module 5 — so the popover lists the
+       table's own columns, and each column its own values with a count of
+       what is left if you pick it. Within a column the values are
+       alternatives, across columns they narrow together, and there is no
+       operator to learn. A column with too many values to list takes a search
+       box instead, and a number column a from / to pair. */
+    /* A column is worth listing as values only when those values repeat —
+       eight households across eight rows is not a facet, it is the table
+       again. "Module 5" and "31 Oct" both parse as numbers, so numeric is
+       asked last, and only once a column is too varied to list. */
+    function kindOf(c) {
+      var few = c.options.length > 1 && c.options.length <= 12;
+      var repeats = c.options.length <= Math.max(2, rows.length * 0.75);
+      if (few && repeats) return 'facet';
+      // c.numeric is true for anything a number can be pulled out of, which
+      // sorting wants and a from / to pair does not: "31 Oct" is not a
+      // quantity. A range is offered only for columns of bare numbers.
+      var bare = c.options.filter(function (v) {
+        return /^[-−]?[\d \s.,]+%?$/.test(v.trim());
+      }).length;
+      return bare >= c.options.length * 0.8 ? 'range' : 'text';
     }
+    function chosen(c) {
+      var k = kindOf(c);
+      if (k === 'facet') return (state.facets[c.i] || []).length;
+      if (k === 'text') return (state.text[c.i] || '').trim() ? 1 : 0;
+      var r = state.range[c.i] || {};
+      return (r.min ? 1 : 0) + (r.max ? 1 : 0);
+    }
+    function summary(c) {
+      var k = kindOf(c);
+      if (!chosen(c)) return '';
+      if (k === 'facet') {
+        var sel = state.facets[c.i];
+        return sel.length === 1 ? sel[0] : sel.length + ' chosen';
+      }
+      if (k === 'text') return '“' + state.text[c.i].trim() + '”';
+      var r = state.range[c.i];
+      if (r.min && r.max) return r.min + ' to ' + r.max;
+      return r.min ? 'from ' + r.min : 'up to ' + r.max;
+    }
+    function activeCount() {
+      var n = 0;
+      cols.forEach(function (c) { if (chosen(c)) n++; });
+      return n;
+    }
+
     function drawFilters() {
-      fPop.innerHTML =
-        '<div class="qpop-h"><h4>Filters</h4><button class="x" type="button" aria-label="Close">' + ICON.x + '</button></div>' +
-        '<div class="qmatch"><button type="button" data-m="and">And</button><button type="button" data-m="or">Or</button></div>' +
-        '<div class="qrows"></div>' +
-        '<button class="qadd" type="button">' + ICON.plus + 'Add filter</button>';
-      fPop.querySelector('.x').onclick = shut;
-      fPop.querySelectorAll('.qmatch button').forEach(function (b) {
-        b.classList.toggle('on', b.dataset.m === state.match);
-        b.onclick = function () { state.match = b.dataset.m; drawFilters(); apply(); };
-      });
-      var wrap = fPop.querySelector('.qrows');
-      if (!state.filters.length) wrap.innerHTML = '<p class="qempty">No filters yet. Add one to narrow this table.</p>';
-      state.filters.forEach(function (f, idx) {
-        var col = cols[f.col];
-        var row = document.createElement('div');
-        row.className = 'qrow';
-        var fieldSel = '<select aria-label="Field">' + cols.map(function (c) {
-          return '<option value="' + c.i + '"' + (c.i === f.col ? ' selected' : '') + '>' + c.label + '</option>';
-        }).join('') + '</select>';
-        var opSel = '<select aria-label="Operator">' + ops(col).map(function (o) {
-          return '<option value="' + o[0] + '"' + (o[0] === f.op ? ' selected' : '') + '>' + o[1] + '</option>';
-        }).join('') + '</select>';
-        var val;
-        if (f.op === 'empty' || f.op === 'nempty') val = '<span></span>';
-        else if (col.enumish && !col.numeric) val = '<select aria-label="Value"><option value="">Choose…</option>' + col.options.map(function (o) {
-          return '<option' + (o === f.val ? ' selected' : '') + '>' + o + '</option>';
-        }).join('') + '</select>';
-        else val = '<input type="' + (col.numeric ? 'number' : 'text') + '" aria-label="Value" value="' + (f.val || '').replace(/"/g, '&quot;') + '" placeholder="Value">';
-        row.innerHTML = fieldSel + opSel + val + '<button class="clr" type="button" aria-label="Remove filter">' + ICON.x + '</button>';
-        var sels = row.querySelectorAll('select, input');
-        sels[0].onchange = function () { f.col = +this.value; f.op = ops(cols[f.col])[0][0]; f.val = ''; drawFilters(); apply(); };
-        sels[1].onchange = function () { f.op = this.value; drawFilters(); apply(); };
-        if (sels[2]) sels[2].oninput = sels[2].onchange = function () { f.val = this.value; apply(); };
-        row.querySelector('.clr').onclick = function () { state.filters.splice(idx, 1); drawFilters(); apply(); };
-        wrap.appendChild(row);
-      });
-      fPop.querySelector('.qadd').onclick = function () {
-        state.filters.push({ col: 0, op: ops(cols[0])[0][0], val: '' });
+      fPop.innerHTML = '';
+      var head = document.createElement('div');
+      head.className = 'qpop-h';
+      head.innerHTML = '<h4>Filters</h4>';
+      var clear = document.createElement('button');
+      clear.type = 'button';
+      clear.className = 'qclear';
+      clear.textContent = 'Clear all';
+      clear.hidden = !activeCount();
+      clear.onclick = function (e) {
+        e.stopPropagation();
+        state.facets = {}; state.text = {}; state.range = {};
         drawFilters(); apply();
       };
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'x';
+      x.setAttribute('aria-label', 'Close');
+      x.innerHTML = ICON.x;
+      x.onclick = shut;
+      head.appendChild(clear);
+      head.appendChild(x);
+      fPop.appendChild(head);
+
+      var list = document.createElement('div');
+      list.className = 'qfacets';
+      fPop.appendChild(list);
+
+      cols.forEach(function (c) {
+        if (c.options.length < 2) return;
+        var k = kindOf(c);
+        var open = chosen(c) > 0 || c.i === state.openCol;
+
+        var sec = document.createElement('section');
+        sec.className = 'qf';
+        var h = document.createElement('button');
+        h.type = 'button';
+        h.className = 'qf-h';
+        h.setAttribute('aria-expanded', String(open));
+        h.innerHTML = '<span class="qf-n"></span><span class="qf-s"></span>' +
+          '<svg class="qf-cv" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" ' +
+          'stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        h.querySelector('.qf-n').textContent = c.label;
+        h.querySelector('.qf-s').textContent = summary(c);
+        h.onclick = function (e) { e.stopPropagation(); state.openCol = open ? null : c.i; drawFilters(); };
+        sec.appendChild(h);
+
+        var bd = document.createElement('div');
+        bd.className = 'qf-b';
+        bd.hidden = !open;
+
+        function refresh() {
+          h.querySelector('.qf-s').textContent = summary(c);
+          clear.hidden = !activeCount();
+        }
+
+        if (k === 'facet') {
+          var sel = state.facets[c.i] || [];
+          c.options.forEach(function (v) {
+            var left = 0;
+            rows.forEach(function (r) {
+              if (cellText(r.cells[c.i]) === v && passes(r, c.i)) left++;
+            });
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'qf-v' + (sel.indexOf(v) >= 0 ? ' on' : '') + (left ? '' : ' none');
+            b.innerHTML = '<span class="bx">' + ICON.tick + '</span><span class="qf-t"></span><em></em>';
+            b.querySelector('.qf-t').textContent = v;
+            b.querySelector('em').textContent = left;
+            b.onclick = function (e) {
+              e.stopPropagation();
+              var cur = state.facets[c.i] || [];
+              var at = cur.indexOf(v);
+              if (at >= 0) cur.splice(at, 1); else cur.push(v);
+              state.facets[c.i] = cur;
+              state.openCol = c.i;
+              drawFilters(); apply();
+            };
+            bd.appendChild(b);
+          });
+        } else if (k === 'range') {
+          var r = state.range[c.i] || (state.range[c.i] = { min: '', max: '' });
+          var wrap = document.createElement('div');
+          wrap.className = 'qrange';
+          wrap.innerHTML = '<input type="number" placeholder="From"><span>to</span><input type="number" placeholder="To">';
+          var ins = wrap.querySelectorAll('input');
+          ins[0].setAttribute('aria-label', c.label + ' from');
+          ins[1].setAttribute('aria-label', c.label + ' to');
+          ins[0].value = r.min;
+          ins[1].value = r.max;
+          ins[0].oninput = function () { r.min = this.value; apply(); refresh(); };
+          ins[1].oninput = function () { r.max = this.value; apply(); refresh(); };
+          bd.appendChild(wrap);
+        } else {
+          var inp = document.createElement('input');
+          inp.type = 'text';
+          inp.className = 'qf-q';
+          inp.placeholder = 'Contains…';
+          inp.setAttribute('aria-label', c.label + ' contains');
+          inp.value = state.text[c.i] || '';
+          inp.oninput = function () { state.text[c.i] = this.value; apply(); refresh(); };
+          bd.appendChild(inp);
+        }
+        sec.appendChild(bd);
+        list.appendChild(sec);
+      });
     }
     function drawCols() {
       cPop.innerHTML = '<div class="qcols"></div>';
@@ -981,24 +1093,23 @@
     });
 
     /* ---- apply ---- */
-    function passes(row) {
-      if (!state.filters.length) return true;
-      var results = state.filters.map(function (f) {
-        var col = cols[f.col], txt = cellText(row.cells[col.i]), low = txt.toLowerCase();
-        var v = (f.val || '').toString().trim(), lv = v.toLowerCase();
-        var n = magnitude(txt), fn = parseFloat(v);
-        switch (f.op) {
-          case 'empty':  return !txt || txt === '—';
-          case 'nempty': return !!txt && txt !== '—';
-          case 'has':    return !v || low.indexOf(lv) >= 0;
-          case 'ne':     return !v || low !== lv;
-          case 'gt':     return isNaN(fn) || (n !== null && n > fn);
-          case 'lt':     return isNaN(fn) || (n !== null && n < fn);
-          case 'eq':     return !v || (col.numeric ? (n !== null && n === fn) : low === lv);
-          default:       return true;
+    function passes(row, skip) {
+      for (var n = 0; n < cols.length; n++) {
+        var c = cols[n];
+        if (c.i === skip) continue;
+        var txt = cellText(row.cells[c.i]);
+        var sel = state.facets[c.i];
+        if (sel && sel.length && sel.indexOf(txt) < 0) return false;
+        var q = (state.text[c.i] || '').trim().toLowerCase();
+        if (q && txt.toLowerCase().indexOf(q) < 0) return false;
+        var r = state.range[c.i];
+        if (r && (r.min !== '' || r.max !== '')) {
+          var m = magnitude(txt);
+          if (r.min !== '' && (m === null || m < +r.min)) return false;
+          if (r.max !== '' && (m === null || m > +r.max)) return false;
         }
-      });
-      return state.match === 'and' ? results.every(Boolean) : results.some(Boolean);
+      }
+      return true;
     }
     var empty = null;
     function apply() {
@@ -1033,9 +1144,7 @@
           c.th.querySelector('.ttl').appendChild(b);
         }
       });
-      var active = state.filters.filter(function (f) {
-        return f.op === 'empty' || f.op === 'nempty' || (f.val && String(f.val).trim());
-      }).length;
+      var active = activeCount();
       filterBtn.classList.toggle('on', active > 0);
       filterBtn.innerHTML = ICON.filter + 'Filter' + (active ? '<span class="n">' + active + '</span>' : '');
       var hiddenCols = cols.filter(function (c) { return !c.shown; }).length;

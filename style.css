@@ -742,24 +742,40 @@ svg use{pointer-events:none}
   border-radius:6px;border:0;background:none;cursor:pointer;color:var(--ink-3)}
 .qpop-h .x:hover{background:var(--tint);color:var(--ink)}
 .qpop-h .x svg{width:13px;height:13px;fill:none}
-.qmatch{display:inline-flex;background:var(--tint);border-radius:7px;padding:2px;gap:2px;margin-bottom:8px}
-.qmatch button{border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;font-weight:500;
-  color:var(--ink-3);padding:3px 10px;border-radius:5px}
-.qmatch button.on{background:var(--surface);color:var(--ink);box-shadow:var(--lift)}
-.qrows{display:grid;gap:4px}
-.qrow{display:grid;grid-template-columns:143px 104px minmax(0,1fr) 32px;gap:4px;align-items:center;min-height:32px}
-.qrow select,.qrow input{height:28px;border-radius:7px;border:1px solid var(--g600);background:var(--surface);
-  color:var(--ink);font-family:var(--ui);font-size:14px;line-height:16px;padding:0 7px;min-width:0;width:100%}
-.qrow select:hover,.qrow input:hover{border-color:var(--ink-4)}
-.qrow .clr{width:32px;height:32px;border-radius:8px;border:0;background:none;cursor:pointer;color:var(--ink-3);
-  display:inline-flex;align-items:center;justify-content:center}
-.qrow .clr:hover{background:var(--red-bg);color:var(--red-ink)}
-.qrow .clr svg{width:13px;height:13px;fill:none}
-.qadd{margin-top:8px;display:inline-flex;align-items:center;gap:5px;border:0;background:none;cursor:pointer;
-  font-family:var(--ui);font-size:14px;font-weight:500;color:var(--link);padding:4px 6px;border-radius:6px}
-.qadd:hover{background:var(--b50)}
-.qadd svg{width:13px;height:13px;fill:none}
-.qempty{font-size:14px;color:var(--ink-3);padding:6px 2px 2px}
+.qclear{margin-left:auto;border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;
+  color:var(--link);padding:4px 6px;border-radius:6px}
+.qclear:hover{background:var(--b50)}
+.qclear[hidden]{display:none}
+.qpop-h .qclear+.x{margin-left:0}
+/* One section per column. Shut by default, open when it is carrying a choice,
+   so the popover opens at the size of what you have done rather than the size
+   of what you could do. */
+.qfacets{display:grid;gap:2px;max-height:min(420px,60vh);overflow:auto;margin:0 -4px;padding:0 4px}
+.qf-h{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;padding:0 8px;border:0;
+  background:none;cursor:pointer;border-radius:6px;font-family:var(--ui);font-size:14px;color:var(--ink)}
+.qf-h:hover{background:var(--tint)}
+.qf-n{flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qf-s{font-size:12px;color:var(--ink-3);flex:none;max-width:148px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.qf-cv{width:14px;height:14px;flex:none;color:var(--ink-4);transition:transform .14s ease}
+.qf-h[aria-expanded="true"] .qf-cv{transform:rotate(90deg)}
+.qf-b{display:grid;gap:1px;padding:2px 0 8px 8px}
+.qf-b[hidden]{display:none}
+.qf-v{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px;border-radius:6px;border:0;
+  background:none;cursor:pointer;font-family:var(--ui);font-size:13px;color:var(--ink-2);text-align:left}
+.qf-v:hover{background:var(--tint)}
+.qf-v .bx{width:15px;height:15px;border-radius:4px;border:1px solid var(--g600);flex:none;
+  display:inline-flex;align-items:center;justify-content:center;color:transparent}
+.qf-v.on .bx{background:var(--b500);border-color:var(--b500);color:#fff}
+.qf-v .bx svg{width:9px;height:9px;fill:none}
+.qf-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qf-v em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--ink-3);flex:none}
+.qf-v.none{color:var(--ink-3)}
+.qf-q,.qrange input{height:28px;border-radius:7px;border:1px solid var(--g600);background:var(--surface);
+  font-family:var(--ui);font-size:13px;color:var(--ink);padding:0 8px;width:100%}
+.qf-q:focus,.qrange input:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 3px var(--b100)}
+.qrange{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.qrange span{font-size:12px;color:var(--ink-3)}
 .qcols{display:grid;gap:1px}
 .qcol{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;border:0;background:none;
   cursor:pointer;font-family:var(--ui);font-size:14px;color:var(--ink);text-align:left;width:100%}
