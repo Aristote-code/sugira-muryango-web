@@ -393,9 +393,12 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .tip b{color:var(--color-content-inverse);font-weight:600}
 
 /* ---------------- chips ---------------- */
-.chip{display:inline-flex;align-items:center;gap:4px;min-height:20px;padding:2px 6px 2px 4px;
-  font-size:12px;line-height:var(--lh-16);font-weight:500;letter-spacing:0;
-  border-radius:var(--x-clickup-radii-3);background:var(--x-clickup-color-background-on-main-hover);color:var(--color-content-secondary);white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:2px;min-height:var(--status-pill-height);
+  padding:2px 6px 2px 4px;font-size:var(--status-pill-font-size);
+  line-height:var(--status-pill-line-height);font-weight:500;
+  border-radius:var(--status-pill-radius);
+  background:var(--x-clickup-color-background-on-main-hover);
+  color:var(--color-content-secondary);white-space:nowrap}
 .chip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
 .chip.ok{background:var(--color-bg-success-subtle);color:var(--color-content-success)}
 .chip.warn{background:var(--color-bg-warning-subtle);color:var(--color-content-warning)}
@@ -664,6 +667,9 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dw-ico[hidden]{display:none}
 .dw-ico.go-right{margin-left:auto}
 .dw-split{flex:1;min-height:0;display:flex}
+.dw-body .rec{padding:32px var(--task-modal-padding-x) 0}
+.dw-body .pad{padding-inline:var(--task-modal-padding-x)}
+@media (max-width:1100px){.dw-body .rec,.dw-body .pad{padding-inline:24px}}
 .dw-body .tab[data-panel="relations"],.dw-body [data-panelid="relations"]{display:none}
 .dw-body{flex:1;min-width:0;min-height:0;overflow:auto;background:var(--color-bg-surface);
   overscroll-behavior:contain}
@@ -726,13 +732,18 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dws-rn{font-size:14px;line-height:16px;font-weight:500;color:var(--color-content-primary);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.dws-empty{padding:48px 16px;text-align:center}
+.dws-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;padding:48px 16px;text-align:center}
 .dws-sq{display:flex;align-items:center;justify-content:center;width:56px;height:56px;
   margin:0 auto 16px;border-radius:var(--radius-xl);background:var(--color-bg-surface);
   box-shadow:var(--elevation-raised);color:var(--color-content-tertiary)}
 .dws-sq svg{width:24px;height:24px;fill:currentColor}
-.dws-et{font-size:18px;line-height:24px;font-weight:500;color:var(--color-content-primary)}
-.dws-ed{margin-top:6px;font-size:14px;line-height:21px;color:var(--color-content-secondary)}
+.dws-et{font-size:var(--surface-empty-title-font-size);
+  line-height:var(--surface-empty-title-line-height);font-weight:500;
+  color:var(--color-content-primary)}
+.dws-ed{margin-top:8px;max-width:var(--surface-empty-description-max-width);
+  font-size:var(--surface-empty-description-font-size);line-height:20px;
+  color:var(--color-content-secondary)}
 
 /* Composer: docked, white, 1px border.default, r10, elevation-1. */
 .dws-comp{background:var(--color-bg-surface);border:1px solid var(--color-border-default);
