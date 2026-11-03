@@ -172,7 +172,7 @@
     var bits = [where === 'Rwanda' ? 'All five districts' : where];
     if (cohort) bits.push('Cohort ' + cohort);
     bits.push(period);
-    var sub = document.querySelector('#s-dashboard .phead .sub');
+    var sub = document.querySelector('#s-dashboard .pbar .sub');
     if (sub) {
       if (!sub.dataset.base) sub.dataset.base = sub.textContent;
       sub.textContent = bits.join(' · ') +

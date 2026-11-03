@@ -912,7 +912,17 @@
       '<button class="tq-btn" type="button" data-q="cols" aria-expanded="false">' + ICON.cols + 'Columns</button>' +
       '<span class="tq-sp"><span class="tq-count"></span>' +
       '<button class="tq-btn" type="button" data-q="export">' + ICON.down + 'Export</button></span>';
-    host.parentNode.insertBefore(bar, host);
+    /* ClickUp gives a view one toolbar, not two. Where the screen already
+       writes a filter row above the table, these controls join it (the class
+       makes the wrapper display:contents, so they become its own children)
+       rather than opening a second band of chrome. */
+    var fRow = host.previousElementSibling;
+    if (fRow && fRow.classList.contains('filters')) {
+      bar.className = 'tq tq-in';
+      fRow.appendChild(bar);
+    } else {
+      host.parentNode.insertBefore(bar, host);
+    }
 
     var filterBtn = bar.querySelector('[data-q="filter"]');
     var colsBtn = bar.querySelector('[data-q="cols"]');
