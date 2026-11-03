@@ -771,19 +771,22 @@ svg use{pointer-events:none}
 .pm-gb{padding:0 0 20px 26px}
 .pm-gb[hidden]{display:none}
 .pm-blurb{font-size:13px;color:var(--ink-3);max-width:76ch;margin-bottom:12px}
-.pm-o{margin-bottom:12px}
-.pm-oh{display:flex;align-items:center;gap:8px;min-height:28px}
-.pm-on{font-family:var(--mono);font-size:12px;color:var(--ink-2);font-weight:500}
-.pm-note{font-size:12px;color:var(--ink-3)}
-.pm-r{display:grid;grid-template-columns:minmax(0,1fr) 72px 136px 36px;gap:12px;align-items:center;
-  min-height:32px;padding:0 8px;border-radius:6px}
-.pm-r:hover{background:var(--tint)}
-.pm-r.is-exc{background:var(--amber-bg)}
-.pm-rn{display:flex;align-items:center;gap:8px;min-width:0}
-.pm-rn code{font-size:12px;background:none;padding:0;color:var(--ink)}
-.pm-rv{font-size:13px;color:var(--ink-2)}
-.pm-rs{font-size:12px;color:var(--ink-3);text-align:right}
-.pm-r.is-exc .pm-rs{color:var(--amber-ink);font-weight:500}
+/* The matrix. Permissions down, positions across, a switch in each cell —
+   ClickUp's own Security & Permissions shape. The definition column is the
+   widest thing on the row because it is the column that was missing. */
+/* Eight positions plus a definition will not fit a drawer, and squeezing the
+   definition to fit defeats the column. The wrap scrolls instead. */
+.pm-t{table-layout:auto;min-width:940px}
+.pm-t th.a,.pm-t td.a{text-align:center;width:64px}
+.pm-t td.nm{vertical-align:top;padding-top:12px}
+.pm-t td.nm code{font-size:12px;background:none;padding:0;color:var(--ink);display:block}
+.pm-what{min-width:300px;max-width:46ch;font-size:13px;color:var(--ink-2);line-height:1.45}
+.pm-what span{display:block}
+.pm-risk{margin-top:4px;color:var(--amber-ink);font-weight:500}
+.pm-note{display:block;margin-top:2px;font-size:12px;color:var(--ink-3);font-family:var(--ui)}
+.pm-t tr.is-exc{background:var(--amber-bg)}
+.pm-me{background:var(--tint)}
+.pm-t .tg{margin:0 auto}
 .pm-none{font-size:14px;color:var(--ink-3);padding:16px 0}
 /* The switch. Reads as on or off at a glance and never as a checkbox, because
    a checkbox in a list of 112 says "tick the ones you want" rather than
@@ -797,6 +800,9 @@ svg use{pointer-events:none}
 .tg.some{background:var(--b200);border-color:var(--b400)}
 .tg.some .tg-k{transform:translateX(7px)}
 .tg:focus-visible{outline:2px solid var(--b500);outline-offset:2px}
+.tg.ro{cursor:default;opacity:.72}
+.tg.ro:hover{background:var(--g300)}
+.tg.ro.on:hover{background:var(--b500)}
 .qclear{border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;
   color:var(--link);padding:4px 6px;border-radius:6px}
 .qclear:hover{background:var(--b50)}
