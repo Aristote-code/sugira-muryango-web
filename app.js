@@ -232,9 +232,33 @@
       ok: 'Publish',
       body: '<div><label for="f-pw">What</label><select id="f-pw"><option>A video</option><option>A document</option><option>An FAQ answer</option></select></div>' +
             '<div><label for="f-pt">Title</label><input id="f-pt" type="text" placeholder="e.g. Recognising signs of harm"></div>' +
+            '<div><label for="f-pf">File</label><input id="f-pf" type="file"></div>' +
+            '<p class="mhint">MP4 or PDF, up to 200 MB. A video is re-encoded for the tablet, which takes a few minutes after you publish.</p>' +
+            '<div><label for="f-pd">Folder</label><select id="f-pd"><option>Using the tablet</option><option>Safeguarding</option><option>Session guidance</option><option>Forms and reporting</option><option>New folder\u2026</option></select></div>' +
+            '<div><label for="f-pl">Language</label><select id="f-pl"><option>Kinyarwanda</option><option>English</option><option>Both</option></select></div>' +
             '<div><label for="f-pv">Visible to</label><select id="f-pv"><option>Everyone</option><option>Home visitors</option><option>Supervisors and above</option><option>Social workers only</option></select></div>' +
-            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">Visibility reads from the same roles as Roles &amp; access.</p>',
+            '<p class="mhint">Visibility reads from the same roles as Roles &amp; access.</p>',
       done: 'Published \u2014 it appears on the tablet at the next sync'
+    },
+    vedit: {
+      title: 'Edit this item',
+      ok: 'Save changes',
+      body: '<div><label for="f-et">Title</label><input id="f-et" type="text" value="Playing with everyday objects"></div>' +
+            '<div><label for="f-ef">Replace the file</label><input id="f-ef" type="file"></div>' +
+            '<p class="mhint">Leave empty to keep the file that is published now.</p>' +
+            '<div><label for="f-ed">Folder</label><select id="f-ed"><option>Using the tablet</option><option>Safeguarding</option><option>Session guidance</option><option>Forms and reporting</option></select></div>' +
+            '<div><label for="f-el">Language</label><select id="f-el"><option>Kinyarwanda</option><option>English</option><option selected>Both</option></select></div>' +
+            '<div><label for="f-ev">Visible to</label><select id="f-ev"><option>Everyone</option><option selected>Home visitors</option><option>Supervisors and above</option><option>Social workers only</option></select></div>',
+      done: 'Saved \u2014 the tablet picks it up at the next sync'
+    },
+    vdelete: {
+      title: 'Delete this item?',
+      ok: 'Delete',
+      danger: true,
+      body: '<p>It is removed from every tablet at the next sync. Anyone part-way through watching it loses their place.</p>' +
+            '<p class="mhint">Deleted items are recoverable for 30 days from System \u203A Data maintenance. After that they are gone.</p>' +
+            '<div><label for="f-dw">Why it is being removed</label><input id="f-dw" type="text" placeholder="Recorded against your name in the activity log"></div>',
+      done: 'Deleted \u2014 recoverable for 30 days'
     },
     access: {
       title: 'Change access for C. Uwimana',
@@ -828,6 +852,7 @@
     mTitle.textContent = def.title;
     mBody.innerHTML = def.body;
     mOk.textContent = def.ok;
+    mOk.classList.toggle('danger', !!def.danger);
     scrim.hidden = false;
     // Build the custom controls before choosing what to focus. A <select> is
     // now visually hidden behind its own trigger, so focusing the first
