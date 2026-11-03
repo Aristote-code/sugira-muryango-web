@@ -321,14 +321,14 @@
     ROLES.forEach(function (r) {
       var mine = state.mode === 'person' && r.name === state.role;
       var th = el('th', 'a' + (mine ? ' pm-me' : ''));
-      th.title = r.name + (mine ? ' — the position ' + state.who + ' holds' : '');
+      th.setAttribute('data-tip', r.name + (mine ? ' \u2014 the position ' + state.who + ' holds' : ''));
       th.appendChild(el('span', 'pm-rid', r.id));
       th.appendChild(el('span', 'pm-rn2', ALL.filter(function (p) { return granted(r, p); }).length + ''));
       hr.appendChild(th);
     });
     if (state.mode === 'person') {
       var me = el('th', 'a pm-me2');
-      me.title = state.who;
+      me.setAttribute('data-tip', state.who + ' \u2014 what this person holds, including any exception');
       me.appendChild(el('span', 'pm-rid', state.who.split(' ').pop()));
       me.appendChild(el('span', 'pm-rn2', ALL.filter(effective).length + ''));
       hr.appendChild(me);

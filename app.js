@@ -1376,7 +1376,7 @@
   }
 
   function mark(e) {
-    return e.target && e.target.closest ? e.target.closest('.ihelp[data-tip]') : null;
+    return e.target && e.target.closest ? e.target.closest('[data-tip]') : null;
   }
 
   document.addEventListener('mouseover', function (e) {
@@ -1391,8 +1391,10 @@
   document.addEventListener('click', function (e) {
     var b = mark(e);
     if (!b) { hide(); return; }
-    /* the mark often sits inside a clickable title, and asking what
-       something is should not also open it */
+    /* The info mark is only there to be asked, so a click on it is the
+       question and nothing else. Anything else carrying a tip — a column
+       head, an abbreviation — still does its own job when clicked. */
+    if (!b.classList.contains('ihelp')) { hide(); return; }
     e.preventDefault();
     e.stopPropagation();
     if (b === owner) hide(); else show(b);
@@ -1400,4 +1402,66 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
   window.addEventListener('scroll', hide, true);
   window.addEventListener('resize', hide);
+})();
+
+/* ==================== table name cells and bare numbers ====================
+   Two things the tables were getting wrong.
+
+   A column headed Cohort held "1". On its own that is not a name, it is a
+   digit, and in a row of other digits it reads as a measurement. It says
+   "Cohort 1" now, which is what people call it.
+
+   And the first cell of a table is the thing itself, so it gets the mark for
+   what kind of thing it is — the system's HubNameCell is a 16px icon, 8 from
+   a 14/16 500 name. The mark is decorative: filtering and sorting read the
+   cell's text, which has not changed. */
+(function () {
+  'use strict';
+
+  var KIND = {
+    's-households': 'i-households', 's-household': 'i-visits', 's-visits': 'i-visits',
+    's-safeguarding': 'i-safeguarding', 's-people': 'i-admin', 's-places': 'i-location',
+    's-reports': 'i-reports', 's-programme': 'i-programme', 's-project': 'i-programme',
+    's-module': 'i-reports', 's-cohorts': 'i-visits', 's-translations': 'i-message',
+    's-followups': 'i-clock', 's-community': 'i-message', 's-izu': 'i-admin',
+    's-field': 'i-admin', 's-roles': 'i-admin', 's-content': 'i-support'
+  };
+
+  /* Only columns whose heading names a thing. "Minutes" and "Likes" are
+     quantities and are left alone. */
+  var NAMES_A_THING = { cohort: 'Cohort' };
+
+  function decorate(table) {
+    var screen = table.closest('.screen');
+    var icon = screen && KIND[screen.id];
+    var heads = Array.prototype.map.call(table.querySelectorAll('thead th'),
+      function (h) { return h.textContent.trim().toLowerCase(); });
+
+    Array.prototype.forEach.call(table.querySelectorAll('tbody tr'), function (tr) {
+      Array.prototype.forEach.call(tr.children, function (td, i) {
+        var word = NAMES_A_THING[heads[i]];
+        if (word && /^\d{1,3}$/.test(td.textContent.trim())) {
+          td.textContent = word + ' ' + td.textContent.trim();
+        }
+      });
+      var first = tr.children[0];
+      if (!icon || !first || first.querySelector('svg') || !first.textContent.trim()) return;
+      var mark = document.createElement('span');
+      mark.className = 'cellmark';
+      mark.setAttribute('aria-hidden', 'true');
+      mark.innerHTML = '<svg><use href="#' + icon + '"/></svg>';
+      first.insertBefore(mark, first.firstChild);
+      first.classList.add('hasmark');
+    });
+  }
+
+  function init() {
+    Array.prototype.forEach.call(document.querySelectorAll('table.tbl'), function (t) {
+      if (t.dataset.celled) return;
+      t.dataset.celled = '1';
+      try { decorate(t); } catch (e) { /* one odd table must not stop the rest */ }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
