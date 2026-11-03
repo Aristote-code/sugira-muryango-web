@@ -208,7 +208,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .search{display:flex;align-items:center;gap:6px;height:var(--size-control-xs);background:var(--color-bg-surface);border:1px solid var(--color-border-default);
   border-radius:var(--x-clickup-radii-3);padding:0 8px;min-width:180px;flex:1;max-width:300px}
 .search svg{width:14px;height:14px;color:var(--x-clickup-color-content-placeholder);fill:none;flex:none}
-.search input{border:0;background:none;outline:none;font-family:inherit;font-size:12px;color:var(--color-content-primary);width:100%;min-width:0}
+.search input{height:100%;border:0;background:none;outline:none;font-family:inherit;font-size:12px;color:var(--color-content-primary);width:100%;min-width:0}
 .search input::placeholder{color:var(--x-clickup-color-content-placeholder)}
 .seg{display:inline-flex;height:var(--size-control-md);background:var(--x-clickup-color-background-on-main);border-radius:var(--x-clickup-radii-3-5);padding:2px;gap:2px}
 .seg button{border:0;background:none;cursor:pointer;height:var(--size-control-sm);padding:0 8px;font-size:14px;
@@ -430,7 +430,8 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .al.is-shut{padding-bottom:0}
 .al-hd{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;cursor:pointer;
   color:var(--color-content-danger);font-family:var(--ui);font-weight:600;font-size:14px;
-  padding:12px 12px;text-align:left;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+  min-height:var(--size-control-lg);padding:10px 12px;text-align:left;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0}
 .al-hd:hover{background:var(--color-bg-hover)}
 .al-hd:focus-visible{outline:2px solid var(--color-content-danger);outline-offset:-3px}
 .al-hd svg{width:17px;height:17px;flex:none;fill:none}
@@ -519,8 +520,7 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .tbl tbody tr:last-child td{border-bottom:0}
 .tbl .num{font-variant-numeric:tabular-nums;text-align:right}
 .tbl .nm{font-weight:500;color:var(--color-content-primary)}
-.tbl td.hasmark{display:flex;align-items:center;gap:8px}
-.cellmark{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;color:var(--color-content-tertiary)}
+.cellmark{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px;color:var(--color-content-tertiary)}
 .cellmark svg{width:16px;height:16px;fill:none}
 
 .tbl .mut{color:var(--color-content-secondary)}
@@ -834,7 +834,7 @@ svg use{pointer-events:none}
 .pm .hint{display:block;font-size:12px;font-weight:400;color:var(--color-content-secondary);margin-top:2px}
 .pm tr.guarded td{background:var(--color-bg-danger-subtle)}
 .pm tr.guarded .obj{color:var(--color-content-danger)}
-.tick{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;
+.tick{display:inline-flex;align-items:center;justify-content:center;width:var(--size-control-xs);height:var(--size-control-xs);border-radius:var(--x-clickup-radii-3);
   border:1px solid var(--color-border-default);background:var(--color-bg-surface);cursor:pointer;color:transparent}
 .tick svg{width:13px;height:13px;fill:none}
 .tick.on{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default);color:var(--color-content-on-primary)}
