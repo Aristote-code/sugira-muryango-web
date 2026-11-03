@@ -254,6 +254,22 @@
     body_.appendChild(rail);
 
     show('activity');
+
+    /* TaskModal's panel has a collapsed state, and the collapse button is the
+       first thing in the rail, because the panel does not fit every layout.
+       The sidebar layout is 70vw capped at 980; take 420 for the panel and
+       the record is left with 559, which is narrower than its own property
+       grid wants. So the panel opens where there is room for both and waits
+       in the rail where there is not. */
+    var panel = document.querySelector('.dw-panel');
+    var room = panel ? panel.getBoundingClientRect().width : 0;
+    var side_ = document.getElementById('dwSide');
+    var tight = room - side_.getBoundingClientRect().width < 820;
+    if (tight) {
+      side_.hidden = true;
+      collapse.classList.add('shut');
+      collapse.setAttribute('aria-label', 'Show the panel');
+    }
   }
 
   document.addEventListener('drawer:render', function (e) {
