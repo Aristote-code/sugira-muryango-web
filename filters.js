@@ -77,6 +77,7 @@
     cohort:   { all: 'All',         options: ['1', '2', '3', '4'] },
     period:   { all: 'This cohort', options: ['This week', 'This month', 'This cohort', 'All time'] },
     date:     { all: 'All',         options: ['Today', 'This week', 'This month', 'This year', 'Date range…'] },
+    form:     { all: 'Any',         options: ['Visit record', 'Caregiver observation', 'Supervisor spot-check', 'Enrollment form', 'Risk of harm report'] },
     status:   { all: 'Any',         options: ['Active', 'Behind', 'Complete', 'Overdue', 'Invited'] },
     module:   { all: 'Any',         options: SESSIONS },
     role:     { all: 'Any',         options: ROLES },
