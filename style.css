@@ -732,25 +732,25 @@ svg use{pointer-events:none}
 
 /* popovers */
 .qpop{position:absolute;z-index:var(--z-pop);background:var(--surface);border-radius:12px;
-  box-shadow:var(--lift-overlay);border:1px solid var(--line);padding:15px;
-  width:min(640px,calc(100vw - 2rem));max-height:min(70vh,520px);overflow:auto}
+  box-shadow:var(--lift-overlay);border:1px solid var(--line);padding:12px;
+  width:max-content;min-width:240px;max-width:min(360px,calc(100vw - 32px));
+  max-height:min(70vh,520px);overflow:hidden auto}
 .qpop.narrow{width:min(280px,calc(100vw - 2rem));padding:8px;border-radius:8px}
 .qpop[hidden]{display:none!important}
 .qpop-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.qpop-h h4{font-size:14px;line-height:16px;font-weight:500;color:var(--ink)}
-.qpop-h .x{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+.qpop-h h4{flex:1;min-width:0;font-size:14px;line-height:16px;font-weight:500;color:var(--ink)}
+.qpop-h .x{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
   border-radius:6px;border:0;background:none;cursor:pointer;color:var(--ink-3)}
 .qpop-h .x:hover{background:var(--tint);color:var(--ink)}
 .qpop-h .x svg{width:13px;height:13px;fill:none}
-.qclear{margin-left:auto;border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;
+.qclear{border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;
   color:var(--link);padding:4px 6px;border-radius:6px}
 .qclear:hover{background:var(--b50)}
 .qclear[hidden]{display:none}
-.qpop-h .qclear+.x{margin-left:0}
 /* One section per column. Shut by default, open when it is carrying a choice,
    so the popover opens at the size of what you have done rather than the size
    of what you could do. */
-.qfacets{display:grid;gap:2px;max-height:min(420px,60vh);overflow:auto;margin:0 -4px;padding:0 4px}
+.qfacets{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;max-height:min(420px,60vh);overflow:hidden auto;margin:0 -4px;padding:0 4px}
 .qf-h{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;padding:0 8px;border:0;
   background:none;cursor:pointer;border-radius:6px;font-family:var(--ui);font-size:14px;color:var(--ink)}
 .qf-h:hover{background:var(--tint)}
@@ -759,7 +759,7 @@ svg use{pointer-events:none}
   text-overflow:ellipsis;white-space:nowrap}
 .qf-cv{width:14px;height:14px;flex:none;color:var(--ink-4);transition:transform .14s ease}
 .qf-h[aria-expanded="true"] .qf-cv{transform:rotate(90deg)}
-.qf-b{display:grid;gap:1px;padding:2px 0 8px 8px}
+.qf-b{display:grid;grid-template-columns:minmax(0,1fr);gap:1px;padding:2px 0 8px 8px}
 .qf-b[hidden]{display:none}
 .qf-v{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px;border-radius:6px;border:0;
   background:none;cursor:pointer;font-family:var(--ui);font-size:13px;color:var(--ink-2);text-align:left}
