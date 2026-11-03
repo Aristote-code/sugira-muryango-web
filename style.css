@@ -376,11 +376,12 @@ h1 .ihelp,h2 .ihelp,h3 .ihelp{margin-left:6px}
 abbr[data-tip]{text-decoration:underline dotted;text-underline-offset:3px;text-decoration-color:var(--color-content-tertiary);cursor:help}
 abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .pm-t thead th.a[data-tip]{cursor:help}
-.tip{position:absolute;z-index:var(--z-pop);max-width:min(360px,calc(100vw - 32px));
-  padding:8px 12px;border-radius:var(--x-clickup-radii-3);background:var(--color-bg-surface);color:var(--color-content-secondary);
-  font-size:12px;line-height:18px;box-shadow:var(--elevation-overlay);pointer-events:none}
+.tip{position:absolute;z-index:var(--z-tooltip);max-width:min(360px,calc(100vw - 32px));
+  padding:8px 12px;border-radius:var(--x-clickup-radii-3);
+  background:var(--x-clickup-color-background-tooltip);color:var(--color-content-inverse);
+  font-size:12px;line-height:18px;pointer-events:none}
 .tip[hidden]{display:none}
-.tip b{color:var(--color-content-primary);font-weight:600}
+.tip b{color:var(--color-content-inverse);font-weight:600}
 
 /* ---------------- chips ---------------- */
 .chip{display:inline-flex;align-items:center;gap:4px;min-height:20px;padding:2px 6px 2px 4px;
@@ -633,7 +634,7 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dw[hidden]{display:none}
 .dw{position:fixed;inset:0;z-index:var(--z-drawer);display:flex;justify-content:flex-end}
 .dw-scrim{position:absolute;inset:0;background:var(--color-bg-overlay);animation:dw-fade 120ms ease-out}
-.dw-panel{position:relative;width:100%;max-width:min(1240px,94vw);background:var(--color-bg-surface);
+.dw-panel{position:relative;width:70vw;max-width:var(--task-modal-max-width);background:var(--color-bg-surface);
   border-left:1px solid var(--color-border-default);box-shadow:var(--elevation-modal);
   display:flex;flex-direction:column;min-height:0;animation:dw-in 180ms cubic-bezier(.32,.72,0,1)}
 @keyframes dw-in{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
@@ -660,18 +661,29 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 
 /* The second pane: 560 in the task view, 400 here because this drawer is
    narrower than their modal. Subtle ground, so the record stays the white one. */
-.dw-side{width:400px;flex:none;min-height:0;display:flex;flex-direction:column;
-  background:var(--color-bg-canvas);border-left:1px solid var(--color-border-subtle)}
+.dw-side{width:var(--task-modal-activity-panel-width);flex:none;min-height:0;display:flex;
+  flex-direction:column;background:var(--x-clickup-color-background-main-dark);
+  border-left:1px solid var(--color-border-default)}
 @media (max-width:1100px){.dw-side{display:none}}
-.dws-head{height:49px;flex:none;display:flex;align-items:center;padding:0 12px;
-  border-bottom:1px solid var(--color-border-subtle)}
-.dws-tabs{display:flex;align-items:center;gap:2px}
-.dws-tab{height:var(--size-control-xs);padding:0 8px;border:0;background:none;
-  border-radius:var(--x-clickup-view-tab-radius);font:inherit;font-size:14px;line-height:16px;
-  font-weight:600;color:var(--color-content-secondary);cursor:pointer}
-.dws-tab:hover{background:var(--x-clickup-color-background-on-main);color:var(--color-content-primary)}
-.dws-tab.on{color:var(--color-content-primary);background:var(--color-bg-surface);
-  box-shadow:var(--elevation-raised)}
+.dws-head{height:var(--task-modal-height);flex:none;display:flex;align-items:center;
+  padding:0 20px 0 16px;border-bottom:1px solid var(--color-border-subtle)}
+.dws-title{flex:1;font-size:14px;line-height:16px;font-weight:600;
+  color:var(--color-content-primary)}
+.dw-body{position:relative}
+.dws-rail{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;
+  align-items:center;gap:2px;z-index:1}
+.dws-rb{display:flex;align-items:center;justify-content:center;
+  width:var(--size-control-sm);height:var(--size-control-sm);padding:0;border:0;background:none;
+  border-radius:var(--radius-md);color:var(--color-content-secondary);cursor:pointer}
+.dws-rb:hover{background:var(--x-clickup-color-background-on-main);
+  color:var(--color-content-primary)}
+.dws-rb[aria-pressed="true"]{background:var(--x-clickup-color-background-on-main);
+  color:var(--color-content-primary)}
+.dws-rb:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.dws-rb svg{width:16px;height:16px;fill:none}
+.dws-rb.fill svg{fill:currentColor;stroke:none}
+.dws-rb.shut svg{transform:rotate(180deg)}
+.dw-side[hidden]{display:none}
 .dws-body{flex:1;min-height:0;overflow:auto;padding:12px}
 .dws-foot{flex:none;padding:12px;border-top:1px solid var(--color-border-subtle)}
 
@@ -779,8 +791,8 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dw-layout button[aria-pressed="true"]{background:var(--color-bg-surface);color:var(--color-content-primary);box-shadow:var(--elevation-raised)}
 .dw-layout svg{width:18px;height:12px}
 .dw-ico.go-right{margin-left:4px}
-.dw.as-modal{align-items:center;justify-content:center;padding:24px}
-.dw.as-modal .dw-panel{max-width:1392px;width:100%;height:100%;border-radius:12px;border-left:0;
+.dw.as-modal{align-items:center;justify-content:center;padding:var(--layout-panel-task-modal-inset)}
+.dw.as-modal .dw-panel{max-width:none;width:100%;height:100%;border-radius:var(--modal-surface-radius);border-left:0;
   box-shadow:none;animation:dw-pop 180ms cubic-bezier(.32,.72,0,1)}
 .dw.as-modal .dw-bar{border-radius:12px 12px 0 0}
 @keyframes dw-pop{from{transform:scale(.985);opacity:0}to{transform:none;opacity:1}}

@@ -181,38 +181,79 @@
     return c;
   }
 
+  /* The panel is switched from a rail of 28px buttons at the top right of
+     the record, not from tabs at the head of the panel — TaskModal puts them
+     there, and the first of them collapses the panel away, which is what
+     makes a 980 drawer workable on a laptop. */
+  var PANELS = [
+    ['activity', 'Activity', 'i-message', function (key) { return stream(ACTIVITY[key]); }],
+    ['related', 'Related', 'i-relation', function (key) { return relations(key); }]
+  ];
+
   function render(key) {
     side = document.getElementById('dwSide');
-    if (!side) return;
+    var body_ = document.getElementById('dwBody');
+    if (!side || !body_) return;
     side.innerHTML = '';
 
     var head = el('div', 'dws-head');
-    var tabs = el('div', 'dws-tabs');
-    var body = el('div', 'dws-body');
-    var foot = el('div', 'dws-foot');
-
-    [['Activity', function () { return stream(ACTIVITY[key]); }],
-     ['Relations', function () { return relations(key); }]].forEach(function (pair, i) {
-      var b = el('button', 'dws-tab' + (i === 0 ? ' on' : ''), pair[0]);
-      b.type = 'button';
-      b.onclick = function () {
-        Array.prototype.forEach.call(tabs.children, function (c, j) {
-          c.classList.toggle('on', j === i);
-        });
-        body.innerHTML = '';
-        body.appendChild(pair[1]());
-        foot.hidden = i !== 0;
-      };
-      tabs.appendChild(b);
-    });
-    head.appendChild(tabs);
+    var title = el('span', 'dws-title');
+    head.appendChild(title);
     side.appendChild(head);
-
-    body.appendChild(stream(ACTIVITY[key]));
+    var body = el('div', 'dws-body');
     side.appendChild(body);
-
+    var foot = el('div', 'dws-foot');
     foot.appendChild(composer());
     side.appendChild(foot);
+
+    var at = 'activity';
+    function show(id) {
+      at = id;
+      var pane = PANELS.filter(function (p) { return p[0] === id; })[0];
+      title.textContent = pane[1];
+      body.innerHTML = '';
+      body.appendChild(pane[3](key));
+      foot.hidden = id !== 'activity';
+      side.hidden = false;
+      Array.prototype.forEach.call(rail.children, function (b) {
+        if (b.dataset.panel) b.setAttribute('aria-pressed', String(b.dataset.panel === id));
+      });
+      collapse.setAttribute('aria-label', 'Collapse the panel');
+      collapse.classList.remove('shut');
+    }
+
+    var old = body_.querySelector('.dws-rail');
+    if (old) old.remove();
+    var rail = el('nav', 'dws-rail');
+    rail.setAttribute('aria-label', 'Record panels');
+
+    var collapse = el('button', 'dws-rb');
+    collapse.type = 'button';
+    collapse.setAttribute('aria-label', 'Collapse the panel');
+    collapse.innerHTML = '<svg aria-hidden="true"><use href="#i-chevronRight"/></svg>';
+    collapse.onclick = function () {
+      var shut = !side.hidden;
+      side.hidden = shut;
+      collapse.classList.toggle('shut', shut);
+      collapse.setAttribute('aria-label', shut ? 'Show the panel' : 'Collapse the panel');
+    };
+    rail.appendChild(collapse);
+
+    PANELS.forEach(function (pane) {
+      var b = el('button', 'dws-rb');
+      b.type = 'button';
+      b.dataset.panel = pane[0];
+      b.setAttribute('aria-label', pane[1]);
+      b.setAttribute('data-tip', pane[1]);
+      b.setAttribute('aria-pressed', String(pane[0] === at));
+      if (pane[2] === 'i-relation') b.classList.add('fill');
+      b.innerHTML = '<svg aria-hidden="true"><use href="#' + pane[2] + '"/></svg>';
+      b.onclick = function () { show(pane[0]); };
+      rail.appendChild(b);
+    });
+    body_.appendChild(rail);
+
+    show('activity');
   }
 
   document.addEventListener('drawer:render', function (e) {
