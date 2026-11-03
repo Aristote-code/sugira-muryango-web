@@ -395,16 +395,52 @@
     }
   }
 
-  /* A screen's own actions sit in the header, next to the breadcrumb that
-     names the screen, each group tagged with the screen it belongs to. Only
-     the live one is shown. */
+  /* A screen's own actions belong on its toolbar row, not up in the header:
+     the breadcrumb bar is where you are, the toolbar is what you can do here.
+     The system's ViewsBar lays that row out as two groups — a start group of
+     filters and search, an end group pushed to the far edge — so each action
+     group moves into the end group of whichever row its screen already has.
+
+     This runs after the tables have been enhanced, because for a screen whose
+     only toolbar is the generated one, that row does not exist until then. */
   var actsHost = $('#pageActs');
 
-  function showActs(key) {
-    if (!actsHost) return;
-    Array.prototype.forEach.call(actsHost.children, function (a) {
-      a.hidden = a.getAttribute('data-for') !== key;
+  function endOf(row) {
+    var end = row.querySelector(':scope > .end');
+    if (!end) {
+      end = document.createElement('span');
+      end.className = 'end';
+      row.appendChild(end);
+    }
+    /* whatever the row already pushed right belongs in that same group */
+    Array.prototype.slice.call(row.children).forEach(function (c) {
+      if (c !== end && (c.classList.contains('tq-sp') || c.classList.contains('rt'))) {
+        end.insertBefore(c, end.firstChild);
+      }
     });
+    return end;
+  }
+
+  function placeActs() {
+    if (!actsHost) return;
+    Array.prototype.slice.call(actsHost.children).forEach(function (acts) {
+      var sc = document.getElementById('s-' + acts.getAttribute('data-for'));
+      if (!sc) return;
+      var row = sc.querySelector('.filters') || sc.querySelector('.tq')
+        || sc.querySelector('.pm-top');
+      if (!row) {
+        /* no filters and no table: the screen still gets the row, empty on
+           the left, so its actions sit where every other screen's do */
+        row = document.createElement('div');
+        row.className = 'filters';
+        var pad = sc.querySelector('.pad');
+        if (!pad) return;
+        pad.insertBefore(row, pad.firstChild);
+      }
+      acts.hidden = false;
+      endOf(row).appendChild(acts);
+    });
+    actsHost.remove();
   }
 
   function setCrumbs(parts, about) {
@@ -585,7 +621,6 @@
     $$('.screen').forEach(function (s) { s.classList.remove('live'); });
     next.classList.add('live');
     setCrumbs(def.crumbs, ABOUT[key]);
-    showActs(key);
     setNav(def.nav);
     resetTabs(next);
     current = key;
@@ -853,6 +888,10 @@
       }
     });
   });
+
+  /* The generated toolbars do not exist until the tables have been
+     enhanced, so the actions are placed once that is done. */
+  document.addEventListener('tables:ready', placeActs);
 
   // ---- open on the screen named in the hash ----
   var start = (location.hash || '').slice(1);
@@ -1278,6 +1317,7 @@
       t.dataset.enhanced = '1';
       try { enhance(t); } catch (err) { /* one bad table must not stop the rest */ }
     });
+    document.dispatchEvent(new Event('tables:ready'));
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

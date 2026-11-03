@@ -301,6 +301,15 @@
     top.appendChild(find);
     var exc = ALL.filter(isException).length;
     if (exc) top.appendChild(el('span', 'pm-exc', exc + (exc === 1 ? ' exception' : ' exceptions')));
+    /* This screen builds its own toolbar after the page actions have been
+       placed, so it takes the end group over rather than leaving Discard and
+       Save stranded on a row of their own. */
+    var end = $('#s-permissions .filters > .end');
+    if (end) {
+      top.appendChild(end);
+      var empty = $('#s-permissions .filters');
+      if (empty && !empty.children.length) empty.remove();
+    }
     root.appendChild(top);
 
     var wrap = el('div', 'tblwrap');
