@@ -77,7 +77,7 @@
     cohort:   { all: 'All',         options: ['1', '2', '3', '4'] },
     period:   { all: 'This cohort', options: ['This week', 'This month', 'This cohort', 'All time'] },
     date:     { all: 'All',         options: ['Today', 'This week', 'This month', 'This year', 'Date range…'] },
-    form:     { all: 'Any',         options: ['Visit record', 'Caregiver observation', 'Supervisor spot-check', 'Enrollment form', 'Risk of harm report'] },
+    form:     { all: 'Any',         options: ['Visit record', 'Caregiver obs.', 'Supervisor spot-check'] },
     status:   { all: 'Any',         options: ['Active', 'Behind', 'Complete', 'Overdue', 'Invited'] },
     module:   { all: 'Any',         options: SESSIONS },
     role:     { all: 'Any',         options: ROLES },
@@ -245,9 +245,10 @@
     var pick = function (v) {
       return function () { setValue(btn, v); window.SugiraMenu.close(); apply(btn); };
     };
+    var opts = optionsFor(btn, keyOf(btn), dim);
     var rows = [{ label: dim.all, selected: cur === dim.all, onPick: pick(dim.all) }];
-    if (dim.options.length) rows.push({ separator: true });
-    dim.options.forEach(function (o) {
+    if (opts.length) rows.push({ separator: true });
+    opts.forEach(function (o) {
       if (o === dim.all) return;
       rows.push({ label: o, selected: cur === o, onPick: pick(o) });
     });
@@ -281,7 +282,9 @@
     module:   ['module', 'session'],
     role:     ['role'],
     project:  ['project', 'projects'],
-    level:    ['level']
+    level:    ['level'],
+    form:     ['form', 'survey'],
+    izu:      ['izu', 'visitor']
   };
 
   function headerIndex(table, key) {
@@ -297,10 +300,52 @@
     return -1;
   }
 
+  /* A cell can carry text it is hiding — a safeguarding row holds both the
+     household name and the "household withheld" stand-in, one of them
+     display:none by role. Reading textContent would offer the redaction as a
+     filter value. display is read off the element, not off layout, so a row
+     the filter has already hidden still reports the same text. */
+  function visibleText(el) {
+    var out = '';
+    Array.prototype.forEach.call(el.childNodes, function (n) {
+      if (n.nodeType === 3) { out += n.nodeValue; return; }
+      if (n.nodeType !== 1) return;
+      if (getComputedStyle(n).display === 'none') return;
+      out += visibleText(n);
+    });
+    return out.replace(/\s+/g, ' ').trim();
+  }
+
+  /* What this screen can actually be narrowed by. Falls back to the
+     configured list for dimensions with no column to read — place, which is
+     a hierarchy rather than a column, and period, which is not in the data. */
+  function optionsFor(btn, key, dim) {
+    if (dim.tree) return dim.options;
+    var screen = btn.closest('.screen');
+    if (!screen) return dim.options;
+    var seen = [];
+    // A screen can hold several tables behind tabs. Only the one on screen
+    // should contribute values, or Status on Follow-ups offers On and Off
+    // from the rules table nobody is looking at.
+    var tables = $$('.tbl', screen).filter(function (t) { return t.offsetParent !== null; });
+    if (!tables.length) tables = $$('.tbl', screen);
+    tables.forEach(function (table) {
+      var i = headerIndex(table, key);
+      if (i < 0) return;
+      $$('tbody tr', table).forEach(function (r) {
+        var c = r.children[i];
+        if (!c) return;
+        var v = visibleText(c);
+        if (v && v !== '\u2014' && seen.indexOf(v) < 0) seen.push(v);
+      });
+    });
+    return seen.length > 1 ? seen.sort() : dim.options;
+  }
+
   function cellMatches(row, idx, value) {
     var cells = row.children;
     if (idx < 0 || idx >= cells.length) return false;
-    var t = cells[idx].textContent.trim().toLowerCase();
+    var t = visibleText(cells[idx]).toLowerCase();
     var v = value.toLowerCase();
     return t === v || (v.length >= 3 && t.indexOf(v) > -1);
   }

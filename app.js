@@ -829,7 +829,23 @@
     if (/^-?\d+(\.\d+)?$/.test(plain)) return parseFloat(plain);
     return null;
   }
-  function cellText(td) { return (td.textContent || '').replace(/\s+/g, ' ').trim(); }
+  /* textContent would also return what the cell is hiding. A safeguarding row
+     carries both the name and the "household withheld" stand-in, one of them
+     display:none by role, and a filter that offers you both is offering you
+     the redaction. */
+  function cellText(td) {
+    var out = '';
+    Array.prototype.forEach.call(td.childNodes, function (n) {
+      if (n.nodeType === 3) { out += n.nodeValue; return; }
+      if (n.nodeType !== 1) return;
+      // display is read off the element itself, not off layout: a row that
+      // the filter has already hidden must still report the same text, or it
+      // could never match its way back into view.
+      if (getComputedStyle(n).display === 'none') return;
+      out += cellText(n);
+    });
+    return out.replace(/\s+/g, ' ').trim();
+  }
 
   function enhance(table) {
     var head = table.tHead, body = table.tBodies[0];
@@ -862,7 +878,7 @@
     var footLabel = foot && foot.querySelector('span:not(.pg)');
     var footText = footLabel ? footLabel.textContent : null;
     var pager = foot && foot.querySelector('.pg');
-    var state = { sort: null, facets: {}, text: {}, range: {}, openCol: null };
+    var state = { sort: null, facets: {}, find: {}, openCol: null };
 
     /* ---- toolbar ---- */
     var bar = document.createElement('div');
@@ -916,36 +932,13 @@
        eight households across eight rows is not a facet, it is the table
        again. "Module 5" and "31 Oct" both parse as numbers, so numeric is
        asked last, and only once a column is too varied to list. */
-    function kindOf(c) {
-      var few = c.options.length > 1 && c.options.length <= 12;
-      var repeats = c.options.length <= Math.max(2, rows.length * 0.75);
-      if (few && repeats) return 'facet';
-      // c.numeric is true for anything a number can be pulled out of, which
-      // sorting wants and a from / to pair does not: "31 Oct" is not a
-      // quantity. A range is offered only for columns of bare numbers.
-      var bare = c.options.filter(function (v) {
-        return /^[-−]?[\d \s.,]+%?$/.test(v.trim());
-      }).length;
-      return bare >= c.options.length * 0.8 ? 'range' : 'text';
-    }
     function chosen(c) {
-      var k = kindOf(c);
-      if (k === 'facet') return (state.facets[c.i] || []).length;
-      if (k === 'text') return (state.text[c.i] || '').trim() ? 1 : 0;
-      var r = state.range[c.i] || {};
-      return (r.min ? 1 : 0) + (r.max ? 1 : 0);
+      return (state.facets[c.i] || []).length;
     }
     function summary(c) {
-      var k = kindOf(c);
-      if (!chosen(c)) return '';
-      if (k === 'facet') {
-        var sel = state.facets[c.i];
-        return sel.length === 1 ? sel[0] : sel.length + ' chosen';
-      }
-      if (k === 'text') return '“' + state.text[c.i].trim() + '”';
-      var r = state.range[c.i];
-      if (r.min && r.max) return r.min + ' to ' + r.max;
-      return r.min ? 'from ' + r.min : 'up to ' + r.max;
+      var sel = state.facets[c.i] || [];
+      if (!sel.length) return '';
+      return sel.length === 1 ? sel[0] : sel.length + ' chosen';
     }
     function activeCount() {
       var n = 0;
@@ -965,7 +958,7 @@
       clear.hidden = !activeCount();
       clear.onclick = function (e) {
         e.stopPropagation();
-        state.facets = {}; state.text = {}; state.range = {};
+        state.facets = {}; state.find = {};
         drawFilters(); apply();
       };
       var x = document.createElement('button');
@@ -984,7 +977,6 @@
 
       cols.forEach(function (c) {
         if (c.options.length < 2) return;
-        var k = kindOf(c);
         var open = chosen(c) > 0 || c.i === state.openCol;
 
         var sec = document.createElement('section');
@@ -1010,53 +1002,54 @@
           clear.hidden = !activeCount();
         }
 
-        if (k === 'facet') {
-          var sel = state.facets[c.i] || [];
-          c.options.forEach(function (v) {
-            var left = 0;
-            rows.forEach(function (r) {
-              if (cellText(r.cells[c.i]) === v && passes(r, c.i)) left++;
+        var sel = state.facets[c.i] || [];
+        var find = (state.find[c.i] || '').trim().toLowerCase();
+
+        /* A long list gets a box to find a value in it. That is still
+           picking: the box narrows which of the real values are shown, it is
+           never itself the thing filtered on, so a typo can only fail to find
+           something rather than quietly empty the table. */
+        if (c.options.length > 10) {
+          var fx = document.createElement('input');
+          fx.type = 'text';
+          fx.className = 'qf-q';
+          fx.placeholder = 'Find in ' + c.label.toLowerCase() + '\u2026';
+          fx.setAttribute('aria-label', 'Find a value in ' + c.label);
+          fx.value = state.find[c.i] || '';
+          fx.oninput = function (e) {
+            e.stopPropagation();
+            state.find[c.i] = this.value;
+            var q = this.value.trim().toLowerCase();
+            bd.querySelectorAll('.qf-v').forEach(function (n) {
+              n.hidden = !!q && n.querySelector('.qf-t').textContent.toLowerCase().indexOf(q) < 0;
             });
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'qf-v' + (sel.indexOf(v) >= 0 ? ' on' : '') + (left ? '' : ' none');
-            b.innerHTML = '<span class="bx">' + ICON.tick + '</span><span class="qf-t"></span><em></em>';
-            b.querySelector('.qf-t').textContent = v;
-            b.querySelector('em').textContent = left;
-            b.onclick = function (e) {
-              e.stopPropagation();
-              var cur = state.facets[c.i] || [];
-              var at = cur.indexOf(v);
-              if (at >= 0) cur.splice(at, 1); else cur.push(v);
-              state.facets[c.i] = cur;
-              state.openCol = c.i;
-              drawFilters(); apply();
-            };
-            bd.appendChild(b);
-          });
-        } else if (k === 'range') {
-          var r = state.range[c.i] || (state.range[c.i] = { min: '', max: '' });
-          var wrap = document.createElement('div');
-          wrap.className = 'qrange';
-          wrap.innerHTML = '<input type="number" placeholder="From"><span>to</span><input type="number" placeholder="To">';
-          var ins = wrap.querySelectorAll('input');
-          ins[0].setAttribute('aria-label', c.label + ' from');
-          ins[1].setAttribute('aria-label', c.label + ' to');
-          ins[0].value = r.min;
-          ins[1].value = r.max;
-          ins[0].oninput = function () { r.min = this.value; apply(); refresh(); };
-          ins[1].oninput = function () { r.max = this.value; apply(); refresh(); };
-          bd.appendChild(wrap);
-        } else {
-          var inp = document.createElement('input');
-          inp.type = 'text';
-          inp.className = 'qf-q';
-          inp.placeholder = 'Contains…';
-          inp.setAttribute('aria-label', c.label + ' contains');
-          inp.value = state.text[c.i] || '';
-          inp.oninput = function () { state.text[c.i] = this.value; apply(); refresh(); };
-          bd.appendChild(inp);
+          };
+          bd.appendChild(fx);
         }
+
+        c.options.forEach(function (v) {
+          var left = 0;
+          rows.forEach(function (r) {
+            if (cellText(r.cells[c.i]) === v && passes(r, c.i)) left++;
+          });
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'qf-v' + (sel.indexOf(v) >= 0 ? ' on' : '') + (left ? '' : ' none');
+          b.hidden = !!find && v.toLowerCase().indexOf(find) < 0;
+          b.innerHTML = '<span class="bx">' + ICON.tick + '</span><span class="qf-t"></span><em></em>';
+          b.querySelector('.qf-t').textContent = v;
+          b.querySelector('em').textContent = left;
+          b.onclick = function (e) {
+            e.stopPropagation();
+            var cur = state.facets[c.i] || [];
+            var at = cur.indexOf(v);
+            if (at >= 0) cur.splice(at, 1); else cur.push(v);
+            state.facets[c.i] = cur;
+            state.openCol = c.i;
+            drawFilters(); apply();
+          };
+          bd.appendChild(b);
+        });
         sec.appendChild(bd);
         list.appendChild(sec);
       });
@@ -1097,17 +1090,8 @@
       for (var n = 0; n < cols.length; n++) {
         var c = cols[n];
         if (c.i === skip) continue;
-        var txt = cellText(row.cells[c.i]);
         var sel = state.facets[c.i];
-        if (sel && sel.length && sel.indexOf(txt) < 0) return false;
-        var q = (state.text[c.i] || '').trim().toLowerCase();
-        if (q && txt.toLowerCase().indexOf(q) < 0) return false;
-        var r = state.range[c.i];
-        if (r && (r.min !== '' || r.max !== '')) {
-          var m = magnitude(txt);
-          if (r.min !== '' && (m === null || m < +r.min)) return false;
-          if (r.max !== '' && (m === null || m > +r.max)) return false;
-        }
+        if (sel && sel.length && sel.indexOf(cellText(row.cells[c.i])) < 0) return false;
       }
       return true;
     }
