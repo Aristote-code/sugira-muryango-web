@@ -18,6 +18,7 @@
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
     role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
     person:       { crumbs: [['People', 'people'], ['C. Uwimana', null]],                 nav: 'people' },
+    permissions:  { crumbs: [['People', 'people'], ['Permissions', null]],                nav: 'people' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },
     system:       { crumbs: [['System', null]],                                           nav: 'system' },
     settings:     { crumbs: [['Settings', null]],                                        nav: 'settings' },
@@ -409,7 +410,7 @@
 
   // ---- drawer: a record opens over the list it came from ----
   // Records open in the drawer; the screens that *list* them stay pages.
-  var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1 };
+  var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1, permissions: 1 };
   var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
   var dwStack = [], dwHeld = null, dwReturn = null;
 

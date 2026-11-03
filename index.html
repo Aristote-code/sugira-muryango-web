@@ -1452,6 +1452,7 @@
             <span class="rec-id">USR-0042</span>
             <span class="acts">
               <button class="btn sec sm" type="button" data-toast="C. Uwimana deactivated &mdash; they keep their history and lose access"><svg aria-hidden="true"><use href="#i-cross"/></svg> Deactivate</button>
+              <button class="btn sec sm" type="button" data-go="permissions" data-perms="person" data-perms-who="C. Uwimana" data-perms-role="Sugira Muryango Sector lead (SLA)"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> All permissions</button>
               <button class="btn sm" type="button" data-modal="access"><svg aria-hidden="true"><use href="#i-settings"/></svg> Change access</button>
             </span>
           </div>
@@ -1494,7 +1495,7 @@
                 <tr><td class="nm">Maintenance</td><td class="a">&mdash;</td><td class="a">&mdash;</td><td class="a">&mdash;</td><td class="a">&mdash;</td><td class="mut">Position</td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Eight rows stand for 112 permissions in the current system &middot; this person has no exceptions</span></div>
+            <div class="tfoot"><span>Eight rows stand for 112 permissions in the current system</span><span><a data-go="permissions" data-perms="person" data-perms-who="C. Uwimana" data-perms-role="Sugira Muryango Sector lead (SLA)">Open all 112 and toggle them</a></span></div>
           </div>
           <div class="card">
             <div class="card-h"><h3>Exceptions</h3><span class="side"><button class="btn sec sm" type="button" data-modal="exception"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add an exception</button></span></div>
@@ -1548,6 +1549,25 @@
         </div>
       </section>
 
+      <!-- ============ PERMISSIONS ============ -->
+      <section class="screen" id="s-permissions">
+        <div class="rec">
+          <div class="rec-top">
+            <span class="rec-type"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> Permissions</span>
+            <span class="rec-id">112 in all</span>
+            <span class="acts">
+              <button class="btn sec sm" type="button" data-toast="Changes discarded &mdash; nothing was saved">Discard</button>
+              <button class="btn sm" type="button" data-toast="Saved &mdash; it takes effect the next time they sign in"><svg aria-hidden="true"><use href="#i-check"/></svg> Save</button>
+            </span>
+          </div>
+          <h1>Every permission, and who has it</h1>
+          <p class="rec-desc">One permission is one thing you may do to one object. The eight groups below are
+            how people talk about them; the names inside each group are what the system actually stores. A
+            <b>position</b> grants them in bulk. A <b>person</b> inherits the position and may hold exceptions to it.</p>
+        </div>
+        <div class="pad"><div id="permBody"></div></div>
+      </section>
+
       <section class="screen" id="s-roles">
         <div class="phead">
           <div class="row">
@@ -1596,6 +1616,7 @@
             </div>
             <div class="acts">
               <button data-modal="role" class="btn sec" type="button">Duplicate</button>
+              <button class="btn" type="button" data-go="permissions" data-perms="role" data-perms-role="Sugira Muryango Sector lead (SLA)"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> Edit permissions</button>
               <button class="btn" type="button" data-modal="rsave">Save role</button>
             </div>
           </div>
@@ -2365,6 +2386,7 @@
 <script src="app.js" defer></script>
 <script src="menu.js" defer></script>
 <script src="filters.js" defer></script>
+<script src="permissions.js" defer></script>
 <script src="actions.js" defer></script>
 </body>
 </html>

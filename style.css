@@ -744,6 +744,59 @@ svg use{pointer-events:none}
   border-radius:6px;border:0;background:none;cursor:pointer;color:var(--ink-3)}
 .qpop-h .x:hover{background:var(--tint);color:var(--ink)}
 .qpop-h .x svg{width:13px;height:13px;fill:none}
+/* Permissions drawer. 112 rows, so the grammar has to be flat: one row is one
+   permission, its verb, where it came from, and a switch. Nothing is a card. */
+.pm-who{font-size:14px;color:var(--ink-2);max-width:88ch;margin-bottom:16px}
+.pm-who b{color:var(--ink);font-weight:600}
+.pm-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.pm-find{flex:1;min-width:240px;height:var(--h-lg);border:1px solid var(--line);border-radius:var(--r-ctl);
+  background:var(--surface);font-family:var(--ui);font-size:14px;color:var(--ink);padding:0 12px}
+.pm-find:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 3px var(--b100)}
+.pm-sum{font-family:var(--mono);font-size:13px;color:var(--ink-3);flex:none}
+.pm-sum b{color:var(--ink);font-weight:600}
+.pm-exc{font-size:12px;font-weight:500;color:var(--amber-ink);background:var(--amber-bg);
+  padding:2px 8px;border-radius:var(--r-tag);flex:none}
+.pm-g{border-top:1px solid var(--line)}
+.pm-gh{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 0;border:0;
+  background:none;cursor:pointer;font-family:var(--ui);font-size:16px;color:var(--ink);text-align:left}
+.pm-gh:hover{background:var(--tint)}
+.pm-cv{width:14px;height:14px;flex:none;color:var(--ink-4);transition:transform .14s ease}
+.pm-gh[aria-expanded="true"] .pm-cv{transform:rotate(90deg)}
+.pm-gn{font-weight:500;flex:none}
+.pm-gc{font-family:var(--mono);font-size:12px;color:var(--ink-3);flex:1}
+.pm-gv{display:flex;align-items:center;gap:16px;flex:none}
+.pm-gvi{display:flex;align-items:center;gap:6px}
+.pm-gvl{font-size:12px;color:var(--ink-3);min-width:44px}
+.pm-gx{width:76px}
+.pm-gb{padding:0 0 20px 26px}
+.pm-gb[hidden]{display:none}
+.pm-blurb{font-size:13px;color:var(--ink-3);max-width:76ch;margin-bottom:12px}
+.pm-o{margin-bottom:12px}
+.pm-oh{display:flex;align-items:center;gap:8px;min-height:28px}
+.pm-on{font-family:var(--mono);font-size:12px;color:var(--ink-2);font-weight:500}
+.pm-note{font-size:12px;color:var(--ink-3)}
+.pm-r{display:grid;grid-template-columns:minmax(0,1fr) 72px 136px 36px;gap:12px;align-items:center;
+  min-height:32px;padding:0 8px;border-radius:6px}
+.pm-r:hover{background:var(--tint)}
+.pm-r.is-exc{background:var(--amber-bg)}
+.pm-rn{display:flex;align-items:center;gap:8px;min-width:0}
+.pm-rn code{font-size:12px;background:none;padding:0;color:var(--ink)}
+.pm-rv{font-size:13px;color:var(--ink-2)}
+.pm-rs{font-size:12px;color:var(--ink-3);text-align:right}
+.pm-r.is-exc .pm-rs{color:var(--amber-ink);font-weight:500}
+.pm-none{font-size:14px;color:var(--ink-3);padding:16px 0}
+/* The switch. Reads as on or off at a glance and never as a checkbox, because
+   a checkbox in a list of 112 says "tick the ones you want" rather than
+   "this is currently true". */
+.tg{position:relative;width:34px;height:20px;border-radius:var(--r-pill);border:1px solid var(--g600);
+  background:var(--g300);cursor:pointer;padding:0;flex:none;transition:background .13s ease,border-color .13s ease}
+.tg .tg-k{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;
+  box-shadow:var(--lift);transition:transform .13s ease}
+.tg.on{background:var(--b500);border-color:var(--b500)}
+.tg.on .tg-k{transform:translateX(14px)}
+.tg.some{background:var(--b200);border-color:var(--b400)}
+.tg.some .tg-k{transform:translateX(7px)}
+.tg:focus-visible{outline:2px solid var(--b500);outline-offset:2px}
 .qclear{border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;
   color:var(--link);padding:4px 6px;border-radius:6px}
 .qclear:hover{background:var(--b50)}
