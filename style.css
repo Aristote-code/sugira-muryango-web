@@ -215,6 +215,45 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   line-height:16px;font-weight:500;color:var(--color-content-secondary);border-radius:var(--x-clickup-radii-2-5)}
 .seg button.on{background:var(--color-bg-surface);color:var(--color-content-secondary);box-shadow:var(--elevation-raised)}
 
+/* ---------------- editing in place ---------------- */
+/* A property value is the picker's trigger, so it has to look like something
+   you can press before you press it: the system's cell hover, nothing more
+   until then. There is no edit mode and no Save. */
+.pgr .v[role="button"]{cursor:pointer}
+.pgr .v[role="button"]:focus-visible{outline:2px solid var(--color-bg-primary-default);
+  outline-offset:-2px}
+.pgr .v.editing{padding:0}
+.pgedit{width:100%;height:var(--size-control-sm);padding:0 8px;font:inherit;font-size:14px;
+  color:var(--color-content-primary);background:var(--color-bg-surface);
+  border:1px solid var(--x-clickup-color-border-primary-focus);
+  border-radius:var(--radius-sm);outline:none;
+  box-shadow:0 0 0 3px var(--x-clickup-color-effect-primary)}
+
+/* The menu is the system's: 28 rows, inset 8, r7, on the overlay elevation. */
+.pgmenu{position:absolute;z-index:var(--z-pop);min-width:200px;max-height:320px;overflow:auto;
+  padding:8px 0;border-radius:var(--radius-lg);background:var(--color-bg-surface);
+  box-shadow:var(--elevation-overlay)}
+.pgmenu-i{display:flex;align-items:center;gap:8px;width:calc(100% - 16px);margin:0 8px;
+  min-height:var(--menu-item-height);padding:6px 8px;border:0;background:none;
+  border-radius:var(--menu-item-radius);font:inherit;font-size:14px;line-height:16px;
+  color:var(--color-content-primary);text-align:left;cursor:pointer}
+.pgmenu-i:hover,.pgmenu-i:focus-visible{background:var(--menu-item-bg-highlighted);outline:none}
+.pgmenu-i.on{font-weight:500}
+.pgmenu-i.on::after{content:"";margin-left:auto;width:14px;height:14px;flex:none;
+  background:currentColor;-webkit-mask:var(--i-check) center/14px no-repeat;
+  mask:var(--i-check) center/14px no-repeat}
+
+/* A title and a description edit where they sit. */
+.rec h1[data-inplace],.rec-desc[data-inplace]{border-radius:var(--radius-sm);
+  margin-inline:-6px;padding-inline:6px;cursor:text}
+.rec h1[data-inplace]:hover,.rec-desc[data-inplace]:hover{background:var(--color-bg-hover)}
+.rec h1.inplace,.rec-desc.inplace{background:var(--color-bg-surface);
+  outline:1px solid var(--x-clickup-color-border-primary-focus);
+  box-shadow:0 0 0 3px var(--x-clickup-color-effect-primary)}
+
+.toast-undo{margin-left:12px;padding:0;border:0;background:none;font:inherit;font-size:14px;
+  font-weight:600;color:var(--color-content-on-primary);text-decoration:underline;cursor:pointer}
+
 /* ---------------- relations ---------------- */
 /* A related record is a row you can open, so it is a row: the kind it plays
    on the left, the record, and why it matters on the right. Geometry is the
