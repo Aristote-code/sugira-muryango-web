@@ -215,6 +215,30 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   line-height:16px;font-weight:500;color:var(--color-content-secondary);border-radius:var(--x-clickup-radii-2-5)}
 .seg button.on{background:var(--color-bg-surface);color:var(--color-content-secondary);box-shadow:var(--elevation-raised)}
 
+/* ---------------- grouping ---------------- */
+/* The group header as measured: a collapse caret, the value as a pill and
+   the count beside it in a quieter tone. The row spans the table, so a
+   group reads as a band rather than as another record. */
+.grp td{padding:0;background:var(--color-bg-canvas);
+  border-bottom:1px solid var(--color-border-subtle)}
+.grp-h{display:flex;align-items:center;gap:8px;width:100%;min-height:var(--size-control-md);
+  padding:0 12px;border:0;background:none;font:inherit;text-align:left;cursor:pointer}
+.grp-h:hover{background:var(--color-bg-hover)}
+.grp-h:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.grp-c{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
+  color:var(--color-content-tertiary)}
+.grp-c svg{width:16px;height:16px;fill:currentColor;
+  transition:transform 120ms var(--x-clickup-motion-timing)}
+.grp-h[aria-expanded="true"] .grp-c svg{transform:rotate(90deg)}
+.grp-p{display:inline-flex;align-items:center;height:20px;padding:0 6px;
+  border-radius:var(--x-clickup-radii-3);background:var(--x-clickup-color-background-on-main);
+  font-size:12px;line-height:16px;font-weight:600;color:var(--color-content-primary);
+  max-width:40ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grp-n{font-size:12px;line-height:16px;color:var(--color-content-secondary);
+  font-variant-numeric:tabular-nums}
+.fl.grpby.on{background:var(--color-bg-primary-subtle);
+  border-color:var(--x-clickup-color-border-primary-low-contrast)}
+
 /* ---------------- fields ---------------- */
 /* CustomFieldRow as measured: 36 high on a 1px top border.subtle, a 220
    label column with a 16 type icon and the name 8 after it, the value

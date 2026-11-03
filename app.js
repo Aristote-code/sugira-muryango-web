@@ -1272,6 +1272,9 @@
         body.parentNode.parentNode.insertBefore(empty, body.parentNode.nextSibling);
       }
       empty.hidden = shown !== 0;
+      /* Grouping runs over whatever is left showing, so it re-forms after
+         every sort and every filter rather than fighting them. */
+      table.dispatchEvent(new CustomEvent('table:applied', { bubbles: true }));
     }
 
     /* ---- export reflects exactly what is on screen ---- */
