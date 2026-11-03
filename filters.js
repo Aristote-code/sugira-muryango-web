@@ -82,6 +82,8 @@
     module:   { all: 'Any',         options: SESSIONS },
     role:     { all: 'Any',         options: ROLES },
     project:  { all: 'Any',         options: PROJECTS },
+    year:     { all: 'All',         options: ['2026', '2025', '2024'] },
+    izu:      { all: 'All',         options: ['M. Dusabe', 'J. Kamanzi', 'E. Mutesi', 'A. Nyirahabimana', 'B. Uwamahoro'] },
     level:    { all: 'All',         options: ['Province', 'District', 'Sector'] }
   };
 
