@@ -180,9 +180,17 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 /* One 38px row: the line that says what the page is, and the page's own
    actions at 24. The name is in the breadcrumb above and is not repeated. */
 .pbar{display:flex;align-items:center;gap:16px;min-height:38px;padding:4px 24px;background:var(--surface)}
+.filters .rt .scope{color:var(--ink-2)}
 .pbar .sub{margin:0;min-width:0;flex:1;max-width:none;overflow:hidden;
   display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
 .pbar .acts{margin-left:auto;display:flex;align-items:center;gap:4px;flex:none}
+.pageacts{display:flex;align-items:center;gap:4px}
+.pageacts .acts{display:flex;align-items:center;gap:4px}
+.pageacts .acts[hidden]{display:none}
+.pageacts .btn{height:var(--h-xs);padding:0 8px;font-size:12px;border-radius:var(--r-btn-sm);gap:4px}
+.pageacts .btn svg{width:14px;height:14px}
+.topbar .tools{border-left:0}
+
 .pbar .btn{height:var(--h-xs);padding:0 8px;font-size:12px;border-radius:var(--r-btn-sm);gap:4px}
 .pbar .btn svg{width:14px;height:14px}
 .phead{padding:20px 24px 0;background:var(--surface)}
@@ -237,6 +245,22 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .seg button{border:0;background:none;cursor:pointer;height:var(--h-sm);padding:0 8px;font-size:14px;
   line-height:16px;font-weight:500;color:var(--ink-3);border-radius:.3125rem}
 .seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--lift)}
+
+/* ---------------- help: the icon, and what it says ---------------- */
+.ihelp{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
+  padding:0;border:0;background:none;border-radius:var(--r-btn-sm);color:var(--ink-4);
+  cursor:pointer;flex:none;vertical-align:middle}
+.ihelp svg{width:14px;height:14px;fill:currentColor;stroke:none}
+.ihelp:hover,.ihelp[aria-expanded="true"]{background:var(--tint-2);color:var(--ink-2)}
+.ihelp:focus-visible{outline:2px solid var(--b500);outline-offset:1px}
+/* Sits beside a title, so it rides the title's baseline rather than its box. */
+h1 .ihelp,h2 .ihelp,h3 .ihelp{margin-left:6px}
+
+.tip{position:absolute;z-index:var(--z-pop);max-width:min(360px,calc(100vw - 32px));
+  padding:8px 12px;border-radius:var(--r-chip);background:var(--surface);color:var(--ink-2);
+  font-size:12px;line-height:18px;box-shadow:var(--lift-overlay);pointer-events:none}
+.tip[hidden]{display:none}
+.tip b{color:var(--ink);font-weight:600}
 
 /* ---------------- chips ---------------- */
 .chip{display:inline-flex;align-items:center;gap:4px;min-height:20px;padding:0 6px;
@@ -759,8 +783,6 @@ svg use{pointer-events:none}
 .qpop-h .x svg{width:13px;height:13px;fill:none}
 /* Permissions drawer. 112 rows, so the grammar has to be flat: one row is one
    permission, its verb, where it came from, and a switch. Nothing is a card. */
-.pm-who{font-size:14px;color:var(--ink-2);max-width:88ch;margin-bottom:16px}
-.pm-who b{color:var(--ink);font-weight:600}
 .pm-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .pm-find{flex:1;min-width:240px;height:var(--h-md);border:1px solid var(--line);border-radius:var(--r-ctl);
   background:var(--surface);font-family:var(--ui);font-size:14px;color:var(--ink);padding:0 12px}

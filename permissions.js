@@ -269,21 +269,24 @@
     root.innerHTML = '';
     var editing = state.mode === 'person' ? null : roleByName(state.role);
 
-    var head = el('div', 'pm-who');
-    if (state.mode === 'person') {
-      head.innerHTML = '<p>The column marked <b class="a"></b> is what ' +
-        '<b class="c"></b> holds today. Changing a cell in it records an exception against them; ' +
-        'changing any other column changes that position for everyone who holds it.</p>';
-      head.querySelector('.a').textContent = position().id;
-      head.querySelector('.c').textContent = state.who;
-    } else {
-      head.innerHTML = '<p>Every position across the top, every capability down the side. ' +
-        'Click a cell to grant or remove it. A position is the whole column, so a change here reaches ' +
-        'everyone holding it.</p>';
-    }
-    root.appendChild(head);
-
+    /* This used to be a paragraph above the table. It says the same thing
+       every time you open the screen, so it waits behind the mark on the
+       heading instead of being read aloud at you. */
+    var about = state.mode === 'person'
+      ? 'The column marked ' + position().id + ' is what ' + state.who +
+        ' holds today. Changing a cell in it records an exception against them; ' +
+        'changing any other column changes that position for everyone who holds it.'
+      : 'Every position across the top, every capability down the side. Click a ' +
+        'cell to grant or remove it. A position is the whole column, so a change ' +
+        'here reaches everyone holding it.';
     var top = el('div', 'pm-top');
+    var mark = el('button', 'ihelp');
+    mark.type = 'button';
+    mark.setAttribute('aria-expanded', 'false');
+    mark.setAttribute('aria-label', 'What this table is');
+    mark.setAttribute('data-tip', about);
+    mark.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
+    top.appendChild(mark);
     var find = el('input', 'pm-find');
     find.type = 'text';
     find.placeholder = 'Find a permission by name or by what it does…';

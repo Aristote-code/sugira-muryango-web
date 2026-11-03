@@ -36,6 +36,31 @@
     translations: { crumbs: [['Programme', 'programme'], ['Translations', null]],         nav: 'translations' }
   };
 
+  /* What each screen is, for the info mark beside its breadcrumb. These
+     used to be a paragraph at the top of every screen, which the crumb
+     had already named and which cost a row of layout to say. */
+  var ABOUT = {
+    cohorts:       'A cohort decides which households get which session, and when. Changing one moves real families’ schedules. Five districts run the programme: Kirehe, Musanze, Ngoma, Nyanza and Rubavu.',
+    community:     'Home visitors post to each other from the tablet. Anything a reader reports arrives here, and nothing is removed without a reason being recorded.',
+    content:       'What a home visitor can open on the tablet: the session videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose.',
+    dashboard:     'Coverage, safeguarding and reporting across every district SUGIRA Muryango works in.',
+    field:         '174 of 193 home visitors have reported today. Until the rest sync, every figure on the dashboard is provisional.',
+    followups:     'An answer on a form can oblige someone to go back. These are the obligations that are open, who owns each one, and how long it has been waiting.',
+    households:    '2 210 enrolled across five districts. 148 are behind their cohort schedule.',
+    izu:           'Whether a session was delivered the way it was designed, scored by the cell coordinator who sat in on it. A low grade is a training need, not a disciplinary one.',
+    people:        'Who can use the system, what they are allowed to do, and the place their role applies to. The place is part of the assignment, not part of the role.',
+    permissions:   'One permission is one thing you may do to one object. The eight groups below are how people talk about them; the names inside each group are what the system actually stores. A position grants them in bulk. A person inherits the position and may hold exceptions to it.',
+    places:        'The administrative hierarchy every role is scoped against, and every household belongs to. Six levels from province down to IZU. The programme runs in five districts across four provinces.',
+    programme:     'What a home visit contains: the projects, their sessions, the forms the visitor fills in, and the cohorts that decide who gets which session when.',
+    reports:       'Build a question once, save it, and have it sent on a schedule.',
+    roles:         'A role says what someone can do. Where they can do it is set when the role is given to a person, so one role covers every sector rather than needing one role per place.',
+    safeguarding:  'Three open cases. Two of them are past the 72-hour review window.',
+    settings:      'The rules the whole programme runs on. Changing one here changes it for every district, every tablet and every household at once, so each says what it will move.',
+    system:        'Who did what, and the housekeeping that keeps the data honest. The rules themselves live in Settings.',
+    translations:  'Thirteen of the thirty-four forms that carry text are not fully translated. Anything still English-only reaches a home visitor in a language the household may not read.',
+    visits:        '147 visits are due this week. 1 842 of 2 210 are done so far in this cohort, and 368 are still missed, the oldest 34 days.'
+  };
+
   var MODALS = {
     setint: {
       title: 'Change the interval between sessions',
@@ -370,7 +395,19 @@
     }
   }
 
-  function setCrumbs(parts) {
+  /* A screen's own actions sit in the header, next to the breadcrumb that
+     names the screen, each group tagged with the screen it belongs to. Only
+     the live one is shown. */
+  var actsHost = $('#pageActs');
+
+  function showActs(key) {
+    if (!actsHost) return;
+    Array.prototype.forEach.call(actsHost.children, function (a) {
+      a.hidden = a.getAttribute('data-for') !== key;
+    });
+  }
+
+  function setCrumbs(parts, about) {
     crumbEl.innerHTML = '';
     parts.forEach(function (p, i) {
       if (i) {
@@ -396,6 +433,15 @@
       }
       crumbEl.appendChild(node);
     });
+    if (!about) return;
+    var help = document.createElement('button');
+    help.type = 'button';
+    help.className = 'ihelp';
+    help.setAttribute('data-tip', about);
+    help.setAttribute('aria-expanded', 'false');
+    help.setAttribute('aria-label', 'About ' + parts[parts.length - 1][0]);
+    help.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
+    crumbEl.appendChild(help);
   }
 
   function resetTabs(root) {
@@ -538,7 +584,8 @@
     if (!next) return;
     $$('.screen').forEach(function (s) { s.classList.remove('live'); });
     next.classList.add('live');
-    setCrumbs(def.crumbs);
+    setCrumbs(def.crumbs, ABOUT[key]);
+    showActs(key);
     setNav(def.nav);
     resetTabs(next);
     current = key;
@@ -1234,4 +1281,83 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+})();
+
+/* ============================ help popovers ============================
+   Every screen and most cards opened with a line of prose explaining what
+   they were. Twenty-odd of those is a row of layout gone on every page, and
+   it read as filler. The words are worth keeping, so they moved behind the
+   mark that asks for them: hover it, focus it, or click it.
+
+   One popover, appended to the body, so a card with overflow:hidden cannot
+   clip it. */
+(function () {
+  'use strict';
+  var tip = null, owner = null;
+
+  function el() {
+    if (tip) return tip;
+    tip = document.createElement('div');
+    tip.className = 'tip';
+    tip.id = 'tip-live';
+    tip.setAttribute('role', 'tooltip');
+    tip.hidden = true;
+    document.body.appendChild(tip);
+    return tip;
+  }
+
+  function hide() {
+    if (!owner) return;
+    owner.setAttribute('aria-expanded', 'false');
+    owner.removeAttribute('aria-describedby');
+    owner = null;
+    el().hidden = true;
+  }
+
+  function show(btn) {
+    var text = btn.getAttribute('data-tip');
+    if (!text) return;
+    var t = el();
+    hide();
+    t.textContent = text;
+    t.hidden = false;
+    var r = btn.getBoundingClientRect();
+    var w = t.offsetWidth, h = t.offsetHeight;
+    var pad = 16, vw = document.documentElement.clientWidth;
+    var left = Math.min(Math.max(pad, r.left - 4), vw - w - pad);
+    /* below the mark, unless that would run off the bottom of the window */
+    var below = r.bottom + 6;
+    var top = (below + h > window.innerHeight - pad) ? r.top - h - 6 : below;
+    t.style.left = (left + window.scrollX) + 'px';
+    t.style.top = (top + window.scrollY) + 'px';
+    owner = btn;
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-describedby', t.id);
+  }
+
+  function mark(e) {
+    return e.target && e.target.closest ? e.target.closest('.ihelp[data-tip]') : null;
+  }
+
+  document.addEventListener('mouseover', function (e) {
+    var b = mark(e);
+    if (b && b !== owner) show(b);
+    else if (!b && owner && !owner.matches(':focus')) hide();
+  });
+  document.addEventListener('focusin', function (e) {
+    var b = mark(e);
+    if (b) show(b); else hide();
+  });
+  document.addEventListener('click', function (e) {
+    var b = mark(e);
+    if (!b) { hide(); return; }
+    /* the mark often sits inside a clickable title, and asking what
+       something is should not also open it */
+    e.preventDefault();
+    e.stopPropagation();
+    if (b === owner) hide(); else show(b);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+  window.addEventListener('scroll', hide, true);
+  window.addEventListener('resize', hide);
 })();
