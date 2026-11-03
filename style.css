@@ -771,23 +771,48 @@ svg use{pointer-events:none}
 .pm-gb{padding:0 0 20px 26px}
 .pm-gb[hidden]{display:none}
 .pm-blurb{font-size:13px;color:var(--ink-3);max-width:76ch;margin-bottom:12px}
-/* The matrix. Permissions down, positions across, a switch in each cell —
-   ClickUp's own Security & Permissions shape. The definition column is the
-   widest thing on the row because it is the column that was missing. */
-/* Eight positions plus a definition will not fit a drawer, and squeezing the
-   definition to fit defeats the column. The wrap scrolls instead. */
-.pm-t{table-layout:auto;min-width:940px}
-.pm-t th.a,.pm-t td.a{text-align:center;width:64px}
-.pm-t td.nm{vertical-align:top;padding-top:12px}
-.pm-t td.nm code{font-size:12px;background:none;padding:0;color:var(--ink);display:block}
-.pm-what{min-width:300px;max-width:46ch;font-size:13px;color:var(--ink-2);line-height:1.45}
-.pm-what span{display:block}
-.pm-risk{margin-top:4px;color:var(--amber-ink);font-weight:500}
-.pm-note{display:block;margin-top:2px;font-size:12px;color:var(--ink-3);font-family:var(--ui)}
-.pm-t tr.is-exc{background:var(--amber-bg)}
+/* The matrix. Capabilities down, positions across, a check in each cell —
+   GitHub's comparison-table shape, where a role is read by scanning its
+   column rather than by opening it. Four capability rows per group is 32 for
+   the whole system; the 112 stored names only appear when a group is opened. */
+.pm-t{table-layout:auto}
+.pm-t th.a,.pm-t td.a{text-align:center;width:72px}
+.pm-t .pm-cap{width:auto;min-width:300px}
+.pm-t thead th.a{vertical-align:bottom;padding-bottom:8px}
+.pm-rid{display:block;font-size:13px;font-weight:500;color:var(--ink)}
+.pm-rn2{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:2px}
+.pm-grp td{background:var(--tint);border-top:1px solid var(--line)}
+.pm-grp .pm-cap{padding:0}
+.pm-gh{display:flex;align-items:center;gap:8px;width:100%;min-height:40px;padding:0 12px;border:0;
+  background:none;cursor:pointer;font-family:var(--ui);font-size:14px;color:var(--ink);text-align:left}
+.pm-gh:hover{color:var(--link)}
+.pm-cv{width:14px;height:14px;flex:none;color:var(--ink-4);transition:transform .14s ease}
+.pm-gh[aria-expanded="true"] .pm-cv{transform:rotate(90deg)}
+.pm-gn{font-weight:500}
+.pm-gc{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.pm-blurbr td{background:var(--tint);padding-top:0}
+.pm-blurb{font-size:13px;color:var(--ink-3);max-width:76ch;padding:0 12px 8px 34px}
+.pm-cr .pm-cap{padding-left:34px}
+.pm-vb{display:flex;align-items:baseline;gap:8px}
+.pm-vb b{font-weight:500;color:var(--ink)}
+.pm-vn{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.pm-pr .pm-cap{padding-left:34px;padding-top:8px;padding-bottom:8px}
+.pm-pn code{font-size:12px;background:none;padding:0;color:var(--ink)}
+.pm-what{display:block;font-size:13px;color:var(--ink-2);line-height:1.45;max-width:64ch;margin-top:2px}
+.pm-risk{display:block;font-size:13px;color:var(--amber-ink);font-weight:500;margin-top:2px;max-width:64ch}
+.pm-note{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+.pm-t tr.is-exc td{background:var(--amber-bg)}
 .pm-me{background:var(--tint)}
-.pm-t .tg{margin:0 auto}
-.pm-none{font-size:14px;color:var(--ink-3);padding:16px 0}
+.pm-me2{background:var(--b50)}
+/* The check. A matrix asks whether something is true, so it reads as a
+   checkbox; mixed means some of the permissions under that capability. */
+.ck{width:20px;height:20px;border-radius:var(--r-xs);border:1px solid var(--g600);background:var(--surface);
+  cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;color:transparent}
+.ck svg{width:12px;height:12px}
+.ck:hover{border-color:var(--b400)}
+.ck.on{background:var(--b500);border-color:var(--b500);color:#fff}
+.ck.some{background:var(--b100);border-color:var(--b400);color:var(--b600)}
+.ck:focus-visible{outline:2px solid var(--b500);outline-offset:2px}
 /* The switch. Reads as on or off at a glance and never as a checkbox, because
    a checkbox in a list of 112 says "tick the ones you want" rather than
    "this is currently true". */

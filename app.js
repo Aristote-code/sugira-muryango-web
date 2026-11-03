@@ -18,7 +18,7 @@
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
     role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
     person:       { crumbs: [['People', 'people'], ['C. Uwimana', null]],                 nav: 'people' },
-    permissions:  { crumbs: [['Permissions', null]],                                      nav: 'permissions' },
+    permissions:  { crumbs: [['Roles & access', null]],                                   nav: 'permissions' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },
     system:       { crumbs: [['System', null]],                                           nav: 'system' },
     settings:     { crumbs: [['Settings', null]],                                        nav: 'settings' },

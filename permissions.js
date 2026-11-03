@@ -222,9 +222,8 @@
   };
 
   function granted(role, p) {
-    if (state.mode === 'role' && role.name === state.role && state.direct.hasOwnProperty(p.id)) {
-      return state.direct[p.id];
-    }
+    var k = role.id + '|' + p.id;
+    if (state.direct.hasOwnProperty(k)) return state.direct[k];
     return (role.grants[p.group] || []).indexOf(p.verb) > -1;
   }
   function position() { return roleByName(state.role); }
@@ -251,63 +250,36 @@
     if (text != null) n.textContent = text;
     return n;
   }
-  function toggle(on, label, onChange, cls) {
-    var b = el('button', 'tg' + (on ? ' on' : '') + (cls ? ' ' + cls : ''));
+  var TICK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" ' +
+    'stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function cell(on, some, label, onChange) {
+    var b = el('button', 'ck' + (on ? ' on' : (some ? ' some' : '')));
     b.type = 'button';
-    b.setAttribute('role', 'switch');
-    b.setAttribute('aria-checked', String(!!on));
+    b.setAttribute('role', 'checkbox');
+    b.setAttribute('aria-checked', on ? 'true' : (some ? 'mixed' : 'false'));
     b.setAttribute('aria-label', label);
-    b.innerHTML = '<span class="tg-k"></span>';
-    if (onChange) b.onclick = function (e) { e.stopPropagation(); onChange(!on); };
-    else { b.disabled = true; b.classList.add('ro'); }
+    b.innerHTML = TICK;
+    b.onclick = function (e) { e.stopPropagation(); onChange(!on); };
     return b;
-  }
-
-  // which toggle columns the table carries, in order
-  function columns() {
-    if (state.mode === 'role') {
-      return ROLES.map(function (r) {
-        return { key: r.id, head: r.id, title: r.name, editable: r.name === state.role,
-                 get: function (p) { return granted(r, p); },
-                 set: function (p, on) {
-                   if (on === (r.grants[p.group] || []).indexOf(p.verb) > -1) delete state.direct[p.id];
-                   else state.direct[p.id] = on;
-                 } };
-      });
-    }
-    var pos = position();
-    return [
-      { key: 'pos', head: pos.id, title: 'From the position — ' + pos.name, editable: false,
-        get: function (p) { return granted(pos, p); } },
-      { key: 'who', head: state.who.split(' ').pop(), title: state.who, editable: true, person: true,
-        get: effective,
-        set: function (p, on) {
-          if (on === granted(pos, p)) delete state.exceptions[p.id];
-          else state.exceptions[p.id] = on;
-        } }
-    ];
   }
 
   function render() {
     var root = $('#permBody');
     if (!root) return;
     root.innerHTML = '';
-    var cols = columns();
-    var onCount = state.mode === 'role'
-      ? ALL.filter(function (p) { return granted(position(), p); }).length
-      : ALL.filter(effective).length;
-    var exc = ALL.filter(isException).length;
+    var editing = state.mode === 'person' ? null : roleByName(state.role);
 
     var head = el('div', 'pm-who');
     if (state.mode === 'person') {
-      head.innerHTML = '<p>What <b class="a"></b> can do. The <b class="b"></b> column is what their position ' +
-        'grants; the one beside it is them. A cell that disagrees with the position is an exception.</p>';
-      head.querySelector('.a').textContent = state.who;
-      head.querySelector('.b').textContent = position().id;
+      head.innerHTML = '<p>The column marked <b class="a"></b> is what ' +
+        '<b class="c"></b> holds today. Changing a cell in it records an exception against them; ' +
+        'changing any other column changes that position for everyone who holds it.</p>';
+      head.querySelector('.a').textContent = position().id;
+      head.querySelector('.c').textContent = state.who;
     } else {
-      head.innerHTML = '<p>Every position across the top, every permission down the side. You are editing ' +
-        '<b class="a"></b>; the other columns are shown so you can see what you are making it differ from.</p>';
-      head.querySelector('.a').textContent = state.role;
+      head.innerHTML = '<p>Every position across the top, every capability down the side. ' +
+        'Click a cell to grant or remove it. A position is the whole column, so a change here reaches ' +
+        'everyone holding it.</p>';
     }
     root.appendChild(head);
 
@@ -324,95 +296,147 @@
       if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); }
     };
     top.appendChild(find);
-    var sum = el('span', 'pm-sum');
-    sum.innerHTML = '<b></b> of ' + ALL.length + ' on';
-    sum.querySelector('b').textContent = onCount;
-    top.appendChild(sum);
+    var exc = ALL.filter(isException).length;
     if (exc) top.appendChild(el('span', 'pm-exc', exc + (exc === 1 ? ' exception' : ' exceptions')));
     root.appendChild(top);
 
+    var wrap = el('div', 'tblwrap');
+    var tb = el('table', 'tbl pm-t');
+
+    var thead = el('thead');
+    var hr = el('tr');
+    hr.appendChild(el('th', 'pm-cap', 'Capability'));
+    ROLES.forEach(function (r) {
+      var mine = state.mode === 'person' && r.name === state.role;
+      var th = el('th', 'a' + (mine ? ' pm-me' : ''));
+      th.title = r.name + (mine ? ' — the position ' + state.who + ' holds' : '');
+      th.appendChild(el('span', 'pm-rid', r.id));
+      th.appendChild(el('span', 'pm-rn2', ALL.filter(function (p) { return granted(r, p); }).length + ''));
+      hr.appendChild(th);
+    });
+    if (state.mode === 'person') {
+      var me = el('th', 'a pm-me2');
+      me.title = state.who;
+      me.appendChild(el('span', 'pm-rid', state.who.split(' ').pop()));
+      me.appendChild(el('span', 'pm-rn2', ALL.filter(effective).length + ''));
+      hr.appendChild(me);
+    }
+    thead.appendChild(hr);
+    tb.appendChild(thead);
+
+    var body = el('tbody');
+    var span = ROLES.length + 1 + (state.mode === 'person' ? 1 : 0);
+
     GROUPS.forEach(function (g) {
-      var perms = g.perms.filter(matches);
-      if (!perms.length) return;
+      var hits = g.perms.filter(matches);
+      if (!hits.length) return;
       var expanded = !!state.open[g.key] || !!state.find;
-      var gOn = g.perms.filter(state.mode === 'role'
-        ? function (p) { return granted(position(), p); } : effective).length;
 
-      var sec = el('section', 'pm-g');
-      var h = el('button', 'pm-gh');
-      h.type = 'button';
-      h.setAttribute('aria-expanded', String(expanded));
-      h.innerHTML = CHEV + '<span class="pm-gn"></span><span class="pm-gc"></span>';
-      h.querySelector('.pm-gn').textContent = g.name;
-      h.querySelector('.pm-gc').textContent = gOn + ' of ' + g.perms.length;
-      h.onclick = function (e) { e.stopPropagation(); state.open[g.key] = !expanded; render(); };
+      // the group row: a heading you can open, not a data row
+      var gr = el('tr', 'pm-grp');
+      var gc = el('td', 'pm-cap');
+      var gb = el('button', 'pm-gh');
+      gb.type = 'button';
+      gb.setAttribute('aria-expanded', String(expanded));
+      gb.innerHTML = CHEV + '<span class="pm-gn"></span><span class="pm-gc"></span>';
+      gb.querySelector('.pm-gn').textContent = g.name;
+      gb.querySelector('.pm-gc').textContent = g.perms.length + ' permissions';
+      gb.onclick = function (e) { e.stopPropagation(); state.open[g.key] = !expanded; render(); };
+      gc.appendChild(gb);
+      gr.appendChild(gc);
+      gr.appendChild(el('td', null, '')).setAttribute('colspan', span - 1);
+      body.appendChild(gr);
 
-      var vs = el('span', 'pm-gv');
-      var editable = cols.filter(function (c) { return c.editable; })[0];
+      if (expanded && g.blurb) {
+        var br = el('tr', 'pm-blurbr');
+        var bc = el('td', 'pm-cap');
+        bc.appendChild(el('p', 'pm-blurb', g.blurb));
+        br.appendChild(bc);
+        br.appendChild(el('td', null, '')).setAttribute('colspan', span - 1);
+        body.appendChild(br);
+      }
+
       VERBS.forEach(function (v) {
         var inV = g.perms.filter(function (p) { return p.verb === v; });
-        if (!inV.length || !editable) { vs.appendChild(el('span', 'pm-gx', '—')); return; }
-        var allOn = inV.every(editable.get);
-        var someOn = !allOn && inV.some(editable.get);
-        var w = el('span', 'pm-gvi');
-        w.appendChild(toggle(allOn, v + ' everything in ' + g.name, function (next) {
-          inV.forEach(function (p) { editable.set(p, next); });
-          state.open[g.key] = true;
-          render();
-        }, someOn ? 'some' : ''));
-        w.appendChild(el('span', 'pm-gvl', v));
-        vs.appendChild(w);
-      });
-      h.appendChild(vs);
-      sec.appendChild(h);
+        if (!inV.length) return;
+        var shownV = inV.filter(matches);
+        if (!shownV.length && state.find) return;
 
-      var bd = el('div', 'pm-gb');
-      bd.hidden = !expanded;
-      if (g.blurb) bd.appendChild(el('p', 'pm-blurb', g.blurb));
-
-      var wrap = el('div', 'tblwrap');
-      var tb = el('table', 'tbl pm-t');
-      var thead = el('thead');
-      var hr = el('tr');
-      hr.appendChild(el('th', null, 'Permission'));
-      hr.appendChild(el('th', null, 'What it means'));
-      hr.appendChild(el('th', 'a', 'Verb'));
-      cols.forEach(function (c) {
-        var th = el('th', 'a' + (c.person ? ' pm-me' : ''), c.head);
-        th.title = c.title;
-        hr.appendChild(th);
-      });
-      thead.appendChild(hr);
-      tb.appendChild(thead);
-
-      var body = el('tbody');
-      perms.forEach(function (p) {
-        var tr = el('tr', isException(p) ? 'is-exc' : null);
-        var c0 = el('td', 'nm');
-        c0.appendChild(el('code', null, p.id));
-        if (p.note) c0.appendChild(el('span', 'pm-note', p.note));
+        var tr = el('tr', 'pm-cr');
+        var c0 = el('td', 'pm-cap');
+        var lab = el('span', 'pm-vb');
+        lab.appendChild(el('b', null, v));
+        lab.appendChild(el('span', 'pm-vn', inV.length === 1 ? '1 permission' : inV.length + ' permissions'));
+        c0.appendChild(lab);
         tr.appendChild(c0);
 
-        var c1 = el('td', 'pm-what');
-        c1.appendChild(el('span', null, p.what));
-        if (p.risk) c1.appendChild(el('span', 'pm-risk', p.risk));
-        tr.appendChild(c1);
-        tr.appendChild(el('td', 'a mut', p.verb));
-
-        cols.forEach(function (c) {
-          var td = el('td', 'a' + (c.person ? ' pm-me' : ''));
-          td.appendChild(toggle(c.get(p), p.id + ' for ' + c.title,
-            c.editable ? function (next) { c.set(p, next); render(); } : null));
+        ROLES.forEach(function (r) {
+          var all = inV.every(function (p) { return granted(r, p); });
+          var some = !all && inV.some(function (p) { return granted(r, p); });
+          var mine = state.mode === 'person' && r.name === state.role;
+          var td = el('td', 'a' + (mine ? ' pm-me' : ''));
+          td.appendChild(cell(all, some, r.name + ' — ' + v + ' ' + g.name, function (next) {
+            inV.forEach(function (p) {
+              if (next === (r.grants[p.group] || []).indexOf(p.verb) > -1) delete state.direct[r.id + '|' + p.id];
+              else state.direct[r.id + '|' + p.id] = next;
+            });
+            render();
+          }));
           tr.appendChild(td);
         });
+        if (state.mode === 'person') {
+          var allMe = inV.every(effective), someMe = !allMe && inV.some(effective);
+          var td2 = el('td', 'a pm-me2');
+          td2.appendChild(cell(allMe, someMe, state.who + ' — ' + v + ' ' + g.name, function (next) {
+            inV.forEach(function (p) {
+              if (next === granted(position(), p)) delete state.exceptions[p.id];
+              else state.exceptions[p.id] = next;
+            });
+            render();
+          }));
+          tr.appendChild(td2);
+        }
         body.appendChild(tr);
+
+        if (!expanded) return;
+        // the stored names behind this capability
+        shownV.forEach(function (p) {
+          var pr = el('tr', 'pm-pr' + (isException(p) ? ' is-exc' : ''));
+          var pc = el('td', 'pm-cap');
+          var nm = el('span', 'pm-pn');
+          nm.appendChild(el('code', null, p.id));
+          pc.appendChild(nm);
+          pc.appendChild(el('span', 'pm-what', p.what));
+          if (p.risk) pc.appendChild(el('span', 'pm-risk', p.risk));
+          if (p.note) pc.appendChild(el('span', 'pm-note', p.note));
+          pr.appendChild(pc);
+          ROLES.forEach(function (r) {
+            var mine = state.mode === 'person' && r.name === state.role;
+            var td = el('td', 'a' + (mine ? ' pm-me' : ''));
+            td.appendChild(cell(granted(r, p), false, p.id + ' for ' + r.name, function (next) {
+              if (next === (r.grants[p.group] || []).indexOf(p.verb) > -1) delete state.direct[r.id + '|' + p.id];
+              else state.direct[r.id + '|' + p.id] = next;
+              render();
+            }));
+            pr.appendChild(td);
+          });
+          if (state.mode === 'person') {
+            var td3 = el('td', 'a pm-me2');
+            td3.appendChild(cell(effective(p), false, p.id + ' for ' + state.who, function (next) {
+              if (next === granted(position(), p)) delete state.exceptions[p.id];
+              else state.exceptions[p.id] = next;
+              render();
+            }));
+            pr.appendChild(td3);
+          }
+          body.appendChild(pr);
+        });
       });
-      tb.appendChild(body);
-      wrap.appendChild(tb);
-      bd.appendChild(wrap);
-      sec.appendChild(bd);
-      root.appendChild(sec);
     });
+
+    tb.appendChild(body);
+    wrap.appendChild(tb);
+    root.appendChild(wrap);
 
     if (!ALL.filter(matches).length) {
       root.appendChild(el('p', 'pm-none', 'No permission matches “' + state.find + '”.'));
