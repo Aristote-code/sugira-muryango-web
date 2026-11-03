@@ -343,7 +343,9 @@
     var view = si.getAttribute('data-view');
     // let the router finish moving screens before the view is applied
     setTimeout(function () {
-      var screen = $('.screen.live') || $('#s-' + si.getAttribute('data-go'));
+      var dw = document.getElementById('dw');
+      var screen = (dw && !dw.hidden && dw.querySelector('.screen'))
+        || $('.screen.live') || $('#s-' + si.getAttribute('data-go'));
       if (!screen) return;
       var id = screen.id;
 

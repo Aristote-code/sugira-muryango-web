@@ -838,6 +838,8 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .modal .mh button:hover{background:var(--x-clickup-color-background-on-main-hover);color:var(--color-content-primary)}
 .modal .mh svg{width:17px;height:17px;fill:none}
 .modal .mb{padding:12px var(--inset) 16px;display:grid;gap:16px}
+.padnote{font-size:13px;line-height:20px;color:var(--color-content-secondary);max-width:78ch}
+.padnote .rel{margin-inline:2px;vertical-align:-4px}
 .impact{padding:12px;border-radius:var(--radius-md);background:var(--color-bg-warning-subtle)}
 .impact b{display:block;margin-bottom:6px;font-size:12px;line-height:16px;font-weight:600;color:var(--color-content-warning)}
 .impact p{font-size:13px;line-height:19px;color:var(--color-content-primary)}

@@ -989,7 +989,7 @@
           <button class="tab on" type="button" data-panel="modules">Modules</button>
           <button class="tab" type="button" data-panel="forms">Forms</button>
           <button class="tab" type="button" data-panel="cohorts">Cohorts</button>
-          <button class="tab" type="button" data-panel="archive">Archived forms <span class="chip" style="margin-left:8px">7</span></button>
+          <button class="tab" type="button" data-panel="archive">Archived forms <span class="chip" style="margin-left:8px">9</span></button>
         </div>
         <div class="pad" data-panelid="modules">
           <div class="card flush plainsurface">
@@ -1053,15 +1053,17 @@
               <div class="pad" data-panelid="archive" hidden>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Name</th><th>Kind</th><th>Archived by</th><th class="num">Archived</th><th>Responses kept</th></tr></thead>
+              <thead><tr><th>Name</th><th>Kind</th><th>Session</th><th>Archived by</th><th class="num">Archived</th><th>Responses kept</th></tr></thead>
               <tbody>
-                <tr><td class="nm">Household visit record v1</td><td class="mut">Form</td><td class="mut">A. Gahimana</td><td class="num mut">12 Sep 2026</td><td>1&#8239;204</td></tr>
-                <tr><td class="nm">Household visit record v2</td><td class="mut">Form</td><td class="mut">A. Gahimana</td><td class="num mut">3 Mar 2026</td><td>2&#8239;880</td></tr>
-                <tr><td class="nm">Caregiver observation (pilot)</td><td class="mut">Form</td><td class="mut">C. Uwimana</td><td class="num mut">18 Jan 2026</td><td>412</td></tr>
-                <tr><td class="nm">Think Aloud testing without Module</td><td class="mut">Module</td><td class="mut">A. Gahimana</td><td class="num mut">9 Dec 2025</td><td>38</td></tr>
-                <tr><td class="nm">Enrollment of Beneficiaries in WEE</td><td class="mut">Form</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="num mut">22 Nov 2025</td><td>166</td></tr>
-                <tr><td class="nm">Get Stakeholders</td><td class="mut">Form</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="num mut">22 Nov 2025</td><td>74</td></tr>
-                <tr><td class="nm">Gender Questionnaire Form (draft)</td><td class="mut">Form</td><td class="mut">C. Uwimana</td><td class="num mut">4 Oct 2025</td><td>0</td></tr>
+                <tr><td class="nm">Session 6 visit record v1</td><td class="mut">Form</td><td class="mut">Session 6</td><td class="mut">A. Gahimana</td><td class="num mut">3 Mar 2026</td><td>986</td></tr>
+                <tr><td class="nm">Session 6 spot-check (pilot)</td><td class="mut">Form</td><td class="mut">Session 6</td><td class="mut">C. Uwimana</td><td class="num mut">18 Jan 2026</td><td>141</td></tr>
+                <tr><td class="nm">Household visit record v1</td><td class="mut">Form</td><td class="mut">Session 6</td><td class="mut">A. Gahimana</td><td class="num mut">12 Sep 2026</td><td>1&#8239;204</td></tr>
+                <tr><td class="nm">Household visit record v2</td><td class="mut">Form</td><td class="mut">Session 6</td><td class="mut">A. Gahimana</td><td class="num mut">3 Mar 2026</td><td>2&#8239;880</td></tr>
+                <tr><td class="nm">Caregiver observation (pilot)</td><td class="mut">Form</td><td class="mut">Session 4</td><td class="mut">C. Uwimana</td><td class="num mut">18 Jan 2026</td><td>412</td></tr>
+                <tr><td class="nm">Think Aloud testing without Module</td><td class="mut">Module</td><td class="mut">—</td><td class="mut">A. Gahimana</td><td class="num mut">9 Dec 2025</td><td>38</td></tr>
+                <tr><td class="nm">Enrollment of Beneficiaries in WEE</td><td class="mut">Form</td><td class="mut">Welcome session</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="num mut">22 Nov 2025</td><td>166</td></tr>
+                <tr><td class="nm">Get Stakeholders</td><td class="mut">Form</td><td class="mut">—</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="num mut">22 Nov 2025</td><td>74</td></tr>
+                <tr><td class="nm">Gender Questionnaire Form (draft)</td><td class="mut">Form</td><td class="mut">Session 9</td><td class="mut">C. Uwimana</td><td class="num mut">4 Oct 2025</td><td>0</td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>7 archived &middot; archiving takes a form off the tablet and keeps every response it already holds</span></div>
@@ -1097,9 +1099,9 @@
           <button class="tab on" type="button" data-panel="forms">Forms</button>
           <button class="tab" type="button" data-panel="content">Content</button>
           <button class="tab" type="button" data-panel="schedule">Schedule</button>
-          <button class="tab" type="button" data-panel="archive">Archive <span class="chip" style="margin-left:8px">2</span></button>
         </div>
         <div class="pad" data-panelid="forms">
+          <p class="padnote">Two forms were archived from this session. They are in <button class="rel" type="button" data-go="project" data-view="tab:Archived"><svg aria-hidden="true"><use href="#i-reports"/></svg>the project archive</button>, with every other archived form, so there is one place to look.</p>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Form</th><th>Filled in by</th><th class="num">Questions</th><th class="num">Responses</th><th>Languages</th><th class="num">Last edited</th></tr></thead>
@@ -1136,20 +1138,7 @@
             <div class="lr"><span class="t">Median length</span><span class="s">42 minutes, against 45 planned</span></div>
             
           </div>
-        </div>
-              <div class="pad" data-panelid="archive" hidden>
-          <div class="card flush plainsurface">
-            <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Name</th><th>Kind</th><th>Archived by</th><th class="num">Archived</th><th>Responses kept</th></tr></thead>
-              <tbody>
-                <tr><td class="nm">Session 6 visit record v1</td><td class="mut">Form</td><td class="mut">A. Gahimana</td><td class="num mut">3 Mar 2026</td><td>986</td></tr>
-                <tr><td class="nm">Session 6 spot-check (pilot)</td><td class="mut">Form</td><td class="mut">C. Uwimana</td><td class="num mut">18 Jan 2026</td><td>141</td></tr>
-              </tbody>
-            </table></div>
-            <div class="tfoot"><span>2 archived &middot; their 1&#8239;127 responses still appear in reports</span></div>
-          </div>
-        </div>
-      </section>
+        </div></section>
 
       <!-- ============ FORM · THE CENTRE ============ -->
       <section class="screen" id="s-form">
