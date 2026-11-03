@@ -17,6 +17,7 @@
     people:       { crumbs: [['People', null]],                                           nav: 'people' },
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
     role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
+    person:       { crumbs: [['People', 'people'], ['C. Uwimana', null]],                 nav: 'people' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },
     system:       { crumbs: [['System', null]],                                           nav: 'system' },
     settings:     { crumbs: [['Settings', null]],                                        nav: 'settings' },
@@ -209,6 +210,28 @@
             '<p style="font-size:.82rem;color:var(--ink-3);margin:0">Visibility reads from the same roles as Roles &amp; access.</p>',
       done: 'Published \u2014 it appears on the tablet at the next sync'
     },
+    access: {
+      title: 'Change access for C. Uwimana',
+      ok: 'Save access',
+      body: '<div><label for="f-ap">Position</label><select id="f-ap"><option>Sugira Muryango Sector lead (SLA)</option><option>Sugira Muryango District lead (DTL)</option><option>IZU Cell Coordinator (ICC)</option><option>IZU at Village</option><option>HQ officer</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>National NCDA Government Official</option></select></div>' +
+            '<div><label for="f-apr">Province</label><select id="f-apr"><option>Eastern</option><option>Northern</option><option>Southern</option><option>Western</option><option>Kigali</option></select></div>' +
+            '<div><label for="f-ad">District</label><select id="f-ad"><option>Ngoma</option><option>Kirehe</option><option>Nyanza</option><option>Rubavu</option><option>Musanze</option></select></div>' +
+            '<div><label for="f-as">Sector</label><select id="f-as"><option>Kibungo</option><option>Jarama</option><option>Sake</option><option>Zaza</option></select></div>' +
+            '<div><label for="f-ac">Cell</label><select id="f-ac"><option>All cells in the sector</option><option>Kabare</option><option>Rukira</option><option>Zaza</option></select></div>' +
+            '<div><label for="f-av">Village</label><select id="f-av"><option>All villages in the cell</option><option>Nyarutovu</option><option>Gituku</option></select></div>' +
+            '<div><label for="f-an">Notified by email</label><select id="f-an"><option>Yes</option><option>No</option></select></div>' +
+            '<p style="font-size:13px;color:var(--ink-3);margin:0;max-width:52ch">The position decides what they can do. The place decides whose records they can do it to. Leave a level unset to cover everything under the one above it.</p>',
+      done: 'Access changed \u2014 it takes effect the next time they sign in'
+    },
+    exception: {
+      title: 'Add an exception',
+      ok: 'Grant exception',
+      body: '<div><label for="f-xw">What they get</label><select id="f-xw"><option>Programme \u2014 Change</option><option>Reports \u2014 Change</option><option>People &amp; access \u2014 See</option><option>Risk-of-harm cases \u2014 Archive</option><option>Maintenance \u2014 See</option></select></div>' +
+            '<div><label for="f-xu">Until</label><input id="f-xu" type="date" value="2026-12-31"></div>' +
+            '<div><label for="f-xr">Why</label><textarea id="f-xr" placeholder="Required. This is what an auditor reads."></textarea></div>' +
+            '<p style="font-size:13px;color:var(--ink-3);margin:0;max-width:52ch">An exception is one person, one thing, with an end date. If several people need the same thing, change the position instead.</p>',
+      done: 'Exception granted \u2014 it appears on the record and expires on its own'
+    },
     invite: {
       title: 'Invite someone',
       ok: 'Send invitation',
@@ -386,7 +409,7 @@
 
   // ---- drawer: a record opens over the list it came from ----
   // Records open in the drawer; the screens that *list* them stay pages.
-  var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1 };
+  var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1 };
   var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
   var dwStack = [], dwHeld = null, dwReturn = null;
 

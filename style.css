@@ -686,6 +686,7 @@ svg use{pointer-events:none}
 .rel svg{width:11px;height:11px;flex:none;fill:none;color:var(--ink-4)}
 .rel:hover svg{color:var(--b500)}
 .rel.more{color:var(--ink-3);border-style:dashed}
+.pgr .v .rel{max-width:min(100%,340px)}
 .pgr .v .rel.hid{display:none}
 .pgr.is-open .v .rel.hid{display:inline-flex}
 .pgr.is-open .v .rel.more{display:none}
