@@ -31,11 +31,7 @@
         rw: 'Gukurikirana amasomo y’umuryango' }],
       ['Description', 'text', { en: 'The core home-visiting curriculum: twelve '
         + 'fortnightly sessions plus two boosters.', rw: '' }],
-      ['Has modules', 'choice:Yes,No', 'Yes'],
-      ['Show on the mobile app', 'choice:Yes,No', 'Yes'],
       ['Project URL', 'text', ''],
-      ['Owner', 'text', 'A. Gahimana'],
-      ['Created', 'date', '12 June 2026'],
       ['Archived', 'choice:Yes,No', 'No']
     ],
     module: [
@@ -50,15 +46,12 @@
     form: [
       ['Form name', 'text', { en: 'Visit record', rw: 'Inyandiko y’uruzinduko' }],
       ['Version', 'number', '4'],
-      ['Questions', 'number', '30'],
       ['Published to the tablet', 'choice:Yes,No', 'Yes'],
-      ['Languages', 'choice:Kinyarwanda,English,Both', 'Both'],
       ['Archived', 'choice:Yes,No', 'No'],
       ['Replaces', 'text', '']
     ],
     person: [
       ['Full name', 'text', 'C. Uwimana'],
-      ['Email', 'text', 'c.uwimana@fxbrwanda.org'],
       ['Phone', 'text', '+250 78 555 0144'],
       ['Employee number', 'text', ''],
       ['Started', 'date', '3 September 2026']
