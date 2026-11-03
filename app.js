@@ -227,6 +227,20 @@
             '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>',
       done: 'Cohort created as a draft \u2014 no household is scheduled yet'
     },
+    cmanage: {
+      title: 'Manage Cohort 1',
+      ok: 'Save the cohort',
+      body: '<div><label for="f-ml">Label</label><input id="f-ml" type="text" value="Cohort 1"></div>' +
+            '<div><label for="f-md">Districts</label><select id="f-md"><option>All five districts</option><option>Kirehe, Musanze, Ngoma</option><option>Nyanza, Rubavu</option></select></div>' +
+            '<div><label for="f-mf">First session falls on</label><input id="f-mf" type="date" value="2026-01-12"></div>' +
+            '<div><label for="f-ms">Status</label><select id="f-ms"><option>Active</option><option>Paused</option><option>Closed</option></select></div>' +
+            '<div class="impact"><b>What this moves</b>' +
+            '<p>1\u202F216 households are on Cohort 1, and 1\u202F104 of them have sessions still to come. ' +
+            'Moving the first session moves every one of those, including 148 already behind schedule.</p>' +
+            '<p>Sessions already delivered are not touched. Pausing the cohort stops new visits being scheduled ' +
+            'but leaves the ones already on a visitor\u2019s list for this week.</p></div>',
+      done: 'Cohort 1 saved \u2014 1\u202F104 households rescheduled'
+    },
     publish: {
       title: 'Publish to the field',
       ok: 'Publish',
