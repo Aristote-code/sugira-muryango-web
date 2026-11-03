@@ -105,7 +105,7 @@ fi
 # scripts/audit-tokens.py came to be served from the live site. Forgetting to
 # add an asset here fails loudly the first time a page is opened; forgetting to
 # delete one fails silently, in public.
-site="index.html tokens.css app.js menu.js filters.js permissions.js places.js relations.js edit.js drawer.js actions.js style.css logo.svg netlify.toml"
+site="index.html tokens.css app.js menu.js filters.js permissions.js places.js relations.js edit.js drawer.js fields.js actions.js style.css logo.svg netlify.toml"
 for f in $site; do
   if [ ! -e "$tmp/$f" ]; then
     echo "deploy aborted — $f is missing from $sha."

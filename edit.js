@@ -65,9 +65,16 @@
   }
 
   function labelOf(cell) {
-    var row = cell.closest('.pgr');
-    var k = row && row.querySelector('.k span:last-child');
+    var row = cell.closest('.pgr') || cell.closest('.fld');
+    var k = row && (row.querySelector('.k span:last-child')
+      || row.querySelector('.fld-k span:last-child'));
     return k ? k.textContent.trim().toLowerCase() : '';
+  }
+
+  /* The property grid writes an empty value as an em dash, the fields
+     section as an en dash; neither is a value. */
+  function blank(text) {
+    return !text || text === '\u2014' || text === '\u2013' || text === 'Empty';
   }
 
   /* The text a cell shows, ignoring the chips and links it may wrap. */
@@ -85,7 +92,7 @@
       + ' is now ' + next, function () {
         cell.innerHTML = '';
         cell.appendChild(document.createTextNode(was));
-        if (!was || was === '—') cell.classList.add('empty');
+        if (blank(was)) cell.classList.add('empty');
       });
   }
 
@@ -96,7 +103,7 @@
     var input = document.createElement('input');
     input.type = 'text';
     input.className = 'pgedit';
-    input.value = was === '—' ? '' : was;
+    input.value = blank(was) ? '' : was;
     cell.innerHTML = '';
     cell.appendChild(input);
     cell.classList.add('editing');
@@ -112,7 +119,7 @@
       if (!save || !next) {
         cell.innerHTML = '';
         cell.appendChild(document.createTextNode(was));
-        if (was === '—') cell.classList.add('empty');
+        if (blank(was)) cell.classList.add('empty');
         return;
       }
       commit(cell, next, was);
@@ -179,13 +186,16 @@
   }
 
   function start(cell) {
-    var opts = CHOICES[labelOf(cell)];
+    /* a field declares its own set when it has one */
+    var t = cell.getAttribute('data-ftype') || '';
+    var opts = t.indexOf('choice:') === 0 ? t.slice(7).split(',')
+      : CHOICES[labelOf(cell)];
     if (opts) pick(cell, opts); else typeIn(cell);
   }
 
   document.addEventListener('click', function (e) {
     if (openMenu && !openMenu.contains(e.target)) shutMenu();
-    var cell = e.target.closest ? e.target.closest('.pgr .v') : null;
+    var cell = e.target.closest ? e.target.closest('.pgr .v, .fld .v') : null;
     /* a link or chip inside the value keeps its own job */
     if (!cell || cell.classList.contains('editing')) return;
     if (e.target.closest('.rel, button:not(.pgmenu-i), a')) return;
@@ -198,7 +208,7 @@
     if (e.key !== 'Enter' && e.key !== ' ') return;
     var cell = document.activeElement;
     if (!cell || !cell.classList || !cell.classList.contains('v')) return;
-    if (!cell.closest('.pgr')) return;
+    if (!cell.closest('.pgr') && !cell.closest('.fld')) return;
     e.preventDefault();
     start(cell);
   });
@@ -245,13 +255,16 @@
   }
 
   function mount() {
-    $$('.pgr .v').forEach(editable);
+    $$('.pgr .v, .fld .v').forEach(editable);
     $$('.rec h1').forEach(function (h) { inPlace(h, 'title'); });
     $$('.rec-desc').forEach(function (d) { inPlace(d, 'description'); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
   else mount();
+  /* the fields section is built after this file runs, so it says when its
+     rows exist and they pick up the same keyboard handling */
+  document.addEventListener('fields:ready', mount);
   window.addEventListener('resize', shutMenu);
   window.addEventListener('scroll', shutMenu, true);
 })();

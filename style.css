@@ -215,6 +215,70 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   line-height:16px;font-weight:500;color:var(--color-content-secondary);border-radius:var(--x-clickup-radii-2-5)}
 .seg button.on{background:var(--color-bg-surface);color:var(--color-content-secondary);box-shadow:var(--elevation-raised)}
 
+/* ---------------- fields ---------------- */
+/* CustomFieldRow as measured: 36 high on a 1px top border.subtle, a 220
+   label column with a 16 type icon and the name 8 after it, the value
+   taking the rest. A field that exists in two languages is one row with
+   two tagged values, which is the pairing the old screen never had. */
+.fields{margin-top:24px}
+.fields-h{display:flex;align-items:center;min-height:var(--size-control-md)}
+.fields-h h3{font-size:16px;line-height:20px;font-weight:600;color:var(--color-content-primary)}
+.fields-b{margin-top:8px;border-bottom:1px solid var(--color-border-subtle)}
+.fld{display:grid;grid-template-columns:220px minmax(0,1fr);align-items:stretch;
+  min-height:36px;border-top:1px solid var(--color-border-subtle)}
+.fld[hidden]{display:none}
+.fld-k{display:flex;align-items:center;gap:8px;padding:0 8px 0 6px;min-width:0;
+  font-size:14px;line-height:16px;color:var(--color-content-primary)}
+.fld-i{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
+  color:var(--x-clickup-color-content-placeholder)}
+.fld-i svg{width:16px;height:16px;fill:none}
+.fld .v{display:flex;align-items:center;min-height:36px;padding:2px 8px;min-width:0;
+  font-size:14px;line-height:16px;color:var(--color-content-primary);
+  border-radius:var(--x-clickup-radii-3);cursor:pointer}
+.fld .v:hover{background:var(--color-bg-hover)}
+.fld .v.empty{color:var(--color-content-secondary)}
+.fld .v[role="button"]:focus-visible{outline:2px solid var(--color-bg-primary-default);
+  outline-offset:-2px}
+.fld-pair{display:flex;flex-direction:column;min-width:0}
+.fld-lang{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;min-width:0}
+.fld-lang + .fld-lang{border-top:1px solid var(--color-border-subtle)}
+.fld-tag{display:inline-flex;align-items:center;justify-content:center;height:16px;
+  border-radius:var(--x-clickup-radii-2);background:var(--x-clickup-color-background-on-main);
+  font-size:11px;font-weight:500;color:var(--color-content-secondary)}
+.fields-t{margin-top:8px;height:var(--size-control-xs);padding:0 7px 0 5px;border:0;
+  background:none;border-radius:var(--x-clickup-radii-2-5);font:inherit;font-size:12px;
+  line-height:16px;font-weight:500;color:var(--color-content-secondary);cursor:pointer}
+.fields-t:hover{background:var(--x-clickup-color-background-on-main)}
+
+/* The record's own menu. MenuButtonGroup as measured: two bordered buttons
+   sharing an edge, 33 tall, outer corners r6, 13px. */
+.recmore{display:inline-flex;align-items:center;justify-content:center;
+  width:var(--size-control-xs);height:var(--size-control-xs);padding:0;border:0;background:none;
+  border-radius:var(--x-clickup-radii-3);color:var(--color-content-secondary);
+  font-size:14px;line-height:1;cursor:pointer}
+.recmore:hover{background:var(--x-clickup-color-background-on-main);
+  color:var(--color-content-primary)}
+.recmenu{position:absolute;z-index:var(--z-pop);min-width:240px;padding:8px 0;
+  border-radius:var(--radius-lg);background:var(--color-bg-surface);
+  box-shadow:var(--elevation-overlay)}
+.recmenu-pair{display:flex;margin:0 8px 8px;padding-bottom:8px;
+  border-bottom:1px solid var(--color-border-default)}
+.recmenu-pair > *{border-radius:0}
+.recmenu-pair{--r:var(--x-clickup-radii-3)}
+.recmenu-pb{flex:1;height:33px;padding:0 12px;border:1px solid var(--color-border-default);
+  background:var(--color-bg-surface);font:inherit;font-size:13px;line-height:16px;
+  color:var(--color-content-primary);cursor:pointer}
+.recmenu-pb:first-child{border-start-start-radius:var(--x-clickup-radii-3);
+  border-end-start-radius:var(--x-clickup-radii-3);border-right-width:0}
+.recmenu-pb:last-child{border-start-end-radius:var(--x-clickup-radii-3);
+  border-end-end-radius:var(--x-clickup-radii-3)}
+.recmenu-pb:hover{background:var(--x-clickup-color-background-on-main)}
+.recmenu-i{display:flex;align-items:center;width:calc(100% - 16px);margin:0 8px;
+  min-height:var(--menu-item-height);padding:6px 8px;border:0;background:none;
+  border-radius:var(--menu-item-radius);font:inherit;font-size:14px;line-height:16px;
+  color:var(--color-content-primary);text-align:left;cursor:pointer}
+.recmenu-i:hover,.recmenu-i:focus-visible{background:var(--menu-item-bg-highlighted);outline:none}
+
 /* ---------------- editing in place ---------------- */
 /* A property value is the picker's trigger, so it has to look like something
    you can press before you press it: the system's cell hover, nothing more
