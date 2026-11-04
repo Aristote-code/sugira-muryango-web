@@ -106,6 +106,14 @@
       var lab = el('span', 'cmenu-t', it.label);
       b.appendChild(lab);
       if (it.hint) b.appendChild(el('span', 'cmenu-hint', it.hint));
+      /* A second line under the label, as MenuRadioItem has (Menu.tsx:141):
+         the row wraps and the description takes the whole next line. It is
+         how the design system explains an option at the moment of choosing,
+         rather than leaving it to a tooltip nobody opens. */
+      if (it.description) {
+        b.classList.add('desc');
+        b.appendChild(el('span', 'cmenu-d', it.description));
+      }
       if (it.submenu) {
         var c = el('span', 'cmenu-ch');
         c.setAttribute('aria-hidden', 'true');

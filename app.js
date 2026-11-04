@@ -49,11 +49,11 @@
     households:    '2 210 enrolled across five districts. 148 are behind their cohort schedule.',
     izu:           'Whether a session was delivered the way it was designed, scored by the cell coordinator who sat in on it. A low grade is a training need, not a disciplinary one.',
     people:        'Who can use the system, what they are allowed to do, and the place their role applies to. The place is part of the assignment, not part of the role.',
-    permissions:   'One permission is one thing you may do to one object. The eight groups below are how people talk about them; the names inside each group are what the system actually stores. A position grants them in bulk. A person inherits the position and may hold exceptions to it.',
+    permissions:   'A position is built on the one below it and may only add to it, so nobody starts from 112 blank checkboxes \u2014 which is what produced 21 roles for 10 jobs, three of them called Test role. Open a position to see what it starts from, the few things it adds, and the stored names behind them. Where a position applies \u2014 which sector, which district \u2014 is set when it is given to a person, not here.',
     places:        'The administrative hierarchy every role is scoped against, and every household belongs to. Six levels from province down to IZU. The programme runs in five districts across four provinces.',
     programme:     'What a home visit contains: the projects, their sessions, the forms the visitor fills in, and the cohorts that decide who gets which session when.',
     reports:       'Build a question once, save it, and have it sent on a schedule.',
-    roles:         'A role says what someone can do. Where they can do it is set when the role is given to a person, so one role covers every sector rather than needing one role per place.',
+    roles:         'Superseded by Roles & access, which states a position as what it starts from plus what it adds. Kept until FXB has seen both.',
     safeguarding:  'Three open cases. Two of them are past the 72-hour review window.',
     settings:      'The rules the whole programme runs on. Changing one here changes it for every district, every tablet and every household at once, so each says what it will move.',
     system:        'Who did what, and the housekeeping that keeps the data honest. The rules themselves live in Settings.',
@@ -290,10 +290,10 @@
     exception: {
       title: 'Add an exception',
       ok: 'Grant exception',
-      body: '<div><label for="f-xw">What they get</label><select id="f-xw"><option>Programme \u2014 Change</option><option>Reports \u2014 Change</option><option>People &amp; access \u2014 See</option><option>Risk-of-harm cases \u2014 Archive</option><option>Maintenance \u2014 See</option></select></div>' +
+      body: '<div><label for="f-xw">The one thing they get</label><select id="f-xw"><option>Change \u2014 Programme</option><option>Add \u2014 Programme</option><option>Change \u2014 Reports</option><option>Archive \u2014 Reports</option><option>See \u2014 People &amp; access</option><option>See \u2014 Maintenance</option><option>Change \u2014 Maintenance</option><option>Archive \u2014 Households</option><option>Change \u2014 Field support</option></select></div>' +
             '<div><label for="f-xu">Until</label><input id="f-xu" type="date" value="2026-12-31"></div>' +
             '<div><label for="f-xr">Why</label><textarea id="f-xr" placeholder="Required. This is what an auditor reads."></textarea></div>' +
-            '<p style="font-size:13px;color:var(--ink-3);margin:0;max-width:52ch">An exception is one person, one thing, with an end date. If several people need the same thing, change the position instead.</p>',
+            '<p style="font-size:13px;color:var(--ink-3);margin:0;max-width:52ch">One person, one thing, with an end date. The list holds only what their position does not already give them. If a second person needs the same thing, it belongs on the position \u2014 or on a rung above it.</p>',
       done: 'Exception granted \u2014 it appears on the record and expires on its own'
     },
     invite: {
@@ -345,13 +345,13 @@
       done: 'Role saved \u2014 17 people are affected'
     },
     role: {
-      title: 'New role',
-      ok: 'Create role',
-      body: '<div><label for="f-rn">Role name</label><input id="f-rn" type="text" placeholder="e.g. District coordinator"></div>' +
-            '<div><label for="f-rl">Operates at</label><select id="f-rl"><option>Sector</option><option>Cell</option><option>District</option><option>Province</option><option>National</option><option>IZU</option></select></div>' +
+      title: 'New position',
+      ok: 'Create position',
+      body: '<div><label for="f-rn">Name</label><input id="f-rn" type="text" placeholder="e.g. District coordinator"></div>' +
+            '<div><label for="f-rb">Starts from</label><select id="f-rb"><option>IZU Cell Coordinator (ICC) \u2014 20</option><option>IZU at Village \u2014 26</option><option>Sugira Muryango District lead (DTL) \u2014 29</option><option>Sugira Muryango Sector lead (SLA) \u2014 44</option><option>National NCDA Government Official \u2014 5</option><option>District NCDA Child protection and Welfare Officer (CPWO) \u2014 7</option><option>Nothing \u2014 build from zero</option></select></div>' +
             '<div><label for="f-rp">Programme</label><select id="f-rp"><option>All projects</option><option>Selected projects</option></select></div>' +
-            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">The level, not the place. Which sector or district a person covers is set when you give them the role.</p>',
-      done: 'Role created with nothing granted yet'
+            '<p style="font-size:13px;color:var(--ink-3);margin:0;max-width:52ch">It gets everything the position it starts from has, and you add to it on the next screen. It cannot take anything away: something that needs less is a rung of its own. Which sector or district a person covers is set when you give them the position, not here.</p>',
+      done: 'Position created \u2014 it already has everything the one it starts from has'
     },
     report: {
       title: 'Build a report',

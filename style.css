@@ -384,7 +384,6 @@ h1 .ihelp,h2 .ihelp,h3 .ihelp{margin-left:6px}
 
 abbr[data-tip]{text-decoration:underline dotted;text-underline-offset:3px;text-decoration-color:var(--color-content-tertiary);cursor:help}
 abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
-.pm-t thead th.a[data-tip]{cursor:help}
 .tip{position:absolute;z-index:var(--z-tooltip);max-width:min(360px,calc(100vw - 32px));
   padding:8px 12px;border-radius:var(--x-clickup-radii-3);
   background:var(--x-clickup-color-background-tooltip);color:var(--color-content-inverse);
@@ -1029,73 +1028,132 @@ svg use{pointer-events:none}
   border-radius:6px;border:0;background:none;cursor:pointer;color:var(--color-content-secondary)}
 .qpop-h .x:hover{background:var(--x-clickup-color-background-on-main);color:var(--color-content-primary)}
 .qpop-h .x svg{width:13px;height:13px;fill:none}
-/* Permissions drawer. 112 rows, so the grammar has to be flat: one row is one
-   permission, its verb, where it came from, and a switch. Nothing is a card. */
+/* ---- Roles & access -------------------------------------------------------
+   The disclosure-card stack from the design system's own share dialog
+   (blocks/ListDialogs.tsx): cards at rest show only their header, one is
+   expanded, and the header carries enough to be read without opening. The
+   cards indent by what they are built on, so the ladder is the layout. */
 .pm-top{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.pm-find{flex:1;min-width:240px;height:var(--size-control-md);border:1px solid var(--color-border-default);border-radius:var(--radius-md);
-  background:var(--color-bg-surface);font-family:var(--ui);font-size:14px;color:var(--color-content-primary);padding:0 12px}
-.pm-find:focus{outline:none;border-color:var(--x-clickup-color-border-primary-hover);box-shadow:0 0 0 3px var(--color-bg-primary-subtle)}
 .pm-sum{font-family:var(--mono);font-size:13px;color:var(--color-content-secondary);flex:none}
 .pm-sum b{color:var(--color-content-primary);font-weight:600}
-.pm-exc{font-size:12px;font-weight:500;color:var(--color-content-warning);background:var(--color-bg-warning-subtle);
-  padding:2px 8px;border-radius:var(--x-clickup-radii-5);flex:none}
-.pm-g{border-top:1px solid var(--color-border-default)}
-.pm-gh{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 0;border:0;
-  background:none;cursor:pointer;font-family:var(--ui);font-size:16px;color:var(--color-content-primary);text-align:left}
-.pm-gh:hover{background:var(--x-clickup-color-background-on-main)}
-.pm-cv{width:14px;height:14px;flex:none;color:var(--color-content-secondary);transition:transform .14s ease}
-.pm-gh[aria-expanded="true"] .pm-cv{transform:rotate(90deg)}
-.pm-gn{font-weight:500;flex:none}
-.pm-gc{font-family:var(--mono);font-size:12px;color:var(--color-content-secondary);flex:1}
-.pm-gv{display:flex;align-items:center;gap:16px;flex:none}
-.pm-gvi{display:flex;align-items:center;gap:6px}
-.pm-gvl{font-size:12px;color:var(--color-content-secondary);min-width:44px}
-.pm-gx{width:76px}
-.pm-gb{padding:0 0 20px 26px}
-.pm-gb[hidden]{display:none}
-.pm-blurb{font-size:13px;color:var(--color-content-secondary);max-width:76ch;margin-bottom:12px}
-/* The matrix. Capabilities down, positions across, a check in each cell —
-   GitHub's comparison-table shape, where a role is read by scanning its
-   column rather than by opening it. Four capability rows per group is 32 for
-   the whole system; the 112 stored names only appear when a group is opened. */
-.pm-t{table-layout:auto}
-.pm-t th.a,.pm-t td.a{text-align:center;width:72px}
-.pm-t .pm-cap{width:auto;min-width:300px}
-.pm-t thead th.a{vertical-align:bottom;padding-bottom:8px}
-.pm-rid{display:block;font-size:13px;font-weight:500;color:var(--color-content-primary)}
-.pm-rn2{display:block;font-family:var(--mono);font-size:11px;color:var(--color-content-secondary);margin-top:2px}
-.pm-grp td{background:var(--x-clickup-color-background-on-main);border-top:1px solid var(--color-border-default)}
-.pm-grp .pm-cap{padding:0}
-.pm-gh{display:flex;align-items:center;gap:8px;width:100%;min-height:40px;padding:0 12px;border:0;
-  background:none;cursor:pointer;font-family:var(--ui);font-size:14px;color:var(--color-content-primary);text-align:left}
-.pm-gh:hover{color:var(--color-content-link)}
-.pm-cv{width:14px;height:14px;flex:none;color:var(--color-content-secondary);transition:transform .14s ease}
-.pm-gh[aria-expanded="true"] .pm-cv{transform:rotate(90deg)}
-.pm-gn{font-weight:500}
-.pm-gc{font-family:var(--mono);font-size:11px;color:var(--color-content-secondary)}
-.pm-blurbr td{background:var(--x-clickup-color-background-on-main);padding-top:0}
-.pm-blurb{font-size:13px;color:var(--color-content-secondary);max-width:76ch;padding:0 12px 8px 34px}
-.pm-cr .pm-cap{padding-left:34px}
-.pm-vb{display:flex;align-items:baseline;gap:8px}
-.pm-vb b{font-weight:500;color:var(--color-content-primary)}
-.pm-vn{font-family:var(--mono);font-size:11px;color:var(--color-content-secondary)}
-.pm-pr .pm-cap{padding-left:34px;padding-top:8px;padding-bottom:8px}
-.pm-pn code{font-size:12px;background:none;padding:0;color:var(--color-content-primary)}
-.pm-what{display:block;font-size:13px;color:var(--color-content-secondary);line-height:1.45;max-width:64ch;margin-top:2px}
-.pm-risk{display:block;font-size:13px;color:var(--color-content-warning);font-weight:500;margin-top:2px;max-width:64ch}
-.pm-note{display:block;font-size:12px;color:var(--color-content-secondary);margin-top:2px}
-.pm-t tr.is-exc td{background:var(--color-bg-warning-subtle)}
-.pm-me{background:var(--x-clickup-color-background-on-main)}
-.pm-me2{background:var(--color-bg-primary-subtle)}
-/* The check. A matrix asks whether something is true, so it reads as a
-   checkbox; mixed means some of the permissions under that capability. */
-.ck{width:20px;height:20px;border-radius:var(--radius-xs);border:1px solid var(--color-primitive-grey-600);background:var(--color-bg-surface);
-  cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;color:transparent}
-.ck svg{width:12px;height:12px}
-.ck:hover{border-color:var(--x-clickup-color-border-primary-hover)}
-.ck.on{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default);color:var(--color-content-on-primary)}
-.ck.some{background:var(--color-bg-primary-subtle);border-color:var(--x-clickup-color-border-primary-hover);color:var(--color-bg-primary-hover)}
-.ck:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}
+.pm-ladder{display:grid;gap:4px;align-content:start}
+/* The field ladder and the office ladder share no rung, so the second
+   root starts away from the first rather than continuing it. */
+.pm-card[data-root]:not(:first-child){margin-top:12px}
+.pm-card{background:var(--color-bg-surface);border-radius:var(--radius-lg);box-shadow:var(--elevation-raised);
+  overflow:hidden;min-width:0}
+.pm-card.is-open{box-shadow:var(--x-clickup-elevation-border-3)}
+.pm-card.is-theirs{box-shadow:0 0 0 1px var(--x-clickup-color-border-primary-low-contrast),var(--elevation-raised)}
+.pm-ch{display:flex;align-items:center;gap:12px;width:100%;min-height:var(--list-dialogs-share-card-height);
+  padding:10px 16px;border:0;background:none;cursor:pointer;font-family:var(--ui);text-align:left;color:var(--color-content-primary)}
+.pm-ch:hover{background:var(--x-clickup-color-background-on-main)}
+.pm-ch:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.pm-cv{width:14px;height:14px;flex:none;fill:none;color:var(--color-content-secondary);transition:transform .14s ease}
+.pm-ch[aria-expanded="true"] .pm-cv{transform:rotate(90deg)}
+.pm-ctx{flex:1;min-width:0;display:grid;gap:2px}
+.pm-cn{display:flex;align-items:center;gap:8px;min-width:0}
+.pm-cn b{font-size:14px;line-height:var(--lh-16);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pm-mine{flex:none;font-size:11px;font-weight:500;line-height:16px;padding:0 6px;border-radius:var(--chip-radius);
+  background:var(--color-bg-primary-subtle);color:var(--x-clickup-color-background-primary-pressed)}
+.pm-cl{font-size:13px;line-height:18px;color:var(--color-content-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pm-reach{flex:none;width:96px;font-size:12px;line-height:16px;color:var(--color-content-secondary);text-align:right;
+  font-variant-numeric:tabular-nums}
+.pm-reach b{font-size:14px;font-weight:600;color:var(--color-content-primary)}
+.pm-reach .trk{display:block;margin-top:4px}
+.pm-cp{flex:none;width:76px;text-align:right;font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
+.pm-cb{padding:4px 16px 16px 42px;display:grid;gap:20px}
+.pm-cb .pm-what{font-size:14px;line-height:21px;color:var(--color-content-secondary);max-width:80ch}
+.pm-sect{display:grid;gap:8px;min-width:0}
+.pm-lbl{font-size:12px;line-height:16px;font-weight:500;color:var(--color-content-secondary);margin:0}
+.pm-sh{display:flex;align-items:center;gap:8px}
+.pm-sh .pm-lbl{flex:1;min-width:0}
+/* "Starts from" is DialogSelect (components/AppDialog.tsx:404): a 36 px icon
+   tile, the title with a chevron, and the description on its own line so the
+   choice explains itself without being opened. */
+.pm-bsel{display:flex;align-items:center;gap:8px;width:100%;max-width:560px;margin-left:-8px;
+  padding:8px 20px 8px 8px;border:0;background:none;cursor:pointer;text-align:left;font-family:var(--ui);
+  border-radius:var(--app-dialog-dialog-select-trigger-radius)}
+.pm-bsel:hover{background:var(--x-clickup-color-background-on-main)}
+.pm-bsel:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.pm-bico{display:flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;
+  border-radius:var(--app-dialog-radius-2);background:var(--x-clickup-color-background-on-main);color:var(--color-content-secondary)}
+.pm-bico svg{width:18px;height:18px;fill:none}
+.pm-bico.fill svg{fill:currentColor;stroke:none}
+.pm-btx{display:grid;gap:2px;min-width:0}
+.pm-bt{display:flex;align-items:center;gap:2px;font-size:14px;line-height:var(--lh-16);font-weight:500;color:var(--color-content-primary)}
+.pm-bt .pm-cv{transform:rotate(90deg);color:var(--x-clickup-color-content-placeholder)}
+/* The same row used to go somewhere rather than to open a menu: the chevron
+   points the way it leads. */
+.pm-bsel.go .pm-bt .pm-cv{transform:none}
+.pm-bd{font-size:12px;line-height:18px;color:var(--color-content-secondary)}
+/* The additions. One row each, removable one at a time, as the share dialog
+   lists the people added on top of what the Space already gives. */
+.pm-adds{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.pm-add{display:flex;align-items:center;gap:8px;min-height:var(--size-control-lg);padding:0 8px;margin-inline:-8px;
+  border-radius:var(--menu-radius);font-size:14px;line-height:var(--lh-16);color:var(--color-content-primary)}
+.pm-add:hover{background:var(--x-clickup-color-background-on-main)}
+.pm-agi{width:16px;height:16px;flex:none;fill:none;color:var(--color-content-secondary)}
+.pm-add.guarded .pm-agi{color:var(--color-content-danger)}
+.pm-an{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0}
+.pm-an b{font-weight:600;min-width:56px}
+.pm-aw{flex:none;font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
+.pm-arisk{display:flex;align-items:center;justify-content:center;width:20px;height:20px;flex:none;
+  color:var(--color-content-warning);cursor:help}
+.pm-arisk svg{width:14px;height:14px;fill:none}
+.pm-ax{display:flex;align-items:center;justify-content:center;width:var(--size-control-xs);height:var(--size-control-xs);
+  flex:none;border:0;background:none;border-radius:var(--button-sm-radius);cursor:pointer;color:var(--color-content-secondary)}
+.pm-ax:hover{background:var(--color-bg-danger-subtle);color:var(--color-content-danger)}
+.pm-ax:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.pm-ax svg{width:13px;height:13px;fill:none}
+/* Where "Make Private" sits in ClickUp's share dialog: one full-width subtle
+   button under the rows it adds to. */
+.pm-addbtn{display:inline-flex;align-items:center;justify-content:center;gap:4px;height:var(--size-control-sm);
+  flex:none;padding:0 10px;border:0;border-radius:var(--x-clickup-radii-3-5);cursor:pointer;font-family:var(--ui);
+  font-size:14px;line-height:16px;font-weight:500;background:var(--x-clickup-color-background-on-main);color:var(--color-content-primary)}
+.pm-addbtn:hover{background:var(--x-clickup-color-background-on-main-hover)}
+.pm-addbtn:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
+.pm-addbtn svg{width:14px;height:14px;fill:none}
+.pm-rule{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:80ch;margin-top:4px}
+.pm-none{font-size:13px;line-height:18px;color:var(--color-content-secondary)}
+.pm-cfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--color-border-subtle)}
+.pm-more{border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;font-weight:600;
+  color:var(--color-content-link);padding:4px 6px;margin-left:-6px;border-radius:6px}
+.pm-more:hover{background:var(--color-bg-primary-subtle)}
+.pm-kids{font-size:12px;color:var(--color-content-secondary)}
+/* The 112 stored names, one disclosure deeper, each saying which rung it
+   arrives from. The search only exists here, because the stored names are
+   unreadable; fix the names and it becomes a convenience. */
+.pm-detail{display:grid;gap:16px;padding:16px;border-radius:var(--radius-md);background:var(--color-bg-canvas)}
+.pm-find{width:100%;height:var(--size-control-md);border:1px solid var(--color-border-default);border-radius:var(--radius-md);
+  background:var(--color-bg-surface);font-family:var(--ui);font-size:14px;color:var(--color-content-primary);padding:0 12px}
+.pm-find:focus{outline:none;border-color:var(--x-clickup-color-border-primary-hover);box-shadow:0 0 0 3px var(--color-bg-primary-subtle)}
+.pm-dg{display:grid;gap:2px}
+.pm-drule{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:86ch;margin-top:-8px}
+.pm-dgb{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:86ch;padding-bottom:2px}
+.pm-dgh{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;font-weight:500;
+  color:var(--color-content-secondary);padding-bottom:4px}
+.pm-dgh svg{width:14px;height:14px;fill:none;flex:none}
+.pm-dgh span:first-of-type{flex:1;min-width:0;color:var(--color-content-primary)}
+.pm-dgc{font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums}
+.pm-dr{display:flex;align-items:flex-start;gap:16px;padding:8px 0;border-top:1px solid var(--color-border-subtle)}
+.pm-dl{flex:1;min-width:0;display:grid;gap:2px}
+.pm-dn{display:flex;align-items:baseline;gap:8px}
+.pm-dn code{font-family:var(--mono);font-size:12px;color:var(--color-content-primary)}
+.pm-dv{font-size:11px;line-height:16px;font-weight:500;color:var(--color-content-secondary)}
+.pm-dw{font-size:13px;line-height:18px;color:var(--color-content-secondary);max-width:72ch}
+.pm-drisk{font-size:13px;line-height:18px;font-weight:500;color:var(--color-content-warning);max-width:72ch}
+.pm-dnote{font-size:12px;line-height:16px;color:var(--color-content-secondary)}
+.pm-dsrc{flex:none;width:168px;text-align:right;font-size:12px;line-height:18px;color:var(--color-content-secondary)}
+.pm-dsrc.here{color:var(--x-clickup-color-background-primary-pressed);font-weight:500}
+/* Opened from a person: whose access this is, before any of it is shown. */
+.pm-who{display:flex;align-items:flex-start;gap:12px;background:var(--color-bg-surface);border-radius:var(--radius-lg);
+  box-shadow:var(--elevation-raised);padding:16px;margin-bottom:16px}
+.pm-who .av{width:var(--size-control-sm);height:var(--size-control-sm);font-size:13px}
+.pm-whot{flex:1;min-width:0;display:grid;gap:2px}
+.pm-whon{font-size:14px;line-height:var(--lh-16);color:var(--color-content-primary)}
+.pm-whon b{font-weight:600}
+.pm-whod{font-size:13px;line-height:18px;color:var(--color-content-secondary);max-width:86ch}
+.pm-foot{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:92ch;padding:0 2px}
 /* The switch. Reads as on or off at a glance and never as a checkbox, because
    a checkbox in a list of 112 says "tick the ones you want" rather than
    "this is currently true". */
@@ -1291,7 +1349,10 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   box-shadow:var(--elevation-overlay);
   display:flex;flex-direction:column;max-height:min(26rem,70vh)}
 .cmenu-l{overflow-y:auto;display:flex;flex-direction:column}
-.cmenu-i{display:flex;align-items:center;gap:8px;min-height:28px;margin:2px 8px 0;
+/* flex:none because the panel is a capped flex column: a row carrying a
+   description would otherwise be squeezed back to 28 and spill its second
+   line over the row below. */
+.cmenu-i{display:flex;flex:none;align-items:center;gap:8px;min-height:28px;margin:2px 8px 0;
   padding:6px 8px;border:0;border-radius:7px;background:transparent;cursor:pointer;
   font-family:var(--ui);font-size:14px;line-height:16px;color:var(--color-content-primary);text-align:left}
 .cmenu-i:first-child{margin-top:0}
@@ -1303,7 +1364,16 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   background:var(--color-bg-primary-hover);-webkit-mask:var(--i-check) center/14px no-repeat;
   mask:var(--i-check) center/14px no-repeat}
 .cmenu-i.sel:has(.cmenu-ch)::after{content:none}
-.cmenu-hint{font-size:12px;color:var(--color-content-secondary);flex:none}
+.cmenu-hint{font-size:12px;color:var(--color-content-secondary);flex:none;font-variant-numeric:tabular-nums}
+/* MenuRadioItem's description (components/Menu.tsx:141): the row wraps and
+   the second line takes the full width, so an option says what it costs at
+   the moment it is chosen rather than in a tooltip nobody opens. */
+.cmenu-i.desc{flex-wrap:wrap;align-items:baseline;padding-top:6px;padding-bottom:6px}
+/* The check belongs on the label's line, not under the description, which is
+   the order MenuRadioItem renders them in. */
+.cmenu-i.desc.sel::after{order:1}
+.cmenu-d{order:2;flex-basis:100%;font-size:var(--menu-description-font-size);
+  line-height:var(--menu-description-line-height);color:var(--color-content-secondary);white-space:normal}
 .cmenu-ch{color:var(--color-content-secondary);font-size:14px;flex:none;margin-left:4px}
 .cmenu-i.back .cmenu-t{color:var(--color-content-secondary)}
 .cmenu-h{font-size:12px;line-height:16px;font-weight:500;color:var(--color-content-secondary);
