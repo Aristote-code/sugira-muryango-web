@@ -209,8 +209,68 @@
      map is read from there rather than written twice. */
   window.SUGIRA_RELATIONS = R;
 
+  /* A property row is one line (PropertyGrid.tsx: h-8), and the chips in it are
+     flex children, so a row with four of them squeezes every one down to an
+     ellipsis — "FCG participation" became 47px of "FCG partic…", and the +3
+     that was supposed to be the way out became 15px wide. How many fit depends
+     on the width the row is read at: the record screen gives it two columns,
+     the drawer one, the side pane less again. So it is counted rather than
+     written into the markup, and the chips that do not fit go behind the count
+     the row already had. */
+  function fit(v) {
+    var chips = [].slice.call(v.querySelectorAll('.rel:not(.more)'));
+    if (chips.length < 2) return;
+    var more = v.querySelector('.rel.more');
+    if (!more) {
+      /* Only one row was written with a way out of itself; the rest need one
+         too, and it belongs before the consequence note at the end. */
+      more = document.createElement('button');
+      more.className = 'rel more';
+      more.type = 'button';
+      more.setAttribute('data-more', '');
+      more.hidden = true;
+      v.insertBefore(more, v.querySelector('.conseq'));
+    }
+    chips.forEach(function (c) { c.classList.remove('hid'); });
+    more.hidden = true;
+    /* While the chips can shrink, nothing ever overflows — they just get
+       narrower — so there is no overflow to measure. They are pinned to their
+       own width for the count, and let go again afterwards, which leaves the
+       last one free to ellipsise into whatever room is left. */
+    v.classList.add('measuring');
+    var n = chips.length;
+    while (n > 1 && v.scrollWidth > v.clientWidth) {
+      chips[--n].classList.add('hid');
+      more.hidden = false;
+      more.textContent = '+' + (chips.length - n);
+    }
+    v.classList.remove('measuring');
+  }
+
+  /* A row on a screen nobody is looking at measures zero, so counting once at
+     load would count every hidden one wrong. Each row is watched instead, and
+     recounted when the room it has changes — which is what happens when its
+     screen opens, when the drawer takes a different layout, and on resize.
+     The recount changes the chips, not the room, so it does not feed itself. */
+  function watch() {
+    if (!window.ResizeObserver) return;
+    var was = new WeakMap();
+    var ro = new ResizeObserver(function (entries) {
+      entries.forEach(function (en) {
+        var w = Math.round(en.contentRect.width);
+        if (!w || was.get(en.target) === w) return;
+        was.set(en.target, w);
+        if (!en.target.closest('.pgr.is-open')) fit(en.target);
+      });
+    });
+    document.querySelectorAll('.pgr .v').forEach(function (v) {
+      if (v.querySelectorAll('.rel:not(.more)').length > 1) ro.observe(v);
+    });
+  }
+
   function mount() {
     Object.keys(R).forEach(function (k) { build(k, R[k]); });
+    watch();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);

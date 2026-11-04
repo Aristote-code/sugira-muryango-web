@@ -781,18 +781,23 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .rec-id{font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums;}
 .rec-top .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 .rec h1{font-size:28px;line-height:35px;font-weight:600;color:var(--color-content-primary)}
-.pg{display:grid;margin-top:16px}
+/* PropertyGrid.tsx: rows are h-8 with gap-y-1 between them, the label column is
+   a fixed 120 whose text truncates, and the value sits ml-22 after it in its own
+   h-8 box. Ours had no row gap, a 6px gap where the system has 22, and labels
+   and values that wrapped — which is what made the rhythm look arbitrary. */
+.pg{display:grid;margin-top:16px;row-gap:4px}
 @media (min-width:1360px){.pg{grid-template-columns:1fr 1fr;column-gap:40px}}
 .dw-body .pg,.dw.as-sidebar .pg{grid-template-columns:1fr}
-.pgr{display:grid;grid-template-columns:var(--property-grid-property-label-width) minmax(0,1fr);align-items:center;min-height:var(--size-control-md);gap:6px}
+.pgr{display:grid;grid-template-columns:var(--property-grid-property-label-width) minmax(0,1fr);
+  align-items:center;height:var(--size-control-md);column-gap:var(--property-grid-margin-left)}
 .pgr .k{display:flex;align-items:center;gap:6px;height:var(--size-control-md);font-size:var(--property-grid-font-size);line-height:16px;color:var(--color-content-secondary);min-width:0}
 .pgr .k svg{width:16px;height:16px;flex:none;fill:none;color:var(--x-clickup-color-content-placeholder)}
-.pgr .k span{min-width:0}
-.pgr .v{display:flex;align-items:center;gap:8px;min-height:var(--size-control-md);
+.pgr .k span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pgr .v{display:flex;align-items:center;gap:8px;height:var(--size-control-md);
   max-width:var(--property-grid-property-value-max-width);padding:2px 8px;
   border-radius:var(--x-clickup-radii-3);
   font-size:var(--property-grid-property-value-font-size);line-height:16px;
-  color:var(--color-content-primary);min-width:0;flex-wrap:wrap}
+  color:var(--color-content-primary);min-width:0;flex-wrap:nowrap;overflow:hidden}
 .pgr .v:hover{background:var(--color-bg-hover)}
 /* The dash is the value, not decoration, so it reads at the text bar. */
 .pgr .v.empty{color:var(--color-content-secondary)}
@@ -962,7 +967,6 @@ svg use{pointer-events:none}
    but all 86 property values were dead ends. These make the value navigable.
    The chip is ClickUp's own measured RelationshipChips spec (max 136 x 20, 1px border, r6,
    padding 0 4, 11/13.2), which already sits on the token scale. */
-.pgr .v{flex-wrap:wrap}
 .rel{display:inline-flex;align-items:center;gap:4px;max-width:136px;height:20px;
   border:1px solid var(--color-border-default);border-radius:var(--x-clickup-radii-3);
   padding:0 4px;background:var(--color-bg-surface);
@@ -975,6 +979,16 @@ svg use{pointer-events:none}
 .rel.more{color:var(--color-content-secondary);border-style:dashed}
 .pgr .v .rel{max-width:min(100%,340px)}
 .pgr .v .rel.hid{display:none}
+/* The count and the consequence are the two things that must stay readable, so
+   they keep their width while the chips give theirs up. */
+.pgr .v .rel.more,.pgr .v .conseq{flex:none}
+.pgr .v .rel.more[hidden]{display:none}
+.pgr .v.measuring .rel{flex:none}
+/* A row holds one line until someone asks for the rest; only then is it allowed
+   past the 32 the grid is built on, because that growth was asked for. */
+.pgr.is-open{height:auto;min-height:var(--size-control-md);align-items:start}
+.pgr.is-open .k{height:var(--size-control-md)}
+.pgr.is-open .v{height:auto;min-height:var(--size-control-md);flex-wrap:wrap;overflow:visible}
 .pgr.is-open .v .rel.hid{display:inline-flex}
 .pgr.is-open .v .rel.more{display:none}
 /* what changing this would affect — the reason the relationship matters */
