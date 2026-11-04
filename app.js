@@ -19,6 +19,8 @@
     role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
     person:       { crumbs: [['People', 'people'], ['C. Uwimana', null]],                 nav: 'people' },
     permissions:  { crumbs: [['Roles & access', null]],                                   nav: 'permissions' },
+    position:     { crumbs: [['Roles & access', 'permissions'], ['Position', null]],      nav: 'permissions' },
+    rolecard:     { crumbs: [['Roles & access', 'permissions'], ['Role', null]],          nav: 'permissions' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },
     system:       { crumbs: [['System', null]],                                           nav: 'system' },
     settings:     { crumbs: [['Settings', null]],                                        nav: 'settings' },
@@ -367,6 +369,30 @@
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>This role can open risk-of-harm detail. Narrowing it hides open cases from the people working them.</span></p>',
       done: 'Role saved \u2014 17 people are affected'
     },
+    rolenew: {
+      title: 'New role',
+      ok: 'Create the role',
+      body: '<div><label for="f-nrn">Name</label><input id="f-nrn" type="text" placeholder="e.g. Form translator"></div>'
+          + '<div><label for="f-nrw">What it is for</label><textarea id="f-nrw" placeholder="The work this covers, in one sentence. A role is not a job \u2014 if it describes someone\u2019s whole position, it belongs on the ladder instead."></textarea></div>'
+          + '<p class="m-lead">A role only adds. It cannot take anything away from the position its holders already have.</p>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Five roles exist. Before making a sixth, the next screen says which of them already grant what you are about to grant \u2014 the live system carries twenty-one roles for ten jobs because nobody could see the twenty that were already there.</span></p>',
+      done: 'Role created \u2014 give it permissions, then give it to someone'
+    },
+    roleperm: {
+      title: 'Add a permission to Form translator',
+      ok: 'Add it',
+      body: '<div><label for="f-rp">Permission</label><select id="f-rp"><option>language-create \u2014 Add a language</option><option>question-list \u2014 See the questions on a form</option><option>form-edit \u2014 Change a form that already exists</option><option>construct-list \u2014 See what a form measures</option></select></div>'
+          + '<p class="m-lead">Six people hold this role. Adding here gives it to all six, whatever position each of them has.</p>',
+      done: 'Added \u2014 all 6 holders have it from their next sign-in'
+    },
+    roleadd: {
+      title: 'Give a role to someone',
+      ok: 'Give it to them',
+      body: '<div><label for="f-ra">Role</label><select id="f-ra"><option>Form translator</option><option>Report builder</option><option>Cohort manager</option><option>Form publisher</option><option>Community manager</option></select></div>'
+          + '<div><label for="f-rap">Person</label><select id="f-rap"><option>C. Uwimana</option><option>M. Dusabe</option><option>A. Gahimana</option><option>J. Mukamana</option></select></div>'
+          + '<p class="m-lead">They keep their position. The role is added on top of it \u2014 nothing they could do before stops working.</p>',
+      done: 'Role given \u2014 it takes effect the next time they sign in'
+    },
     role: {
       title: 'New position',
       ok: 'Create position',
@@ -553,7 +579,8 @@
 
   // ---- drawer: a record opens over the list it came from ----
   // Records open in the drawer; the screens that *list* them stay pages.
-  var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1 };
+  var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1,
+                     position: 1, rolecard: 1 };
   var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
   var dwStack = [], dwHeld = null, dwReturn = null;
 

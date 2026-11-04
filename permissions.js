@@ -708,18 +708,43 @@
     hd.appendChild(tx);
     hd.appendChild(reach(total(p)));
     hd.appendChild(el('span', 'pm-cp', p.people + (p.people === 1 ? ' person' : ' people')));
+    /* The drawer takes it from here — app.js routes data-go through
+       DRAWERABLE, so this is the same gesture as opening a household. */
+    hd.setAttribute('data-go', 'position');
+    hd.setAttribute('data-pos-id', p.id);
     hd.onclick = function () {
-      state.open = open ? null : p.id;
+      state.open = p.id;
       state.detail = false;
       state.find = '';
-      render();
+      setTimeout(renderOne, 0);
     };
     sec.appendChild(hd);
+    return sec;
+  }
 
-    if (!open) return sec;
+  /* ---- one position, in the drawer ---- */
+
+  function renderOne() {
+    var root = $('#positionBody');
+    if (!root) return;
+    var p = byId(state.open) || state.pos[0];
+    if (!p) return;
+    var sec = root;
+    sec.innerHTML = '';
+
+    var rec = el('div', 'rec');
+    var rtop = el('div', 'rec-top');
+    var type = el('span', 'rec-type');
+    type.appendChild(icon('i-hierarchy'));
+    type.appendChild(el('span', null, 'Position'));
+    rtop.appendChild(type);
+    rtop.appendChild(el('span', 'rec-id', p.people + (p.people === 1 ? ' person' : ' people')));
+    rec.appendChild(rtop);
+    rec.appendChild(el('h1', null, p.name));
+    rec.appendChild(el('p', 'rec-desc', p.what));
+    sec.appendChild(rec);
 
     var body = el('div', 'pm-cb');
-    body.appendChild(el('p', 'pm-what', p.what));
     body.appendChild(baseSelect(p));
     body.appendChild(addsList(p));
 
@@ -742,7 +767,6 @@
 
     if (state.detail) body.appendChild(detailPanel(p));
     sec.appendChild(body);
-    return sec;
   }
 
   /* ---- the screen ---- */
@@ -750,6 +774,9 @@
   function render() {
     var root = $('#permBody');
     if (!root) return;
+    /* Both surfaces read the same positions, so a change in the drawer has to
+       reach the list behind it and the other way round. */
+    setTimeout(renderOne, 0);
     root.innerHTML = '';
 
     /* The explanation waits behind the mark on the toolbar rather than being
@@ -856,6 +883,12 @@
     setTimeout(render, 0);
   });
 
+  /* The drawer moves the screen's markup into itself and then asks whoever
+     owns it to fill it, which is how the other records do it too. */
+  document.addEventListener('drawer:render', function (e) {
+    if (e.detail && e.detail.key === 'position') setTimeout(renderOne, 0);
+  });
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
   else render();
 
@@ -866,6 +899,7 @@
     positions: function () { return state.pos; },
     total: total,
     held: held,
+    renderOne: renderOne,
     reset: function () { state.pos = freshPositions(); state.open = null; state.detail = false; state.find = ''; render(); }
   };
 })();

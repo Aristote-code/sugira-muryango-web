@@ -963,6 +963,14 @@ svg use{pointer-events:none}
   background:var(--color-bg-surface)}
 .acc-cb svg{width:14px;height:14px;fill:none;color:var(--color-content-on-primary)}
 .acc-cb.on{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default)}
+/* Partly covered: a role grants some of the cell's names but not all. The
+   system's own indeterminate checkbox — unchecked-looking with a primary dash
+   (Checkbox.tsx), aria-checked="mixed". */
+.acc-cb.mixed{position:relative}
+.acc-cb.mixed::after{content:"";position:absolute;left:50%;top:50%;
+  width:8px;height:1.75px;transform:translate(-50%,-50%);
+  background:var(--color-bg-primary-default)}
+.acc-cb.mixed.locked::after{background:var(--x-clickup-color-content-disabled)}
 /* A verb that arrives from the position: ClickUp's greyed row, and the only
    honest way to show a tick nobody can take back. */
 .acc-cb.locked{background:var(--x-clickup-color-content-disabled);
@@ -1459,3 +1467,47 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .t-empty td{padding:36px 16px;text-align:center;border-bottom:0}
 .t-empty p{font-size:14px;color:var(--color-content-secondary);margin-bottom:12px}
 .t-empty .btn{display:inline-flex}
+
+/* ---------------- roles ----------------
+   A role is narrow, so its card carries the whole of it: the name, what it is
+   for in a sentence, how many permissions and how many holders. Cards rather
+   than a ladder, because roles have no order — none is built on another, which
+   is the difference between a role and a position. */
+.rolegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:12px;margin-top:16px}
+.rolec{display:flex;flex-direction:column;gap:8px;padding:16px;text-align:left;
+  background:var(--color-bg-surface);border:0;border-radius:var(--radius-lg);
+  box-shadow:var(--elevation-raised);font:inherit;cursor:pointer}
+.rolec:hover{box-shadow:var(--x-clickup-elevation-border-3)}
+.rolec:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}
+.rolec-t{display:flex;align-items:center;gap:8px}
+.rolec-i{display:flex;align-items:center;justify-content:center;width:16px;height:16px;
+  flex:none;color:var(--color-content-secondary)}
+.rolec-i svg{width:16px;height:16px;fill:none}
+.rolec-n{font-size:14px;line-height:20px;font-weight:600;color:var(--color-content-primary);
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rolec-risk{display:flex;align-items:center;width:14px;height:14px;flex:none;
+  color:var(--color-content-warning)}
+.rolec-risk svg{width:14px;height:14px;fill:none}
+.rolec-w{margin:0;font-size:13px;line-height:20px;color:var(--color-content-secondary)}
+.rolec-f{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:4px;
+  font-size:12px;line-height:16px;color:var(--color-content-secondary);
+  font-variant-numeric:tabular-nums}
+.rolec-p{margin-left:auto}
+/* The one that makes a new role says what the check is for before you click. */
+.rolec.new{border:1px dashed var(--color-border-default);box-shadow:none;
+  background:none;color:var(--color-content-secondary)}
+.rolec.new:hover{background:var(--color-bg-hover);box-shadow:none}
+.rolec.new .rolec-n{font-weight:500;color:var(--color-content-secondary)}
+
+/* One role's permissions. A list, not a grid — a role is three or four named
+   things, and the grid is what a position needs. */
+.rolep{gap:8px;padding-right:8px}
+.rolep-also{margin-left:auto;font-size:11px;line-height:16px;flex:none;
+  color:var(--color-content-secondary)}
+.rolep-x{display:flex;align-items:center;justify-content:center;width:24px;height:24px;
+  flex:none;border:0;background:none;border-radius:var(--x-clickup-radii-2);
+  color:var(--color-content-secondary);cursor:pointer}
+.rolep-x:hover{background:var(--color-bg-hover);color:var(--color-content-danger)}
+.rolep-x svg{width:12px;height:12px;fill:none}
+.rolep-x:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
