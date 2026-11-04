@@ -400,6 +400,13 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
   background:var(--x-clickup-color-background-on-main-hover);
   color:var(--color-content-secondary);white-space:nowrap}
 .chip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+/* ClickUp sets its status pills in capitals. Only the pills, though: the same
+   .chip class also carries counts ("2 210") and plain labels ("In use"), and
+   those are the system's Tag, which is not uppercased. The glyph is what tells
+   them apart — a StatusPill always has one — so the dot is the selector.
+   No letter-spacing: the system specifies 12/16 500 and no tracking, and
+   inventing some here would be a different component again. */
+.chip:has(i){text-transform:uppercase}
 .chip.ok{background:var(--color-bg-success-subtle);color:var(--color-content-success)}
 .chip.warn{background:var(--color-bg-warning-subtle);color:var(--color-content-warning)}
 .chip.bad{background:var(--color-bg-danger-subtle);color:var(--color-content-danger)}
