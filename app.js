@@ -227,6 +227,29 @@
             '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>',
       done: 'Cohort created as a draft \u2014 no household is scheduled yet'
     },
+    qedit: {
+      title: 'Question 3',
+      ok: 'Save the question',
+      body: '<div><label for="f-qe">Question, in English</label><input id="f-qe" type="text" value="Was the male caregiver present?"></div>' +
+            '<div><label for="f-qk">Question, in Kinyarwanda</label><input id="f-qk" type="text" value="Umubyeyi w\u2019umugabo yari ahari?"></div>' +
+            '<div><label for="f-qt">Answer type</label><select id="f-qt"><option>Yes / No</option><option>Single choice</option><option>Multi-select</option><option>Checklist</option><option>Number</option><option>Date</option><option>Short text</option><option>Long text</option></select></div>' +
+            '<div><label for="f-qo">Answers offered</label><input id="f-qo" type="text" value="Yego, Oya, Nta mubyeyi w\u2019umugabo"></div>' +
+            '<p class="mhint">Separate each answer with a comma. They appear on the tablet in this order.</p>' +
+            '<div><label for="f-qr">Must be answered</label><select id="f-qr"><option>Yes</option><option>No</option></select></div>' +
+            '<div><label for="f-qc">Opens a risk-of-harm case</label><select id="f-qc"><option>No</option><option>Yes, when answered Yego</option></select></div>' +
+            '<p class="mhint">Only question 5 does this today. A second one would send two cases to the same supervisor for one visit.</p>',
+      done: 'Question saved \u2014 the tablet gets it when the form is published'
+    },
+    qadd: {
+      title: 'Add a question',
+      ok: 'Add it',
+      body: '<div><label for="f-at">Answer type</label><select id="f-at"><option>Yes / No</option><option>Single choice</option><option>Multi-select</option><option>Checklist</option><option>Number</option><option>Date</option><option>Short text</option><option>Long text</option></select></div>' +
+            '<div><label for="f-ae">Question, in English</label><input id="f-ae" type="text" placeholder="e.g. Did the caregiver attend the growth check?"></div>' +
+            '<div><label for="f-ak">Question, in Kinyarwanda</label><input id="f-ak" type="text" placeholder="Leave empty and it shows on the Translate tab"></div>' +
+            '<div><label for="f-ap">Position</label><select id="f-ap"><option>At the end, question 31</option><option>After question 5</option><option>After question 12</option></select></div>' +
+            '<p class="mhint">Adding a question does not change the 986 responses already collected. They read as unanswered for the new question.</p>',
+      done: 'Question added as number 31 \u2014 publish the form to send it to the tablet'
+    },
     cmanage: {
       title: 'Manage Cohort 1',
       ok: 'Save the cohort',

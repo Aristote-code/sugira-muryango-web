@@ -1177,14 +1177,14 @@
         <div class="pad" data-panelid="build">
           <div class="cols c2">
             <div class="card">
-              <div class="card-h"><h3>Questions</h3><span class="side"><a>Add question</a></span></div>
-              <div class="lr"><span class="s" style="width:1.4rem">1</span><span class="t">Date of visit</span><span class="chip">Date</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="s" style="width:1.4rem">2</span><span class="t">Who was present?</span><span class="chip">Multi-select</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="s" style="width:1.4rem">3</span><span class="t">Was the male caregiver present?</span><span class="chip">Yes / No</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="s" style="width:1.4rem">4</span><span class="t">Which activities were completed?</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="s" style="width:1.4rem">5</span><span class="t">Any sign of harm or neglect?</span><span class="chip bad"><i></i>Triggers a case</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="s" style="width:1.4rem">6</span><span class="t">Household needs identified</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="s" style="width:1.4rem">7</span><span class="t">Notes for the next visit</span><span class="chip">Long text</span><span class="ch">&rsaquo;</span></div>
+              <div class="card-h"><h3>Questions</h3><span class="side"><a data-modal="qadd">Add question</a></span></div>
+              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">1</span><span class="t">Date of visit</span><span class="chip">Date</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">2</span><span class="t">Who was present?</span><span class="chip">Multi-select</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">3</span><span class="t">Was the male caregiver present?</span><span class="chip">Yes / No</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">4</span><span class="t">Which activities were completed?</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">5</span><span class="t">Any sign of harm or neglect?</span><span class="chip bad"><i></i>Triggers a case</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">6</span><span class="t">Household needs identified</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">7</span><span class="t">Notes for the next visit</span><span class="chip">Long text</span><span class="ch">&rsaquo;</span></div>
               <div class="lr"><span class="s" style="width:1.4rem"></span><span class="t mut" style="color:var(--ink-3)">23 more questions</span><span class="ch">&rsaquo;</span></div>
             </div>
             <div style="display:grid;gap:16px;align-content:start">
@@ -1246,11 +1246,11 @@
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th style="width:3rem">#</th><th>English</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td class="mut">1</td><td>Date of visit</td><td>Itariki y&rsquo;urugendo</td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
-                <tr><td class="mut">2</td><td>Who was present?</td><td>Ninde wari ahari?</td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
-                <tr><td class="mut">3</td><td>Was the male caregiver present?</td><td>Umubyeyi w&rsquo;umugabo yari ahari?</td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
-                <tr><td class="mut">4</td><td>Which activities were completed?</td><td>Ni ibihe bikorwa byarangiye?</td><td><span class="chip warn"><i></i>Needs review</span></td></tr>
-                <tr><td class="mut">5</td><td>Any sign of harm or neglect?</td><td>Hari ikimenyetso cy&rsquo;ihohoterwa cyangwa kwirengagizwa?</td><td><span class="chip warn"><i></i>Needs review</span></td></tr>
+                <tr><td class="mut">1</td><td>Date of visit</td><td><span class="v" data-ftype="text">Itariki y&rsquo;urugendo</span></td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
+                <tr><td class="mut">2</td><td>Who was present?</td><td><span class="v" data-ftype="text">Ninde wari ahari?</span></td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
+                <tr><td class="mut">3</td><td>Was the male caregiver present?</td><td><span class="v" data-ftype="text">Umubyeyi w&rsquo;umugabo yari ahari?</span></td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
+                <tr><td class="mut">4</td><td>Which activities were completed?</td><td><span class="v" data-ftype="text">Ni ibihe bikorwa byarangiye?</span></td><td><span class="chip warn"><i></i>Needs review</span></td></tr>
+                <tr><td class="mut">5</td><td>Any sign of harm or neglect?</td><td><span class="v" data-ftype="text">Hari ikimenyetso cy&rsquo;ihohoterwa cyangwa kwirengagizwa?</span></td><td><span class="chip warn"><i></i>Needs review</span></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 5 of 30 &middot; the route keeps the project and module, so Back works</span>

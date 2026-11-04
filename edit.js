@@ -65,6 +65,13 @@
   }
 
   function labelOf(cell) {
+    /* in a table the label is the column heading above the cell */
+    var td = cell.closest('td');
+    if (td && !cell.closest('.pgr, .fld')) {
+      var table = td.closest('table');
+      var th = table && table.querySelectorAll('thead th')[td.cellIndex];
+      return th ? th.textContent.trim().toLowerCase() : '';
+    }
     var row = cell.closest('.pgr') || cell.closest('.fld');
     var k = row && (row.querySelector('.k span:last-child')
       || row.querySelector('.fld-k span:last-child'));
@@ -195,7 +202,7 @@
 
   document.addEventListener('click', function (e) {
     if (openMenu && !openMenu.contains(e.target)) shutMenu();
-    var cell = e.target.closest ? e.target.closest('.pgr .v, .fld .v') : null;
+    var cell = e.target.closest ? e.target.closest('.pgr .v, .fld .v, td .v[data-ftype]') : null;
     /* a link or chip inside the value keeps its own job */
     if (!cell || cell.classList.contains('editing')) return;
     if (e.target.closest('.rel, button:not(.pgmenu-i), a')) return;
@@ -208,7 +215,8 @@
     if (e.key !== 'Enter' && e.key !== ' ') return;
     var cell = document.activeElement;
     if (!cell || !cell.classList || !cell.classList.contains('v')) return;
-    if (!cell.closest('.pgr') && !cell.closest('.fld')) return;
+    if (!cell.closest('.pgr') && !cell.closest('.fld')
+      && !cell.hasAttribute('data-ftype')) return;
     e.preventDefault();
     start(cell);
   });
@@ -255,7 +263,7 @@
   }
 
   function mount() {
-    $$('.pgr .v, .fld .v').forEach(editable);
+    $$('.pgr .v, .fld .v, td .v[data-ftype]').forEach(editable);
     $$('.rec h1').forEach(function (h) { inPlace(h, 'title'); });
     $$('.rec-desc').forEach(function (d) { inPlace(d, 'description'); });
   }
