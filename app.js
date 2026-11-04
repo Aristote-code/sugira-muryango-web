@@ -1133,9 +1133,14 @@
         numeric: nums.length >= Math.ceil(vals.length * 0.6),
         enumish: distinct.length > 1 && distinct.length <= Math.max(4, rows.length / 2),
         options: distinct.sort(),
-        shown: true
+        shown: true,
+        gap: th.classList.contains('gap')
       };
     });
+    /* The spacer column holds the slack at the right-hand end and nothing
+       else, so it is dropped here rather than in each of the loops below —
+       after the indexes are taken, so every column still reads its own cell. */
+    cols = cols.filter(function (c) { return !c.gap; });
 
     var host = table.closest('.card') || table.closest('.tblwrap');
     if (!host || !host.parentNode) return;
@@ -1510,8 +1515,15 @@
     }).observe(document.body, { childList: true, subtree: true });
   }
   function start() { init(); watch(); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
-  else start();
+  /* A deferred script runs at readyState 'interactive', so "not loading" never
+     meant "every module has mounted" — it meant this one is first. It read the
+     project list while programme.js had yet to add its Sessions, Forms and
+     Responses columns, so the toolbar kept a four-column map of a seven-column
+     table: Filter offered Archived's dates under Sessions, and the three new
+     columns could not be sorted at all. DOMContentLoaded is after every
+     deferred module, which is what the ordering wanted all along. */
+  if (document.readyState === 'complete') start();
+  else document.addEventListener('DOMContentLoaded', start);
 })();
 
 /* ============================ help popovers ============================

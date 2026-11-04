@@ -566,18 +566,16 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
    others in proportion — so at 1996px a table 1666 wide carrying 788px of
    content put 393px of air inside Household, 112 inside Place, 92 inside
    Status, and a question-number column that needs 59px was held at 500. Every
-   gap was a different size and none of them meant anything. Now the name
-   column takes all of it and the rest group on the right, which is also what
-   puts a row's actions at the right-hand end of the row. */
-.tbl th:first-child,.tbl td:first-child{width:100%}
-/* Unless the first column is an index — the question number, the session
-   number — in which case it is 3rem and the column after it grows. */
-.tbl.grow2 th:first-child,.tbl.grow2 td:first-child{width:48px}
-.tbl.grow2 th:nth-child(2),.tbl.grow2 td:nth-child(2){width:100%}
-/* And unless the toolbar has hidden that column, which would leave nothing
-   holding the slack. */
-.tbl th.grow,.tbl td.grow{width:100%}
-.tbl th.nogrow,.tbl td.nogrow{width:auto}
+   gap was a different size and none of them meant anything. Now every column
+   is the width of what it holds, with one 24px gutter between any two of
+   them, and the last column takes what is left over — which is what puts a
+   row's actions hard against the right-hand end of the row. */
+.tbl th:last-child,.tbl td:last-child{width:100%}
+/* Where the last column is a figure it would be pinned to the right edge on
+   its own, a long way from the columns it belongs with, so those four tables
+   carry an empty column after it to hold the slack instead. The toolbar skips
+   it, so it is not offered as a column to sort, filter, hide or export. */
+.tbl th.gap,.tbl td.gap{width:100%;padding:0}
 .tfoot{display:flex;align-items:center;gap:12px;padding:8px 12px;border-top:1px solid var(--color-border-default);font-size:13px;color:var(--color-content-secondary);flex-wrap:wrap;background:var(--color-bg-surface)}
 .tfoot .pg{margin-left:auto;display:flex;gap:4px}
 .tfoot .pg button{border:1px solid var(--color-border-default);background:var(--color-bg-surface);border-radius:var(--button-sm-radius);
@@ -1054,12 +1052,13 @@ svg use{pointer-events:none}
   color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .acc-gcount b{font-weight:600;color:var(--color-content-primary)}
 .acc-gcount.none b{font-weight:400;color:var(--color-content-secondary)}
-/* The part that opens starts where the group's icon starts, not where its
-   caret does. Left at nothing, the first checkbox sat flush under the caret
-   and the permissions read as eight more rows of the same list rather than
-   as what is inside Households. The indent is the caret's own width plus the
-   row's gap — 16 + 6 — so it is the same number wherever the row is drawn. */
-.acc-gb{padding-left:22px}
+/* What opens starts where the group's name starts, not where its icon does.
+   At the icon the checkboxes sat to the left of the word they belong under,
+   so the permissions appeared to hang off the group rather than sit inside
+   it. The indent is everything the row puts before its name — caret 16, gap
+   6, icon 16, gap 6 — so a permission's own label lands clear of the name
+   above it and the pair reads as a parent and its contents. */
+.acc-gb{padding-left:44px}
 /* Two columns sized to their content rather than to the drawer: at 1fr each
    they were 605px wide, so "Record a visit" sat half a screen from "See
    visits and answers" and the pair read as two lists. They stop where the

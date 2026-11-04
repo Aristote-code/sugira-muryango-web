@@ -386,12 +386,19 @@
      export the same rows, each with its own idea of what was applied. The
      domain bar wins where it exists: it knows the place hierarchy, the
      cohorts and the sessions. Columns and column sorting stay, because the
-     domain bar does not do those. */
-  $$('.screen').forEach(function (screen) {
-    if (!screen.querySelector('.filters')) return;
-    $$('.tq-btn', screen).forEach(function (b) {
-      var t = b.textContent.trim();
-      if (t === 'Filter' || t === 'Export') b.hidden = true;
+     domain bar does not do those.
+
+     What counts as a domain bar is its filter pills, not the row they sit in.
+     Eight screens carry a .filters row holding nothing but a search box, and
+     reading that as a domain bar took Filter and Export off their tables and
+     left a text search as the only way to narrow them. */
+  document.addEventListener('tables:ready', function () {
+    $$('.screen').forEach(function (screen) {
+      if (!screen.querySelector('.filters .fl')) return;
+      $$('.tq-btn', screen).forEach(function (b) {
+        var t = b.textContent.trim();
+        if (t === 'Filter' || t === 'Export') b.hidden = true;
+      });
     });
   });
 
