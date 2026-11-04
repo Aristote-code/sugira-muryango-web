@@ -12,8 +12,11 @@
    keeps its deep aubergine, which is the one surface the client asked to
    leave alone.
 
-   Inter is kept over the system font stack because it is the typeface in the
-   Sugira Figma file; it is the only other place this app overrules the DS. */
+   The typeface is the system's own stack, not Inter. The Sugira Figma file is
+   set in Inter, and this followed it until the client chose ClickUp's stack
+   instead: ClickUp renders in whatever the OS provides, so matching the
+   product and matching the Figma file were not both possible. The rail colour
+   above is now the only place this app overrules the DS. */
 :root, [data-theme="light"]{
   --color-primitive-purple-50:#fefdfe;   --color-primitive-purple-100:#fcf7fb;
   --color-primitive-purple-200:#f9eff6;  --color-primitive-purple-300:#f4e2ef;
@@ -35,7 +38,7 @@
   --brand:#36132F; --pill:#4E1C46;
   /* this app's own, with no equivalent in the system */
   --z-drawer:1000; --z-modal:2000; --z-pop:2500; --z-toast:3000;
-  --ui:"Inter","Helvetica Neue",Arial,sans-serif;
+  --ui:var(--font-family-sans);
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   --i-check:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M5 14L8.5 17.5L19 6.5" stroke="%23000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   --lh-16:16px;
