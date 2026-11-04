@@ -369,6 +369,15 @@
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>This role can open risk-of-harm detail. Narrowing it hides open cases from the people working them.</span></p>',
       done: 'Role saved \u2014 17 people are affected'
     },
+    posadd: {
+      title: 'Give a position to someone',
+      ok: 'Give it to them',
+      body: '<div><label for="f-pap">Person</label><select id="f-pap"><option>M. Dusabe</option><option>J. Mukamana</option><option>A. Gahimana</option><option>C. Uwimana</option></select></div>'
+          + '<div><label for="f-papl">Where they work</label><select id="f-papl"><option>Kibungo \u00b7 Ngoma</option><option>Jarama \u00b7 Ngoma</option><option>Sake \u00b7 Ngoma</option><option>Kigoma \u00b7 Nyanza</option></select></div>'
+          + '<p class="m-lead">The position decides what they can do. The place decides whose records they can do it to \u2014 which is why it is set here, on the assignment, and not on the position.</p>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>A position replaces whatever position they hold now. Roles they hold are left alone \u2014 those add on top of whichever position someone has.</span></p>',
+      done: 'Position given \u2014 it takes effect the next time they sign in'
+    },
     rolenew: {
       title: 'New role',
       ok: 'Create the role',

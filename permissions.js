@@ -767,6 +767,44 @@
 
     if (state.detail) body.appendChild(detailPanel(p));
     sec.appendChild(body);
+    sec.appendChild(holders(p));
+  }
+
+  /* Who actually holds this position. The card said "11 people" and gave you
+     no way to reach them or add a twelfth — the role drawer had both, and
+     these are the same record with the same two questions. */
+  function holders(p) {
+    var card = el('div', 'card');
+    var h = el('div', 'card-h');
+    h.appendChild(el('h3', null, 'Who holds it'));
+    var side = el('span', 'side');
+    var add = el('button', 'btn sec sm');
+    add.type = 'button';
+    add.setAttribute('data-modal', 'posadd');
+    add.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
+    add.appendChild(document.createTextNode(' Give it to someone'));
+    side.appendChild(add);
+    h.appendChild(side);
+    card.appendChild(h);
+
+    var kids = children(p);
+    card.appendChild(el('p', 'pm-rule',
+      p.people + (p.people === 1 ? ' person holds this position' : ' people hold this position')
+      + '. Everything above is theirs together \u2014 a change here reaches all of them'
+      + (kids.length
+          ? ', and everyone on the ' + (kids.length === 1 ? 'position' : kids.length + ' positions')
+            + ' built on it.'
+          : '.')
+      + ' Where each of them works \u2014 which sector, which district \u2014 is set on their own'
+      + ' record, not here.'));
+
+    var go = el('button', 'rel');
+    go.type = 'button';
+    go.setAttribute('data-go', 'people');
+    go.innerHTML = '<svg aria-hidden="true"><use href="#i-admin"/></svg>';
+    go.appendChild(document.createTextNode('See the ' + p.people + ' in People'));
+    card.appendChild(go);
+    return card;
   }
 
   /* ---- the screen ---- */
