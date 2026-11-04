@@ -190,11 +190,25 @@
     ['related', 'Related', 'i-relation', function (key) { return relations(key); }]
   ];
 
+  /* The second pane and its rail are hidden while Aristote settles what the
+     panels should do. Nothing below is deleted — set this to true and the
+     pane comes back as it was. The rail is the only way to open the pane, so
+     the two are one switch: hiding the rail alone would strand an open pane
+     on a wide screen with no way to shut it. */
+  var SHOW_PANE = false;
+
   function render(key) {
     side = document.getElementById('dwSide');
     var body_ = document.getElementById('dwBody');
     if (!side || !body_) return;
     side.innerHTML = '';
+
+    if (!SHOW_PANE) {
+      side.hidden = true;
+      var gone = body_.querySelector('.dws-rail');
+      if (gone) gone.remove();
+      return;
+    }
 
     var head = el('div', 'dws-head');
     var title = el('span', 'dws-title');
