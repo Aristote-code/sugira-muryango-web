@@ -912,6 +912,19 @@
     /* ordered() walks each root and then everything built on it, so a
        position still comes after the one it starts from. */
     ordered().forEach(function (p) { ladder.appendChild(card(p)); });
+
+    /* The only way to make one was a button on the legacy roles screen, which
+       this tab replaced. Roles have their card; positions get the same one. */
+    var add = el('button', 'rolec new');
+    add.type = 'button';
+    add.setAttribute('data-modal', 'role');
+    add.appendChild(icon('i-plus', 'rolec-i'));
+    add.appendChild(el('span', 'rolec-n', 'New position'));
+    add.appendChild(el('p', 'rolec-w',
+      'A job, not a task. It starts from the nearest position below it and adds — so if '
+      + 'the new one would be an existing position plus one thing for one person, that '
+      + 'belongs on their record as an exception instead.'));
+    ladder.appendChild(add);
     root.appendChild(ladder);
 
     var foot = el('p', 'pm-foot');
