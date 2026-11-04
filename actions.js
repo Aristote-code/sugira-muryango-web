@@ -451,6 +451,32 @@
     });
   });
 
+  /* ---- row actions as controls, not a row of links ----
+     Every row ended in "Details Edit Archive" as three underlined links, which
+     reads as prose in a cell and puts the same visual weight on opening a
+     record and archiving it. ClickUp's TaskRow carries its actions as icon
+     buttons and reserves a label for the one people actually reach for. So the
+     first action keeps its words and becomes a small button; the rest become
+     24px icon buttons, keeping the label on aria-label and title.
+     Anything without an icon stays a text button rather than guessing. */
+  var ROWACT_ICON = {
+    Edit: 'i-edit', Archive: 'i-archive', Delete: 'i-cross',
+    Download: 'i-download', Preview: 'i-expand'
+  };
+  $$('.rowacts').forEach(function (cell) {
+    $$('a', cell).forEach(function (a, i) {
+      if (a.querySelector('svg')) return;
+      var label = (a.textContent || '').trim();
+      var id = i === 0 ? null : ROWACT_ICON[label];
+      if (!id) { a.classList.add('rowact-main'); return; }
+      a.classList.add('rowact-ico');
+      a.setAttribute('aria-label', label);
+      a.setAttribute('title', label);
+      a.textContent = '';
+      a.innerHTML = '<svg aria-hidden="true"><use href="#' + id + '"/></svg>';
+    });
+  });
+
   pagers();
 
   // the filter module hides rows; tell the pagers so they re-page what is left

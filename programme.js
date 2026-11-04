@@ -230,25 +230,92 @@
     });
   }
 
-  function childRow(depth, iconId, name, note, right, go) {
+  /* A child is the same row as its parent, one step in.
+     This used to be a td with colspan=4 holding a div, so everything below a
+     project ignored the columns the project was lined up against: the counts
+     sat inline as text while Forms and Responses stood empty beside them. On
+     ClickUp every row in the tree is the same shape and only the name cell is
+     indented — TaskRow does it with a spacer of depth * 28 — so the numbers
+     stay in their columns however deep you go. */
+  var INDENT = 28;
+  /* Where each level's marker sits inside the name cell, measured rather
+     than stepped: the project row carries a caret before its icon and its
+     children carry a spacer, so the first two are not INDENT apart. */
+  var LINES = [20, 54, 82, 110, 138];
+
+  function kidRow(o) {
     var tr = el('tr', 'prow-kid');
-    tr.dataset.depth = depth;
-    var td = el('td');
-    td.colSpan = 4;
-    var w = el('div', 'prk');
-    w.style.paddingLeft = (depth * 22) + 'px';
-    w.appendChild(icon(iconId, 'prk-i'));
-    var nm = el('span', 'prk-n', name);
-    w.appendChild(nm);
-    if (note) w.appendChild(el('span', 'prk-note', note));
-    if (right) w.appendChild(el('span', 'prk-r', right));
-    td.appendChild(w);
+    tr.setAttribute('data-depth', String(o.depth));
+
+    var td = el('td', 'nm prow-n');
+    var pad = el('span', 'prow-ind');
+    pad.style.width = (o.depth * INDENT) + 'px';
+    pad.setAttribute('aria-hidden', 'true');
+    td.appendChild(pad);
+
+    if (o.toggle) td.appendChild(o.toggle);
+    else td.appendChild(el('span', 'prow-t-gap'));
+
+    td.appendChild(icon(o.iconId, 'cellmark'));
+    td.appendChild(document.createTextNode(o.name));
+    if (o.context) td.appendChild(el('span', 'prow-ctx', o.context));
     tr.appendChild(td);
-    if (go) {
-      tr.setAttribute('data-go', go);
+
+    /* Sessions, Forms, Responses — a dash where the number has no meaning at
+       this level, which is how ClickUp leaves a cell a row does not fill. */
+    [o.sessions, o.forms, o.responses].forEach(function (v) {
+      tr.appendChild(el('td', 'num' + (v == null ? ' mut' : ''), v == null ? '—' : v));
+    });
+    tr.appendChild(el('td'));
+    tr.appendChild(el('td'));
+    tr.appendChild(el('td'));
+
+    if (o.go) {
+      tr.setAttribute('data-go', o.go);
       tr.classList.add('click');
     }
     return tr;
+  }
+
+  function caret(label) {
+    var t = el('button', 'prow-t');
+    t.type = 'button';
+    t.setAttribute('aria-expanded', 'false');
+    t.setAttribute('aria-label', label);
+    t.innerHTML = '<svg aria-hidden="true"><use href="#i-caret"/></svg>';
+    return t;
+  }
+
+  /* Hang `kids` under `tr`, and take them away again when it shuts. The rows
+     a caret owns are its own, so a session closing cannot strip the forms of
+     the session after it. */
+  function thread(t, tr, make) {
+    var kids = [];
+    t.onclick = function (e) {
+      e.stopPropagation();
+      var open = t.getAttribute('aria-expanded') === 'true';
+      t.setAttribute('aria-expanded', String(!open));
+      tr.classList.toggle('is-open', !open);
+      if (open) {
+        kids.forEach(function (k) { k.remove(); });
+        kids = [];
+        return;
+      }
+      kids = make();
+      /* Every branch this opens gets its levels drawn, not only the projects:
+         the lines belong to the tree, not to one caller of it. */
+      if (window.SugiraTree) {
+        var ts = trails(kids.map(function (k) { return +k.getAttribute('data-depth'); }));
+        kids.forEach(function (k, n) {
+          window.SugiraTree.guides(k.querySelector('.prow-n'), ts[n], LINES);
+        });
+      }
+      var at = tr;
+      kids.forEach(function (k) {
+        at.parentNode.insertBefore(k, at.nextSibling);
+        at = k;
+      });
+    };
   }
 
   function mountTree() {
@@ -256,6 +323,19 @@
     if (!table) return;
     var body = table.tBodies[0];
     if (!body) return;
+
+    /* Sessions, Forms and Responses become columns. They were one line of
+       text under the project name — "13 sessions · 12 forms · 8 749
+       responses" — which pushed every row to 43px and left the three columns
+       beside it empty. They are numbers about the row, so they belong in
+       cells, where they also sort and line up. */
+    var head = table.tHead && table.tHead.rows[0];
+    if (head && head.cells.length === 4) {
+      ['Sessions', 'Forms', 'Responses'].forEach(function (t, n) {
+        var th = el('th', 'num', t);
+        head.insertBefore(th, head.cells[1 + n]);
+      });
+    }
 
     var rows = [].slice.call(body.rows).filter(function (r) {
       return !r.classList.contains('prow-kid');
@@ -269,46 +349,17 @@
 
       /* the caret goes before the name, and takes the click that used to open
          the project — Details on the same row still does that */
-      var t = el('button', 'prow-t');
-      t.type = 'button';
-      t.setAttribute('aria-expanded', 'false');
-      t.setAttribute('aria-label', 'What is in ' + p.name);
-      t.innerHTML = '<svg aria-hidden="true"><use href="#i-caret"/></svg>';
+      var t = caret('What is in ' + p.name);
       cell.insertBefore(t, cell.firstChild);
       cell.classList.add('prow-n');
 
-      /* what it holds, on the row, so the shape is readable without opening */
-      var sum = el('span', 'prow-s');
-      sum.textContent = (p.sessions.length ? p.sessions.length + ' sessions · ' : '')
-        + p.forms.length + (p.forms.length === 1 ? ' form · ' : ' forms · ')
-        + fmt(p.responses) + ' responses';
-      cell.appendChild(sum);
-
-      var kids = [];
-      t.onclick = function (e) {
-        e.stopPropagation();
-        var open = t.getAttribute('aria-expanded') === 'true';
-        t.setAttribute('aria-expanded', String(!open));
-        tr.classList.toggle('is-open', !open);
-        if (open) {
-          kids.forEach(function (k) { k.remove(); });
-          kids = [];
-          return;
-        }
-        kids = build(p, tr);
-        if (window.SugiraTree) {
-          var ts = trails(kids.map(function (k) { return +k.dataset.depth; }));
-          kids.forEach(function (k, n) {
-            /* measured: the project's caret centres at 20 from the cell edge
-               and a first-level child's icon at 30, after which the indent
-               steps by 22 */
-            window.SugiraTree.guides(k.querySelector('.prk'), ts[n], [20, 30, 52, 74]);
-          });
-        }
-        kids.forEach(function (k, n) {
-          tr.parentNode.insertBefore(k, n === 0 ? tr.nextSibling : kids[n - 1].nextSibling);
+      [p.sessions.length || null, p.forms.length || null, fmt(p.responses)]
+        .forEach(function (v, n) {
+          var td = el('td', 'num' + (v == null ? ' mut' : ''), v == null ? '—' : v);
+          tr.insertBefore(td, tr.cells[1 + n]);
         });
-      };
+
+      thread(t, tr, function () { return build(p, tr); });
     });
 
     function build(p, tr) {
@@ -317,12 +368,17 @@
 
       /* A supervisor's form says so on the row. That is the whole of what the
          Monitoring forms tab was telling you, said where the form is. */
-      function formRow(depth, f) {
-        return childRow(depth, 'i-reports', f.name,
-          f.questions + ' questions' + (f.bySupervisor ? ' · ' + f.by : ''),
-          fmt(f.responses) + ' responses', 'form');
+      function tag(r) { if (tags) r.setAttribute('data-tags', tags); return r; }
+      function sumResp(list) {
+        return list.reduce(function (a, f) { return a + f.responses; }, 0);
       }
-      function count(n) { return n + (n === 1 ? ' form' : ' forms'); }
+      function formRow(depth, f) {
+        return tag(kidRow({
+          depth: depth, iconId: 'i-reports', name: f.name,
+          context: f.questions + ' questions' + (f.bySupervisor ? ' · ' + f.by : ''),
+          sessions: null, forms: null, responses: fmt(f.responses), go: 'form'
+        }));
+      }
 
       /* A form every session carries is the project's, not any one session's.
          Listing it under all twelve was true and unreadable — thirty-six rows
@@ -335,20 +391,41 @@
       var own = everywhere.concat(loose);
       if (own.length) {
         if (p.sessions.length) {
-          out.push(childRow(1, 'i-reports', 'Carried by every session', count(own.length)));
+          /* Its own caret, so the forms every session carries open and shut
+             as a group instead of unrolling with the project. */
+          var gT = caret('Forms carried by every session');
+          var gTr = tag(kidRow({
+            depth: 1, toggle: gT, iconId: 'i-reports', name: 'Carried by every session',
+            sessions: null, forms: own.length, responses: fmt(sumResp(own))
+          }));
+          thread(gT, gTr, function () {
+            return own.map(function (f) { return formRow(2, f); });
+          });
+          out.push(gTr);
+        } else {
+          own.forEach(function (f) { out.push(formRow(1, f)); });
         }
-        own.forEach(function (f) { out.push(formRow(p.sessions.length ? 2 : 1, f)); });
       }
 
+      /* A session is a row that opens, the way a task opens its subtasks on
+         ClickUp. Its forms used to come out flat beside it, so opening one
+         project put thirty-odd rows on screen at once with nothing to shut. */
       p.sessions.forEach(function (s) {
         var fs = formsOf(p, s).filter(function (f) { return own.indexOf(f) === -1; });
-        out.push(childRow(1, 'i-programme', s,
-          fs.length ? count(fs.length) : 'no form of its own', null, 'module'));
-        fs.forEach(function (f) { out.push(formRow(2, f)); });
+        var sT = fs.length ? caret('Forms in ' + s) : null;
+        var sTr = tag(kidRow({
+          depth: 1, toggle: sT, iconId: 'i-programme', name: s,
+          sessions: null, forms: fs.length || null,
+          responses: fs.length ? fmt(sumResp(fs)) : null, go: 'module'
+        }));
+        if (sT) {
+          thread(sT, sTr, function () {
+            return fs.map(function (f) { return formRow(2, f); });
+          });
+        }
+        out.push(sTr);
       });
 
-      /* child rows answer to the same tabs as the project they hang under */
-      out.forEach(function (r) { if (tags) r.setAttribute('data-tags', tags); });
       return out;
     }
   }
@@ -462,6 +539,10 @@
 
   function mount() { mountTree(); mountList(); mountCounts(); }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
-  else mount();
+  /* Mount now rather than on DOMContentLoaded. Every script here is deferred,
+     so the document is already parsed when this runs, and app.js — loaded
+     first — has its own DOMContentLoaded listener that reads each table's
+     columns to build the toolbar. Waiting for the same event would hand it a
+     four-column table and then add three more behind its back. */
+  mount();
 })();
