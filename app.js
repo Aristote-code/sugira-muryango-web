@@ -1395,8 +1395,28 @@
     });
     document.dispatchEvent(new Event('tables:ready'));
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+
+  /* A table built after load never reached this scan, because it only ran once:
+     the Forms library on Programme is assembled by programme.js into an empty
+     card, so it was the one table of 34 with no filtering, sorting or export.
+     Watching for late tables keeps that the module's own problem rather than
+     something every module that builds one has to remember to announce. The
+     toolbar this inserts contains no table, so it cannot retrigger the watch. */
+  function watch() {
+    new MutationObserver(function (recs) {
+      for (var i = 0; i < recs.length; i++) {
+        var added = recs[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var n = added[j];
+          if (n.nodeType !== 1) continue;
+          if (n.matches('table.tbl') || n.querySelector('table.tbl')) return init();
+        }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+  function start() { init(); watch(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
 })();
 
 /* ============================ help popovers ============================
@@ -1538,6 +1558,22 @@
       try { decorate(t); } catch (e) { /* one odd table must not stop the rest */ }
     });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+
+  /* Same one-shot problem as the query bar above: tables mounted by a module
+     after load were never decorated. */
+  function watch() {
+    new MutationObserver(function (recs) {
+      for (var i = 0; i < recs.length; i++) {
+        var added = recs[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var n = added[j];
+          if (n.nodeType !== 1) continue;
+          if (n.matches('table.tbl') || n.querySelector('table.tbl')) return init();
+        }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+  function start() { init(); watch(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
 })();
