@@ -360,7 +360,6 @@
 
   /* ---- words ---- */
 
-  function capLabel(g, v) { return v + ' · ' + groupByKey(g).name; }
   function shortOf(p) { return p.short || p.name.replace(/ \(.*\)$/, ''); }
   /* "Everything IZU at Village has, plus five more things." The sentence is
      the whole point of the model, so it is what the collapsed card shows. */
@@ -501,85 +500,110 @@
      right; then one full-width subtle button underneath, where "Make Private"
      sits in ClickUp's own dialog. */
 
+  /* Which segment, which groups are open and which are showing their stored
+     names, per card — so reopening a position finds it as you left it. */
+  var cardMode = {}, cardOpen = {}, cardNames = {};
+
   function addsList(p) {
     var wrap = el('div', 'pm-sect');
     var h = el('div', 'pm-sh');
     h.appendChild(el('p', 'pm-lbl', p.base ? 'Plus, on top of that' : 'Granted here'));
-    var add = el('button', 'pm-addbtn');
-    add.type = 'button';
-    add.setAttribute('aria-haspopup', 'menu');
-    add.setAttribute('aria-expanded', 'false');
-    add.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
-    add.appendChild(el('span', null, 'Add one thing'));
-    add.onclick = function (e) {
-      e.stopPropagation();
-      var mine = held(p);
-      /* One flat list, not a drill-down. There are at most 32 capabilities and
-         the position already holds most of them, so what is left fits; and the
-         menu's own search only reads the row's label, which means the object
-         has to be in it. A drill-down would hide the search and cost a click. */
-      var items = [{ heading: true, label: 'Give this position one more thing' }];
-      GROUPS.forEach(function (g) {
-        VERBS.forEach(function (v) {
-          if (!capSize(g.key, v) || mine[g.key + '|' + v]) return;
-          items.push({
-            label: capLabel(g.key, v),
-            hint: capSize(g.key, v) + '',
-            description: CAP_RISK[g.key + '|' + v]
-              || capSize(g.key, v) + ' of the stored names, granted together.',
-            onPick: function () {
-              window.SugiraMenu.close();
-              p.adds.push([g.key, v]);
-              render();
-            }
-          });
-        });
-      });
-      if (items.length === 1) items.push({ label: 'It already holds everything', disabled: true });
-      window.SugiraMenu.show(add, items, { width: 340 });
-    };
-    h.appendChild(add);
     wrap.appendChild(h);
 
-    if (!p.adds.length) {
-      wrap.appendChild(el('p', 'pm-none', p.base
-        ? 'Nothing. This position is exactly ' + shortOf(byId(p.base)) + '.'
-        : 'Nothing. This position grants no permissions at all.'));
-      return wrap;
-    }
+    var host = el('div', 'pm-perm');
+    wrap.appendChild(host);
+    if (!window.SugiraAccess) return wrap;
 
-    var ul = el('ul', 'pm-adds');
-    p.adds.forEach(function (c, i) {
-      var g = groupByKey(c[0]);
-      var li = el('li', 'pm-add' + (g.guarded ? ' guarded' : ''));
-      li.appendChild(icon(g.icon, 'pm-agi'));
-      var nm = el('span', 'pm-an');
-      nm.appendChild(el('b', null, c[1]));
-      nm.appendChild(el('span', null, g.name));
-      li.appendChild(nm);
-      var w = capSize(c[0], c[1]);
-      li.appendChild(el('span', 'pm-aw', w + (w === 1 ? ' permission' : ' permissions')));
-      if (CAP_RISK[c[0] + '|' + c[1]]) {
-        var warn = el('span', 'pm-arisk');
-        warn.setAttribute('data-tip', CAP_RISK[c[0] + '|' + c[1]]);
-        warn.appendChild(icon('i-alert'));
-        li.appendChild(warn);
+    var below = p.base ? held(byId(p.base)) : {};
+    var A = window.SugiraAccess;
+
+    function mine(key, verb) {
+      for (var i = 0; i < p.adds.length; i++) {
+        if (p.adds[i][0] === key && p.adds[i][1] === verb) return i;
       }
-      var x = el('button', 'pm-ax');
-      x.type = 'button';
-      x.setAttribute('aria-label', 'Remove ' + capLabel(c[0], c[1]) + ' from ' + p.name);
-      x.innerHTML = '<svg aria-hidden="true"><use href="#i-cross"/></svg>';
-      x.onclick = function (e) { e.stopPropagation(); p.adds.splice(i, 1); render(); };
-      li.appendChild(x);
-      ul.appendChild(li);
-    });
-    wrap.appendChild(ul);
-
-    if (p.base) {
-      wrap.appendChild(el('p', 'pm-rule',
-        'A position can only add to the one it starts from. Something that needs less than '
-        + shortOf(byId(p.base)) + ' is a rung of its own, not a position with holes in it.'));
+      return -1;
     }
+
+    var model = {
+      mode: cardMode[p.id] || 'adds',
+      open: cardOpen[p.id] || (cardOpen[p.id] = {}),
+      names: cardNames[p.id] || (cardNames[p.id] = {}),
+      setMode: function (id) { cardMode[p.id] = id; render(); },
+      redraw: function () { A.render(host, model); },
+      segments: function () {
+        if (!p.base) return null;
+        return [{ id: 'below', label: 'Everything it inherits' },
+                { id: 'adds', label: 'What this adds' }];
+      },
+      caption: function () {
+        if (model.mode === 'below') {
+          return 'What ' + shortOf(byId(p.base))
+            + ' gives, and every position built on it. Switch to \u201cWhat this adds\u201d '
+            + 'to change this rung.';
+        }
+        return p.base
+          ? 'Tick what this rung adds on top of ' + shortOf(byId(p.base))
+            + '. The greyed ones already arrive from it.'
+          : 'Tick what this position grants. It starts from nothing, so everything here is its own.';
+      },
+      cell: function (key, verb) {
+        var g = groupByKey(key);
+        var list = A.cellsOf(g, verb);
+        if (!list.length) return null;
+        var k = key + '|' + verb;
+        var sample = list.slice(0, 3).map(function (x) { return x.id; }).join(', ')
+          + (list.length > 3 ? '\u2026' : '');
+        var risk = CAP_RISK[k] ? ' ' + CAP_RISK[k] : '';
+        var step = below[k];
+        if (step) {
+          return { on: true, locked: true, from: shortOf(step),
+            tip: verb + ' \u2014 ' + g.name + ' arrives from ' + shortOf(step)
+              + '. A position may only add to the one it starts from, so it cannot be taken '
+              + 'away here \u2014 change ' + shortOf(step) + ' itself, which reaches everyone '
+              + 'built on it. ' + list.length
+              + (list.length === 1 ? ' stored name' : ' stored names') + ': ' + sample + '.' + risk };
+        }
+        var own = mine(key, verb) >= 0;
+        return { on: own, locked: model.mode === 'below', from: own ? 'this position' : null,
+          tip: own
+            ? verb + ' \u2014 ' + g.name + ' is what this rung adds. Unticking it takes it from '
+              + p.people + (p.people === 1 ? ' person' : ' people')
+              + ' and from every position built on this one. ' + list.length
+              + (list.length === 1 ? ' stored name' : ' stored names') + ': ' + sample + '.' + risk
+            : verb + ' \u2014 ' + g.name + ' is not granted. Ticking it gives these '
+              + list.length + ' to ' + p.people + (p.people === 1 ? ' person' : ' people')
+              + ' and to every position built on this one: ' + sample + '.' + risk };
+      },
+      toggle: function (key, verb) {
+        var i = mine(key, verb);
+        if (i >= 0) p.adds.splice(i, 1);
+        else p.adds.push([key, verb]);
+        render();
+      },
+      summary: function () {
+        var s = el('p', 'acc-sum');
+        s.appendChild(el('b', null, String(total(p))));
+        s.appendChild(document.createTextNode(' of the 112 stored names'));
+        if (p.base) {
+          s.appendChild(document.createTextNode(' \u2014 '));
+          s.appendChild(el('b', null, String(total(byId(p.base)))));
+          s.appendChild(document.createTextNode(' from ' + shortOf(byId(p.base)) + ', and '));
+          s.appendChild(el('b', null, String(p.adds.length)));
+          s.appendChild(document.createTextNode(p.adds.length === 1
+            ? ' thing added here.' : ' things added here.'));
+        } else {
+          s.appendChild(document.createTextNode(', all granted on this card.'));
+        }
+        var kids = children(p);
+        if (kids.length) {
+          s.appendChild(document.createTextNode(' ' + (kids.length === 1
+            ? shortOf(kids[0]) + ' is built on this one, so a change here reaches it too.'
+            : kids.length + ' positions are built on this one, so a change here reaches them too.')));
+        }
+        return s;
+      }
+    };
+    A.render(host, model);
     return wrap;
   }
 

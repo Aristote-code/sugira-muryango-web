@@ -53,9 +53,7 @@ b,strong{font-weight:600}
 p{margin:0}
 button{font-family:inherit}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--color-content-secondary);background:var(--x-clickup-color-background-on-main);border-radius:var(--radius-xs);padding:.08em .32em;overflow-wrap:anywhere}
-
 :focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px;border-radius:4px}
-
 /* ---------------- shell ---------------- */
 /* The app frame. Measured on ClickUp at 1440x900: body frame inset 6px from the
    window, 1px default border, r8, elevation-1, surface over the darker ground.
@@ -68,7 +66,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   background:var(--color-bg-surface);box-shadow:var(--x-clickup-elevation-1);overflow:hidden}
 .shell.mini{grid-template-columns:76px 1fr}
 @media (max-width:880px){.shell,.shell.mini{grid-template-columns:1fr;height:auto}}
-
 /* ---------------- rail ---------------- */
 .rail{background:var(--brand);padding:20px 16px;display:flex;flex-direction:column;overflow-y:auto;min-width:0}
 .shell.mini .rail{padding:20px 14px}
@@ -121,7 +118,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .si .ct{font-size:11px;font-weight:500;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.58)}
 .si .ct.sig{color:#FFA2A2}
 .railfoot{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:2px}
-
 /* ---------------- main ---------------- */
 .main{min-width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--color-bg-surface)}
 @media (max-width:880px){.main{overflow:visible}}
@@ -143,14 +139,12 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .userchip .who span{font-size:12px;color:var(--color-content-secondary)}
 .userchip .cv{color:var(--color-content-secondary);font-size:11px}
 @media (max-width:620px){.userchip .who{display:none}}
-
 .scroll{flex:1;overflow-y:auto;min-height:0;background:var(--color-bg-canvas)}
 @media (max-width:880px){.scroll{overflow:visible}}
 .screen{display:none}
 .screen.live{display:block}
 .pad{padding:20px 24px 32px;display:grid;gap:20px;align-content:start}
 .cols>*,.stats>*,.pad>*{min-width:0}
-
 /* ---------------- page bar and record header ---------------- */
 /* One 38px row: the line that says what the page is, and the page's own
    actions at 24. The name is in the breadcrumb above and is not repeated. */
@@ -159,7 +153,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .pbar .sub{margin:0;min-width:0;flex:1;max-width:none;overflow:hidden;
   display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
 .pbar .acts{margin-left:auto;display:flex;align-items:center;gap:4px;flex:none}
-
 .pbar .btn{height:var(--size-control-xs);padding:0 8px;font-size:12px;border-radius:var(--button-sm-radius);gap:4px}
 .pbar .btn svg{width:14px;height:14px}
 .phead{padding:20px 24px 0;background:var(--color-bg-surface)}
@@ -172,7 +165,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .phead .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .phead .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 .sub{font-size:14px;line-height:21px;color:var(--color-content-secondary);margin-top:4px;max-width:78ch}
-
 /* ---------------- tabs ---------------- */
 .tabs{display:flex;align-items:center;gap:2px;height:var(--view-tabs-height);padding:0 24px;border-bottom:1px solid var(--color-border-subtle);overflow-x:auto;scrollbar-width:none;background:var(--color-bg-surface);flex:none}
 .tabs::-webkit-scrollbar{display:none}
@@ -185,7 +177,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 /* the bar belongs to the row, not the tab, so it lands on the row's own edge */
 .tab.on::after{content:"";position:absolute;left:0;right:0;bottom:calc((var(--size-control-xs) - var(--view-tabs-height)) / 2);
   height:2px;border-radius:2px 2px 0 0;background:var(--color-bg-primary-default)}
-
 /* ---------------- controls ---------------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid transparent;
   border-radius:var(--button-lg-radius);cursor:pointer;height:var(--button-lg-height);
@@ -230,7 +221,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .seg button{border:0;background:none;cursor:pointer;height:var(--size-control-sm);padding:0 8px;font-size:14px;
   line-height:16px;font-weight:500;color:var(--color-content-secondary);border-radius:var(--x-clickup-radii-2-5)}
 .seg button.on{background:var(--color-bg-surface);color:var(--color-content-secondary);box-shadow:var(--elevation-raised)}
-
 /* ---------------- grouping ---------------- */
 /* The group header as measured: a collapse caret, the value as a pill and
    the count beside it in a quieter tone. The row spans the table, so a
@@ -254,7 +244,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .fl.grpby.on{background:var(--color-bg-primary-subtle);
   border-color:var(--x-clickup-color-border-primary-low-contrast)}
-
 /* ---------------- fields ---------------- */
 /* CustomFieldRow as measured: 36 high on a 1px top border.subtle, a 220
    label column with a 16 type icon and the name 8 after it, the value
@@ -292,7 +281,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   background:none;border-radius:var(--x-clickup-radii-2-5);font:inherit;font-size:12px;
   line-height:16px;font-weight:500;color:var(--color-content-secondary);cursor:pointer}
 .fields-t:hover{background:var(--x-clickup-color-background-on-main)}
-
 /* The record's own menu. MenuButtonGroup as measured: two bordered buttons
    sharing an edge, 33 tall, outer corners r6, 13px. */
 .recmore{display:inline-flex;align-items:center;justify-content:center;
@@ -322,7 +310,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   line-height:var(--menu-line-height-2);
   color:var(--color-content-primary);text-align:left;cursor:pointer}
 .recmenu-i:hover,.recmenu-i:focus-visible{background:var(--menu-item-bg-highlighted);outline:none}
-
 /* ---------------- editing in place ---------------- */
 /* A property value is the picker's trigger, so it has to look like something
    you can press before you press it: the system's cell hover, nothing more
@@ -336,7 +323,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   border:1px solid var(--x-clickup-color-border-primary-focus);
   border-radius:var(--radius-sm);outline:none;
   box-shadow:0 0 0 3px var(--x-clickup-color-effect-primary)}
-
 /* The menu is the system's: 28 rows, inset 8, r7, on the overlay elevation. */
 .pgmenu{position:absolute;z-index:var(--menu-surface-z,var(--z-pop));min-width:200px;
   max-height:320px;overflow:auto;padding:8px 0;border-radius:var(--menu-surface-radius);
@@ -352,7 +338,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .pgmenu-i.on::after{content:"";margin-left:auto;width:14px;height:14px;flex:none;
   background:currentColor;-webkit-mask:var(--i-check) center/14px no-repeat;
   mask:var(--i-check) center/14px no-repeat}
-
 /* A title and a description edit where they sit. */
 .rec h1[data-inplace],.rec-desc[data-inplace]{border-radius:var(--radius-sm);
   margin-inline:-6px;padding-inline:6px;cursor:text}
@@ -360,10 +345,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .rec h1.inplace,.rec-desc.inplace{background:var(--color-bg-surface);
   outline:1px solid var(--x-clickup-color-border-primary-focus);
   box-shadow:0 0 0 3px var(--x-clickup-color-effect-primary)}
-
 .toast-undo{margin-left:12px;padding:0;border:0;background:none;font:inherit;font-size:14px;
   font-weight:600;color:var(--color-content-on-primary);text-decoration:underline;cursor:pointer}
-
 /* ---------------- relations ---------------- */
 /* A related record is a row you can open, so it is a row: the kind it plays
    on the left, the record, and why it matters on the right. Geometry is the
@@ -384,7 +367,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .relrow-w{font-size:12px;line-height:16px;color:var(--color-content-secondary);
   text-align:right;max-width:40ch;flex:none}
 @media (max-width:880px){.relrow-w{display:none}}
-
 /* ---------------- help: the icon, and what it says ---------------- */
 .ihelp{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
   padding:0;border:0;background:none;border-radius:var(--button-sm-radius);color:var(--color-content-secondary);
@@ -394,7 +376,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .ihelp:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
 /* Sits beside a title, so it rides the title's baseline rather than its box. */
 h1 .ihelp,h2 .ihelp,h3 .ihelp{margin-left:6px}
-
 abbr[data-tip]{text-decoration:underline dotted;text-underline-offset:3px;text-decoration-color:var(--color-content-tertiary);cursor:help}
 abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .tip{position:absolute;z-index:var(--z-tooltip);max-width:min(360px,calc(100vw - 32px));
@@ -403,7 +384,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
   font-size:12px;line-height:18px;pointer-events:none}
 .tip[hidden]{display:none}
 .tip b{color:var(--color-content-inverse);font-weight:600}
-
 /* ---------------- chips ---------------- */
 .chip{display:inline-flex;align-items:center;gap:2px;min-height:var(--status-pill-height);
   padding:2px 6px 2px 4px;font-size:var(--status-pill-font-size);
@@ -416,7 +396,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .chip.warn{background:var(--color-bg-warning-subtle);color:var(--color-content-warning)}
 .chip.bad{background:var(--color-bg-danger-subtle);color:var(--color-content-danger)}
 .chip.brand{background:var(--color-bg-primary-subtle);color:var(--x-clickup-color-background-primary-pressed)}
-
 /* ---------------- cards: the tinted surface from the mobile file ---------------- */
 /* radius-md (8), not radius-lg (12): 12 is the modal's radius on ClickUp, and
    using it for every card flattens the difference between a panel and an overlay. */
@@ -439,13 +418,10 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 @media (min-width:1500px){.stats{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
 @media (min-width:820px){.cols.c3{grid-template-columns:repeat(3,1fr)}}
 .wide{grid-column:1/-1}
-
 .callout{background:var(--color-bg-surface);border-left:3px solid var(--color-bg-primary-default);border-radius:var(--radius-lg);padding:16px 20px;box-shadow:var(--elevation-raised)}
-
 .callout .ch{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--color-bg-primary-hover);margin-bottom:8px}
 .callout .ch svg{width:14px;height:14px;fill:none}
 .callout p{font-size:14px;color:var(--color-content-secondary);max-width:86ch}
-
 /* Framed alert: the system's subtle danger fill names the alert, a surface panel
    sits inside the frame, and each thing needing action gets its own outlined row.
    The header text is content.danger on that fill rather than white, because the
@@ -476,7 +452,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .al-what .lb{font-size:12px;color:var(--color-content-secondary)}
 .al-what .nm{font-size:1rem;font-weight:600;color:var(--color-content-link)}
 .al-act{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-
 /* alert — red is for a child at risk, amber for behind-schedule */
 .alert{background:var(--color-bg-danger-subtle);border:1px solid var(--x-clickup-color-border-danger);border-radius:var(--radius-lg);padding:16px 20px}
 .alert.warn{background:var(--color-bg-warning-subtle);border-color:var(--x-clickup-color-border-warning)}
@@ -489,7 +464,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .ar b{color:var(--color-content-primary);font-weight:500;font-variant-numeric:tabular-nums}
 .ar .go{margin-left:auto;color:var(--color-content-danger);font-weight:500;font-size:13px;cursor:pointer}
 .alert.warn .ar .go{color:var(--color-content-warning)}
-
 /* stats — the 42px ExtraBold figure from the mobile file */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:16px}
 .st{background:var(--color-bg-surface);border-radius:var(--radius-lg);box-shadow:var(--elevation-raised);padding:16px 24px;display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:132px}
@@ -504,7 +478,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .trk{height:6px;background:var(--x-clickup-color-background-on-main-hover);border-radius:var(--radius-full);margin-top:2px;overflow:hidden}
 .trk i{display:block;height:100%;background:var(--color-bg-primary-default);border-radius:var(--radius-full)}
 .trk.warn i{background:var(--color-bg-warning-default)}
-
 /* ---- weekly completion chart ----
    One chart, so it leads. The line stays in the neutral ramp and only the week
    that broke the pattern takes the accent, which is why the dip reads before
@@ -526,7 +499,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .wk-line{fill:none;stroke:var(--color-primitive-grey-700);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .wk-last{fill:none;stroke:var(--color-bg-primary-default);stroke-width:2.5;stroke-linecap:round}
 .wk-dot{fill:var(--color-bg-primary-default);stroke:var(--color-bg-surface);stroke-width:2.5}
-
 /* list rows */
 .lr{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--color-border-subtle);font-size:14px}
 .lr:first-of-type{border-top:0}
@@ -536,7 +508,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .lr .ch{color:var(--color-content-secondary)}
 .lr.click{cursor:pointer;margin-inline:-8px;padding-inline:8px;border-radius:10px}
 .lr.click:hover{background:var(--x-clickup-color-background-on-main-hover)}
-
 /* table — sits on the white surface so dense rows stay readable */
 .tbl{width:100%;border-collapse:collapse;font-size:14px;background:var(--color-bg-surface)}
 .tbl th{text-align:left;font-size:12px;line-height:16px;font-weight:500;color:var(--color-content-secondary);
@@ -552,20 +523,17 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .tbl .nm{font-weight:500;color:var(--color-content-primary)}
 .cellmark{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px;color:var(--color-content-tertiary)}
 .cellmark svg{width:16px;height:16px;fill:none}
-
 .tbl .mut{color:var(--color-content-secondary)}
 .tblwrap{overflow-x:auto}
 /* On a wide display the name column absorbs the slack, so the figures stay grouped
    on the right instead of drifting apart across the row. */
 @media (min-width:1500px){.tbl th:first-child,.tbl td:first-child{width:34%}}
 @media (min-width:1900px){.tbl th:first-child,.tbl td:first-child{width:30%}}
-
 .tfoot{display:flex;align-items:center;gap:12px;padding:8px 12px;border-top:1px solid var(--color-border-default);font-size:13px;color:var(--color-content-secondary);flex-wrap:wrap;background:var(--color-bg-surface)}
 .tfoot .pg{margin-left:auto;display:flex;gap:4px}
 .tfoot .pg button{border:1px solid var(--color-border-default);background:var(--color-bg-surface);border-radius:var(--button-sm-radius);
   min-width:var(--size-control-sm);height:var(--size-control-sm);cursor:pointer;color:var(--color-content-secondary);font-size:12px;font-weight:500}
 .tfoot .pg button.on{background:var(--color-bg-primary-default);color:var(--color-content-on-primary);border-color:var(--color-bg-primary-default)}
-
 /* timeline */
 .tl{display:grid;gap:1px}
 .te{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:start;
@@ -580,7 +548,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .te p{font-size:12px;line-height:16px;color:var(--color-content-secondary);margin-top:1px}
 .te .when{font-size:12px;line-height:16px;color:var(--color-content-secondary);white-space:nowrap}
 .te a{color:var(--color-content-link);font-size:12px;font-weight:500;cursor:pointer;display:inline-block;margin-top:2px;text-decoration:none}
-
 /* module progress */
 .mods{display:grid;gap:8px}
 .mod{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;font-size:14px}
@@ -593,12 +560,10 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .mod .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mod.done .nm{color:var(--color-content-secondary)}
 .mod .wh{font-size:12px;color:var(--color-content-secondary);white-space:nowrap}
-
 /* key-value */
 .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px}
 .kv .k{font-size:12px;font-weight:500;color:var(--color-content-secondary)}
 .kv .v{font-size:18px;font-weight:500;font-variant-numeric:tabular-nums;margin-top:2px}
-
 /* charts */
 .bars{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;height:6.8rem}
 .bc{display:grid;grid-template-rows:1fr auto;gap:4px;min-height:0}
@@ -649,14 +614,12 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:12px;font-size:.75rem;color:var(--color-content-secondary)}
 .legend span{display:inline-flex;align-items:center;gap:4px}
 .legend i{width:12px;height:12px;border-radius:2px;display:block}
-
 /* empty state */
 .empty{text-align:center;padding:44px 24px;display:grid;gap:8px;justify-items:center}
 .empty .ei{width:46px;height:46px;border-radius:12px;background:var(--color-bg-primary-subtle);display:flex;align-items:center;justify-content:center}
 .empty .ei svg{width:21px;height:21px;color:var(--color-bg-primary-hover);fill:none}
 .empty h4{font-size:1rem}
 .empty p{font-size:14px;color:var(--color-content-secondary);max-width:46ch}
-
 /* Drawer. Detail records open over the list they came from instead of replacing it,
    and can be promoted to a full page. Geometry, elevation, scrim and easing are the
    ClickUp drawer's: 880px, elevation-5, #00000099, 180ms cubic-bezier(.32,.72,0,1). */
@@ -694,7 +657,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dw-body .tab[data-panel="relations"],.dw-body [data-panelid="relations"]{display:none}
 .dw-body{flex:1;min-width:0;min-height:0;overflow:auto;background:var(--color-bg-surface);
   overscroll-behavior:contain}
-
 /* The second pane: 560 in the task view, 400 here because this drawer is
    narrower than their modal. Subtle ground, so the record stays the white one. */
 .dw-side{width:var(--task-modal-activity-panel-width);flex:none;min-height:0;display:flex;
@@ -722,7 +684,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dw-side[hidden]{display:none}
 .dws-body{flex:1;min-height:0;overflow:auto;padding:12px}
 .dws-foot{flex:none;padding:12px;border-top:1px solid var(--color-border-subtle)}
-
 /* A system event: a dot, what happened, and when — the when right-aligned
    so a column of them scans by date. */
 .dws-stream{display:flex;flex-direction:column;gap:4px;padding-bottom:8px}
@@ -737,7 +698,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dws-t b{color:var(--color-content-primary);font-weight:600}
 .dws-w{flex:none;font-size:var(--activity-stream-font-size);line-height:18px;
   color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
-
 .dws-seg{width:100%;margin-bottom:8px}
 .dws-seg button{flex:1}
 .dws-rels{display:flex;flex-direction:column;gap:2px}
@@ -752,7 +712,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dws-rk{font-size:12px;line-height:16px;color:var(--color-content-secondary)}
 .dws-rn{font-size:14px;line-height:16px;font-weight:500;color:var(--color-content-primary);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
 .dws-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:16px;padding:48px 16px;text-align:center}
 .dws-sq{display:flex;align-items:center;justify-content:center;width:56px;height:56px;
@@ -765,7 +724,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dws-ed{margin-top:8px;max-width:var(--surface-empty-description-max-width);
   font-size:var(--surface-empty-description-font-size);line-height:20px;
   color:var(--color-content-secondary)}
-
 /* Composer: docked, white, 1px border.default, r10, elevation-1. */
 .dws-comp{background:var(--color-bg-surface);border:1px solid var(--color-border-default);
   border-radius:var(--x-clickup-radii-5);box-shadow:var(--elevation-raised);padding:8px}
@@ -787,7 +745,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 /* the list behind the drawer must not scroll with it */
 .shell.dw-open .scroll{overflow:hidden}
 @media (max-width:880px){.dw-panel{max-width:none;border-left:0}}
-
 /* Record header, to the measured ClickUp task-detail spec: type chip 82x28 r7, title
    28/35 600, property rows 32 with a 120px label (16px icon + 14/16 tertiary, gap 6)
    and a value padded 2/8 at r6 that tints on hover. Two columns above 1360, one below. */
@@ -833,7 +790,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
   color:var(--color-content-secondary);margin-top:8px}
 .pg-collapse:hover{background:var(--color-bg-hover);color:var(--color-content-secondary)}
 .pg.hide-empty .pgr.is-empty{display:none}
-
 /* Layout switch: sidebar (default), modal, full page — ClickUp's three task layouts. */
 .dw-layout{display:inline-flex;gap:2px;background:var(--x-clickup-color-background-on-main);border-radius:7px;padding:3px;margin-left:auto}
 .dw-layout button{width:26px;height:24px;border:0;background:none;border-radius:5px;cursor:pointer;
@@ -849,7 +805,6 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 @keyframes dw-pop{from{transform:scale(.985);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.dw.as-modal .dw-panel{animation:none}}
 @media (max-width:880px){.dw.as-modal{padding:0}.dw.as-modal .dw-panel{border-radius:0}.dw-layout{display:none}}
-
 /* modal */
 .scrim{position:fixed;inset:0;background:var(--modal-overlay-bg);display:flex;align-items:center;justify-content:center;padding:24px;z-index:var(--z-modal)}
 .scrim[hidden]{display:none}
@@ -878,15 +833,12 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--brand);color:var(--color-content-on-primary);font-size:14px;font-weight:600;
   padding:12px 20px;border-radius:var(--radius-full);z-index:var(--z-toast);box-shadow:var(--elevation-modal)}
 .toast[hidden]{display:none}
-
 /* standalone document: the artifact skeleton used to provide these */
 [hidden]{display:none!important}
 img{max-width:100%}
-
 /* Hugeicons Pro sprite: symbols carry their own stroke, so rules above set color */
 .icon-defs{display:none}
 svg use{pointer-events:none}
-
 /* ---------------- permission matrix ----------------
    The client described roles scoped two ways: "the position is the national level /
    this is the sector level" [09:57] and "project level ... create a role to set your
@@ -910,7 +862,6 @@ svg use{pointer-events:none}
 .tick.on{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default);color:var(--color-content-on-primary)}
 .tick.locked{background:var(--x-clickup-color-background-on-main-hover);border-color:var(--color-border-default);cursor:not-allowed;opacity:.55}
 .tick:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}
-
 /* scope: the two axes, shown as what they are */
 .axes{display:grid;gap:16px}
 @media (min-width:900px){.axes{grid-template-columns:1fr 1fr}}
@@ -926,7 +877,6 @@ svg use{pointer-events:none}
 .lvl.on .dot{background:var(--color-bg-primary-default)}
 .lvl .n{margin-left:auto;font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .lvl .ind{display:inline-block;flex:none}
-
 /* places tree */
 /* The places tree. Rows are the system's 32, the caret turns rather than
    swapping glyph, and a row with nothing under it has no caret at all — so
@@ -957,7 +907,6 @@ svg use{pointer-events:none}
   font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .plr-r span{min-width:110px;text-align:right}
 @media (max-width:880px){.plr-l,.plr-r span:last-child{display:none}}
-
 /* ---------------- what one person can open ----------------
    ClickUp's "Use List Template" block, read from the design system rather than
    from the screenshot:
@@ -969,6 +918,11 @@ svg use{pointer-events:none}
        border with the check in on-primary. Disabled is ClickUp's own treatment
        for a row the template cannot take — which is exactly a verb that comes
        from the position and so cannot be removed here. */
+/* On a position card the block sits in the card's own padding rather than in
+   a drawer panel, so it takes the gap the section label leaves and nothing
+   else — the card already draws the surface around it. */
+.pm-perm{margin-top:8px}
+.pm-perm .acc-sum{margin:8px 0 12px}
 .acc-seg{display:flex;height:var(--size-control-md);padding:2px;border-radius:var(--x-clickup-radii-3-5);
   background:var(--x-clickup-color-background-on-main)}
 .acc-segb{flex:1;height:28px;display:flex;align-items:center;justify-content:center;gap:4px;
@@ -988,12 +942,11 @@ svg use{pointer-events:none}
 .acc-sum b{color:var(--color-content-primary);font-weight:600}
 .acc-of{margin-left:auto;font-size:12px;line-height:16px;color:var(--color-content-secondary);
   flex:none;font-variant-numeric:tabular-nums}
-
 /* The body of an open group: the caption ClickUp puts under its switch, then
    the two-column grid, then the stored names behind a line of their own. */
 .acc-body{padding:4px 12px 12px 44px;border-bottom:1px solid var(--color-border-subtle);
   background:var(--color-bg-surface)}
-.acc-cap{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
+.acc-cap{margin:0 0 12px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
 .acc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;max-width:520px}
 .acc-cbw{display:flex;min-width:0}
 .acc-cbb{display:flex;align-items:center;gap:8px;width:100%;min-height:26px;padding:0;
@@ -1020,7 +973,6 @@ svg use{pointer-events:none}
 .acc-cbw.gone{opacity:var(--opacity-disabled)}
 .acc-cbw.gone .acc-cb{border-style:dashed;background:none}
 .acc-cbw.gone .acc-cbt{font-size:14px;line-height:16px;color:var(--color-content-secondary)}
-
 .acc-more{margin-top:10px;height:var(--size-control-xs);padding:0 7px 0 5px;border:0;background:none;
   border-radius:var(--x-clickup-radii-2-5);font:inherit;font-size:12px;line-height:16px;
   font-weight:500;color:var(--color-content-secondary);cursor:pointer}
@@ -1042,7 +994,6 @@ svg use{pointer-events:none}
 .acc-vh.off,.acc-nr.off{opacity:.55}
 @media (max-width:880px){.acc-grid{grid-template-columns:minmax(0,1fr)}.acc-id{display:none}
   .acc-body{padding-left:12px}}
-
 /* A project row opens to show its sessions and forms. Same caret and the same
    indent step as the places tree, because it is the same gesture answering the
    same question — what is under this. */
@@ -1070,7 +1021,6 @@ svg use{pointer-events:none}
 .prk-r{margin-left:auto;flex:none;font-size:12px;color:var(--color-content-secondary);
   font-variant-numeric:tabular-nums}
 @media (max-width:880px){.prk-note{display:none}}
-
 /* login sits outside the app chrome */
 .shell.bare .rail,.shell.bare .topbar{display:none}
 .shell.bare{grid-template-columns:1fr}
@@ -1092,7 +1042,6 @@ svg use{pointer-events:none}
 .signin .btn{width:100%;justify-content:center;margin-top:20px}
 .signin .alt{text-align:center;margin-top:16px;font-size:13px}
 .signin .alt a{color:var(--color-content-link);font-weight:600;cursor:pointer;text-decoration:none}
-
 /* ---------------- relationships ----------------
    Records already name their relationships — "Home visitor: M. Dusabe", "Cases raised: 14" —
    but all 86 property values were dead ends. These make the value navigable.
@@ -1125,8 +1074,6 @@ svg use{pointer-events:none}
 /* what changing this would affect — the reason the relationship matters */
 .conseq{font-size:11px;line-height:16px;color:var(--color-content-warning);white-space:nowrap}
 .conseq.plain{color:var(--color-content-secondary)}
-
-
 /* ---------------- query bar: filter, sort, columns, export ----------------
    Built to ClickUp's measured specs. SelectTrigger: 28 high, r7, 1px border.strong,
    padding 0 7, gap 4. SortBadge: 20x18, r10, bg.selected, 12px icon in link colour.
@@ -1151,7 +1098,6 @@ svg use{pointer-events:none}
 .tq-btn .n{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;
   padding:0 4px;border-radius:var(--radius-full);background:var(--color-bg-primary-default);color:var(--color-content-on-primary);font-size:11px;font-weight:600}
 .tq-btn.on{border-color:var(--x-clickup-color-border-primary-hover);background:var(--color-bg-primary-subtle)}
-
 /* sortable column titles */
 .tbl th.srt{cursor:pointer;user-select:none}
 .tbl th.srt .ttl{display:inline-flex;align-items:center;gap:4px;color:var(--color-content-secondary)}
@@ -1159,7 +1105,6 @@ svg use{pointer-events:none}
 .sortb{display:inline-flex;width:20px;height:18px;align-items:center;justify-content:center;
   border-radius:10px;border:1px solid var(--x-clickup-color-effect-primary);background:var(--color-bg-primary-subtle);flex:none}
 .sortb svg{width:12px;height:12px;fill:none;color:var(--color-bg-primary-hover)}
-
 /* popovers */
 .qpop{position:absolute;z-index:var(--z-pop);background:var(--color-bg-surface);border-radius:12px;
   box-shadow:var(--elevation-overlay);border:1px solid var(--color-border-default);padding:12px;
@@ -1231,33 +1176,6 @@ svg use{pointer-events:none}
    points the way it leads. */
 .pm-bsel.go .pm-bt .pm-cv{transform:none}
 .pm-bd{font-size:12px;line-height:18px;color:var(--color-content-secondary)}
-/* The additions. One row each, removable one at a time, as the share dialog
-   lists the people added on top of what the Space already gives. */
-.pm-adds{list-style:none;margin:0;padding:0;display:grid;gap:2px}
-.pm-add{display:flex;align-items:center;gap:8px;min-height:var(--size-control-lg);padding:0 8px;margin-inline:-8px;
-  border-radius:var(--menu-radius);font-size:14px;line-height:var(--lh-16);color:var(--color-content-primary)}
-.pm-add:hover{background:var(--x-clickup-color-background-on-main)}
-.pm-agi{width:16px;height:16px;flex:none;fill:none;color:var(--color-content-secondary)}
-.pm-add.guarded .pm-agi{color:var(--color-content-danger)}
-.pm-an{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0}
-.pm-an b{font-weight:600;min-width:56px}
-.pm-aw{flex:none;font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
-.pm-arisk{display:flex;align-items:center;justify-content:center;width:20px;height:20px;flex:none;
-  color:var(--color-content-warning);cursor:help}
-.pm-arisk svg{width:14px;height:14px;fill:none}
-.pm-ax{display:flex;align-items:center;justify-content:center;width:var(--size-control-xs);height:var(--size-control-xs);
-  flex:none;border:0;background:none;border-radius:var(--button-sm-radius);cursor:pointer;color:var(--color-content-secondary)}
-.pm-ax:hover{background:var(--color-bg-danger-subtle);color:var(--color-content-danger)}
-.pm-ax:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
-.pm-ax svg{width:13px;height:13px;fill:none}
-/* Where "Make Private" sits in ClickUp's share dialog: one full-width subtle
-   button under the rows it adds to. */
-.pm-addbtn{display:inline-flex;align-items:center;justify-content:center;gap:4px;height:var(--size-control-sm);
-  flex:none;padding:0 10px;border:0;border-radius:var(--x-clickup-radii-3-5);cursor:pointer;font-family:var(--ui);
-  font-size:14px;line-height:16px;font-weight:500;background:var(--x-clickup-color-background-on-main);color:var(--color-content-primary)}
-.pm-addbtn:hover{background:var(--x-clickup-color-background-on-main-hover)}
-.pm-addbtn:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
-.pm-addbtn svg{width:14px;height:14px;fill:none}
 .pm-rule{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:80ch;margin-top:4px}
 .pm-none{font-size:13px;line-height:18px;color:var(--color-content-secondary)}
 .pm-cfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--color-border-subtle)}
@@ -1357,7 +1275,6 @@ svg use{pointer-events:none}
 .qcol .bx svg{width:10px;height:10px;fill:none}
 .qcol.locked{opacity:.5;cursor:not-allowed}
 .tq-none{padding:24px 16px;text-align:center;color:var(--color-content-secondary);font-size:.875rem}
-
 /* ---------------- save-time consequence ----------------
    A record five projects share cannot be saved quietly. The confirm names what
    else moves, by name, as the same chip used in the record — so you can open it
@@ -1377,7 +1294,6 @@ svg use{pointer-events:none}
   font-size:12px;line-height:16px;color:var(--color-content-warning);background:var(--color-bg-warning-subtle);
   border:1px solid var(--x-clickup-color-border-warning);border-radius:8px}
 .m-note svg{width:14px;height:14px;flex:none;fill:none;margin-top:1px}
-
 .pm-count{display:inline-block;margin-top:8px;border:1px solid var(--color-border-default);background:var(--color-bg-surface);
   border-radius:var(--radius-full);padding:2px 8px;font-family:var(--ui);font-size:11px;font-weight:500;
   color:var(--color-content-secondary);cursor:pointer;letter-spacing:0}
@@ -1391,7 +1307,6 @@ svg use{pointer-events:none}
    scrolls, the header and the footer stay where the hand expects them. */
 .modal{display:flex;flex-direction:column;max-height:calc(100vh - 3rem)}
 .modal .mb{overflow:auto;min-height:0;grid-auto-rows:max-content}
-
 .axes.a3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:1180px){.axes.a3{grid-template-columns:1fr}}
 .axis h4{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -1400,7 +1315,6 @@ svg use{pointer-events:none}
 .axis-tag.now{background:var(--color-primitive-grey-100);border-color:var(--color-border-default);color:var(--color-content-secondary)}
 .axis-tag.new{background:var(--color-bg-primary-subtle);border-color:var(--x-clickup-color-effect-primary);color:var(--x-clickup-color-background-primary-pressed)}
 .axis-foot{font-size:12px;color:var(--color-content-secondary);margin:12px 0 0;line-height:1.5}
-
 /* viewing-as: the risk-of-harm access bands, switchable */
 .vas{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .vas.inrec{margin:12px 0 4px}
@@ -1419,7 +1333,6 @@ svg use{pointer-events:none}
   padding:12px 16px;margin-bottom:16px}
 .rnote p{font-size:13px;color:var(--color-content-secondary);line-height:1.55;margin:0;max-width:92ch}
 .rnote code{font-size:12px}
-
 /* a redacted row keeps its shape so the count stays readable */
 .r-shut{display:none}
 tr.shut .r-open{display:none}
@@ -1427,7 +1340,6 @@ tr.shut .r-shut{display:inline}
 tr.shut{cursor:default}
 tr.shut .nm{color:var(--color-content-secondary);font-weight:500}
 .rd{color:var(--color-content-secondary);font-style:italic;font-size:13px}
-
 /* the locked case */
 .lockwrap{padding:0 24px 24px}
 .rlock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
@@ -1443,10 +1355,8 @@ tr.shut .nm{color:var(--color-content-secondary);font-weight:500}
 .rlock-a{display:flex;gap:8px;justify-content:center;margin:8px 0 0;flex-wrap:wrap}
 .rlock-f{font-size:12px;color:var(--color-content-secondary);margin:0;max-width:var(--surface-empty-description-max-width)}
 .offlimits{display:none}
-
 .tr.more .nm{color:var(--color-content-secondary);font-style:italic}
 .tr.more .rt{color:var(--color-content-secondary)}
-
 /* filter popovers: ClickUp's surface, the old app's chaining, neither's waiting */
 .fl.on{border-color:var(--x-clickup-color-border-primary-low-contrast);background:var(--color-bg-primary-subtle)}
 .fl.on b{color:var(--x-clickup-color-background-primary-pressed)}
@@ -1463,7 +1373,6 @@ tr.shut .nm{color:var(--color-content-secondary);font-weight:500}
 .flclear{border:0;background:transparent;color:var(--color-content-secondary);font-family:var(--ui);
   font-size:12px;cursor:pointer;text-decoration:underline;padding:4px 4px}
 .flclear:hover{color:var(--color-content-primary)}
-
 /* filtering and paging each own a flag, so neither can reveal what the other hid */
 tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .pg button[hidden]{display:none}
@@ -1477,13 +1386,11 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .usermenu-i:hover{background:var(--color-primitive-grey-100);color:var(--color-content-primary)}
 .usermenu-i:focus-visible{outline:2px solid var(--x-clickup-color-border-primary-hover);outline-offset:-2px}
 .more-extra{margin-right:4px}
-
 /* which build is on screen, so "I'm not seeing the changes" is checkable */
 .buildstamp{margin:16px 8px 0;padding-top:12px;border-top:1px solid rgba(255,255,255,.12);
   font-size:11px;color:rgba(255,255,255,.58);letter-spacing:.02em;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
 .shell.mini .buildstamp{display:none}
-
 /* ---------------------------------------------------------------------------
    Menus, to ClickUp's measurements (see menu.js for where each number comes
    from). The native <select> popup was the loudest generic note in the app:
@@ -1528,7 +1435,6 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   font-family:var(--ui);font-size:14px;color:var(--color-content-primary);background:var(--color-bg-surface);
   width:calc(100% - 16px)}
 .cmenu-s:focus{outline:none;border-color:var(--x-clickup-color-border-primary-hover);box-shadow:0 0 0 3px var(--color-bg-primary-subtle)}
-
 /* the trigger that replaces a native select */
 .cselect{display:flex;align-items:center;gap:8px;width:100%;height:var(--size-control-md);
   padding:0 12px;border:1px solid var(--color-border-default);border-radius:var(--radius-md);
@@ -1540,14 +1446,12 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .cselect-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cselect-c{color:var(--color-content-secondary);font-size:11px;flex:none}
 .cselect-native{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;margin:0}
-
 /* The section you are inside, marked on the group as well as the item. With
    the rail collapsed, or the group shut, the item was the only thing carrying
    the current place — so the rail showed nothing at all. */
 .ni.in{color:var(--color-content-on-primary)}
 .ni.in svg{color:var(--x-clickup-color-border-primary-low-contrast)}
 .shell.mini .ni.in{background:var(--pill)}
-
 /* the row that stands in for an emptied table */
 .t-empty td{padding:36px 16px;text-align:center;border-bottom:0}
 .t-empty p{font-size:14px;color:var(--color-content-secondary);margin-bottom:12px}

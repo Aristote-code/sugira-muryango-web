@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
-   What one person can open, in the drawer.
+   The permissions block, and the two places that use it.
 
    Built on the block ClickUp uses for "Use List Template" — Aristote found it
    and it is the right shape for this. Read from the design system's source,
@@ -10,27 +10,27 @@
        selected one is content.secondary on surface with elevation.border-1.
        Its own comment says it was measured on probe.customize-modal-s8 — the
        very dialog in the screenshot.
-     Checkbox.tsx  16 (md), r4, 1 px border.input; checked is primary
-       background and border with a 14 px check in on-primary.
-
-   The two segments carry the model rather than decorating it. "Everything the
-   position gives" is the default and is read-only: C. Uwimana is the Sector
-   lead, and that is the whole answer for most people. "Add for this person" is
-   where the checkboxes come alive.
+     Checkbox.tsx  16, r4, 1 px border.input; checked is primary background and
+       border with a 14 px check in on-primary.
 
    What a position stores is eight groups by four verbs, so the grid is the
-   four verbs — thirty-two boxes across the whole screen, not a hundred and
-   twelve. The hundred and twelve are still here, one disclosure deeper, under
-   the verb that holds them.
+   four verbs — thirty-two boxes, not a hundred and twelve. The hundred and
+   twelve are one disclosure deeper, under the verb that holds them.
 
-   The greyed boxes do the work the popover used to. ClickUp greys the rows a
-   template cannot take — Keep checked items, Task Types, Relationships — and
-   that is exactly the rule Aristote set: a position is the rung below it plus
-   things, never minus things. A verb the position grants is checked and
-   disabled, and its tooltip says which rung it arrives from and how many
-   people hold that rung. There is no way to uncheck it, because there is no
-   such thing. A verb it does not grant is empty and live: ticking it is an
-   exception — one person, one thing, a reason and an end date.
+   The greyed boxes carry the rule Aristote set: a position is the rung below
+   it plus things, never minus things. ClickUp greys the rows a template cannot
+   take — Keep checked items, Task Types, Relationships — and that is the same
+   statement. What is greyed differs by where the block is used, which is why
+   `render` knows nothing about positions or people and asks its caller:
+
+     on a person  everything the position gives is locked; an empty box is an
+       exception, which is one person, one thing, a reason and an end date.
+     on a position card  what it inherits from the rung below is locked; what
+       this rung adds is its own and can be taken back; an empty box adds.
+
+   One deviation from the system, measured: it puts the unselected segment in
+   content.placeholder, which is 2.9:1 at 14px and fails the 4.5 text needs, so
+   both segments move up a step. The relationship between them is the same.
 --------------------------------------------------------------------------- */
 (function () {
   'use strict';
@@ -49,59 +49,31 @@
     return s;
   }
   function perms() { return window.SugiraPerms; }
-
-  function positionNamed(name) {
-    var all = perms().positions();
-    for (var i = 0; i < all.length; i++) if (all[i].name === name) return all[i];
-    return null;
-  }
-
-  /* Nothing is saved. The prototype holds a person's exceptions for as long as
-     the page is open, which is long enough to see what the screen does. */
-  var extra = {};
-  var mode = 'all';          // 'all' = the position as it is, 'add' = add to it
-  var open = {};             // which groups are expanded
-  var names = {};            // which groups are showing their stored names
-
-  function host() { return document.getElementById('accessTree'); }
-  function attr(k) { var h = host(); return h ? h.getAttribute(k) : ''; }
-  function roleName() { return attr('data-role'); }
-  function whoName() { return attr('data-who'); }
-
   function cellsOf(g, verb) {
     return g.perms.filter(function (p) { return p.verb === verb; });
   }
 
-  function sourceOf(from, key) {
-    if (extra[key]) return { kind: 'exception', label: 'an exception' };
-    var step = from[key];
-    return step ? { kind: 'position', label: step.short || step.name, step: step } : null;
-  }
+  /* =======================================================================
+     The block itself. A model gives it four things and owns its own state:
 
-  /* ---- the two segments ---- */
+       segments()        [{id, label}] or null when there is only one view
+       mode / setMode    which segment is showing
+       summary()         a node to sit under the segments, or null
+       cell(key, verb)   null when nothing is stored under that verb, else
+                         { on, locked, tip } — locked means ticked and not
+                         yours to untick here
+       toggle(key, verb) called only when a cell is neither locked nor absent
+       caption(groupKey) the line ClickUp puts under its switch
+       open / names      plain objects the block writes which group is showing
+       redraw()          draw the whole thing again
+     ======================================================================= */
 
-  function segments() {
-    var g = el('div', 'acc-seg');
-    g.setAttribute('role', 'group');
-    g.setAttribute('aria-label', 'What to show');
-    [['all', 'Everything the position gives'], ['add', 'Add for ' + whoName()]].forEach(function (o) {
-      var b = el('button', 'acc-segb' + (mode === o[0] ? ' on' : ''), o[1]);
-      b.type = 'button';
-      b.setAttribute('aria-pressed', String(mode === o[0]));
-      b.onclick = function () { mode = o[0]; draw(); };
-      g.appendChild(b);
-    });
-    return g;
-  }
-
-  /* ---- one verb, as a checkbox ---- */
-
-  function box(g, verb, from) {
-    var key = g.key + '|' + verb;
-    var list = cellsOf(g, verb);
+  function box(model, g, verb) {
     var wrap = el('label', 'acc-cbw');
+    var list = cellsOf(g, verb);
+    var c = list.length ? model.cell(g.key, verb) : null;
 
-    if (!list.length) {
+    if (!c) {
       /* Not every group has all four verbs — Maintenance is three names, all
          See. An absent verb is not a box that happens to be empty. */
       wrap.className = 'acc-cbw gone';
@@ -111,61 +83,33 @@
       return wrap;
     }
 
-    var src = sourceOf(from, key);
-    var held = !!src;
-    var locked = held && src.kind === 'position';
-    var sample = list.slice(0, 3).map(function (p) { return p.id; }).join(', ');
-
-    var cb = el('span', 'acc-cb' + (held ? ' on' : '') + (locked ? ' locked' : ''));
-    cb.innerHTML = held ? '<svg aria-hidden="true"><use href="#i-check"/></svg>' : '';
+    var cb = el('span', 'acc-cb' + (c.on ? ' on' : '') + (c.locked ? ' locked' : ''));
+    cb.innerHTML = c.on ? '<svg aria-hidden="true"><use href="#i-check"/></svg>' : '';
     var btn = el('button', 'acc-cbb');
     btn.type = 'button';
     btn.setAttribute('role', 'checkbox');
-    btn.setAttribute('aria-checked', String(held));
+    btn.setAttribute('aria-checked', String(!!c.on));
     btn.setAttribute('aria-label', verb + ' — ' + g.name);
-    if (locked || mode === 'all') btn.disabled = true;
-
-    wrap.setAttribute('data-tip', held
-      ? (src.kind === 'exception'
-          ? verb + ' — ' + g.name + ' is an exception for ' + whoName()
-            + ' alone. ' + list.length + (list.length === 1 ? ' stored name' : ' stored names')
-            + ': ' + sample + (list.length > 3 ? '…' : '') + '.'
-          : verb + ' — ' + g.name + ' comes from ' + src.label + ', which '
-            + src.step.people + (src.step.people === 1 ? ' person holds' : ' people hold')
-            + '. It cannot be taken away here — a position is the rung below it plus things, '
-            + 'never minus things. ' + list.length
-            + (list.length === 1 ? ' stored name' : ' stored names') + ': '
-            + sample + (list.length > 3 ? '…' : '') + '.')
-      : verb + ' — ' + g.name + ' is not granted. Ticking it gives ' + whoName()
-        + ' these ' + list.length + ', and nobody else: ' + sample
-        + (list.length > 3 ? '…' : '') + '.');
+    btn.disabled = !!c.locked;
+    wrap.setAttribute('data-tip', c.tip);
 
     btn.appendChild(cb);
     btn.appendChild(el('span', 'acc-cbt', verb));
     btn.appendChild(el('span', 'acc-cbn', String(list.length)));
     if (!btn.disabled) {
-      btn.onclick = function () {
-        if (src && src.kind === 'exception') {
-          delete extra[key];
-          draw();
-          say('Exception withdrawn — ' + verb + ' — ' + g.name + ' is gone');
-        } else {
-          grant(g, verb);
-        }
-      };
+      btn.onclick = function (e) { e.stopPropagation(); model.toggle(g.key, verb); };
     }
     wrap.appendChild(btn);
     return wrap;
   }
 
-  /* ---- the group ---- */
-
-  function groupRow(g, from, isOpen) {
+  function groupRow(model, g, isOpen) {
     var n = 0, of = 0;
     VERBS.forEach(function (v) {
       if (!cellsOf(g, v).length) return;
       of++;
-      if (from[g.key + '|' + v] || extra[g.key + '|' + v]) n++;
+      var c = model.cell(g.key, v);
+      if (c && c.on) n++;
     });
     var r = el('button', 'plr');
     r.type = 'button';
@@ -175,30 +119,33 @@
     r.appendChild(svg(g.icon, 'plr-i'));
     r.appendChild(el('span', 'plr-n', g.name));
     r.appendChild(el('span', 'acc-of', n + ' of ' + of));
-    r.onclick = function () { open[g.key] = !isOpen; draw(); };
+    r.onclick = function (e) {
+      e.stopPropagation();
+      model.open[g.key] = !isOpen;
+      model.redraw();
+    };
     return r;
   }
 
-  function groupBody(g, from) {
+  function groupBody(model, g) {
     var body = el('div', 'acc-body');
-    body.appendChild(el('p', 'acc-cap', mode === 'add'
-      ? 'Tick what ' + whoName() + ' should have beyond the position. The greyed ones already arrive from it.'
-      : 'What the position gives under ' + g.name + '. Switch to “Add for ' + whoName()
-        + '” to give them more.'));
-
     var grid = el('div', 'acc-grid');
-    VERBS.forEach(function (v) { grid.appendChild(box(g, v, from)); });
+    VERBS.forEach(function (v) { grid.appendChild(box(model, g, v)); });
     body.appendChild(grid);
 
     /* The hundred and twelve, for whoever has to migrate them. */
-    var showing = !!names[g.key];
+    var showing = !!model.names[g.key];
     var more = el('button', 'acc-more');
     more.type = 'button';
     more.setAttribute('aria-expanded', String(showing));
     more.textContent = showing
       ? 'Hide the ' + g.perms.length + ' stored names'
       : 'See the ' + g.perms.length + ' stored names';
-    more.onclick = function (e) { e.stopPropagation(); names[g.key] = !showing; draw(); };
+    more.onclick = function (e) {
+      e.stopPropagation();
+      model.names[g.key] = !showing;
+      model.redraw();
+    };
     body.appendChild(more);
 
     if (showing) {
@@ -206,13 +153,14 @@
       VERBS.forEach(function (v) {
         var items = cellsOf(g, v);
         if (!items.length) return;
-        var src = sourceOf(from, g.key + '|' + v);
-        var vh = el('p', 'acc-vh' + (src ? '' : ' off'));
+        var c = model.cell(g.key, v);
+        var on = c && c.on;
+        var vh = el('p', 'acc-vh' + (on ? '' : ' off'));
         vh.appendChild(el('b', null, v));
-        vh.appendChild(el('span', null, src ? ' — from ' + src.label : ' — not granted'));
+        vh.appendChild(el('span', null, on ? (c.from ? ' — from ' + c.from : '') : ' — not granted'));
         list.appendChild(vh);
         items.forEach(function (p) {
-          var row = el('div', 'acc-nr' + (src ? '' : ' off'));
+          var row = el('div', 'acc-nr' + (on ? '' : ' off'));
           row.appendChild(el('code', 'acc-id', p.id));
           row.appendChild(el('span', 'acc-what', p.what));
           if (p.risk) row.appendChild(svg('i-alert', 'acc-risk'));
@@ -224,11 +172,155 @@
     return body;
   }
 
-  /* ---- ticking a box: one thing, a reason, an end date ---- */
+  function render(host, model) {
+    host.innerHTML = '';
+
+    var segs = model.segments && model.segments();
+    if (segs && segs.length > 1) {
+      var g = el('div', 'acc-seg');
+      g.setAttribute('role', 'group');
+      g.setAttribute('aria-label', 'What to show');
+      segs.forEach(function (o) {
+        var b = el('button', 'acc-segb' + (model.mode === o.id ? ' on' : ''), o.label);
+        b.type = 'button';
+        b.setAttribute('aria-pressed', String(model.mode === o.id));
+        b.onclick = function (e) { e.stopPropagation(); model.setMode(o.id); };
+        g.appendChild(b);
+      });
+      host.appendChild(g);
+    }
+
+    var sum = model.summary && model.summary();
+    if (sum) host.appendChild(sum);
+
+    /* ClickUp puts this line once, under the control it explains. Ours had it
+       under all eight groups, which is the same sentence eight times. */
+    var cap = model.caption && model.caption();
+    if (cap) host.appendChild(el('p', 'acc-cap', cap));
+
+    var tree = el('div', 'tree');
+    perms().groups.forEach(function (gr) {
+      var isOpen = !!model.open[gr.key];
+      tree.appendChild(groupRow(model, gr, isOpen));
+      if (isOpen) tree.appendChild(groupBody(model, gr));
+    });
+    host.appendChild(tree);
+  }
+
+  window.SugiraAccess = { render: render, verbs: VERBS, cellsOf: cellsOf };
+
+  /* =======================================================================
+     One person, in their drawer.
+     ======================================================================= */
+
+  /* Nothing is saved. The prototype holds a person's exceptions for as long as
+     the page is open, which is long enough to see what the screen does. */
+  var extra = {};
+  var person = {
+    mode: 'all',
+    open: {},
+    names: {},
+    setMode: function (id) { person.mode = id; person.redraw(); },
+    redraw: function () { draw(); }
+  };
+
+  function host() { return document.getElementById('accessTree'); }
+  function attr(k) { var h = host(); return h ? h.getAttribute(k) : ''; }
+  function roleName() { return attr('data-role'); }
+  function whoName() { return attr('data-who'); }
+
+  function positionNamed(name) {
+    var all = perms().positions();
+    for (var i = 0; i < all.length; i++) if (all[i].name === name) return all[i];
+    return null;
+  }
+
+  person.segments = function () {
+    return [{ id: 'all', label: 'Everything the position gives' },
+            { id: 'add', label: 'Add for ' + whoName() }];
+  };
+
+  person.caption = function () {
+    return person.mode === 'add'
+      ? 'Tick what ' + whoName() + ' should have beyond the position. The greyed ones already '
+        + 'arrive from it and cannot be taken away here.'
+      : 'Open a group to see what the position gives. Switch to “Add for ' + whoName()
+        + '” to give them more.';
+  };
+
+  person.cell = function (key, verb) {
+    var p = positionNamed(roleName());
+    if (!p) return null;
+    var g = groupByKey(key);
+    var list = cellsOf(g, verb);
+    if (!list.length) return null;
+    var k = key + '|' + verb;
+    var sample = list.slice(0, 3).map(function (x) { return x.id; }).join(', ')
+      + (list.length > 3 ? '…' : '');
+
+    if (extra[k]) {
+      return { on: true, locked: false, from: 'an exception',
+        tip: verb + ' — ' + g.name + ' is an exception for ' + whoName() + ' alone. '
+          + list.length + (list.length === 1 ? ' stored name' : ' stored names') + ': ' + sample + '.' };
+    }
+    var step = perms().held(p)[k];
+    if (step) {
+      return { on: true, locked: true, from: step.short || step.name,
+        tip: verb + ' — ' + g.name + ' comes from ' + (step.short || step.name) + ', which '
+          + step.people + (step.people === 1 ? ' person holds' : ' people hold')
+          + '. It cannot be taken away here — a position is the rung below it plus things, '
+          + 'never minus things. ' + list.length
+          + (list.length === 1 ? ' stored name' : ' stored names') + ': ' + sample + '.' };
+    }
+    return { on: false, locked: person.mode === 'all',
+      tip: verb + ' — ' + g.name + ' is not granted. Ticking it gives ' + whoName()
+        + ' these ' + list.length + ', and nobody else: ' + sample + '.' };
+  };
+
+  person.toggle = function (key, verb) {
+    var k = key + '|' + verb;
+    if (extra[k]) {
+      delete extra[k];
+      draw();
+      say('Exception withdrawn — ' + verb + ' — ' + groupByKey(key).name + ' is gone');
+      return;
+    }
+    grant(key, verb);
+  };
+
+  person.summary = function () {
+    var p = positionNamed(roleName());
+    if (!p) return null;
+    var from = perms().held(p), n = 0;
+    perms().groups.forEach(function (g) {
+      VERBS.forEach(function (v) {
+        if (from[g.key + '|' + v] || extra[g.key + '|' + v]) n += cellsOf(g, v).length;
+      });
+    });
+    var ex = Object.keys(extra).length;
+    var s = el('p', 'acc-sum');
+    s.appendChild(el('b', null, String(n)));
+    s.appendChild(document.createTextNode(' of the 112 stored names, from '));
+    s.appendChild(el('b', null, p.short || p.name));
+    s.appendChild(document.createTextNode(ex
+      ? ' and ' + ex + (ex === 1 ? ' exception' : ' exceptions') + '. '
+      : '. '));
+    s.appendChild(document.createTextNode(whoName()
+      + ' is this position plus what is ticked here, never less than it.'));
+    return s;
+  };
+
+  function groupByKey(k) {
+    var gs = perms().groups;
+    for (var i = 0; i < gs.length; i++) if (gs[i].key === k) return gs[i];
+    return null;
+  }
+
+  /* ---- ticking an empty box: one thing, a reason, an end date ---- */
 
   var pending = null;
 
-  function grant(g, verb) {
+  function grant(key, verb) {
     openModal('exception');
     var sel = document.getElementById('f-xw');
     if (!sel) return;
@@ -248,13 +340,13 @@
         sel.appendChild(o);
       });
     });
-    sel.value = g.key + '|' + verb;
+    sel.value = key + '|' + verb;
     var trig = sel.previousElementSibling;
     if (trig && trig.classList.contains('cselect')) {
       var t = trig.querySelector('.cselect-t');
       if (t && sel.options[sel.selectedIndex]) t.textContent = sel.options[sel.selectedIndex].text;
     }
-    pending = g.key + '|' + verb;
+    pending = key + '|' + verb;
   }
 
   document.addEventListener('click', function (e) {
@@ -284,44 +376,10 @@
     say._t = setTimeout(function () { t.hidden = true; }, 2600);
   }
 
-  /* ---- the panel ---- */
-
   function draw() {
     var h = host();
-    if (!h || !window.SugiraPerms) return;
-    var p = positionNamed(roleName());
-    if (!p) return;
-    var from = perms().held(p);
-
-    h.innerHTML = '';
-    h.appendChild(segments());
-
-    var n = 0;
-    perms().groups.forEach(function (g) {
-      VERBS.forEach(function (v) {
-        if (from[g.key + '|' + v] || extra[g.key + '|' + v]) n += cellsOf(g, v).length;
-      });
-    });
-    var ex = Object.keys(extra).length;
-
-    var sum = el('p', 'acc-sum');
-    sum.appendChild(el('b', null, String(n)));
-    sum.appendChild(document.createTextNode(' of the 112 stored names, from '));
-    sum.appendChild(el('b', null, p.short || p.name));
-    sum.appendChild(document.createTextNode(ex
-      ? ' and ' + ex + (ex === 1 ? ' exception' : ' exceptions') + '. '
-      : '. '));
-    sum.appendChild(document.createTextNode(whoName()
-      + ' is this position plus what is ticked here, never less than it.'));
-    h.appendChild(sum);
-
-    var tree = el('div', 'tree');
-    perms().groups.forEach(function (g) {
-      var isOpen = !!open[g.key];
-      tree.appendChild(groupRow(g, from, isOpen));
-      if (isOpen) tree.appendChild(groupBody(g, from));
-    });
-    h.appendChild(tree);
+    if (!h || !window.SugiraPerms || !positionNamed(roleName())) return;
+    render(h, person);
   }
 
   function mount() {
