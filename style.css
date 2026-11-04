@@ -941,46 +941,89 @@ svg use{pointer-events:none}
 @media (max-width:880px){.plr-l,.plr-r span:last-child{display:none}}
 
 /* ---------------- what one person can open ----------------
-   The same .plr rows as the places tree, with four switches on the right. Each
-   switch column is a fixed 52, shared by the heading and the cell under it, so
-   the four line up however long a group's name is. */
-.acc-vs{margin-left:auto;display:flex;align-items:center;gap:4px;flex:none}
-.acc-vl{width:var(--acc-col);text-align:center;font-size:11px;line-height:16px;
-  font-weight:500;color:var(--color-content-secondary)}
-.plr.head{--acc-col:52px;cursor:default;background:var(--x-clickup-color-background-on-main);
-  min-height:var(--size-control-xs)}
-.plr.head:hover{background:var(--x-clickup-color-background-on-main)}
-.acc-c{--acc-col:52px;width:var(--acc-col);height:24px;display:flex;align-items:center;
-  justify-content:center;border:0;background:none;border-radius:var(--x-clickup-radii-3);
-  cursor:pointer;padding:0}
-.acc-c:hover{background:var(--color-bg-hover)}
-.acc-c:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
-.acc-c.none{cursor:default}
-.acc-c.none:hover{background:none}
-/* Off is a ring, on is filled, an exception is filled and ringed — so the one
-   that is this person's alone is the one that looks different. */
-.acc-d{width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--color-border-default)}
-.acc-c.on .acc-d{background:var(--color-bg-primary-default);box-shadow:none}
-.acc-c.exc .acc-d{background:var(--color-content-warning);
-  box-shadow:0 0 0 2px var(--color-bg-surface),0 0 0 3.5px var(--color-content-warning)}
-.acc-c.none .acc-d{box-shadow:none;width:4px;height:4px;background:var(--color-border-default)}
-.acc-vr .plr-n{font-weight:500}
-.acc-vr{color:var(--color-content-secondary)}
-.acc-src{margin-left:auto;font-size:11px;line-height:16px;color:var(--color-content-secondary);flex:none}
-.acc-pr{gap:8px;padding-right:12px}
+   ClickUp's "Use List Template" block, read from the design system rather than
+   from the screenshot:
+
+     SegmentedControl.tsx  track 32 high, r7, padding 2, background.on-main;
+       segments 28 high, r5, padding 6 8, 14/16 500 content.placeholder; the
+       selected one content.secondary on surface with elevation.border-1.
+     Checkbox.tsx  16, r4, 1px border.input; checked is primary background and
+       border with the check in on-primary. Disabled is ClickUp's own treatment
+       for a row the template cannot take — which is exactly a verb that comes
+       from the position and so cannot be removed here. */
+.acc-seg{display:flex;height:var(--size-control-md);padding:2px;border-radius:var(--x-clickup-radii-3-5);
+  background:var(--x-clickup-color-background-on-main)}
+.acc-segb{flex:1;height:28px;display:flex;align-items:center;justify-content:center;gap:4px;
+  padding:6px 8px;border:0;background:none;border-radius:var(--radius-sm);cursor:pointer;
+  font:inherit;font-size:var(--segmented-control-font-size);line-height:16px;font-weight:500;
+  /* The system puts the unselected segment in content.placeholder and the
+     selected one in content.secondary. At 14px placeholder measures 2.9:1,
+     under the 4.5 text needs, so both move up one step: the relationship
+     between them is the same and both read. */
+  color:var(--color-content-secondary);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-segb:hover{color:var(--color-content-primary)}
+.acc-segb.on{background:var(--color-bg-surface);color:var(--color-content-primary);
+  box-shadow:var(--x-clickup-elevation-border-1)}
+.acc-segb:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.acc-sum{margin:12px 0;font-size:13px;line-height:20px;color:var(--color-content-secondary)}
+.acc-sum b{color:var(--color-content-primary);font-weight:600}
+.acc-of{margin-left:auto;font-size:12px;line-height:16px;color:var(--color-content-secondary);
+  flex:none;font-variant-numeric:tabular-nums}
+
+/* The body of an open group: the caption ClickUp puts under its switch, then
+   the two-column grid, then the stored names behind a line of their own. */
+.acc-body{padding:4px 12px 12px 44px;border-bottom:1px solid var(--color-border-subtle);
+  background:var(--color-bg-surface)}
+.acc-cap{margin:0 0 8px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
+.acc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;max-width:520px}
+.acc-cbw{display:flex;min-width:0}
+.acc-cbb{display:flex;align-items:center;gap:8px;width:100%;min-height:26px;padding:0;
+  border:0;background:none;font:inherit;font-size:14px;line-height:16px;
+  color:var(--color-content-primary);text-align:left;cursor:pointer}
+.acc-cbb:disabled{cursor:default}
+.acc-cbb:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px;
+  border-radius:var(--x-clickup-radii-2)}
+.acc-cb{width:16px;height:16px;flex:none;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--x-clickup-color-border-input);border-radius:var(--x-clickup-radii-2);
+  background:var(--color-bg-surface)}
+.acc-cb svg{width:14px;height:14px;fill:none;color:var(--color-content-on-primary)}
+.acc-cb.on{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default)}
+/* A verb that arrives from the position: ClickUp's greyed row, and the only
+   honest way to show a tick nobody can take back. */
+.acc-cb.locked{background:var(--x-clickup-color-content-disabled);
+  border-color:var(--x-clickup-color-content-disabled)}
+.acc-cbb:disabled .acc-cbt{color:var(--color-content-secondary)}
+.acc-cbt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none}
+/* How many stored names the verb carries, beside the verb rather than pushed
+   to the column's edge, where it read as a number belonging to nothing. */
+.acc-cbn{font-size:11px;line-height:16px;color:var(--color-content-secondary);
+  flex:none;font-variant-numeric:tabular-nums}
+.acc-cbw.gone{opacity:var(--opacity-disabled)}
+.acc-cbw.gone .acc-cb{border-style:dashed;background:none}
+.acc-cbw.gone .acc-cbt{font-size:14px;line-height:16px;color:var(--color-content-secondary)}
+
+.acc-more{margin-top:10px;height:var(--size-control-xs);padding:0 7px 0 5px;border:0;background:none;
+  border-radius:var(--x-clickup-radii-2-5);font:inherit;font-size:12px;line-height:16px;
+  font-weight:500;color:var(--color-content-secondary);cursor:pointer}
+.acc-more:hover{background:var(--color-bg-hover)}
+.acc-names{margin-top:8px;border-top:1px solid var(--color-border-subtle);padding-top:8px}
+.acc-vh{margin:8px 0 4px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
+.acc-vh:first-child{margin-top:0}
+.acc-vh b{color:var(--color-content-primary);font-weight:600}
+.acc-nr{display:flex;align-items:center;gap:8px;min-height:24px}
 .acc-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:16px;
   color:var(--color-content-secondary);flex:none;min-width:150px}
 .acc-what{font-size:12px;line-height:16px;color:var(--color-content-secondary);min-width:0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.acc-risk{display:flex;align-items:center;width:14px;height:14px;flex:none;color:var(--color-content-warning)}
+.acc-risk{display:flex;align-items:center;width:14px;height:14px;flex:none;
+  color:var(--color-content-warning)}
 .acc-risk svg{width:14px;height:14px;fill:none}
 /* A verb the position does not grant still lists what would arrive with it,
-   quietly, so the switch is a choice rather than a leap. */
-.acc-vr.off,.acc-pr.off{opacity:.55}
-.acc-foot{padding:8px 12px;margin:0;font-size:12px;line-height:16px;
-  color:var(--color-content-secondary);border-top:1px solid var(--color-border-subtle)}
-.acc-foot b{color:var(--color-content-primary);font-weight:600}
-@media (max-width:880px){.acc-id{display:none}}
+   quietly, so ticking it is a choice rather than a leap. */
+.acc-vh.off,.acc-nr.off{opacity:.55}
+@media (max-width:880px){.acc-grid{grid-template-columns:minmax(0,1fr)}.acc-id{display:none}
+  .acc-body{padding-left:12px}}
 
 /* A project row opens to show its sessions and forms. Same caret and the same
    indent step as the places tree, because it is the same gesture answering the

@@ -1,37 +1,36 @@
 /* ---------------------------------------------------------------------------
-   What one person can open, as a tree they can work in.
+   What one person can open, in the drawer.
 
-   The person's record already said where their access came from, in prose:
-   the position, the rung it is built on, and "44 of the 112 permissions". It
-   named a number and then gave you no way to see the 44, let alone touch them.
-   This is that number opened up.
+   Built on the block ClickUp uses for "Use List Template" — Aristote found it
+   and it is the right shape for this. Read from the design system's source,
+   not from the screenshot:
 
-   The tree is the one Places uses, because it is the same question — a thing
-   with things under it — and the rows are literally the same .plr rows.
+     SegmentedControl.tsx  track 32 high, r7, padding 2, background.on-main;
+       segments 28 high, r5, padding 6 8, 14/16 500 in content.placeholder; the
+       selected one is content.secondary on surface with elevation.border-1.
+       Its own comment says it was measured on probe.customize-modal-s8 — the
+       very dialog in the screenshot.
+     Checkbox.tsx  16 (md), r4, 1 px border.input; checked is primary
+       background and border with a 14 px check in on-primary.
 
-   Three levels, not 112 checkboxes:
+   The two segments carry the model rather than decorating it. "Everything the
+   position gives" is the default and is read-only: C. Uwimana is the Sector
+   lead, and that is the whole answer for most people. "Add for this person" is
+   where the checkboxes come alive.
 
-     Households          See  Add  Change  Archive      <- 8 of these
-       Add                                              <- the verb that holds
-         family-create   Add a household …                 the stored names
-         familymember-create …
+   What a position stores is eight groups by four verbs, so the grid is the
+   four verbs — thirty-two boxes across the whole screen, not a hundred and
+   twelve. The hundred and twelve are still here, one disclosure deeper, under
+   the verb that holds them.
 
-   What is toggleable is the middle level: eight groups by four verbs, which is
-   thirty-two switches rather than a hundred and twelve. That is not a display
-   trick — it is what a position actually stores. `adds` is a list of
-   [group, verb] pairs, and the stored names underneath are what that pair
-   contains. Ticking names one at a time is the thing that produced twenty-one
-   roles for ten jobs.
-
-   Switching one ON makes an exception: one person, one thing, a reason and an
-   end date. Switching one OFF is not offered. Aristote's call, and the right
-   one: a position is the rung below it plus things, never minus things, so a
-   person is always exactly their position plus a named list of additions. The
-   moment someone can be their position minus something, "what can a sector
-   lead do?" has seventeen answers and the ladder stops meaning anything. A
-   granted cell says where it comes from and offers the two routes that do not
-   break that: change the position for everyone who holds it, or move this
-   person to a different position.
+   The greyed boxes do the work the popover used to. ClickUp greys the rows a
+   template cannot take — Keep checked items, Task Types, Relationships — and
+   that is exactly the rule Aristote set: a position is the rung below it plus
+   things, never minus things. A verb the position grants is checked and
+   disabled, and its tooltip says which rung it arrives from and how many
+   people hold that rung. There is no way to uncheck it, because there is no
+   such thing. A verb it does not grant is empty and live: ticking it is an
+   exception — one person, one thing, a reason and an end date.
 --------------------------------------------------------------------------- */
 (function () {
   'use strict';
@@ -49,7 +48,6 @@
     s.innerHTML = '<svg aria-hidden="true"><use href="#' + id + '"/></svg>';
     return s;
   }
-
   function perms() { return window.SugiraPerms; }
 
   function positionNamed(name) {
@@ -58,121 +56,192 @@
     return null;
   }
 
-  /* An exception is held here rather than on the position, because that is
-     what an exception is: this person, not this rung. Nothing is saved — the
-     prototype keeps it for as long as the page is open, which is long enough
-     to see what the screen does. */
+  /* Nothing is saved. The prototype holds a person's exceptions for as long as
+     the page is open, which is long enough to see what the screen does. */
   var extra = {};
+  var mode = 'all';          // 'all' = the position as it is, 'add' = add to it
+  var open = {};             // which groups are expanded
+  var names = {};            // which groups are showing their stored names
+
+  function host() { return document.getElementById('accessTree'); }
+  function attr(k) { var h = host(); return h ? h.getAttribute(k) : ''; }
+  function roleName() { return attr('data-role'); }
+  function whoName() { return attr('data-who'); }
+
+  function cellsOf(g, verb) {
+    return g.perms.filter(function (p) { return p.verb === verb; });
+  }
 
   function sourceOf(from, key) {
-    if (extra[key]) return { kind: 'exception', label: 'exception' };
+    if (extra[key]) return { kind: 'exception', label: 'an exception' };
     var step = from[key];
     return step ? { kind: 'position', label: step.short || step.name, step: step } : null;
   }
 
-  /* ---- the cell: granted, and from where ---- */
+  /* ---- the two segments ---- */
 
-  function cell(host, g, verb, from, redraw) {
-    var key = g.key + '|' + verb;
-    var has = perms().groups.some(function (x) {
-      return x.key === g.key && x.perms.some(function (p) { return p.verb === verb; });
+  function segments() {
+    var g = el('div', 'acc-seg');
+    g.setAttribute('role', 'group');
+    g.setAttribute('aria-label', 'What to show');
+    [['all', 'Everything the position gives'], ['add', 'Add for ' + whoName()]].forEach(function (o) {
+      var b = el('button', 'acc-segb' + (mode === o[0] ? ' on' : ''), o[1]);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(mode === o[0]));
+      b.onclick = function () { mode = o[0]; draw(); };
+      g.appendChild(b);
     });
-    var b = el('button', 'acc-c');
-    b.type = 'button';
+    return g;
+  }
 
-    if (!has) {
+  /* ---- one verb, as a checkbox ---- */
+
+  function box(g, verb, from) {
+    var key = g.key + '|' + verb;
+    var list = cellsOf(g, verb);
+    var wrap = el('label', 'acc-cbw');
+
+    if (!list.length) {
       /* Not every group has all four verbs — Maintenance is three names, all
-         See. An empty cell is not a switch that happens to be off. */
-      b.className = 'acc-c none';
-      b.disabled = true;
-      b.setAttribute('aria-label', verb + ' — ' + g.name + ': nothing stored under this');
-      host.appendChild(b);
-      return;
+         See. An absent verb is not a box that happens to be empty. */
+      wrap.className = 'acc-cbw gone';
+      wrap.appendChild(el('span', 'acc-cb gone'));
+      wrap.appendChild(el('span', 'acc-cbt', verb));
+      wrap.setAttribute('data-tip', 'Nothing is stored under ' + verb + ' — ' + g.name + '.');
+      return wrap;
     }
 
     var src = sourceOf(from, key);
-    var n = g.perms.filter(function (p) { return p.verb === verb; }).length;
-    b.className = 'acc-c' + (src ? ' on' : '') + (src && src.kind === 'exception' ? ' exc' : '');
-    b.setAttribute('aria-pressed', String(!!src));
-    b.setAttribute('aria-label', verb + ' — ' + g.name + ': ' + (src
-      ? 'granted by ' + src.label + ', ' + n + (n === 1 ? ' permission' : ' permissions')
-      : 'not granted'));
-    b.setAttribute('data-tip', src
-      ? verb + ' — ' + g.name + ' comes from ' + src.label + '. ' + n
-        + (n === 1 ? ' stored name' : ' stored names') + ' behind it.'
-      : verb + ' — ' + g.name + ' is not granted. ' + n
-        + (n === 1 ? ' stored name' : ' stored names') + ' would arrive with it.');
-    b.innerHTML = '<span class="acc-d"></span>';
-    b.onclick = function (e) {
-      e.stopPropagation();
-      if (src) explain(b, g, verb, src);
-      else grant(b, g, verb, redraw);
-    };
-    host.appendChild(b);
-  }
+    var held = !!src;
+    var locked = held && src.kind === 'position';
+    var sample = list.slice(0, 3).map(function (p) { return p.id; }).join(', ');
 
-  /* ---- a granted cell: where it comes from, and the two ways to change it ---- */
+    var cb = el('span', 'acc-cb' + (held ? ' on' : '') + (locked ? ' locked' : ''));
+    cb.innerHTML = held ? '<svg aria-hidden="true"><use href="#i-check"/></svg>' : '';
+    var btn = el('button', 'acc-cbb');
+    btn.type = 'button';
+    btn.setAttribute('role', 'checkbox');
+    btn.setAttribute('aria-checked', String(held));
+    btn.setAttribute('aria-label', verb + ' — ' + g.name);
+    if (locked || mode === 'all') btn.disabled = true;
 
-  function explain(btn, g, verb, src) {
-    if (src.kind === 'exception') {
-      window.SugiraMenu.show(btn, [
-        { heading: true, label: verb + ' — ' + g.name },
-        { label: 'Granted as an exception',
-          description: 'For this person only, with a reason and an end date on it.' },
-        { label: 'Withdraw the exception',
-          description: 'Takes back the one thing. The position underneath is untouched.',
-          onPick: function () {
-            window.SugiraMenu.close();
-            delete extra[g.key + '|' + verb];
-            draw();
-            say('Exception withdrawn — ' + verb + ' — ' + g.name + ' is gone');
-          } }
-      ], { width: 380 });
-      return;
+    wrap.setAttribute('data-tip', held
+      ? (src.kind === 'exception'
+          ? verb + ' — ' + g.name + ' is an exception for ' + whoName()
+            + ' alone. ' + list.length + (list.length === 1 ? ' stored name' : ' stored names')
+            + ': ' + sample + (list.length > 3 ? '…' : '') + '.'
+          : verb + ' — ' + g.name + ' comes from ' + src.label + ', which '
+            + src.step.people + (src.step.people === 1 ? ' person holds' : ' people hold')
+            + '. It cannot be taken away here — a position is the rung below it plus things, '
+            + 'never minus things. ' + list.length
+            + (list.length === 1 ? ' stored name' : ' stored names') + ': '
+            + sample + (list.length > 3 ? '…' : '') + '.')
+      : verb + ' — ' + g.name + ' is not granted. Ticking it gives ' + whoName()
+        + ' these ' + list.length + ', and nobody else: ' + sample
+        + (list.length > 3 ? '…' : '') + '.');
+
+    btn.appendChild(cb);
+    btn.appendChild(el('span', 'acc-cbt', verb));
+    btn.appendChild(el('span', 'acc-cbn', String(list.length)));
+    if (!btn.disabled) {
+      btn.onclick = function () {
+        if (src && src.kind === 'exception') {
+          delete extra[key];
+          draw();
+          say('Exception withdrawn — ' + verb + ' — ' + g.name + ' is gone');
+        } else {
+          grant(g, verb);
+        }
+      };
     }
-
-    var step = src.step;
-    var n = step.people;
-    window.SugiraMenu.show(btn, [
-      { heading: true, label: verb + ' — ' + g.name },
-      { label: 'Comes from ' + (step.short || step.name),
-        description: n + (n === 1 ? ' person holds' : ' people hold') + ' that position. '
-          + 'It cannot be taken away here — a position is the rung below it plus things, '
-          + 'never minus things.' },
-      { label: 'Change the position',
-        description: 'Opens the ladder. What you change there changes for all '
-          + n + (n === 1 ? ' holder' : ' holders') + '.',
-        onPick: function () {
-          window.SugiraMenu.close();
-          var go = document.querySelector('[data-go="permissions"][data-perms="role"]');
-          if (go) go.click();
-        } },
-      { label: 'Move them to another position',
-        description: 'If this person needs less than this one gives, they are on the wrong rung.',
-        onPick: function () {
-          window.SugiraMenu.close();
-          openModal('access');
-        } }
-    ], { width: 420 });
+    wrap.appendChild(btn);
+    return wrap;
   }
 
-  /* ---- an ungranted cell: the exception sheet, already filled in ---- */
+  /* ---- the group ---- */
 
-  function grant(btn, g, verb, redraw) {
+  function groupRow(g, from, isOpen) {
+    var n = 0, of = 0;
+    VERBS.forEach(function (v) {
+      if (!cellsOf(g, v).length) return;
+      of++;
+      if (from[g.key + '|' + v] || extra[g.key + '|' + v]) n++;
+    });
+    var r = el('button', 'plr');
+    r.type = 'button';
+    r.setAttribute('aria-expanded', String(isOpen));
+    r.style.paddingLeft = '12px';
+    r.appendChild(svg('i-caret', 'plr-c'));
+    r.appendChild(svg(g.icon, 'plr-i'));
+    r.appendChild(el('span', 'plr-n', g.name));
+    r.appendChild(el('span', 'acc-of', n + ' of ' + of));
+    r.onclick = function () { open[g.key] = !isOpen; draw(); };
+    return r;
+  }
+
+  function groupBody(g, from) {
+    var body = el('div', 'acc-body');
+    body.appendChild(el('p', 'acc-cap', mode === 'add'
+      ? 'Tick what ' + whoName() + ' should have beyond the position. The greyed ones already arrive from it.'
+      : 'What the position gives under ' + g.name + '. Switch to “Add for ' + whoName()
+        + '” to give them more.'));
+
+    var grid = el('div', 'acc-grid');
+    VERBS.forEach(function (v) { grid.appendChild(box(g, v, from)); });
+    body.appendChild(grid);
+
+    /* The hundred and twelve, for whoever has to migrate them. */
+    var showing = !!names[g.key];
+    var more = el('button', 'acc-more');
+    more.type = 'button';
+    more.setAttribute('aria-expanded', String(showing));
+    more.textContent = showing
+      ? 'Hide the ' + g.perms.length + ' stored names'
+      : 'See the ' + g.perms.length + ' stored names';
+    more.onclick = function (e) { e.stopPropagation(); names[g.key] = !showing; draw(); };
+    body.appendChild(more);
+
+    if (showing) {
+      var list = el('div', 'acc-names');
+      VERBS.forEach(function (v) {
+        var items = cellsOf(g, v);
+        if (!items.length) return;
+        var src = sourceOf(from, g.key + '|' + v);
+        var vh = el('p', 'acc-vh' + (src ? '' : ' off'));
+        vh.appendChild(el('b', null, v));
+        vh.appendChild(el('span', null, src ? ' — from ' + src.label : ' — not granted'));
+        list.appendChild(vh);
+        items.forEach(function (p) {
+          var row = el('div', 'acc-nr' + (src ? '' : ' off'));
+          row.appendChild(el('code', 'acc-id', p.id));
+          row.appendChild(el('span', 'acc-what', p.what));
+          if (p.risk) row.appendChild(svg('i-alert', 'acc-risk'));
+          list.appendChild(row);
+        });
+      });
+      body.appendChild(list);
+    }
+    return body;
+  }
+
+  /* ---- ticking a box: one thing, a reason, an end date ---- */
+
+  var pending = null;
+
+  function grant(g, verb) {
     openModal('exception');
     var sel = document.getElementById('f-xw');
     if (!sel) return;
-    /* The sheet claimed to hold "only what their position does not already
-       give them" and then listed nine things it had been written with. It is
-       built from what is actually missing. */
+    /* The sheet promised "only what their position does not already give
+       them" and then listed nine things it had been written with. It is built
+       from what is actually missing. */
     var p = positionNamed(roleName());
     var from = perms().held(p);
     sel.innerHTML = '';
     perms().groups.forEach(function (gr) {
       VERBS.forEach(function (v) {
         var k = gr.key + '|' + v;
-        if (from[k] || extra[k]) return;
-        if (!gr.perms.some(function (x) { return x.verb === v; })) return;
+        if (from[k] || extra[k] || !cellsOf(gr, v).length) return;
         var o = document.createElement('option');
         o.text = v + ' — ' + gr.name;
         o.value = k;
@@ -180,29 +249,21 @@
       });
     });
     sel.value = g.key + '|' + verb;
-    var trigger = sel.previousElementSibling;
-    if (trigger && trigger.classList.contains('cselect')) {
-      var t = trigger.querySelector('.cselect-t');
+    var trig = sel.previousElementSibling;
+    if (trig && trig.classList.contains('cselect')) {
+      var t = trig.querySelector('.cselect-t');
       if (t && sel.options[sel.selectedIndex]) t.textContent = sel.options[sel.selectedIndex].text;
     }
-    pendingGrant = { key: g.key + '|' + verb, label: verb + ' — ' + g.name };
+    pending = g.key + '|' + verb;
   }
 
-  var pendingGrant = null;
-
-  /* The modal's own OK closes it and says its line; this adds the one thing it
-     was opened for to the tree behind it. */
   document.addEventListener('click', function (e) {
     var ok = e.target.closest && e.target.closest('#mOk');
-    if (!ok || !pendingGrant) return;
+    if (!ok || !pending) return;
     var sel = document.getElementById('f-xw');
-    var k = sel && sel.value ? sel.value : pendingGrant.key;
-    var label = sel && sel.options[sel.selectedIndex]
-      ? sel.options[sel.selectedIndex].text : pendingGrant.label;
-    extra[k] = true;
-    pendingGrant = null;
-    setTimeout(function () { draw(); }, 0);
-    void label;
+    extra[sel && sel.value ? sel.value : pending] = true;
+    pending = null;
+    setTimeout(draw, 0);
   }, true);
 
   function openModal(key) {
@@ -220,71 +281,10 @@
     t.textContent = msg;
     t.hidden = false;
     clearTimeout(say._t);
-    say._t = setTimeout(function () { t.hidden = true; }, 4000);
+    say._t = setTimeout(function () { t.hidden = true; }, 2600);
   }
 
-  /* ---- the tree ---- */
-
-  function host() { return document.getElementById('accessTree'); }
-  function roleName() { var h = host(); return h ? h.getAttribute('data-role') : ''; }
-  function whoName() { var h = host(); return h ? h.getAttribute('data-who') : ''; }
-
-  var open = {};
-
-  function headRow() {
-    var r = el('div', 'plr head');
-    r.appendChild(el('span', 'plr-c'));
-    r.appendChild(el('span', 'plr-i'));
-    r.appendChild(el('span', 'plr-n'));
-    var vs = el('span', 'acc-vs');
-    VERBS.forEach(function (v) { vs.appendChild(el('span', 'acc-vl', v)); });
-    r.appendChild(vs);
-    return r;
-  }
-
-  function groupRow(g, from, isOpen) {
-    var r = el('button', 'plr');
-    r.type = 'button';
-    r.setAttribute('aria-expanded', String(isOpen));
-    r.style.paddingLeft = '12px';
-    r.appendChild(svg('i-caret', 'plr-c'));
-    r.appendChild(svg(g.icon, 'plr-i'));
-    r.appendChild(el('span', 'plr-n', g.name));
-
-    var vs = el('span', 'acc-vs');
-    VERBS.forEach(function (v) { cell(vs, g, v, from, draw); });
-    r.appendChild(vs);
-    r.onclick = function () { open[g.key] = !isOpen; draw(); };
-    return r;
-  }
-
-  /* Under an open group: the stored names, by verb, each saying what it does
-     and which rung it arrives from. These are what the switch above contains,
-     so they are read, not set. */
-  function permRows(g, from, into) {
-    VERBS.forEach(function (v) {
-      var list = g.perms.filter(function (p) { return p.verb === v; });
-      if (!list.length) return;
-      var src = sourceOf(from, g.key + '|' + v);
-      var vr = el('div', 'plr leaf acc-vr' + (src ? '' : ' off'));
-      vr.style.paddingLeft = '32px';
-      vr.appendChild(el('span', 'plr-c'));
-      vr.appendChild(el('span', 'plr-n', v));
-      vr.appendChild(el('span', 'acc-src', src
-        ? 'from ' + src.label
-        : 'not granted'));
-      into.appendChild(vr);
-
-      list.forEach(function (p) {
-        var pr = el('div', 'plr leaf acc-pr' + (src ? '' : ' off'));
-        pr.style.paddingLeft = '52px';
-        pr.appendChild(el('code', 'acc-id', p.id));
-        pr.appendChild(el('span', 'acc-what', p.what));
-        if (p.risk) pr.appendChild(svg('i-alert', 'acc-risk'));
-        into.appendChild(pr);
-      });
-    });
-  }
+  /* ---- the panel ---- */
 
   function draw() {
     var h = host();
@@ -294,37 +294,38 @@
     var from = perms().held(p);
 
     h.innerHTML = '';
-    h.appendChild(headRow());
-    perms().groups.forEach(function (g) {
-      var isOpen = !!open[g.key];
-      h.appendChild(groupRow(g, from, isOpen));
-      if (isOpen) permRows(g, from, h);
-    });
+    h.appendChild(segments());
 
     var n = 0;
     perms().groups.forEach(function (g) {
       VERBS.forEach(function (v) {
-        if (from[g.key + '|' + v] || extra[g.key + '|' + v]) {
-          n += g.perms.filter(function (x) { return x.verb === v; }).length;
-        }
+        if (from[g.key + '|' + v] || extra[g.key + '|' + v]) n += cellsOf(g, v).length;
       });
     });
     var ex = Object.keys(extra).length;
-    var foot = el('p', 'acc-foot');
-    foot.appendChild(el('b', null, String(n)));
-    foot.appendChild(el('span', null, ' of the 112 stored names, from '));
-    foot.appendChild(el('b', null, p.short || p.name));
-    foot.appendChild(el('span', null, ex
+
+    var sum = el('p', 'acc-sum');
+    sum.appendChild(el('b', null, String(n)));
+    sum.appendChild(document.createTextNode(' of the 112 stored names, from '));
+    sum.appendChild(el('b', null, p.short || p.name));
+    sum.appendChild(document.createTextNode(ex
       ? ' and ' + ex + (ex === 1 ? ' exception' : ' exceptions') + '. '
       : '. '));
-    foot.appendChild(el('span', null, whoName()
-      + ' is this position plus what is listed here, never less than it.'));
-    h.appendChild(foot);
+    sum.appendChild(document.createTextNode(whoName()
+      + ' is this position plus what is ticked here, never less than it.'));
+    h.appendChild(sum);
+
+    var tree = el('div', 'tree');
+    perms().groups.forEach(function (g) {
+      var isOpen = !!open[g.key];
+      tree.appendChild(groupRow(g, from, isOpen));
+      if (isOpen) tree.appendChild(groupBody(g, from));
+    });
+    h.appendChild(tree);
   }
 
   function mount() {
     if (!host()) return;
-    /* permissions.js builds its positions at load; if this runs first, wait */
     if (!window.SugiraPerms) { setTimeout(mount, 30); return; }
     draw();
   }
