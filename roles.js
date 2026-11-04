@@ -223,7 +223,10 @@
     top.appendChild(type);
     head.appendChild(top);
     head.appendChild(el('h1', null, r.name));
-    head.appendChild(el('p', 'rec-desc', r.what));
+    /* No description paragraph. Prose explaining the record to the person
+       reading it is the thing the drawers were asked twice to stop doing, and
+       the six written into index.html came out for the same reason. `r.what`
+       stays in the data for whatever wants it next. */
     root.appendChild(head);
 
     /* what it grants */
