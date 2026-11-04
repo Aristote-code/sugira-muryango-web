@@ -871,15 +871,20 @@
     sum.appendChild(el('span', null, ' people'));
     top.appendChild(sum);
 
-    /* This screen builds its own toolbar after the page actions have been
-       placed, so it takes the end group over rather than leaving Discard and
-       Save stranded on a row of their own. */
-    var end = $('#s-permissions .filters > .end');
-    if (end) {
-      top.appendChild(end);
-      var empty = $('#s-permissions .filters');
-      if (empty && !empty.children.length) empty.remove();
-    }
+    /* Each tab builds its own action, because the two tabs make two different
+       things and the screen's shared .acts group could only ever name one.
+       What was here was Discard and Save, which this screen cannot honestly
+       offer: nothing is saved anywhere, and a tick on a card is already live.
+       Putting the positions back is still worth having, so it moved to the
+       footer, where it reads as the aside it is. */
+    var end = el('span', 'end');
+    var mk = el('button', 'btn');
+    mk.type = 'button';
+    mk.setAttribute('data-modal', 'role');
+    mk.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
+    mk.appendChild(document.createTextNode('Add position'));
+    end.appendChild(mk);
+    top.appendChild(end);
     root.appendChild(top);
 
     /* Opened from a person: say whose access this is before showing it. */
@@ -942,6 +947,14 @@
     asis.innerHTML = '<svg aria-hidden="true"><use href="#i-admin"/></svg>';
     asis.appendChild(document.createTextNode('How it works today'));
     foot.appendChild(asis);
+
+    var undo = el('button', 'rel');
+    undo.type = 'button';
+    undo.setAttribute('data-perms-act', 'discard');
+    undo.setAttribute('data-toast', 'The positions are back as they were');
+    undo.innerHTML = '<svg aria-hidden="true"><use href="#i-expand"/></svg>';
+    undo.appendChild(document.createTextNode('Put the positions back'));
+    foot.appendChild(undo);
     root.appendChild(foot);
   }
 

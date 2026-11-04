@@ -172,8 +172,17 @@
     sum.appendChild(el('span', null, ' holders'));
     top.appendChild(sum);
 
-    var end = document.querySelector('#s-permissions .filters > .end');
-    if (end && !top.contains(end)) top.appendChild(end.cloneNode(true));
+    /* It used to clone the screen's end group, which by then the positions
+       tab had already taken, so this tab's toolbar was empty. It builds its
+       own, the same as that tab does. */
+    var end = el('span', 'end');
+    var mk = el('button', 'btn');
+    mk.type = 'button';
+    mk.setAttribute('data-modal', 'rolenew');
+    mk.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
+    mk.appendChild(document.createTextNode('Add role'));
+    end.appendChild(mk);
+    top.appendChild(end);
     root.appendChild(top);
 
     var grid = el('div', 'rolegrid');
