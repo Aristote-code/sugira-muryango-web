@@ -83,12 +83,13 @@
       return wrap;
     }
 
-    var cb = el('span', 'acc-cb' + (c.on ? ' on' : '') + (c.locked ? ' locked' : ''));
+    var cb = el('span', 'acc-cb' + (c.on ? ' on' : '') + (c.mixed ? ' mixed' : '')
+      + (c.locked ? ' locked' : ''));
     cb.innerHTML = c.on ? '<svg aria-hidden="true"><use href="#i-check"/></svg>' : '';
     var btn = el('button', 'acc-cbb');
     btn.type = 'button';
     btn.setAttribute('role', 'checkbox');
-    btn.setAttribute('aria-checked', String(!!c.on));
+    btn.setAttribute('aria-checked', c.mixed ? 'mixed' : String(!!c.on));
     btn.setAttribute('aria-label', verb + ' — ' + g.name);
     btn.disabled = !!c.locked;
     wrap.setAttribute('data-tip', c.tip);
@@ -229,6 +230,29 @@
   function roleName() { return attr('data-role'); }
   function whoName() { return attr('data-who'); }
 
+  /* The roles this person holds, on top of their position. A role grants named
+     permissions rather than whole cells, so a cell can be partly covered —
+     which is what the system's own indeterminate checkbox is for. */
+  function heldRoles() {
+    var ids = (attr('data-roles') || '').split(',').filter(Boolean);
+    if (!window.SugiraRoles) return [];
+    return ids.map(function (id) { return window.SugiraRoles.byId(id.trim()); })
+              .filter(Boolean);
+  }
+  function fromRoles(g, verb) {
+    var ids = cellsOf(g, verb).map(function (p) { return p.id; });
+    var hit = [];
+    heldRoles().forEach(function (r) {
+      var n = r.grants.filter(function (x) { return ids.indexOf(x) >= 0; });
+      if (n.length) hit.push({ role: r, names: n });
+    });
+    if (!hit.length) return null;
+    var covered = {};
+    hit.forEach(function (h) { h.names.forEach(function (n) { covered[n] = 1; }); });
+    return { roles: hit, all: Object.keys(covered).length === ids.length,
+             count: Object.keys(covered).length, of: ids.length };
+  }
+
   function positionNamed(name) {
     var all = perms().positions();
     for (var i = 0; i < all.length; i++) if (all[i].name === name) return all[i];
@@ -263,7 +287,16 @@
         tip: verb + ' — ' + g.name + ' is an exception for ' + whoName() + ' alone. '
           + list.length + (list.length === 1 ? ' stored name' : ' stored names') + ': ' + sample + '.' };
     }
+    var byRole = fromRoles(g, verb);
     var step = perms().held(p)[k];
+    if (byRole && !step) {
+      var names = byRole.roles.map(function (h) { return h.role.name; }).join(', ');
+      return { on: byRole.all, mixed: !byRole.all, locked: true, from: names,
+        tip: verb + ' \u2014 ' + g.name + ': ' + byRole.count + ' of the ' + byRole.of
+          + ' stored names come from the ' + names + (byRole.roles.length === 1 ? ' role' : ' roles')
+          + ', which ' + whoName() + ' holds on top of the position. Change it on the role, '
+          + 'where it changes for everyone who holds it.' };
+    }
     if (step) {
       return { on: true, locked: true, from: step.short || step.name,
         tip: verb + ' — ' + g.name + ' comes from ' + (step.short || step.name) + ', which '

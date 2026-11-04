@@ -1461,8 +1461,13 @@
             <p class="pm-rule">Eleven people hold this position. Nothing above is C. Uwimana’s alone — changing any of it changes it for all eleven. One thing for one person goes below.</p>
           </div>
           <div class="card">
+            <div class="card-h"><h3>Roles<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A role is work that is not a job — translating a form, building a report. It adds to the position and can never take anything away, so C. Uwimana is still a Sector lead plus whatever these give."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="roleadd"><svg aria-hidden="true"><use href="#i-plus"/></svg> Give them a role</button></span></div>
+            <p class="pm-rule">On top of the position. Six people hold Form translator, at four different positions — which is the point of a role: the work is the same wherever you sit.</p>
+            <button class="rel" type="button" data-go="rolecard" data-role-id="translator"><svg aria-hidden="true"><use href="#i-reports"/></svg>Form translator</button>
+          </div>
+          <div class="card">
             <div class="card-h"><h3>What they can open<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Eight groups by four verbs — thirty-two switches, not a hundred and twelve checkboxes. That is what a position actually stores; the names underneath are what each switch contains. Open a group to read them."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
-            <div class="tree" id="accessTree" data-who="C. Uwimana" data-role="Sugira Muryango Sector lead (SLA)"></div>
+            <div class="tree" id="accessTree" data-who="C. Uwimana" data-role="Sugira Muryango Sector lead (SLA)" data-roles="translator"></div>
           </div>
           <div class="card">
             <div class="card-h"><h3>Exceptions<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="An exception gives this one person something their position does not, and it has to say why and when it ends. The old system had no exceptions, so anyone needing one extra thing got a whole new role — which is how twenty-one roles exist for ten jobs, three of them called Test role."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="exception"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add one thing</button></span></div>
@@ -1514,7 +1519,22 @@
 
       <!-- ============ PERMISSIONS ============ -->
       <section class="screen" id="s-permissions">
-        <div class="pad"><div id="permBody"></div></div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-panel="positions">Positions</button>
+          <button class="tab" type="button" data-panel="roles">Roles</button>
+        </div>
+        <div class="pad" data-panelid="positions"><div id="permBody"></div></div>
+        <div class="pad" data-panelid="roles" hidden><div id="roleBody"></div></div>
+      </section>
+
+      <!-- ============ ONE POSITION, IN A DRAWER ============ -->
+      <section class="screen" id="s-position">
+        <div class="pad"><div id="positionBody"></div></div>
+      </section>
+
+      <!-- ============ ONE ROLE, IN A DRAWER ============ -->
+      <section class="screen" id="s-rolecard">
+        <div class="pad"><div id="roleCardBody"></div></div>
       </section>
 
       <section class="screen" id="s-roles">
@@ -2255,6 +2275,7 @@
 <script src="fields.js" defer></script>
 <script src="group.js" defer></script>
 <script src="access.js" defer></script>
+<script src="roles.js" defer></script>
 <script src="actions.js" defer></script>
 </body>
 </html>
