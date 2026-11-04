@@ -685,41 +685,72 @@
     return wrap;
   }
 
-  /* ---- one card ---- */
+  /* ---- one card ----
+
+     Same card as a role's, because they are the same gesture: a thing you
+     open. What a position adds is the line that a role has no use for — what
+     it is built on — and the strip of what its holders can actually do. */
+
+  /* The eight groups this position touches, each with the verbs it has. One
+     wrapped line is enough to tell a home visitor from an administrator
+     without opening anything. */
+  function canStrip(p) {
+    var from = held(p);
+    var wrap = el('div', 'posc-can');
+    var any = false;
+    GROUPS.forEach(function (g) {
+      var verbs = VERBS.filter(function (v) { return !!from[g.key + '|' + v]; });
+      if (!verbs.length) return;
+      any = true;
+      var chip = el('span', 'posc-g');
+      chip.setAttribute('data-tip', g.name + ': ' + verbs.join(', ') + '. '
+        + verbs.reduce(function (n, v) { return n + capSize(g.key, v); }, 0)
+        + ' of the stored names.');
+      chip.appendChild(icon(g.icon, 'posc-gi'));
+      chip.appendChild(el('span', 'posc-gn', g.name));
+      chip.appendChild(el('span', 'posc-gv', verbs.length + ' of ' + VERBS.filter(
+        function (v) { return !!capSize(g.key, v); }).length));
+      wrap.appendChild(chip);
+    });
+    if (!any) {
+      wrap.appendChild(el('span', 'posc-none', 'Grants nothing at all.'));
+    }
+    return wrap;
+  }
 
   function card(p) {
-    var open = state.open === p.id;
-    var sec = el('section', 'pm-card' + (open ? ' is-open' : ''));
-    sec.setAttribute('data-pos', p.id);
-    if (!p.base) sec.setAttribute('data-root', '');
-    sec.style.marginLeft = (depth(p) * 20) + 'px';
-    if (state.whoRole && p.name === state.whoRole) sec.classList.add('is-theirs');
+    var a = el('button', 'rolec posc');
+    a.type = 'button';
+    a.setAttribute('data-pos', p.id);
+    a.setAttribute('data-go', 'position');
+    a.setAttribute('data-pos-id', p.id);
+    if (state.whoRole && p.name === state.whoRole) a.classList.add('is-theirs');
 
-    var hd = el('button', 'pm-ch');
-    hd.type = 'button';
-    hd.setAttribute('aria-expanded', String(open));
-    hd.innerHTML = CHEV;
-    var tx = el('span', 'pm-ctx');
-    var t1 = el('span', 'pm-cn');
-    t1.appendChild(el('b', null, p.name));
-    if (state.whoRole && p.name === state.whoRole) t1.appendChild(el('span', 'pm-mine', 'theirs'));
-    tx.appendChild(t1);
-    tx.appendChild(el('span', 'pm-cl', lineage(p)));
-    hd.appendChild(tx);
-    hd.appendChild(reach(total(p)));
-    hd.appendChild(el('span', 'pm-cp', p.people + (p.people === 1 ? ' person' : ' people')));
-    /* The drawer takes it from here — app.js routes data-go through
-       DRAWERABLE, so this is the same gesture as opening a household. */
-    hd.setAttribute('data-go', 'position');
-    hd.setAttribute('data-pos-id', p.id);
-    hd.onclick = function () {
+    var top = el('div', 'rolec-t');
+    top.appendChild(icon('i-hierarchy', 'rolec-i'));
+    top.appendChild(el('span', 'rolec-n', p.name));
+    if (state.whoRole && p.name === state.whoRole) {
+      top.appendChild(el('span', 'pm-mine', 'theirs'));
+    }
+    a.appendChild(top);
+
+    /* The indent used to say what this is built on. A grid has no indent, so
+       the sentence says it, and the cards stay in chain order. */
+    a.appendChild(el('p', 'posc-l', lineage(p)));
+    a.appendChild(canStrip(p));
+
+    var foot = el('div', 'rolec-f');
+    foot.appendChild(reach(total(p)));
+    foot.appendChild(el('span', 'rolec-p', p.people + (p.people === 1 ? ' person' : ' people')));
+    a.appendChild(foot);
+
+    a.onclick = function () {
       state.open = p.id;
       state.detail = false;
       state.find = '';
       setTimeout(renderOne, 0);
     };
-    sec.appendChild(hd);
-    return sec;
+    return a;
   }
 
   /* ---- one position, in the drawer ---- */
@@ -877,7 +908,9 @@
       root.appendChild(band);
     }
 
-    var ladder = el('div', 'pm-ladder');
+    var ladder = el('div', 'rolegrid');
+    /* ordered() walks each root and then everything built on it, so a
+       position still comes after the one it starts from. */
     ordered().forEach(function (p) { ladder.appendChild(card(p)); });
     root.appendChild(ladder);
 

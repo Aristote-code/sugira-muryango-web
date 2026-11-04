@@ -1547,3 +1547,33 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .rolep-x:hover{background:var(--color-bg-hover);color:var(--color-content-danger)}
 .rolep-x svg{width:12px;height:12px;fill:none}
 .rolep-x:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+
+/* ---------------- a position, as a card ----------------
+   The same card as a role's, so the two tabs read as two lists of one kind of
+   thing. What a position adds is the line saying what it is built on — the
+   indent used to carry that and a grid has none — and a strip of what its
+   holders can actually do, which the ladder never showed without a click. */
+.posc{gap:10px}
+.posc.is-theirs{box-shadow:0 0 0 1px var(--x-clickup-color-border-primary-low-contrast),var(--elevation-raised)}
+.posc-l{margin:0;font-size:13px;line-height:20px;color:var(--color-content-secondary)}
+.posc-can{display:flex;flex-wrap:wrap;gap:4px}
+.posc-g{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;
+  border:1px solid var(--color-border-subtle);border-radius:var(--x-clickup-radii-3);
+  font-size:11px;line-height:16px;color:var(--color-content-secondary);min-width:0}
+.posc-gi{display:flex;align-items:center;width:11px;height:11px;flex:none;
+  color:var(--x-clickup-color-content-placeholder)}
+.posc-gi svg{width:11px;height:11px;fill:none}
+.posc-gn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* content.placeholder measures 3.32:1 at 11px, under the 4.5 text needs —
+   the same trap as content.tertiary. The count reads at the chip's own
+   colour; being a number after the name is hierarchy enough. */
+.posc-gv{flex:none;font-variant-numeric:tabular-nums}
+.posc-none{font-size:12px;line-height:16px;color:var(--color-content-secondary)}
+/* The reach bar sits in the card's footer rather than a ladder row, so it
+   gives up the fixed width it had there. */
+.posc .pm-reach{display:flex;align-items:center;gap:6px;min-width:0;white-space:nowrap}
+/* It was built for a ladder row with room to spare. In a card footer it was
+   breaking "26 of 112" across three lines, so it keeps its line and the track
+   gives up the width instead. */
+.posc .pm-reach > span{flex:none}
+.posc .pm-reach .trk{width:52px;flex:none}
