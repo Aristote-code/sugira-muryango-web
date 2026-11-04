@@ -471,6 +471,8 @@
     }
     if (!hit) return;
     hit.classList.add('on');
+    foldOthers(hit.classList.contains('ni') ? hit
+      : (hit.closest('.subs') ? $('[aria-controls="' + hit.closest('.subs').id + '"]') : null));
     // Landing on a header itself (a group with no sub-item for this screen)
     // should still show what is inside it.
     if (hit.classList.contains('ni') && hit.getAttribute('aria-controls')) {
@@ -706,6 +708,40 @@
     t.textContent = hiding ? 'Show empty fields' : 'Collapse empty fields';
   });
 
+  /* ---- four properties, then More ----
+     ClickUp's task detail shows Status, Assignees, Dates and Track time and
+     puts everything else behind More. A household here opened with fourteen
+     fields at once — national ID, family ID, consent date, phone — so the
+     first thing the drawer said was reference detail rather than who the
+     household is and where it stands. The rest are one click away and the
+     order is the one the markup already declares. */
+  var PG_VISIBLE = 4;
+  $$('.pg').forEach(function (grid) {
+    var rows = $$('.pgr', grid);
+    if (rows.length <= PG_VISIBLE + 1) return;
+    var extra = rows.slice(PG_VISIBLE);
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pg-collapse pg-more';
+    btn.setAttribute('aria-expanded', 'false');
+    var caret = document.createElement('span');
+    caret.className = 'pg-more-c';
+    caret.innerHTML = '<svg aria-hidden="true"><use href="#i-caret"/></svg>';
+    var label = document.createTextNode('');
+    btn.appendChild(caret);
+    btn.appendChild(label);
+    function show(open) {
+      btn.setAttribute('aria-expanded', String(open));
+      extra.forEach(function (r) { r.hidden = !open; });
+      label.nodeValue = open ? 'Less' : 'More (' + extra.length + ')';
+    }
+    show(false);
+    btn.addEventListener('click', function () {
+      show(btn.getAttribute('aria-expanded') !== 'true');
+    });
+    grid.parentNode.insertBefore(btn, grid.nextSibling);
+  });
+
   dw.addEventListener('click', function (e) {
     var t = e.target.closest('[data-dw]');
     if (!t) return;
@@ -741,6 +777,20 @@
   // ---- navigation groups ----
   // The row and the chevron used to be one control, so a section header could
   // only fold its own list: clicking "Households" shut the thing you had just
+  /* One section open at a time. Three stood open together, which spent most of
+     the rail's height on groups you were not in and pushed the rest below the
+     fold. Opening one folds the others, so the rail always shows every section
+     and the contents of exactly one. */
+  function foldOthers(except) {
+    $$('.ni[aria-controls]').forEach(function (b) {
+      if (b === except) return;
+      var p = document.getElementById(b.getAttribute('aria-controls'));
+      if (!p) return;
+      b.setAttribute('aria-expanded', 'false');
+      p.hidden = true;
+    });
+  }
+
   // aimed at and went nowhere. The row now opens the section it names; the
   // chevron — and the arrow keys — fold it.
   $$('.ni[aria-controls]').forEach(function (btn) {
@@ -749,6 +799,7 @@
     function fold(open) {
       btn.setAttribute('aria-expanded', String(open));
       panel.hidden = !open;
+      if (open) foldOthers(btn);
     }
     btn.addEventListener('click', function (e) {
       if (e.target.closest('.cr')) {
@@ -1141,6 +1192,15 @@
     var fPop = popover(), cPop = popover('narrow');
 
     function place(pop, btn) {
+      /* One popover at a time, across every table. A screen can carry four
+         toolbars, and each only ever shut its own pair, so two column pickers
+         could stand open at once over different tables. */
+      Array.prototype.forEach.call(document.querySelectorAll('.qpop'), function (p) {
+        if (p !== pop) p.hidden = true;
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('.tq-btn[aria-expanded="true"]'), function (b) {
+        if (b !== btn) b.setAttribute('aria-expanded', 'false');
+      });
       var r = btn.getBoundingClientRect();
       pop.hidden = false;
       var w = pop.offsetWidth;
