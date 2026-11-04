@@ -211,32 +211,6 @@
 
   /* ---- the tree, under the project rows on Programme ---- */
 
-  /* For a flat list of rows that carry their own depth, the line at each
-     ancestor level is drawn while that branch still has rows to come. Worked
-     out once over the finished list rather than guessed per row, because a
-     row cannot see its own siblings from inside itself. */
-  function trails(depths) {
-    return depths.map(function (d, i) {
-      var t = [];
-      for (var j = 0; j < d; j++) {
-        var more = false;
-        for (var k = i + 1; k < depths.length; k++) {
-          if (depths[k] < j + 1) break;
-          if (depths[k] === j + 1) { more = true; break; }
-        }
-        t.push(more);
-      }
-      return t;
-    });
-  }
-
-  /* A child is the same row as its parent, one step in.
-     This used to be a td with colspan=4 holding a div, so everything below a
-     project ignored the columns the project was lined up against: the counts
-     sat inline as text while Forms and Responses stood empty beside them. On
-     ClickUp every row in the tree is the same shape and only the name cell is
-     indented — TaskRow does it with a spacer of depth * 28 — so the numbers
-     stay in their columns however deep you go. */
   var INDENT = 28;
   /* Where each level's marker sits inside the name cell, measured rather
      than stepped: the project row carries a caret before its icon and its
@@ -305,23 +279,35 @@
       if (open) {
         kids.forEach(function (k) { k.remove(); });
         kids = [];
+        redrawGuides(tr.parentNode);
         return;
       }
       kids = make();
-      /* Every branch this opens gets its levels drawn, not only the projects:
-         the lines belong to the tree, not to one caller of it. */
-      if (window.SugiraTree) {
-        var ts = trails(kids.map(function (k) { return +k.getAttribute('data-depth'); }));
-        kids.forEach(function (k, n) {
-          window.SugiraTree.guides(k.querySelector('.prow-n'), ts[n], LINES);
-        });
-      }
       var at = tr;
       kids.forEach(function (k) {
         at.parentNode.insertBefore(k, at.nextSibling);
         at = k;
       });
+      redrawGuides(tr.parentNode);
     };
+  }
+
+  /* The threads are a property of the whole table, not of one branch.
+     Working them out over the rows a single open had just made was why the
+     project's thread broke: when a session opened, its three form rows were
+     all this branch knew about, so nothing in them was at the session's own
+     depth and the level above was judged finished — the line stopped for
+     three rows and picked up again underneath. Every row in the body, in the
+     order they are in, is the only list that can answer it. */
+  function redrawGuides(tbody) {
+    if (!window.SugiraTree || !tbody) return;
+    var rows = [].slice.call(tbody.rows);
+    var depths = rows.map(function (r) {
+      return r.classList.contains('prow-kid') ? +r.getAttribute('data-depth') : 0;
+    });
+    rows.forEach(function (r, i) {
+      window.SugiraTree.guides(r.querySelector('.prow-n'), depths[i], LINES);
+    });
   }
 
   function mountTree() {
