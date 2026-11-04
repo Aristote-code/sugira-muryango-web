@@ -16,7 +16,6 @@
     content:      { crumbs: [['Field support', null]],                                   nav: 'content' },
     people:       { crumbs: [['People', null]],                                           nav: 'people' },
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
-    role:         { crumbs: [['Roles & access', 'roles'], ['Sugira Muryango Sector lead (SLA)', null]],   nav: 'roles' },
     person:       { crumbs: [['People', 'people'], ['C. Uwimana', null]],                 nav: 'people' },
     permissions:  { crumbs: [['Roles & access', null]],                                   nav: 'permissions' },
     position:     { crumbs: [['Roles & access', 'permissions'], ['Position', null]],      nav: 'permissions' },
@@ -400,7 +399,7 @@
       ok: 'Create position',
       body: '<div><label for="f-rn">Name</label><input id="f-rn" type="text" placeholder="e.g. District coordinator"></div>'
           + '<div><label for="f-rw">What the job is</label><textarea id="f-rw" placeholder="One sentence, the way someone in the programme would say it \u2014 \u201cRuns the programme in one sector and supervises the home visitors in it.\u201d This is what the card shows."></textarea></div>'
-          + '<div><label for="f-rb">Starts from</label><select id="f-rb"><option>IZU at Village \u2014 26 of 112</option><option>Sugira Muryango Sector lead (SLA) \u2014 44 of 112</option><option>National NCDA Government Official \u2014 5 of 112</option><option>District NCDA Child protection and Welfare Officer (CPWO) \u2014 7 of 112</option><option>IZU Cell Coordinator (ICC) \u2014 20 of 112</option><option>Sugira Muryango District lead (DTL) \u2014 29 of 112</option><option>HQ officer \u2014 88 of 112</option><option>Nothing \u2014 build from zero</option></select></div>'
+          + '<div><label for="f-rb">Starts from</label><select id="f-rb"><option>IZU at Village \u2014 8 of 26</option><option>Sugira Muryango Sector lead (SLA) \u2014 14 of 26</option><option>National NCDA Government Official \u2014 2 of 26</option><option>District NCDA Child protection and Welfare Officer (CPWO) \u2014 4 of 26</option><option>IZU Cell Coordinator (ICC) \u2014 6 of 26</option><option>Sugira Muryango District lead (DTL) \u2014 7 of 26</option><option>HQ officer \u2014 19 of 26</option><option>Nothing \u2014 build from zero</option></select></div>'
           + '<div><label for="f-rp">Programme</label><select id="f-rp"><option>All projects</option><option>Selected projects</option></select></div>'
           + '<p class="m-lead">It starts with everything that position has, and you add to it on the card. It cannot take anything away \u2014 something that needs less than its rung is a rung of its own.</p>'
           + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Eight positions exist for ten jobs. If this one would be an existing position plus one thing for one person, that belongs on their record as an exception \u2014 doing it here is how the live system came to carry twenty-one roles, three of them called Test role.</span></p>'

@@ -55,8 +55,8 @@
     ]
   };
   ACTIVITY.profile = ACTIVITY.person;
-  ACTIVITY.role = [
-    ['A. Gahimana', 'granted this position Change on risk-of-harm cases', '1 Nov'],
+  ACTIVITY.position = [
+    ['A. Gahimana', 'gave this position Close a case', '1 Nov'],
     ['A. Gahimana', 'gave this position to T. Mukamana at Rubavu', '12 Oct']
   ];
 

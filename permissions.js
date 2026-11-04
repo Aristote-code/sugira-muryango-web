@@ -388,7 +388,7 @@
   function reach(n) {
     var w = el('span', 'pm-reach');
     w.appendChild(el('b', null, String(n)));
-    w.appendChild(el('span', null, ' of 112'));
+    w.appendChild(el('span', null, ' of ' + ALL.length));
     var trk = el('span', 'trk');
     trk.appendChild(el('i')).style.width = Math.round(n / 112 * 100) + '%';
     w.appendChild(trk);

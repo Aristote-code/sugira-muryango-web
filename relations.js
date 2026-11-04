@@ -102,11 +102,11 @@
         ['Report', 'i-reports', 'Risk of harm — type and victim', 'reports', 'They own this saved report']
       ]
     },
-    role: {
+    position: {
       title: 'Sugira Muryango Sector lead (SLA)',
       rel: [
         ['People', 'i-admin', '12 people hold this position', 'people', 'Each at their own place'],
-        ['Permissions', 'i-settings', '44 of 112', 'permissions', 'What the position opens'],
+        ['Permissions', 'i-settings', '14 of the 26 permissions', 'permissions', 'What the position opens'],
         ['Places', 'i-location', 'Any sector', 'places', 'The place is set when the position is given, not on the position']
       ],
       ref: [
