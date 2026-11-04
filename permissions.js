@@ -296,6 +296,11 @@
     });
   }
 
+  /* Declared with the rest of the state rather than beside the renderer it
+     belongs to: render() runs before that point in the file, so the hoisted
+     var was still undefined and the box opened reading "undefined". */
+  var permFind = '';
+
   var state = {
     pos: freshPositions(),
     open: null,          // the one expanded card
@@ -661,6 +666,7 @@
     foot.appendChild(undo);
     root.appendChild(foot);
     if (state.find) filterCards(root, state.find);
+    renderPerms();
   }
 
   /* ---- entry points ---- */
@@ -690,8 +696,134 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
   else render();
 
+  /* ---- every permission, on a tab of its own ---- */
+
+
+  /* Which positions and which roles grant one. A permission nothing grants is
+     the thing this column exists to show. */
+  function usedBy(id) {
+    var pos = state.pos.filter(function (x) { return !!held(x)[id]; });
+    var roles = (window.SugiraRoles ? window.SugiraRoles.all() : [])
+      .filter(function (r) { return r.grants.indexOf(id) > -1; });
+    return { pos: pos, roles: roles };
+  }
+
+  function permRow(perm) {
+    var g = groupByKey(perm.group);
+    var tr = el('tr');
+
+    var nm = el('td', 'nm');
+    nm.appendChild(icon(g.icon, 'cellmark'));
+    nm.appendChild(document.createTextNode(perm.label));
+    if (perm.risk) {
+      /* .acc-prisk, which exists and is sized. The class this first used had
+         been deleted as dead CSS earlier in the week, so the icon had nothing
+         constraining it and grew to fill the cell. */
+      var w = el('span', 'acc-prisk');
+      w.setAttribute('data-tip', perm.risk);
+      w.appendChild(icon('i-alert'));
+      nm.appendChild(w);
+    }
+    tr.appendChild(nm);
+
+    tr.appendChild(el('td', 'mut', g.name));
+    /* The sentence is the long one, and a row here is 32 like every other row
+       in the app. It ellipsises and carries the whole of itself on hover. */
+    var what = el('td', 'mut pm-what');
+    what.textContent = perm.what;
+    what.setAttribute('data-tip', perm.what);
+    tr.appendChild(what);
+
+    var u = usedBy(perm.id);
+    var use = el('td', 'mut');
+    if (!u.pos.length && !u.roles.length) {
+      use.appendChild(el('span', 'pm-dead', 'nothing grants it'));
+    } else {
+      var bits = [];
+      if (u.pos.length) bits.push(u.pos.length + (u.pos.length === 1 ? ' position' : ' positions'));
+      if (u.roles.length) bits.push(u.roles.length + (u.roles.length === 1 ? ' role' : ' roles'));
+      use.textContent = bits.join(' \u00b7 ');
+      use.setAttribute('data-tip', u.pos.map(shortOf)
+        .concat(u.roles.map(function (r) { return r.name; })).join(', '));
+    }
+    tr.appendChild(use);
+
+    var old = el('td', 'num mut');
+    old.textContent = perm.replaces.length || '\u2014';
+    if (perm.replaces.length) old.setAttribute('data-tip', perm.replaces.join(', '));
+    tr.appendChild(old);
+    return tr;
+  }
+
+  function renderPerms() {
+    var root = $('#permsBody');
+    if (!root) return;
+    root.innerHTML = '';
+
+    var top = el('div', 'pm-top');
+    var find = el('div', 'search');
+    find.innerHTML = '<svg aria-hidden="true"><use href="#i-search"/></svg>';
+    var inp = el('input');
+    inp.type = 'text';
+    inp.placeholder = 'Search permissions';
+    inp.setAttribute('aria-label', 'Search permissions');
+    inp.value = permFind;
+    inp.oninput = function () { permFind = this.value; filterPerms(root, permFind); };
+    find.appendChild(inp);
+    top.appendChild(find);
+
+    var end = el('span', 'end');
+    var mk = el('button', 'btn');
+    mk.type = 'button';
+    mk.setAttribute('data-modal', 'permnew');
+    mk.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
+    mk.appendChild(document.createTextNode('Add permission'));
+    end.appendChild(mk);
+    top.appendChild(end);
+    root.appendChild(top);
+
+    var card = el('div', 'card flush plainsurface');
+    var wrap = el('div', 'tblwrap');
+    var t = el('table', 'tbl');
+    var head = el('thead');
+    var hr = el('tr');
+    ['Permission', 'Group', 'What it means', 'Granted by', 'Replaces'].forEach(function (h, i) {
+      hr.appendChild(el('th', i === 4 ? 'num' : null, h));
+    });
+    head.appendChild(hr);
+    t.appendChild(head);
+    var body = el('tbody');
+    ALL.forEach(function (perm) { body.appendChild(permRow(perm)); });
+    var none = el('tr', 't-empty');
+    var td = el('td');
+    td.colSpan = 5;
+    td.textContent = 'Nothing matches what you typed.';
+    none.appendChild(td);
+    none.hidden = true;
+    body.appendChild(none);
+    t.appendChild(body);
+    wrap.appendChild(t);
+    card.appendChild(wrap);
+    root.appendChild(card);
+
+    if (permFind) filterPerms(root, permFind);
+  }
+
+  function filterPerms(root, q) {
+    q = (q || '').trim().toLowerCase();
+    var n = 0;
+    Array.prototype.forEach.call(root.querySelectorAll('tbody tr:not(.t-empty)'), function (tr) {
+      var hit = !q || tr.textContent.toLowerCase().indexOf(q) > -1;
+      tr.hidden = !hit;
+      if (hit) n++;
+    });
+    var empty = root.querySelector('.t-empty');
+    if (empty) empty.hidden = !(q && !n);
+  }
+
   window.SugiraPerms = {
     render: render,
+    renderPerms: renderPerms,
     all: ALL,
     groups: GROUPS,
     positions: function () { return state.pos; },

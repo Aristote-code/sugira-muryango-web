@@ -1093,7 +1093,11 @@ svg use{pointer-events:none}
 .acc-pb:disabled .acc-box.on svg{color:var(--x-clickup-color-content-on-dark)}
 .acc-pb:disabled .acc-pn{color:var(--color-content-secondary)}
 .acc-pn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.acc-prisk{display:flex;align-items:center;width:14px;height:14px;flex:none;
+/* inline-flex, not flex: inside .acc-pb it is a flex item either way, but
+   in a table cell display:flex is block-level and takes its own line —
+   which made the five rows with a risk icon 39px instead of 32. */
+.acc-prisk{display:inline-flex;align-items:center;vertical-align:-3px;margin-left:6px;
+  width:14px;height:14px;flex:none;
   color:var(--x-clickup-color-content-warning)}
 .acc-prisk svg{width:14px;height:14px;fill:none}
 /* Narrow: one column. The indent stays — 22px is cheap, and clawing it back
@@ -1628,3 +1632,12 @@ svg:has(> use[href="#i-caret"]){fill:currentColor;stroke:none}
 .pm-top > .search{flex:1;min-width:0;max-width:320px}
 .pm-nohit{margin:16px 0 0;font-size:13px;line-height:20px;color:var(--color-content-secondary)}
 .pm-nohit[hidden]{display:none}
+
+/* A permission nothing grants: the column exists to surface it, so it has to
+   read as a state rather than as an empty cell. */
+.pm-dead{color:var(--color-content-warning)}
+/* The permissions table carries a sentence per row, so it gives the long
+   column the room and keeps the rest tight. */
+#permsBody .tbl th:nth-child(3),#permsBody .tbl td:nth-child(3){width:40%}
+#permsBody .pm-what{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#permsBody .tbl tr[hidden]{display:none}
