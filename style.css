@@ -42,7 +42,10 @@
 }
 *{box-sizing:border-box}
 html,body{font-family:var(--ui);height:100%}
-body{margin:0;background:var(--color-bg-canvas);color:var(--color-content-primary);font-family:var(--ui);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+/* The ground the app frame floats on. ClickUp puts background.main-dark behind a
+   surface-coloured content frame; with both the same colour nothing reads as an
+   object, which was the single biggest reason this did not look like ClickUp. */
+body{margin:0;padding:6px;box-sizing:border-box;background:var(--x-clickup-color-background-main-dark);color:var(--color-content-primary);font-family:var(--ui);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 /* Hierarchy comes from size and colour, so headings stop at 600, and the tight
    tracking belongs to the large sizes that set it on themselves below. */
 h1,h2,h3,h4{margin:0;font-weight:600;line-height:1.25;text-wrap:balance}
@@ -54,7 +57,15 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 :focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px;border-radius:4px}
 
 /* ---------------- shell ---------------- */
-.shell{display:grid;grid-template-columns:268px 1fr;height:100%;min-height:0}
+/* The app frame. Measured on ClickUp at 1440x900: body frame inset 6px from the
+   window, 1px default border, r8, elevation-1, surface over the darker ground.
+   The rail sits inside it, so the frame's own overflow rounds the rail's corners. */
+/* The 6px inset is padding on the body, not margin here: a margin on this grid
+   collapses through the body and adds its own height back to the page, which
+   left every route scrolling 6px. */
+.shell{display:grid;grid-template-columns:268px 1fr;height:100%;min-height:0;
+  border:1px solid var(--color-border-default);border-radius:var(--radius-md);
+  background:var(--color-bg-surface);box-shadow:var(--x-clickup-elevation-1);overflow:hidden}
 .shell.mini{grid-template-columns:76px 1fr}
 @media (max-width:880px){.shell,.shell.mini{grid-template-columns:1fr;height:auto}}
 
@@ -112,9 +123,11 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .railfoot{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:2px}
 
 /* ---------------- main ---------------- */
-.main{min-width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--color-bg-canvas)}
+.main{min-width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--color-bg-surface)}
 @media (max-width:880px){.main{overflow:visible}}
-.topbar{display:flex;align-items:center;gap:8px;height:38px;padding:0 24px;border-bottom:1px solid var(--color-border-default);flex:none;background:var(--color-bg-surface)}
+/* 40px on ClickUp, and no background of its own: it reads as part of the frame
+   rather than a white band stuck to the top of it. */
+.topbar{display:flex;align-items:center;gap:8px;height:var(--layout-topbar-height);padding:0 24px;border-bottom:1px solid var(--color-border-default);flex:none;background:transparent}
 .crumbs{display:flex;align-items:center;gap:2px;font-size:14px;line-height:var(--lh-16);color:var(--color-content-secondary);min-width:0;white-space:nowrap;overflow:hidden}
 .crumbs a,.crumbs b{display:inline-flex;align-items:center;height:24px;padding:0 4px;border-radius:var(--button-sm-radius);text-decoration:none}
 .crumbs a{color:var(--color-content-secondary);cursor:pointer}
@@ -405,7 +418,9 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .chip.brand{background:var(--color-bg-primary-subtle);color:var(--x-clickup-color-background-primary-pressed)}
 
 /* ---------------- cards: the tinted surface from the mobile file ---------------- */
-.card{background:var(--color-bg-surface);border-radius:var(--radius-lg);padding:20px 24px;min-width:0;box-shadow:var(--elevation-raised)}
+/* radius-md (8), not radius-lg (12): 12 is the modal's radius on ClickUp, and
+   using it for every card flattens the difference between a panel and an overlay. */
+.card{background:var(--color-bg-surface);border-radius:var(--radius-md);padding:20px 24px;min-width:0;box-shadow:var(--elevation-raised)}
 .card.lg{border-radius:var(--radius-xl);padding:20px}
 .card.flush{padding:0;overflow:hidden}
 .card.plainsurface{background:var(--color-bg-surface);box-shadow:var(--elevation-raised)}
@@ -526,7 +541,10 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .tbl{width:100%;border-collapse:collapse;font-size:14px;background:var(--color-bg-surface)}
 .tbl th{text-align:left;font-size:12px;line-height:16px;font-weight:500;color:var(--color-content-secondary);
   padding:0 12px;height:var(--size-control-md);background:var(--color-bg-surface);border-bottom:1px solid var(--color-border-default);white-space:nowrap}
-.tbl td{padding:8px 12px;height:36px;line-height:16px;border-bottom:1px solid var(--color-border-subtle);vertical-align:middle;color:var(--color-content-secondary)}
+/* ClickUp's TableRow is measured at 32 high including its 1px bottom border, with
+   13px cell text. At 36/14 these tables read noticeably looser than the product
+   they are meant to resemble, and it compounds over 34 of them. */
+.tbl td{padding:4px 12px;height:32px;font-size:13px;line-height:16px;border-bottom:1px solid var(--color-border-subtle);vertical-align:middle;color:var(--color-content-secondary)}
 .tbl tbody tr{cursor:pointer}
 .tbl tbody tr:hover{background:var(--color-bg-canvas)}
 .tbl tbody tr:last-child td{border-bottom:0}
