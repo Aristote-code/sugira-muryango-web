@@ -146,7 +146,11 @@
          line would run past the end of its own branch. */
       if (!more && i !== trail.length - 1) return;
       var x = xs[Math.min(i, xs.length - 1)];
-      img.push('linear-gradient(var(--color-border-default),var(--color-border-default))');
+      /* border.default (#e8e8e8) is the weight of the row rules the thread
+         crosses, so at 1px it read as another one of them. border.strong
+         (#cecece) is one step up — quiet, but above the rules rather than
+         level with them, which is what makes it read as a thread. */
+      img.push('linear-gradient(var(--color-border-strong),var(--color-border-strong))');
       pos.push(x + 'px 0');
     });
     if (!img.length) return;

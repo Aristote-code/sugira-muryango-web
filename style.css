@@ -1082,13 +1082,19 @@ svg use{pointer-events:none}
 /* A child row is an ordinary row. Only the name cell knows the depth, through
    a spacer, which is how ClickUp's TaskRow indents a subtask: the cells after
    it stay on the same grid as the parent's. */
-.prow-n{display:flex;align-items:center;gap:6px;min-width:0}
-.prow-ind{flex:none}
-.prow-t-gap{flex:none;width:16px}
+/* A <td> that is display:flex stops being a table cell. It drops out of the
+   column sizing, so the header's name column measured 461 while the body's
+   measured 157 — the bare strip down the right of the body rows — and its own
+   border-bottom drew only as far as its own content, which is the short line
+   under every project name. The cell stays a cell; its contents line up
+   inline, the same fix .hasmark needed for the same reason. */
+.prow-n{min-width:0;vertical-align:middle}
+.prow-ind{display:inline-block;vertical-align:middle}
+.prow-t-gap{display:inline-block;width:16px;margin-right:8px;vertical-align:middle}
 .prow-kid .cellmark{color:var(--color-content-tertiary)}
 .prow-kid>td{color:var(--color-content-secondary)}
-.prow-ctx{flex:none;margin-left:2px;font-size:12px;color:var(--color-content-tertiary);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow-ctx{margin-left:6px;font-size:12px;color:var(--color-content-secondary);
+  white-space:nowrap}
 /* content.placeholder is 3.32:1 — under the 4.5 text needs, and this rule
    covered a hundred cells. A dash standing in for a number is still text
    someone has to read, so it takes the same secondary the other muted
