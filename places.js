@@ -221,12 +221,26 @@
 
     function key(node, path) { return path + '/' + node.name; }
 
+    /* Set by the search box; '' means show everything. */
+    var q = '';
+
+    function matches(n) {
+      if (!q) return true;
+      if (n.name.toLowerCase().indexOf(q) > -1) return true;
+      return !!(n.children && n.children.some(matches));
+    }
+
     function draw() {
       host.innerHTML = '';
       (function walk(nodes, depth, path) {
         nodes.forEach(function (n) {
+          if (!matches(n)) return;
           var k = key(n, path);
-          var isOpen = !!open[depth === 0 ? n.name : k];
+          /* While searching, a branch that holds a match opens itself — the
+             answer is no use three carets deep. */
+          var isOpen = q
+            ? n.name.toLowerCase().indexOf(q) < 0
+            : !!open[depth === 0 ? n.name : k];
           host.appendChild(row(n, depth, isOpen, function (e) {
             e.stopPropagation();
             var kk = depth === 0 ? n.name : k;
@@ -246,6 +260,14 @@
     }
 
     draw();
+
+    var box = document.getElementById('plSearch');
+    if (box) {
+      box.addEventListener('input', function () {
+        q = this.value.trim().toLowerCase();
+        draw();
+      });
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);

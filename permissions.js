@@ -533,6 +533,27 @@
 
   /* ---- the screen ---- */
 
+  /* Hiding rather than redrawing, so the caret stays where it is. */
+  function filterCards(root, q) {
+    q = (q || '').trim().toLowerCase();
+    var n = 0;
+    Array.prototype.forEach.call(root.querySelectorAll('.rolegrid > .posc'), function (c) {
+      var hit = !q || c.textContent.toLowerCase().indexOf(q) > -1;
+      c.hidden = !hit;
+      if (hit) n++;
+    });
+    var mk = root.querySelector('.rolegrid > .rolec.new');
+    if (mk) mk.hidden = !!q;
+    var none = root.querySelector('.pm-nohit');
+    if (!none) {
+      none = el('p', 'pm-nohit');
+      var grid = root.querySelector('.rolegrid');
+      if (grid) grid.parentNode.insertBefore(none, grid.nextSibling);
+    }
+    none.textContent = q && !n ? 'No position matches \u201c' + q + '\u201d.' : '';
+    none.hidden = !(q && !n);
+  }
+
   function render() {
     var root = $('#permBody');
     if (!root) return;
@@ -541,23 +562,21 @@
     setTimeout(renderOne, 0);
     root.innerHTML = '';
 
-    /* The explanation waits behind the mark on the toolbar rather than being
-       read aloud every time the screen opens. */
     var top = el('div', 'pm-top');
-    var mark = el('button', 'ihelp');
-    mark.type = 'button';
-    mark.setAttribute('aria-expanded', 'false');
-    mark.setAttribute('aria-label', 'What a position is');
-    mark.setAttribute('data-tip',
-      'A position is built on the one below it and may only add to it. Eight of them stand '
-      + 'for the ten jobs the programme has; the live system carries twenty-one roles for '
-      + 'those ten, three of them called Test role, because there was no way to give one '
-      + 'person one extra thing. Two more could not be read from the capture. Where a '
-      + 'position applies — which sector, which district — is set when it is given to a '
-      + 'person, not here.');
-    mark.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
-    top.appendChild(mark);
 
+    var find = el('div', 'search');
+    find.innerHTML = '<svg aria-hidden="true"><use href="#i-search"/></svg>';
+    var inp = el('input');
+    inp.type = 'text';
+    inp.placeholder = 'Search positions';
+    inp.setAttribute('aria-label', 'Search positions');
+    inp.value = state.find;
+    inp.oninput = function () {
+      state.find = this.value;
+      filterCards(root, state.find);
+    };
+    find.appendChild(inp);
+    top.appendChild(find);
 
     /* Each tab builds its own action, because the two tabs make two different
        things and the screen's shared .acts group could only ever name one.
@@ -641,6 +660,7 @@
     undo.appendChild(document.createTextNode('Put the positions back'));
     foot.appendChild(undo);
     root.appendChild(foot);
+    if (state.find) filterCards(root, state.find);
   }
 
   /* ---- entry points ---- */
