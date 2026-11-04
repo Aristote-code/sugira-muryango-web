@@ -838,6 +838,10 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
   color:var(--color-content-secondary);margin-top:8px}
 .pg-collapse:hover{background:var(--color-bg-hover);color:var(--color-content-secondary)}
 .pg.hide-empty .pgr.is-empty{display:none}
+.pg-more{gap:4px;margin-right:4px}
+.pg-more-c{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px}
+.pg-more-c svg{width:12px;height:12px;fill:currentColor;transition:transform 120ms ease}
+.pg-more[aria-expanded="true"] .pg-more-c svg{transform:rotate(90deg)}
 /* Layout switch: sidebar (default), modal, full page — ClickUp's three task layouts. */
 .dw-layout{display:inline-flex;gap:2px;background:var(--x-clickup-color-background-on-main);border-radius:7px;padding:3px;margin-left:auto}
 .dw-layout button{width:26px;height:24px;border:0;background:none;border-radius:5px;cursor:pointer;
