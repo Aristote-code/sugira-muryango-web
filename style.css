@@ -613,9 +613,22 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 /* Row actions. Quiet links, not buttons — a table of buttons reads as a toolbar
    per row and drowns the data the row is actually for. */
 .rowacts{white-space:nowrap}
-.rowacts a{display:inline-block;margin-right:12px;font-size:13px;color:var(--color-content-link);cursor:pointer}
-.rowacts a:last-child{margin-right:0}
-.rowacts a:hover{text-decoration:underline}
+.rowacts{display:flex;align-items:center;gap:2px}
+/* The action people reach for keeps its words, as a small button on ClickUp's
+   sm metrics: 24 high, r6, 1px border.default, 12/16 500. */
+.rowacts a.rowact-main{display:inline-flex;align-items:center;height:var(--size-control-xs);
+  padding:0 7px;border:1px solid var(--color-border-default);border-radius:var(--button-sm-radius);
+  background:var(--color-bg-surface);font-size:12px;line-height:16px;font-weight:500;
+  color:var(--color-content-secondary);cursor:pointer;text-decoration:none}
+.rowacts a.rowact-main:hover{background:var(--color-bg-hover);text-decoration:none}
+/* The rest are ghost icon buttons, as TaskRow's RowAction is. */
+.rowacts a.rowact-ico{display:inline-flex;align-items:center;justify-content:center;
+  width:var(--size-control-xs);height:var(--size-control-xs);flex:none;
+  border-radius:var(--button-sm-radius);background:none;border:0;
+  color:var(--icon-button-ghost-content);cursor:pointer;text-decoration:none}
+.rowacts a.rowact-ico:hover{background:var(--icon-button-ghost-bg-hover);text-decoration:none}
+.rowacts a.rowact-ico svg{width:16px;height:16px;fill:none}
+.rowacts a:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
 /* A video preview is the one dark surface in the app: it is standing in for
    the frame itself, not for a panel. */
 .vprev{display:flex;align-items:center;justify-content:center;gap:8px;height:200px;
@@ -1050,22 +1063,19 @@ svg use{pointer-events:none}
 .prow-t[aria-expanded="true"] svg{transform:rotate(90deg)}
 .prow-t:hover{background:var(--color-bg-hover);color:var(--color-content-secondary)}
 .prow-t:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
-.prow-s{display:block;margin-top:2px;font-size:12px;line-height:16px;
-  color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .tbl tr.is-open>td{background:var(--color-bg-hover)}
-.prow-kid>td{padding:0;background:var(--color-bg-surface)}
-.prow-kid:hover>td{background:var(--color-bg-hover)}
-.prk{display:flex;align-items:center;gap:8px;min-height:var(--size-control-md);
-  padding:0 12px;font-size:13px;line-height:16px;color:var(--color-content-secondary)}
-.prk-i{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
-  color:var(--color-content-tertiary)}
-.prk-i svg{width:16px;height:16px;fill:none}
-.prk-n{color:var(--color-content-primary);min-width:0;
+/* A child row is an ordinary row. Only the name cell knows the depth, through
+   a spacer, which is how ClickUp's TaskRow indents a subtask: the cells after
+   it stay on the same grid as the parent's. */
+.prow-n{display:flex;align-items:center;gap:6px;min-width:0}
+.prow-ind{flex:none}
+.prow-t-gap{flex:none;width:16px}
+.prow-kid .cellmark{color:var(--color-content-tertiary)}
+.prow-kid>td{color:var(--color-content-secondary)}
+.prow-ctx{flex:none;margin-left:2px;font-size:12px;color:var(--color-content-tertiary);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.prk-note{flex:none;color:var(--color-content-secondary);font-size:12px}
-.prk-r{margin-left:auto;flex:none;font-size:12px;color:var(--color-content-secondary);
-  font-variant-numeric:tabular-nums}
-@media (max-width:880px){.prk-note{display:none}}
+.tbl td.num.mut{color:var(--x-clickup-color-content-placeholder)}
+@media (max-width:880px){.prow-ctx{display:none}}
 /* login sits outside the app chrome */
 .shell.bare .rail,.shell.bare .topbar{display:none}
 .shell.bare{grid-template-columns:1fr}
