@@ -530,6 +530,15 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 /* ClickUp's TableRow is measured at 32 high including its 1px bottom border, with
    13px cell text. At 36/14 these tables read noticeably looser than the product
    they are meant to resemble, and it compounds over 34 of them. */
+/* A row is 32 and stays 32. ClickUp's TableRow is a fixed pitch, and ours grew
+   to 41 and 45 wherever a long name met a column that could not hold it: 31 of
+   the 37 rows in the form library were two lines high, which is what made these
+   tables look ragged. Nothing is truncated to achieve it — the cells stop
+   wrapping and the table takes the width it needs, which its wrapper already
+   scrolls. Measured: the widest of them overhangs by 179px and no cell is
+   clipped, so a long Kinyarwanda form name is still read in full by scrolling
+   rather than cut off with an ellipsis. */
+.tbl td,.tbl th{white-space:nowrap}
 .tbl td{padding:4px 12px;height:32px;font-size:13px;line-height:16px;border-bottom:1px solid var(--color-border-subtle);vertical-align:middle;color:var(--color-content-secondary)}
 .tbl tbody tr{cursor:pointer}
 .tbl tbody tr:hover{background:var(--color-bg-canvas)}
