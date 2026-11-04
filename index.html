@@ -853,24 +853,27 @@
       <!-- ============ REPORTS ============ -->
       <section class="screen" id="s-reports">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:8px">6</span></button>
-          <button class="tab" type="button" data-tab="sched">Scheduled<span class="chip" style="margin-left:8px">4</span></button>
-          <button class="tab" type="button" data-tab="manual">Run by hand<span class="chip" style="margin-left:8px">2</span></button>
+          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:8px">9</span></button>
+          <button class="tab" type="button" data-tab="sched">Scheduled<span class="chip" style="margin-left:8px">5</span></button>
+          <button class="tab" type="button" data-tab="manual">Run by hand<span class="chip" style="margin-left:8px">4</span></button>
           </div>
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Report</th><th>Covers</th><th>Owner</th><th class="num">Last run</th><th>Schedule</th></tr></thead>
+              <thead><tr><th>Report</th><th>Built on</th><th>Covers</th><th>Owner</th><th class="num">Last run</th><th>Schedule</th></tr></thead>
               <tbody>
-                <tr data-tags="sched"><td class="nm">Male caregiver attendance by district</td><td class="mut">All districts &middot; Cohort 1</td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td><span class="chip ok"><i></i>Weekly &rarr; <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></span></td></tr>
-                <tr data-tags="sched"><td class="nm">Risk of harm &mdash; type and victim</td><td class="mut">All districts &middot; 12 months</td><td class="mut">C. Uwimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td></tr>
-                <tr data-tags="manual"><td class="nm">Household needs breakdown</td><td class="mut">Ngoma, Nyanza</td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td><span class="chip">Manual</span></td></tr>
-                <tr data-tags="sched"><td class="nm"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> status and supervision</td><td class="mut">All districts</td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">27 Oct</td><td><span class="chip ok"><i></i>Weekly</span></td></tr>
-                <tr data-tags="sched"><td class="nm">Average minutes per module</td><td class="mut">All districts</td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td><span class="chip warn"><i></i>Needs validation</span></td></tr>
-                <tr data-tags="manual"><td class="nm">Reasons <abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> Telephone Supervision missed</td><td class="mut">All districts &middot; Quarter</td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">14 Oct</td><td><span class="chip">Manual</span></td></tr>
+                <tr data-tags="sched"><td class="nm">Male caregiver attendance by district</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">All districts &middot; Cohort 1</td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td><span class="chip ok"><i></i>Weekly &rarr; <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></span></td></tr>
+                <tr data-tags="sched"><td class="nm">Risk of harm &mdash; type and victim</td><td><button class="rel" type="button" data-go="form" data-tip="Risk of Harm management &mdash; intake"><svg aria-hidden="true"><use href="#i-reports"/></svg>Risk of Harm management &mdash; intake</button></td><td class="mut">All districts &middot; 12 months</td><td class="mut">C. Uwimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td></tr>
+                <tr data-tags="manual"><td class="nm">Household needs breakdown</td><td><button class="rel" type="button" data-go="form" data-tip="Family Enrollment and Composition Form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Family Enrollment and Composition Form</button></td><td class="mut">Ngoma, Nyanza</td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td><span class="chip">Manual</span></td></tr>
+                <tr data-tags="sched"><td class="nm"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> status and supervision</td><td><button class="rel" type="button" data-go="form" data-tip="IZU Telephone Supervision &mdash; weekly call"><svg aria-hidden="true"><use href="#i-reports"/></svg>IZU Telephone Supervision &mdash; weekly call</button></td><td class="mut">All districts</td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">27 Oct</td><td><span class="chip ok"><i></i>Weekly</span></td></tr>
+                <tr data-tags="sched"><td class="nm">Average minutes per module</td><td><button class="rel" type="button" data-go="form" data-tip="Flash weekly report on every module"><svg aria-hidden="true"><use href="#i-reports"/></svg>Flash weekly report on every module</button></td><td class="mut">All districts</td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td><span class="chip warn"><i></i>Needs validation</span></td></tr>
+                <tr data-tags="manual"><td class="nm">Reasons <abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> Telephone Supervision missed</td><td><button class="rel" type="button" data-go="form" data-tip="IZU Telephone Supervision &mdash; missed call"><svg aria-hidden="true"><use href="#i-reports"/></svg>IZU Telephone Supervision &mdash; missed call</button></td><td class="mut">All districts &middot; Quarter</td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">14 Oct</td><td><span class="chip">Manual</span></td></tr>
+                <tr data-tags="sched"><td class="nm">Activities completed, by session</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">All districts</td><td class="mut">A. Gahimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td></tr>
+                <tr data-tags="manual"><td class="nm">Minutes per visit, by home visitor</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">Ngoma &middot; Cohort 1</td><td class="mut">C. Uwimana</td><td class="num mut">30 Oct</td><td><span class="chip">Manual</span></td></tr>
+                <tr data-tags="manual"><td class="nm">Households flagged at session 6</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">All districts</td><td class="mut">C. Uwimana</td><td class="num mut">2 Nov</td><td><span class="chip">Manual</span></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>6 saved reports</span></div>
+            <div class="tfoot"><span>9 saved reports &middot; 5 run on a schedule &middot; every one is built on a form</span></div>
           </div>
         </div>
       </section>
@@ -1286,7 +1289,7 @@
             <span class="side"><button class="btn" type="button" data-modal="report"><svg aria-hidden="true"><use href="#i-plus"/></svg>New report</button></span></div>
           <div class="cols c2">
             <div class="card">
-              <div class="card-h"><h3>Saved from this form</h3></div>
+              <div class="card-h"><h3>Saved from this form</h3><span class="side"><button class="rel" type="button" data-go="reports"><svg aria-hidden="true"><use href="#i-reports"/></svg>All 9 reports</button></span></div>
               <div class="lr click"><span class="t">Male caregiver attendance by district</span><span class="s">Weekly &rarr; <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></span><span class="ch">&rsaquo;</span></div>
               <div class="lr click"><span class="t">Activities completed, by session</span><span class="s">Monthly</span><span class="ch">&rsaquo;</span></div>
               <div class="lr click"><span class="t">Minutes per visit, by home visitor</span><span class="s">Manual</span><span class="ch">&rsaquo;</span></div>
@@ -1897,7 +1900,7 @@
             <div class="card">
               <div class="card-h"><h3>Getting data out</h3></div>
               <div class="lr"><span class="t">CSV export</span><span class="s">Any table, filters included</span><span class="c"><span class="chip ok"><i></i>On</span></span></div>
-              <div class="lr"><span class="t">Scheduled reports</span><span class="s">4 running, to <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr> and the <abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</span><span class="c"><button class="rel" type="button" data-go="reports">Reports</button></span></div>
+              <div class="lr"><span class="t">Scheduled reports</span><span class="s">5 running, to <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr> and the <abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</span><span class="c"><button class="rel" type="button" data-go="reports">Reports</button></span></div>
               <div class="lr"><span class="t">Exports include names</span><span class="s">Only for roles that can already see them</span><span class="c"><span class="chip ok"><i></i>Scoped</span></span></div>
               <div class="lr"><span class="t">Risk-of-harm detail in exports</span><span class="s">Never, in any export</span><span class="c"><span class="chip"><i></i>Off</span></span></div>
             </div>
