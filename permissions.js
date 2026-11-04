@@ -772,7 +772,9 @@
     rtop.appendChild(el('span', 'rec-id', p.people + (p.people === 1 ? ' person' : ' people')));
     rec.appendChild(rtop);
     rec.appendChild(el('h1', null, p.name));
-    rec.appendChild(el('p', 'rec-desc', p.what));
+    /* No description paragraph, for the reason the others came out: the record
+       says what it is through its fields, not through prose about itself.
+       `p.what` stays in the data. */
     sec.appendChild(rec);
 
     var body = el('div', 'pm-cb');
