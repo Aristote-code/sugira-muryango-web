@@ -67,7 +67,7 @@
     });
   }
 
-  var state = { roles: fresh(), open: null };
+  var state = { roles: fresh(), open: null, find: '' };
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -143,25 +143,48 @@
     return a;
   }
 
+  /* Hiding rather than redrawing, so the caret stays where it is. */
+  function filterCards(root, q) {
+    q = (q || '').trim().toLowerCase();
+    var n = 0;
+    Array.prototype.forEach.call(root.querySelectorAll('.rolegrid > .rolec[data-role-id]'),
+      function (c) {
+        var hit = !q || c.textContent.toLowerCase().indexOf(q) > -1;
+        c.hidden = !hit;
+        if (hit) n++;
+      });
+    var mk = root.querySelector('.rolegrid > .rolec.new');
+    if (mk) mk.hidden = !!q;
+    var none = root.querySelector('.pm-nohit');
+    if (!none) {
+      none = el('p', 'pm-nohit');
+      var grid = root.querySelector('.rolegrid');
+      if (grid) grid.parentNode.insertBefore(none, grid.nextSibling);
+    }
+    none.textContent = q && !n ? 'No role matches \u201c' + q + '\u201d.' : '';
+    none.hidden = !(q && !n);
+  }
+
   function renderList() {
     var root = document.getElementById('roleBody');
     if (!root || !window.SugiraPerms) return;
     root.innerHTML = '';
 
     var top = el('div', 'pm-top');
-    var mark = el('button', 'ihelp');
-    mark.type = 'button';
-    mark.setAttribute('aria-expanded', 'false');
-    mark.setAttribute('aria-label', 'What a role is');
-    mark.setAttribute('data-tip',
-      'A role is a small bundle of permissions for work that is not a job. Translating a '
-      + 'form, building a report, managing cohorts — the people who do these sit at every '
-      + 'level, so none of them is a rung. A Sector lead who translates holds the Sector '
-      + 'lead position and the Form translator role, not a position called “Sector lead '
-      + 'who translates”. A role only adds; it can never take something away.');
-    mark.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
-    top.appendChild(mark);
 
+    var find = el('div', 'search');
+    find.innerHTML = '<svg aria-hidden="true"><use href="#i-search"/></svg>';
+    var inp = el('input');
+    inp.type = 'text';
+    inp.placeholder = 'Search roles';
+    inp.setAttribute('aria-label', 'Search roles');
+    inp.value = state.find || '';
+    inp.oninput = function () {
+      state.find = this.value;
+      filterCards(root, state.find);
+    };
+    find.appendChild(inp);
+    top.appendChild(find);
 
     /* It used to clone the screen's end group, which by then the positions
        tab had already taken, so this tab's toolbar was empty. It builds its
@@ -190,6 +213,7 @@
       + 'the live system never had, which is why it carries twenty-one roles for ten jobs.');
     grid.appendChild(add);
     root.appendChild(grid);
+    if (state.find) filterCards(root, state.find);
 
   }
 

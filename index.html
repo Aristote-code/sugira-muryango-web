@@ -644,6 +644,9 @@
 
       <!-- ============ SAFEGUARDING ============ -->
       <section class="screen" id="s-safeguarding">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by household, case ID or type" aria-label="Search cases"></div>
+        </div>
         <div class="tabs">
           <button class="tab on" type="button" data-tab="open">Open<span class="chip" style="margin-left:8px">3</span></button>
           <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:8px">2</span></button>
@@ -814,6 +817,9 @@
 
       <!-- ============ FIELD STATUS ============ -->
       <section class="screen" id="s-field">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by home visitor or place" aria-label="Search field status"></div>
+        </div>
         <div class="pad">
           <div class="stats">
             <div class="st"><div class="l">Reported today</div>
@@ -843,6 +849,9 @@
 
       <!-- ============ REPORTS ============ -->
       <section class="screen" id="s-reports">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by report name" aria-label="Search reports"></div>
+        </div>
         <div class="tabs">
           <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:8px">9</span></button>
           <button class="tab" type="button" data-tab="sched">Scheduled<span class="chip" style="margin-left:8px">5</span></button>
@@ -885,7 +894,7 @@
         <div class="pad" data-panelid="archived" hidden>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Project, exactly as it is stored</th><th>Archived</th><th>Archived by</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Project, exactly as it is stored</th><th>Archived</th><th>Archived by</th><th class="ract">Actions</th></tr></thead>
               <tbody>
                 <tr><td class="nm">Household Tracking Project v1 <span class="chip warn"><i></i>near-duplicate</span></td><td class="mut">14 Aug 2026</td><td>A. Gahimana &middot; FXB Rwanda</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="Household Tracking Project restored">Restore</a></td></tr>
                 <tr><td class="nm">Think Aloud testing without Module &mdash; 2025 <span class="chip warn"><i></i>test</span></td><td class="mut">2 Aug 2026</td><td>A. Gahimana &middot; FXB Rwanda</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="Think Aloud testing restored">Restore</a></td></tr>
@@ -916,10 +925,13 @@
           </div>
         </div>
         <div class="pad" data-panelid="list">
+          <div class="filters">
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search projects, sessions and forms" aria-label="Search the programme"></div>
+          </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead>
-                <tr><th>Project, exactly as it is stored</th><th>Visible on App</th><th>Status</th><th>Actions</th></tr></thead>
+                <tr><th>Project, exactly as it is stored</th><th>Visible on App</th><th>Status</th><th class="ract">Actions</th></tr></thead>
               <tbody>
                 <tr data-tags="tablet" data-go="project"><td class="nm">Household Module Tracking</td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td><td class="rowacts"><a data-go="project">Details</a><a data-go="project">Edit</a><a data-modal="archive">Archive</a></td></tr>
                 <tr data-tags="tablet" data-go="project"><td class="nm">Household Tracking Project <span class="chip warn"><i></i>near-duplicate</span></td><td><span class="chip ok"><i></i>Available</span></td><td><span class="chip ok"><i></i>Active</span></td><td class="rowacts"><a data-go="project">Details</a><a data-go="project">Edit</a><a data-modal="archive">Archive</a></td></tr>
@@ -977,9 +989,9 @@
         </div>
         <div class="pad" data-panelid="modules">
           <div class="card flush plainsurface">
-            <div class="tblwrap"><table class="tbl">
+            <div class="tblwrap"><table class="tbl grow2">
               <thead>
-                <tr><th style="width:3rem">#</th><th>Session</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
+                <tr><th>#</th><th>Session</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
               <tbody>
                 <tr data-go="module"><td class="mut">&mdash;</td><td class="nm">Welcome session</td><td class="mut">Guhana ikaze</td><td><span class="chip ok"><i></i>Active</span></td></tr>
                 <tr data-go="module"><td class="mut">1</td><td class="nm">1.Family Narrative</td><td class="mut">1.Amateka y&rsquo;umuryango</td><td><span class="chip ok"><i></i>Active</span></td></tr>
@@ -1232,8 +1244,8 @@
               <div class="d">C. Uwimana</div></div>
           </div>
           <div class="card flush plainsurface">
-            <div class="tblwrap"><table class="tbl">
-              <thead><tr><th style="width:3rem">#</th><th>English</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
+            <div class="tblwrap"><table class="tbl grow2">
+              <thead><tr><th>#</th><th>English</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
               <tbody>
                 <tr><td class="mut">1</td><td>Date of visit</td><td><span class="v" data-ftype="text">Itariki y&rsquo;urugendo</span></td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
                 <tr><td class="mut">2</td><td>Who was present?</td><td><span class="v" data-ftype="text">Ninde wari ahari?</span></td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
@@ -1299,11 +1311,14 @@
 
       <!-- ============ COHORTS ============ -->
       <section class="screen" id="s-cohorts">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by cohort" aria-label="Search cohorts"></div>
+        </div>
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead>
-                <tr><th>Cohort</th><th>Districts, exactly as they are stored</th><th class="num">Households</th><th>Reached</th><th class="num">Added</th><th>Status</th><th>Actions</th></tr></thead>
+                <tr><th>Cohort</th><th>Districts, exactly as they are stored</th><th class="num">Households</th><th>Reached</th><th class="num">Added</th><th>Status</th><th class="ract">Actions</th></tr></thead>
               <tbody>
                 <tr><td class="nm">1</td><td class="mut">Kirehe (1-4- 2026) &middot; Musanze (1-12-2025) &middot; Ngoma (1 - 2026) &middot; Nyanza (1-2026) &middot; Rubavu (1-2026)</td><td class="num">1 216</td><td class="mut">Session 6 of 12</td><td class="num mut">23 Jun 2025</td><td><span class="chip ok"><i></i>Active</span></td><td class="rowacts"><a data-modal="cmanage">Manage</a></td></tr>
                 <tr><td class="nm">2</td><td class="mut">Kirehe (2-08-2026) &middot; Musanze (2-06-2026) &middot; Ngoma (2-2026) &middot; Nyanza (2-2026) &middot; Rubavu (2-2026)</td><td class="num">994</td><td class="mut">Session 2 of 12</td><td class="num mut">23 Jun 2025</td><td><span class="chip ok"><i></i>Active</span></td><td class="rowacts"><a data-modal="cmanage">Manage</a></td></tr>
@@ -1319,6 +1334,9 @@
 
       <!-- ============ TRANSLATIONS ============ -->
       <section class="screen" id="s-translations">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search the English or the Kinyarwanda" aria-label="Search translations"></div>
+        </div>
         <div class="pad">
           <div class="stats">
             <div class="st"><div class="l">Forms fully translated</div>
@@ -1524,6 +1542,9 @@
       </section>
 
       <section class="screen" id="s-roles">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by role" aria-label="Search roles"></div>
+        </div>
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
@@ -1996,6 +2017,9 @@
 
       <!-- ============ FIELD SUPPORT ============ -->
       <section class="screen" id="s-content">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search guidance, videos and documents" aria-label="Search field support"></div>
+        </div>
         <div class="tabs">
           <button class="tab on" type="button" data-panel="videos">Videos <span class="chip" style="margin-left:8px">24</span></button>
           <button class="tab" type="button" data-panel="docs">Documents <span class="chip" style="margin-left:8px">41</span></button>
@@ -2007,7 +2031,7 @@
         <div class="pad" data-panelid="videos">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Video</th><th>For</th><th>Languages</th><th>Visible to</th><th class="num">Opened</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Video</th><th>For</th><th>Languages</th><th>Visible to</th><th class="num">Opened</th><th class="ract">Actions</th></tr></thead>
               <tbody>
                 <tr><td class="nm">Playing with everyday objects</td><td class="mut">Session 3 &middot; Building Early Communication Skills</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">1 844</td><td class="rowacts"><a data-modal="vprev">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
                 <tr><td class="nm">Feeding a child who refuses</td><td class="mut">Session 5 &middot; The Importance of Good Nutrition</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">1 602</td><td class="rowacts"><a data-modal="vprev">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
@@ -2022,7 +2046,7 @@
         <div class="pad" data-panelid="docs" hidden>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Document</th><th>Folder</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Document</th><th>Folder</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th><th class="ract">Actions</th></tr></thead>
               <tbody>
                 <tr><td class="nm">Safeguarding protocol</td><td class="mut">Policy</td><td><span class="chip bad"><i></i>Supervisors, social workers</span></td><td class="num mut">1.2 MB</td><td class="num mut">12 Sep</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Safeguarding protocol downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
                 <tr><td class="nm">Home visit checklist</td><td class="mut">Field</td><td class="mut">Everyone</td><td class="num mut">240 KB</td><td class="num mut">3 Oct</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Home visit checklist downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
