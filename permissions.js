@@ -72,172 +72,174 @@
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
 
-  var CRUD = ['list', 'create', 'edit', 'delete'];
-  var VERB = { list: 'See', create: 'Add', edit: 'Change', 'delete': 'Archive' };
-  var VERBS = ['See', 'Add', 'Change', 'Archive'];
+  /* ---- the permissions ----
 
-  /* What each object is, in words a programme officer would use. The verb
-     sentences are built from these, so a wrong noun here is wrong in four
-     places at once — which is the point. */
-  function obj(name, noun, plural, opts) {
-    opts = opts || {};
-    return { name: name, noun: noun, plural: plural, verbs: opts.verbs || CRUD, note: opts.note };
-  }
-  function one(name, verb, what, opts) {
-    opts = opts || {};
-    return { name: name, verb: verb, what: what, odd: true, risk: opts.risk, note: opts.note };
-  }
+     Twenty-six, and we wrote them.
 
-  var GROUPS = [
-    { key: 'households', name: 'Households', icon: 'i-households',
-      blurb: 'The family and everyone counted in it. Five objects for one idea — the clearest case for collapsing names.',
-      objects: [
-        obj('family', 'a household on the programme', 'households'),
-        obj('familymember', 'a person counted inside a household', 'the people in a household'),
-        obj('familymodule', 'one session’s delivery against one household', 'what each household has been delivered'),
-        obj('admittedfamily', 'a household that has been accepted onto the programme', 'accepted households'),
-        obj('householdenrollment', 'the enrolment record that admits a household', 'enrolments')],
-      extra: [] },
+     The live system has 112, and they are not a design — they are what happens
+     when permission names are free text typed into a field called "Name". That
+     is where `form-list` AND `forms-list` come from, and `View-collected-data`
+     as the one capitalised name, and seven sets missing a verb, and five
+     different words — family, familymember, familymodule, admittedfamily,
+     householdenrollment — for one idea. Drawing 112 checkboxes better does not
+     fix any of that. Nobody can hold 112 of anything in their head, so nobody
+     reads them, so everyone presses Check all, so a role means nothing.
 
-    { key: 'visits', name: 'Visits', icon: 'i-visits',
-      blurb: 'A session delivered in the household, and the form filled in while it happened.',
-      objects: [obj('sessioninaction', 'a visit as it is being delivered', 'visits in progress',
-                    { verbs: ['list', 'create', 'edit'],
-                      note: 'no delete exists — an incomplete set in the current system' })],
-      extra: [
-        one('submit-form', 'Add', 'Send a completed form from the tablet into the system. This is the permission every home visitor needs and almost nobody else does.'),
-        one('View-collected-data', 'See', 'Read the answers people gave, rather than just the count of them. Separate from seeing the form itself.',
-            { note: 'the only capitalised name in the system' })] },
+     So each of these names a decision somebody actually makes, and carries the
+     stored names it replaces. 111 of the 112 land in exactly one of them; the
+     112th is `roh-delete`, which is not here because a safeguarding record
+     should not be deletable at all.
 
-    { key: 'roh', name: 'Risk-of-harm cases', icon: 'i-safeguarding', guarded: true,
-      blurb: 'Child safeguarding. The one group where being wrong harms a child rather than a workflow.',
-      objects: [obj('roh', 'a risk-of-harm case', 'risk-of-harm cases')],
-      extra: [] },
+     `replaces` is the migration map. It is also the tooltip: hover a permission
+     and you are told which old names it covers, so nothing is hidden and a
+     developer can still answer "where did family-create go". */
 
-    { key: 'programme', name: 'Programme', icon: 'i-programme',
-      blurb: 'Projects, their sessions, the forms inside them, and the words those forms are written in.',
-      objects: [
-        obj('project', 'a project — the container a set of sessions belongs to', 'projects'),
-        obj('module', 'a session inside a project', 'sessions'),
-        obj('form', 'a form a visitor fills in during a session', 'forms'),
-        obj('question', 'a single question inside a form', 'the questions in a form'),
-        obj('construct', 'a construct — what a group of questions together is measuring', 'constructs'),
-        obj('language', 'a language the forms can be translated into', 'languages')],
-      extra: [
-        one('forms-list', 'See', 'Does nothing that form-list does not already do. One of the two names is dead and nobody knows which.',
-            { note: 'typo duplicate of form-list — resolve before anything depends on it' }),
-        one('can-archive-project', 'Archive', 'Take a whole project off the tablet. Its collected responses stay readable; nothing new can be added to it.'),
-        one('can-translate-forms', 'Change', 'Write the Kinyarwanda alongside the English. Does not allow changing what the question asks.'),
-        one('create-form-version', 'Add', 'Publish a new version of a form that is already in use, so earlier answers stay attached to the version they were given under.'),
-        one('manage-cohort', 'Change', 'Decide which households are grouped together and what dates the group runs between.')] },
+  var PERMS = [
+    /* id, group, label, what it means, the stored names it replaces */
+    ['hh-see', 'households', 'See households',
+      'See households and the people counted in them.',
+      ['family-list', 'familymember-list', 'familymodule-list', 'admittedfamily-list',
+        'householdenrollment-list']],
+    ['hh-enrol', 'households', 'Enrol a household',
+      'Put a household on the programme and record who is in it.',
+      ['family-create', 'familymember-create', 'familymodule-create', 'admittedfamily-create',
+        'householdenrollment-create']],
+    ['hh-change', 'households', 'Change household details',
+      'Correct a household’s details, or who is counted in it.',
+      ['family-edit', 'familymember-edit', 'familymodule-edit', 'admittedfamily-edit',
+        'householdenrollment-edit']],
+    ['hh-remove', 'households', 'Remove a household',
+      'Take a household off the programme. Today this deletes it outright rather than archiving it.',
+      ['family-delete', 'familymember-delete', 'familymodule-delete', 'admittedfamily-delete',
+        'householdenrollment-delete'], { risk: 'Deletes the record and everything collected against it.' }],
 
-    { key: 'reports', name: 'Reports', icon: 'i-reports',
-      blurb: 'Reading the data back out, and taking it off the platform.',
-      objects: [
-        obj('reports', 'a saved report someone built', 'saved reports'),
-        obj('generalreport', 'a standard programme report that ships with the system', 'standard reports'),
-        obj('indicator', 'an indicator — one measured number with a definition behind it', 'indicators')],
-      extra: [
-        one('customreport-list', 'See', 'See reports other people built, rather than only the standard ones.',
-            { note: 'no create, edit or delete exists — an incomplete set' }),
-        one('build-reports', 'Add', 'Use the report builder to make a new report from the data this person can already reach.'),
-        one('export-data', 'See', 'Take data out as CSV or Excel. Once exported it is outside every permission in this list.',
-            { risk: 'Export removes every protection below. Grant it as carefully as the data it reaches.' })] },
+    ['visit-see', 'visits', 'See visits and answers',
+      'See visits, and read the answers people gave.',
+      ['sessioninaction-list', 'View-collected-data']],
+    ['visit-record', 'visits', 'Record a visit',
+      'Deliver a session and send the completed form in from the tablet.',
+      ['sessioninaction-create', 'submit-form']],
+    ['visit-change', 'visits', 'Change a recorded visit',
+      'Correct a visit already recorded, and set a follow-up.',
+      ['sessioninaction-edit', 'follow-up']],
 
-    { key: 'field', name: 'Field support', icon: 'i-support',
-      blurb: 'What a home visitor can open on the tablet: videos, documents, answers, and what they send back.',
-      objects: [
-        obj('instruction', 'an instruction page for field staff', 'instructions'),
-        obj('category', 'a category that groups help content', 'help categories'),
-        obj('resource', 'a document or video published to the tablet', 'documents and videos'),
-        obj('feedback', 'feedback sent in from the field', 'field feedback'),
-        obj('help', 'a help article', 'help articles',
-            { verbs: ['list', 'create'], note: 'no edit or delete exists — an incomplete set' })],
-      extra: [
-        one('manage-community', 'Change', 'Moderate what field staff post to each other — hide a post, resolve a report.')] },
+    ['roh-see', 'roh', 'See that cases exist',
+      'See that a case exists and how many are open — not the child’s record.',
+      ['roh-list']],
+    ['roh-open', 'roh', 'Open a case in full',
+      'Read the whole case, including the child’s record.',
+      [], { risk: 'New. Today there is no way to hold the count without also holding this, '
+        + 'which is why roh-list is effectively a national grant.' }],
+    ['roh-raise', 'roh', 'Raise a case',
+      'Open a risk-of-harm case from a visit.', ['roh-create']],
+    ['roh-close', 'roh', 'Close a case',
+      'Record the outcome and close a case.', ['roh-edit']],
 
-    { key: 'people', name: 'People & access', icon: 'i-admin',
-      blurb: 'This screen, and who else may open it. The one group that grants the rest.',
-      objects: [
-        obj('user', 'a person’s account', 'the people who can sign in'),
-        obj('role', 'a position and the permissions it carries', 'positions'),
-        obj('permission', 'a permission itself — the names behind these rows', 'permissions'),
-        obj('profile', 'a person’s own name, email and password', 'profiles')],
-      extra: [
-        one('userlogs-list', 'See', 'Read what other people did and when — including the attempts that were refused.',
-            { note: 'no create, edit or delete exists, correctly: a log nobody can edit is the point' })] },
+    ['prog-see', 'programme', 'See the programme',
+      'See projects, sessions, forms and the questions in them.',
+      ['project-list', 'module-list', 'form-list', 'question-list', 'construct-list',
+        'language-list']],
+    ['prog-change', 'programme', 'Change sessions and forms',
+      'Write and edit sessions, forms and questions, and cut a new version of a form.',
+      ['project-create', 'project-edit', 'module-create', 'module-edit', 'form-create',
+        'form-edit', 'question-create', 'question-edit', 'construct-create', 'construct-edit',
+        'language-create', 'language-edit', 'create-form-version']],
+    ['prog-archive', 'programme', 'Archive part of the programme',
+      'Take a project, session or form out of use, keeping everything it collected.',
+      ['project-delete', 'module-delete', 'form-delete', 'question-delete', 'construct-delete',
+        'language-delete', 'can-archive-project']],
+    ['prog-translate', 'programme', 'Translate',
+      'Write the Kinyarwanda for a form and its questions.', ['can-translate-forms']],
+    ['prog-cohorts', 'programme', 'Manage cohorts',
+      'Decide which households get which session, and when.', ['manage-cohort']],
 
-    { key: 'maintenance', name: 'Maintenance', icon: 'i-settings',
-      blurb: 'Housekeeping that touches data directly.',
-      objects: [],
-      extra: [
-        one('recycle-data', 'Change', 'Empty the recycle bin, or restore from it. Reaches records their owner has already deleted.',
-            { risk: 'Touches deleted data directly.' }),
-        one('checklist-list', 'See', 'See the training-data cleanup checklist.',
-            { note: 'no create, edit or delete exists — an incomplete set' }),
-        one('monitoring-forms-list', 'See', 'See the monitoring forms, which are the forms supervisors fill in rather than home visitors.',
-            { note: 'no create, edit or delete exists — an incomplete set' })] }
+    ['rep-see', 'reports', 'See reports',
+      'Open reports and indicators someone has already built.',
+      ['reports-list', 'generalreport-list', 'indicator-list', 'customreport-list']],
+    ['rep-build', 'reports', 'Build a report',
+      'Ask a question of the collected data, save it, and put it on a schedule.',
+      ['reports-create', 'reports-edit', 'reports-delete', 'generalreport-create',
+        'generalreport-edit', 'generalreport-delete', 'indicator-create', 'indicator-edit',
+        'indicator-delete', 'build-reports']],
+    ['rep-export', 'reports', 'Export data',
+      'Take the data out of the system as a file.', ['export-data'],
+      { risk: 'Once a file leaves the system nothing in it can be withdrawn.' }],
+
+    ['fs-see', 'field', 'See field support material',
+      'Open the videos, documents and FAQs the field team uses.',
+      ['help-list', 'instruction-list', 'category-list', 'resource-list', 'feedback-list']],
+    ['fs-change', 'field', 'Change the material',
+      'Add, edit and remove the videos, documents and FAQs.',
+      ['help-create', 'instruction-create', 'instruction-edit', 'instruction-delete',
+        'category-create', 'category-edit', 'category-delete', 'resource-create',
+        'resource-edit', 'resource-delete']],
+    ['fs-community', 'field', 'Moderate community posts',
+      'Answer, hide and remove what field staff post to each other.',
+      ['feedback-create', 'feedback-edit', 'feedback-delete', 'manage-community']],
+
+    ['ppl-see', 'people', 'See people',
+      'See who is on the system, what they hold, and when they were last active.',
+      ['user-list', 'role-list', 'permission-list', 'profile-list', 'userlogs-list']],
+    ['ppl-add', 'people', 'Add and invite people',
+      'Invite someone and create their account.',
+      ['user-create', 'profile-create'],
+      { risk: 'An invitation carries a position with it, so this grants whatever that position holds.' }],
+    ['ppl-access', 'people', 'Change what people can do',
+      'Change positions, roles and permissions — including your own.',
+      ['user-edit', 'user-delete', 'profile-edit', 'profile-delete', 'role-create', 'role-edit',
+        'role-delete', 'permission-create', 'permission-edit', 'permission-delete'],
+      { risk: 'Whoever holds this can give themselves everything else on this screen.' }],
+
+    ['maint-restore', 'maintenance', 'Restore deleted records',
+      'Bring back something that was deleted, and see the checklists and monitoring forms behind it.',
+      ['recycle-data', 'checklist-list', 'monitoring-forms-list']]
   ];
 
-  /* The sentence for a CRUD permission, built from the object. Writing these
-     by hand 112 times is how they end up inconsistent. */
-  function sentence(o, verb) {
-    /* The "-list is what makes the section appear" rule is true of all thirty
-       of them, so it is said once above the list rather than thirty times in
-       it. Repeating it was most of the reading. */
-    if (verb === 'See') return 'See ' + o.plural + '.';
-    if (verb === 'Add') return 'Create ' + o.noun + '.';
-    if (verb === 'Change') return 'Change ' + o.noun + ' that already exists. Does not include creating or removing one.';
-    return 'Delete ' + o.noun + '. In the current system this removes it outright rather than archiving it.';
-  }
-
-  /* Said once, on the permission that earns it. */
-  var RISK = {
-    'roh-delete': 'A safeguarding record, removed outright. The audit argues this permission should not exist at all.',
-    'roh-list': 'Opens children’s records. The count of cases is not a permission; this is.',
-    'user-create': 'Creating accounts and assigning positions is how access spreads.',
-    'role-edit': 'Changing a position changes it for everyone holding it, at once.',
-    'permission-edit': 'This is the permission that edits permissions.',
-    'permission-create': 'Inventing a permission that nothing checks is how the current list reached 112.'
+  /* The one stored name that is deliberately not above. Said here rather than
+     left as an absence, because an absence looks like an oversight. */
+  var RETIRED = {
+    'roh-delete': 'A safeguarding record should not be deletable. Nothing in the redesign '
+      + 'grants it, and the migration should drop it rather than map it.'
   };
 
-  /* A capability is one group and one verb: the unit a position is built from.
-     Risk is said on the capability too, because that is where it is granted. */
-  var CAP_RISK = {
-    'roh|Archive': 'Deletes a safeguarding record outright. The audit argues this should not exist.',
-    'roh|See': 'Opens children’s records in full, not just the count of them.',
-    'people|Add': 'Creating accounts and assigning positions is how access spreads.',
-    'people|Change': 'Includes editing positions, which changes them for everyone holding them.',
-    'people|Archive': 'Removes accounts, positions and permissions.',
-    'maintenance|Change': 'Reaches records their owner has already deleted.'
-  };
+  /* ---- the eight groups ---- */
+  var GROUPS = [
+    { key: 'households', name: 'Households', icon: 'i-households',
+      blurb: 'The family and everyone counted in it.' },
+    { key: 'visits', name: 'Visits', icon: 'i-visits',
+      blurb: 'A session delivered in the household, and the form filled in while it happened.' },
+    { key: 'roh', name: 'Risk-of-harm cases', icon: 'i-safeguarding', guarded: true,
+      blurb: 'A child may be at risk. The one group where seeing and opening are separate.' },
+    { key: 'programme', name: 'Programme', icon: 'i-programme',
+      blurb: 'The projects, sessions and forms everyone else delivers.' },
+    { key: 'reports', name: 'Reports', icon: 'i-reports',
+      blurb: 'Questions asked of what has been collected.' },
+    { key: 'field', name: 'Field support', icon: 'i-support',
+      blurb: 'What the field team reads, watches and asks each other.' },
+    { key: 'people', name: 'People & access', icon: 'i-admin',
+      blurb: 'Who is on the system and what they may do — this screen included.' },
+    { key: 'maintenance', name: 'Maintenance', icon: 'i-settings',
+      blurb: 'Putting back what was deleted.' }
+  ];
 
-  var ALL = [];
-  var BY_CAP = {};
-  GROUPS.forEach(function (g) {
-    g.perms = [];
-    g.objects.forEach(function (o) {
-      o.verbs.forEach(function (v) {
-        g.perms.push({ id: o.name + '-' + v, group: g.key, verb: VERB[v],
-                       what: sentence(o, VERB[v]), risk: RISK[o.name + '-' + v] || null,
-                       note: v === 'list' ? o.note : null });
-      });
-    });
-    g.extra.forEach(function (x) {
-      g.perms.push({ id: x.name, group: g.key, verb: x.verb,
-                     what: x.what, risk: x.risk, note: x.note, odd: true });
-    });
-    g.perms.forEach(function (p) {
-      ALL.push(p);
-      (BY_CAP[p.group + '|' + p.verb] = BY_CAP[p.group + '|' + p.verb] || []).push(p);
-    });
+  /* ---- shape it ---- */
+
+  var ALL = [], BY_ID = {};
+  PERMS.forEach(function (r) {
+    var p = { id: r[0], group: r[1], label: r[2], what: r[3],
+      replaces: r[4] || [], risk: (r[5] || {}).risk || null };
+    ALL.push(p);
+    BY_ID[p.id] = p;
   });
-  function capPerms(g, v) { return BY_CAP[g + '|' + v] || []; }
-  function capSize(g, v) { return capPerms(g, v).length; }
+  GROUPS.forEach(function (g) {
+    g.perms = ALL.filter(function (p) { return p.group === g.key; });
+  });
   function groupByKey(k) {
     for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i].key === k) return GROUPS[i];
     return null;
   }
+  /* What a permission is worth in old money, for the migration note. */
+  function replacedBy(p) { return p.replaces.length; }
 
   /* ---- the positions, each one built on the one below it ----
 
@@ -251,64 +253,52 @@
   var SEED = [
     { id: 'IZU', name: 'IZU at Village', short: 'IZU at Village', base: null, people: 146,
       what: 'The home visitor, one per village. Everything they do happens in a household, on a tablet.',
-      adds: [['households', 'See'], ['households', 'Add'], ['households', 'Change'],
-             ['visits', 'See'], ['visits', 'Add'],
-             ['roh', 'See'], ['roh', 'Add'],
-             ['field', 'See']] },
+      adds: ['hh-see', 'hh-enrol', 'hh-change', 'visit-see', 'visit-record', 'roh-see',
+             'roh-raise', 'fs-see'] },
 
     { id: 'SLA', name: 'Sugira Muryango Sector lead (SLA)', short: 'the Sector lead', base: 'IZU', people: 11,
       what: 'Runs the programme in one sector and supervises the home visitors in it.',
-      adds: [['visits', 'Change'], ['roh', 'Change'],
-             ['programme', 'See'], ['reports', 'See'], ['reports', 'Add']] },
+      adds: ['visit-change', 'roh-open', 'roh-close', 'prog-see', 'rep-see',
+             'rep-build'] },
 
     { id: 'NCDA', name: 'National NCDA Government Official', short: 'National NCDA', base: null, people: 2,
       what: 'Government oversight. Reads the numbers, never the names behind them.',
-      adds: [['reports', 'See']] },
+      adds: ['rep-see', 'roh-see'] },
 
     { id: 'CPWO', name: 'District NCDA Child protection and Welfare Officer (CPWO)', short: 'the district CPWO', base: 'NCDA', people: 2,
       what: 'Takes the referral when a case leaves the programme. Works on cases, not on households.',
-      adds: [['roh', 'See'], ['roh', 'Change']] },
+      adds: ['roh-open', 'roh-close'] },
 
     { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 21,
       what: 'Sits in on visits in one cell and scores how they were delivered.',
-      adds: [['households', 'See'], ['visits', 'See'], ['visits', 'Add'],
-             ['roh', 'See'], ['field', 'See']] },
+      adds: ['hh-see', 'visit-see', 'visit-record', 'fs-see'] },
 
     { id: 'DTL', name: 'Sugira Muryango District lead (DTL)', short: 'the District lead', base: 'NCDA', people: 5,
       what: 'Reads across a whole district. Reports on it rather than working in it.',
-      adds: [['households', 'See'], ['visits', 'See'], ['roh', 'See'],
-             ['programme', 'See'], ['reports', 'Add'], ['field', 'See']] },
+      adds: ['hh-see', 'visit-see', 'prog-see', 'rep-build', 'fs-see'] },
 
     { id: 'HQ', name: 'HQ officer', short: 'the HQ officer', base: 'DTL', people: 4,
       what: 'FXB Rwanda head office. Builds the programme everyone else delivers.',
-      adds: [['households', 'Add'], ['households', 'Change'],
-             ['visits', 'Add'], ['visits', 'Change'],
-             ['programme', 'Add'], ['programme', 'Change'], ['programme', 'Archive'],
-             ['reports', 'Change'],
-             ['field', 'Add'], ['field', 'Change'], ['field', 'Archive'],
-             ['people', 'See'], ['maintenance', 'See']] },
+      adds: ['hh-enrol', 'hh-change', 'visit-change', 'prog-change', 'prog-archive',
+             'prog-translate', 'prog-cohorts', 'rep-export', 'fs-change',
+             'fs-community', 'ppl-see', 'maint-restore'] },
 
     { id: 'Admin', name: 'admin', short: 'admin', base: 'HQ', people: 2,
       what: 'Everything, including this screen. Two people hold it.',
-      adds: [['households', 'Archive'],
-             ['roh', 'Add'], ['roh', 'Change'], ['roh', 'Archive'],
-             ['reports', 'Archive'],
-             ['people', 'Add'], ['people', 'Change'], ['people', 'Archive'],
-             ['maintenance', 'Change']] }
+      adds: ['hh-remove', 'visit-record', 'roh-open', 'roh-raise', 'roh-close',
+             'ppl-add', 'ppl-access'] }
   ];
 
   function freshPositions() {
     return SEED.map(function (p) {
       return { id: p.id, name: p.name, short: p.short, base: p.base, people: p.people, what: p.what,
-               adds: p.adds.map(function (c) { return [c[0], c[1]]; }) };
+               adds: p.adds.slice() };
     });
   }
 
   var state = {
     pos: freshPositions(),
     open: null,          // the one expanded card
-    detail: false,       // the 112 names, under the expanded card
-    find: '',            // search inside that detail
     who: null,           // set when the screen is opened from a person
     whoRole: null
   };
@@ -332,19 +322,19 @@
     return state.pos.filter(function (q) { return q.base === p.id; });
   }
   /* Every capability a position holds, and the rung each one arrives from. */
+  /* Every permission this position holds, and the rung it first arrives from.
+     The value is the position, not just true, because "where does this come
+     from" is the question the screen exists to answer. */
   function held(p) {
     var from = {};
     chain(p).reverse().forEach(function (step) {
-      step.adds.forEach(function (c) {
-        var k = c[0] + '|' + c[1];
-        if (!from[k]) from[k] = step;
-      });
+      step.adds.forEach(function (id) { if (!from[id]) from[id] = step; });
     });
     return from;
   }
   function total(p) {
     var from = held(p), n = 0;
-    for (var k in from) if (from.hasOwnProperty(k)) n += BY_CAP[k] ? BY_CAP[k].length : 0;
+    for (var k in from) if (from.hasOwnProperty(k)) n += 1;
     return n;
   }
 
@@ -435,12 +425,10 @@
     var keep = [];
     for (var k in mine) {
       if (!mine.hasOwnProperty(k) || now[k]) continue;
-      keep.push(k.split('|'));
+      keep.push(k);
     }
-    keep.sort(function (a, b) {
-      var ga = GROUPS.map(function (g) { return g.key; });
-      return ga.indexOf(a[0]) - ga.indexOf(b[0]) || VERBS.indexOf(a[1]) - VERBS.indexOf(b[1]);
-    });
+    var order = ALL.map(function (x) { return x.id; });
+    keep.sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); });
     p.adds = keep;
   }
 
@@ -464,7 +452,7 @@
     t.innerHTML += CHEV;
     tx.appendChild(t);
     tx.appendChild(el('span', 'pm-bd', b
-      ? total(b) + ' of the 112 permissions come from here. ' + b.what
+      ? total(b) + ' of the ' + ALL.length + ' permissions come from here. ' + b.what
       : 'Every one of this position’s permissions is granted on this card.'));
     btn.appendChild(tx);
 
@@ -502,97 +490,64 @@
 
   /* Which segment, which groups are open and which are showing their stored
      names, per card — so reopening a position finds it as you left it. */
-  var cardMode = {}, cardOpen = {}, cardNames = {};
+  /* which groups are open, per position card */
+  var cardOpen = {};
 
   function addsList(p) {
     var wrap = el('div', 'pm-sect');
-    var h = el('div', 'pm-sh');
-    h.appendChild(el('p', 'pm-lbl', p.base ? 'Plus, on top of that' : 'Granted here'));
-    wrap.appendChild(h);
+    wrap.appendChild(el('p', 'pm-lbl', p.base ? 'Plus, on top of that' : 'Granted here'));
 
     var host = el('div', 'pm-perm');
     wrap.appendChild(host);
     if (!window.SugiraAccess) return wrap;
 
     var below = p.base ? held(byId(p.base)) : {};
-    var A = window.SugiraAccess;
 
-    function mine(key, verb) {
-      for (var i = 0; i < p.adds.length; i++) {
-        if (p.adds[i][0] === key && p.adds[i][1] === verb) return i;
-      }
-      return -1;
-    }
+    function own(id) { return p.adds.indexOf(id); }
 
     var model = {
-      mode: cardMode[p.id] || 'adds',
       open: cardOpen[p.id] || (cardOpen[p.id] = {}),
-      names: cardNames[p.id] || (cardNames[p.id] = {}),
-      setMode: function (id) { cardMode[p.id] = id; render(); },
-      redraw: function () { A.render(host, model); },
-      segments: function () {
-        if (!p.base) return null;
-        return [{ id: 'below', label: 'Everything it inherits' },
-                { id: 'adds', label: 'What this adds' }];
+
+      perm: function (id) {
+        var step = below[id];
+        if (step) return { on: true, locked: true, from: shortOf(step) };
+        return { on: own(id) > -1, locked: false };
       },
-      caption: function () {
-        if (model.mode === 'below') {
-          return 'What ' + shortOf(byId(p.base))
-            + ' gives, and every position built on it. Switch to \u201cWhat this adds\u201d '
-            + 'to change this rung.';
-        }
-        return p.base
-          ? 'Tick what this rung adds on top of ' + shortOf(byId(p.base))
-            + '. The greyed ones already arrive from it.'
-          : 'Tick what this position grants. It starts from nothing, so everything here is its own.';
-      },
-      cell: function (key, verb) {
-        var g = groupByKey(key);
-        var list = A.cellsOf(g, verb);
-        if (!list.length) return null;
-        var k = key + '|' + verb;
-        var sample = list.slice(0, 3).map(function (x) { return x.id; }).join(', ')
-          + (list.length > 3 ? '\u2026' : '');
-        var risk = CAP_RISK[k] ? ' ' + CAP_RISK[k] : '';
-        var step = below[k];
-        if (step) {
-          return { on: true, locked: true, from: shortOf(step),
-            tip: verb + ' \u2014 ' + g.name + ' arrives from ' + shortOf(step)
-              + '. A position may only add to the one it starts from, so it cannot be taken '
-              + 'away here \u2014 change ' + shortOf(step) + ' itself, which reaches everyone '
-              + 'built on it. ' + list.length
-              + (list.length === 1 ? ' stored name' : ' stored names') + ': ' + sample + '.' + risk };
-        }
-        var own = mine(key, verb) >= 0;
-        return { on: own, locked: model.mode === 'below', from: own ? 'this position' : null,
-          tip: own
-            ? verb + ' \u2014 ' + g.name + ' is what this rung adds. Unticking it takes it from '
-              + p.people + (p.people === 1 ? ' person' : ' people')
-              + ' and from every position built on this one. ' + list.length
-              + (list.length === 1 ? ' stored name' : ' stored names') + ': ' + sample + '.' + risk
-            : verb + ' \u2014 ' + g.name + ' is not granted. Ticking it gives these '
-              + list.length + ' to ' + p.people + (p.people === 1 ? ' person' : ' people')
-              + ' and to every position built on this one: ' + sample + '.' + risk };
-      },
-      toggle: function (key, verb) {
-        var i = mine(key, verb);
-        if (i >= 0) p.adds.splice(i, 1);
-        else p.adds.push([key, verb]);
+
+      toggle: function (id) {
+        var i = own(id);
+        if (i > -1) p.adds.splice(i, 1); else p.adds.push(id);
         render();
       },
+
+      /* The switch acts on what this rung may act on. Anything arriving from
+         below is left alone — a position is the one under it plus things, and
+         never minus things, so the switch cannot take away what it did not
+         give. */
+      setGroup: function (key, on) {
+        groupByKey(key).perms.forEach(function (perm) {
+          if (below[perm.id]) return;
+          var i = own(perm.id);
+          if (on && i < 0) p.adds.push(perm.id);
+          if (!on && i > -1) p.adds.splice(i, 1);
+        });
+        render();
+      },
+
+      caption: function (key) { return groupByKey(key).blurb; },
+
       summary: function () {
+        var from = held(p), n = 0, mine = 0;
+        for (var k in from) if (from.hasOwnProperty(k)) { n++; if (from[k] === p) mine++; }
         var s = el('p', 'acc-sum');
-        s.appendChild(el('b', null, String(total(p))));
-        s.appendChild(document.createTextNode(' of the 112 stored names'));
+        s.appendChild(el('b', null, String(n)));
+        s.appendChild(document.createTextNode(' of the ' + ALL.length + ' permissions'));
         if (p.base) {
-          s.appendChild(document.createTextNode(' \u2014 '));
-          s.appendChild(el('b', null, String(total(byId(p.base)))));
-          s.appendChild(document.createTextNode(' from ' + shortOf(byId(p.base)) + ', and '));
-          s.appendChild(el('b', null, String(p.adds.length)));
-          s.appendChild(document.createTextNode(p.adds.length === 1
-            ? ' thing added here.' : ' things added here.'));
+          s.appendChild(document.createTextNode(' — ' + (n - mine) + ' from '
+            + shortOf(byId(p.base)) + ', and ' + mine
+            + (mine === 1 ? ' thing added here.' : ' things added here.')));
         } else {
-          s.appendChild(document.createTextNode(', all granted on this card.'));
+          s.appendChild(document.createTextNode(', all granted here.'));
         }
         var kids = children(p);
         if (kids.length) {
@@ -601,87 +556,11 @@
             : kids.length + ' positions are built on this one, so a change here reaches them too.')));
         }
         return s;
-      }
+      },
+
+      redraw: function () { window.SugiraAccess.render(host, model); }
     };
-    A.render(host, model);
-    return wrap;
-  }
-
-  /* ---- the 112 stored names, one disclosure deeper ---- */
-
-  function matches(p) {
-    var q = state.find.trim().toLowerCase();
-    if (!q) return true;
-    return (p.id + ' ' + p.verb + ' ' + p.what).toLowerCase().indexOf(q) > -1;
-  }
-
-  function detailPanel(p) {
-    var from = held(p);
-    var wrap = el('div', 'pm-detail');
-
-    var find = el('input', 'pm-find');
-    find.type = 'text';
-    find.placeholder = 'Find a permission by its stored name or by what it does…';
-    find.setAttribute('aria-label', 'Find a permission');
-    find.value = state.find;
-    find.oninput = function () {
-      state.find = this.value;
-      render();
-      var f = $('#permBody .pm-find');
-      if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); }
-    };
-    wrap.appendChild(find);
-    wrap.appendChild(el('p', 'pm-drule',
-      'A name ending ‑list is what makes a section appear at all. Without it nothing '
-      + 'else in that section can be reached, whatever else is granted.'));
-
-    var shown = 0;
-    GROUPS.forEach(function (g) {
-      var rows = [];
-      VERBS.forEach(function (v) {
-        if (!from[g.key + '|' + v]) return;
-        capPerms(g.key, v).filter(matches).forEach(function (perm) {
-          rows.push({ perm: perm, src: from[g.key + '|' + v] });
-        });
-      });
-      if (!rows.length) return;
-      shown += rows.length;
-
-      var sec = el('section', 'pm-dg');
-      var hd = el('h4', 'pm-dgh');
-      hd.appendChild(icon(g.icon));
-      hd.appendChild(el('span', null, g.name));
-      var holds = 0;
-      VERBS.forEach(function (v) { if (from[g.key + '|' + v]) holds += capSize(g.key, v); });
-      var tot = g.perms.length;
-      hd.appendChild(el('span', 'pm-dgc', holds + ' of ' + tot));
-      sec.appendChild(hd);
-      if (g.blurb) sec.appendChild(el('p', 'pm-dgb', g.blurb));
-
-      rows.forEach(function (r) {
-        var row = el('div', 'pm-dr');
-        var left = el('div', 'pm-dl');
-        var nm = el('span', 'pm-dn');
-        nm.appendChild(el('code', null, r.perm.id));
-        nm.appendChild(el('span', 'pm-dv', r.perm.verb));
-        left.appendChild(nm);
-        left.appendChild(el('span', 'pm-dw', r.perm.what));
-        if (r.perm.risk) left.appendChild(el('span', 'pm-drisk', r.perm.risk));
-        if (r.perm.note) left.appendChild(el('span', 'pm-dnote', r.perm.note));
-        row.appendChild(left);
-        var src = el('span', 'pm-dsrc' + (r.src === p ? ' here' : ''));
-        src.textContent = r.src === p ? 'added here' : shortOf(r.src);
-        row.appendChild(src);
-        sec.appendChild(row);
-      });
-      wrap.appendChild(sec);
-    });
-
-    if (!shown) {
-      wrap.appendChild(el('p', 'pm-none', state.find
-        ? 'Nothing this position holds matches “' + state.find + '”.'
-        : 'This position holds no permissions.'));
-    }
+    model.redraw();
     return wrap;
   }
 
@@ -690,33 +569,6 @@
      Same card as a role's, because they are the same gesture: a thing you
      open. What a position adds is the line that a role has no use for — what
      it is built on — and the strip of what its holders can actually do. */
-
-  /* The eight groups this position touches, each with the verbs it has. One
-     wrapped line is enough to tell a home visitor from an administrator
-     without opening anything. */
-  function canStrip(p) {
-    var from = held(p);
-    var wrap = el('div', 'posc-can');
-    var any = false;
-    GROUPS.forEach(function (g) {
-      var verbs = VERBS.filter(function (v) { return !!from[g.key + '|' + v]; });
-      if (!verbs.length) return;
-      any = true;
-      var chip = el('span', 'posc-g');
-      chip.setAttribute('data-tip', g.name + ': ' + verbs.join(', ') + '. '
-        + verbs.reduce(function (n, v) { return n + capSize(g.key, v); }, 0)
-        + ' of the stored names.');
-      chip.appendChild(icon(g.icon, 'posc-gi'));
-      chip.appendChild(el('span', 'posc-gn', g.name));
-      chip.appendChild(el('span', 'posc-gv', verbs.length + ' of ' + VERBS.filter(
-        function (v) { return !!capSize(g.key, v); }).length));
-      wrap.appendChild(chip);
-    });
-    if (!any) {
-      wrap.appendChild(el('span', 'posc-none', 'Grants nothing at all.'));
-    }
-    return wrap;
-  }
 
   function card(p) {
     var a = el('button', 'rolec posc');
@@ -737,7 +589,6 @@
     /* The indent used to say what this is built on. A grid has no indent, so
        the sentence says it, and the cards stay in chain order. */
     a.appendChild(el('p', 'posc-l', lineage(p)));
-    a.appendChild(canStrip(p));
 
     var foot = el('div', 'rolec-f');
     foot.appendChild(reach(total(p)));
@@ -746,8 +597,6 @@
 
     a.onclick = function () {
       state.open = p.id;
-      state.detail = false;
-      state.find = '';
       setTimeout(renderOne, 0);
     };
     return a;
@@ -781,24 +630,15 @@
     body.appendChild(baseSelect(p));
     body.appendChild(addsList(p));
 
+    /* The stored names used to be a second list under this one. They are on
+       the permission now — hover any row and it tells you which of the old
+       112 it replaces — so there is nothing left to disclose. */
     var foot = el('div', 'pm-cfoot');
-    var more = el('button', 'pm-more');
-    more.type = 'button';
-    more.setAttribute('aria-expanded', String(state.detail));
-    more.textContent = state.detail
-      ? 'Hide the ' + total(p) + ' stored names'
-      : 'See all ' + total(p) + ' stored names';
-    more.onclick = function () { state.detail = !state.detail; state.find = ''; render(); };
-    foot.appendChild(more);
-    var kids = children(p);
-    if (kids.length) {
-      foot.appendChild(el('span', 'pm-kids', kids.length === 1
-        ? shortOf(kids[0]) + ' is built on this one, so a change here reaches it too.'
-        : kids.length + ' positions are built on this one, so a change here reaches them too.'));
-    }
+    foot.appendChild(el('span', 'pm-kids', ALL.length + ' permissions in all, written for this '
+      + 'programme. They replace the 111 of the live system’s 112 that mean something; '
+      + 'roh-delete is retired rather than granted.'));
     body.appendChild(foot);
 
-    if (state.detail) body.appendChild(detailPanel(p));
     sec.appendChild(body);
     sec.appendChild(holders(p));
   }
@@ -867,7 +707,7 @@
     var sum = el('span', 'pm-sum');
     sum.appendChild(el('b', null, String(state.pos.length)));
     sum.appendChild(el('span', null, ' positions · '));
-    sum.appendChild(el('b', null, '112'));
+    sum.appendChild(el('b', null, String(ALL.length)));
     sum.appendChild(el('span', null, ' permissions · '));
     sum.appendChild(el('b', null, String(state.pos.reduce(function (n, p) { return n + p.people; }, 0))));
     sum.appendChild(el('span', null, ' people'));
@@ -902,7 +742,7 @@
       l1.appendChild(el('span', null, ' holds ' + (who ? who.name : state.whoRole) + '.'));
       wt.appendChild(l1);
       wt.appendChild(el('p', 'pm-whod', who
-        ? 'That is ' + total(who) + ' of the 112 permissions, and ' + (who.people - 1)
+        ? 'That is ' + total(who) + ' of the ' + ALL.length + ' permissions, and ' + (who.people - 1)
           + ' other people hold the same position — so anything changed here changes it for all of them. '
           + 'One thing for one person belongs on their record as an exception, not on this card.'
         : 'That position is not on this screen.'));
@@ -966,8 +806,6 @@
     var reset = e.target.closest('[data-perms-act="discard"]');
     if (reset) {
       state.pos = freshPositions();
-      state.detail = false;
-      state.find = '';
       setTimeout(render, 0);
       return;
     }
@@ -977,8 +815,6 @@
     state.whoRole = t.getAttribute('data-perms-role') || state.whoRole;
     state.who = mode === 'person' ? (t.getAttribute('data-perms-who') || state.who) : null;
     state.open = state.whoRole && byName(state.whoRole) ? byName(state.whoRole).id : null;
-    state.detail = false;
-    state.find = '';
     setTimeout(render, 0);
   });
 
@@ -999,6 +835,6 @@
     total: total,
     held: held,
     renderOne: renderOne,
-    reset: function () { state.pos = freshPositions(); state.open = null; state.detail = false; state.find = ''; render(); }
+    reset: function () { state.pos = freshPositions(); state.open = null; cardOpen = {}; render(); }
   };
 })();

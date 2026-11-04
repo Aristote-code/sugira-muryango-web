@@ -37,27 +37,27 @@
     { id: 'translator', name: 'Form translator', icon: 'i-reports', people: 6,
       what: 'Writes the Kinyarwanda alongside the English. Not a rung — the people who '
         + 'translate sit at every level, and none of them needs a position of their own.',
-      grants: ['can-translate-forms', 'language-list', 'language-edit', 'form-list'] },
+      grants: ['prog-translate', 'prog-see'] },
 
     { id: 'reporter', name: 'Report builder', icon: 'i-reports', people: 9,
       what: 'Builds reports beyond the standard ones and takes the numbers out of the '
         + 'system. Held by M&E staff at national and district level alike.',
-      grants: ['build-reports', 'export-data', 'customreport-list', 'indicator-list'] },
+      grants: ['rep-see', 'rep-build', 'rep-export'] },
 
     { id: 'cohorts', name: 'Cohort manager', icon: 'i-visits', people: 4,
       what: 'Decides which households are grouped together and what dates the group runs '
         + 'between. One or two people per district do this, whatever else they are.',
-      grants: ['manage-cohort'] },
+      grants: ['prog-cohorts'] },
 
     { id: 'publisher', name: 'Form publisher', icon: 'i-programme', people: 2,
       what: 'Publishes a new version of a form that is already in use, and takes a project '
         + 'off the tablet. The riskiest thing on this list — it reaches every tablet.',
-      grants: ['create-form-version', 'can-archive-project'],
+      grants: ['prog-change', 'prog-archive'],
       risk: 'Publishing reaches every tablet in the programme at once.' },
 
     { id: 'community', name: 'Community manager', icon: 'i-message', people: 3,
       what: 'Answers what field staff post, and keeps the guidance they read current.',
-      grants: ['manage-community', 'feedback-list', 'resource-edit'] }
+      grants: ['fs-see', 'fs-change', 'fs-community'] }
   ];
 
   function fresh() {
@@ -83,6 +83,9 @@
   function perms() { return window.SugiraPerms; }
 
   /* The stored name, found once rather than looked up in eight places. */
+  /* which groups are open, per role drawer */
+  var roleOpen = {};
+
   function permById(id) {
     var gs = perms().groups;
     for (var i = 0; i < gs.length; i++) {
@@ -101,11 +104,8 @@
   /* Which positions already grant a stored name, so making a role can say what
      already covers it. This is the check the live system could not do. */
   function positionsGranting(permId) {
-    var found = permById(permId);
-    if (!found) return [];
-    var key = found.group.key + '|' + found.perm.verb;
     return perms().positions().filter(function (p) {
-      return !!perms().held(p)[key];
+      return !!perms().held(p)[permId];
     });
   }
   function rolesGranting(permId, except) {
@@ -229,60 +229,73 @@
        stays in the data for whatever wants it next. */
     root.appendChild(head);
 
-    /* what it grants */
+    /* what it grants — the same block the position drawer uses. A role has no
+       base, so nothing in it is locked; everything is this role's own. */
     var card1 = el('div', 'card');
     var h1 = el('div', 'card-h');
     h1.appendChild(el('h3', null, 'What it grants'));
-    var side = el('span', 'side');
-    var addb = el('button', 'btn sec sm');
-    addb.type = 'button';
-    addb.setAttribute('data-modal', 'roleperm');
-    addb.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
-    addb.appendChild(document.createTextNode(' Add a permission'));
-    side.appendChild(addb);
-    h1.appendChild(side);
     card1.appendChild(h1);
 
-    var list = el('div', 'tree');
-    r.grants.forEach(function (id) {
-      var found = permById(id);
-      var row = el('div', 'plr leaf rolep');
-      row.appendChild(el('code', 'acc-id', id));
-      row.appendChild(el('span', 'acc-what', found ? found.perm.what : 'Not in the capture.'));
-      if (found) {
-        var also = positionsGranting(id);
-        var tag = el('span', 'rolep-also');
-        tag.textContent = also.length
-          ? also.length + (also.length === 1 ? ' position already has it' : ' positions already have it')
-          : 'no position has it';
-        tag.setAttribute('data-tip', also.length
-          ? 'Already granted by ' + also.map(function (p) { return p.short || p.name; }).join(', ')
-            + '. Anyone holding one of those does not need this role for this permission.'
-          : 'No position grants this, so this role is the only way anyone gets it.');
-        row.appendChild(tag);
-      }
-      var x = el('button', 'rolep-x');
-      x.type = 'button';
-      x.setAttribute('aria-label', 'Take ' + id + ' out of ' + r.name);
-      x.innerHTML = '<svg aria-hidden="true"><use href="#i-cross"/></svg>';
-      x.onclick = function (e) {
-        e.stopPropagation();
-        r.grants.splice(r.grants.indexOf(id), 1);
-        renderOne();
-        renderList();
+    var host = el('div', 'pm-perm');
+    card1.appendChild(host);
+
+    if (window.SugiraAccess) {
+      var model = {
+        open: roleOpen[r.id] || (roleOpen[r.id] = {}),
+
+        perm: function (id) { return { on: r.grants.indexOf(id) > -1, locked: false }; },
+
+        toggle: function (id) {
+          var i = r.grants.indexOf(id);
+          if (i > -1) r.grants.splice(i, 1); else r.grants.push(id);
+          renderOne();
+          renderList();
+        },
+
+        setGroup: function (key, on) {
+          perms().groups.forEach(function (g) {
+            if (g.key !== key) return;
+            g.perms.forEach(function (perm) {
+              var i = r.grants.indexOf(perm.id);
+              if (on && i < 0) r.grants.push(perm.id);
+              if (!on && i > -1) r.grants.splice(i, 1);
+            });
+          });
+          renderOne();
+          renderList();
+        },
+
+        caption: function (key) {
+          var granted = r.grants.filter(function (id) {
+            var found = permById(id);
+            return found && found.group.key === key;
+          });
+          if (!granted.length) return null;
+          /* The check the live system could not do: a role that only repeats
+             what a position already gives is a role nobody needs. */
+          var covered = granted.filter(function (id) { return positionsGranting(id).length; });
+          if (covered.length === granted.length) {
+            return 'Every one of these is already granted by a position, so this role adds '
+              + 'nothing here.';
+          }
+          return null;
+        },
+
+        summary: function () {
+          var s = el('p', 'acc-sum');
+          s.appendChild(el('b', null, String(r.grants.length)));
+          s.appendChild(document.createTextNode(r.grants.length === 1
+            ? ' permission. A role only adds — whatever is ticked here is given on top of '
+            : ' permissions. A role only adds — whatever is ticked here is given on top of '));
+          s.appendChild(document.createTextNode('each holder’s position, and can never take '
+            + 'something away.'));
+          return s;
+        },
+
+        redraw: function () { window.SugiraAccess.render(host, model); }
       };
-      row.appendChild(x);
-      list.appendChild(row);
-    });
-    if (!r.grants.length) {
-      card1.appendChild(el('p', 'pm-none', 'Nothing yet. A role with no permissions gives '
-        + 'its holders exactly what their position already gave them.'));
-    } else {
-      card1.appendChild(list);
+      model.redraw();
     }
-    card1.appendChild(el('p', 'pm-rule',
-      'A role only adds. Whatever is listed here is given on top of each holder’s position '
-      + '— it can never take something away, so nobody ends up less than their job.'));
     root.appendChild(card1);
 
     /* who holds it */

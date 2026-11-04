@@ -976,101 +976,113 @@ svg use{pointer-events:none}
   font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .plr-r span{min-width:110px;text-align:right}
 @media (max-width:880px){.plr-l,.plr-r span:last-child{display:none}}
-/* ---------------- what one person can open ----------------
-   ClickUp's "Use List Template" block, read from the design system rather than
-   from the screenshot:
+/* ---------------- the permissions block ----------------
+   One group row with a switch, opening to that group's permissions as
+   checkboxes. Measured from the package source, not from the screenshot:
 
-     SegmentedControl.tsx  track 32 high, r7, padding 2, background.on-main;
-       segments 28 high, r5, padding 6 8, 14/16 500 content.placeholder; the
-       selected one content.secondary on surface with elevation.border-1.
-     Checkbox.tsx  16, r4, 1px border.input; checked is primary background and
-       border with the check in on-primary. Disabled is ClickUp's own treatment
-       for a row the template cannot take — which is exactly a verb that comes
-       from the position and so cannot be removed here. */
-/* On a position card the block sits in the card's own padding rather than in
-   a drawer panel, so it takes the gap the section label leaves and nothing
-   else — the card already draws the surface around it. */
+     atoms/Switch.tsx:30-47   sm is 24 x 14 with a 2px border in the track
+       colour, and a 10px knob travelling 10px. On is --switch-track-on-bg-
+       default; off is --switch-track-off-bg-default.
+     atoms/Checkbox.tsx:34-50 16px box, --checkbox-radius (4), 1px border.
+       Disabled is NOT half opacity — disabledLook="type" keeps full opacity
+       and swaps the fill, which is what cu3 does (specs/foundations/
+       states.md:24). Dimming would have taken the label under 4.5:1.
+     components/PropertyGrid.tsx:11-17  two columns, column gap
+       --property-grid-gap-x (22), row gap 4, one column when it is narrow.
+     components/SectionHeader.tsx:9-21  32 high, 16px caret box with a 14px
+       glyph, 6 to the label, 14/16 600. */
 .pm-perm{margin-top:8px}
 .pm-perm .acc-sum{margin:8px 0 12px}
-.acc-seg{display:flex;height:var(--size-control-md);padding:2px;border-radius:var(--x-clickup-radii-3-5);
-  background:var(--x-clickup-color-background-on-main)}
-.acc-segb{flex:1;height:28px;display:flex;align-items:center;justify-content:center;gap:4px;
-  padding:6px 8px;border:0;background:none;border-radius:var(--radius-sm);cursor:pointer;
-  font:inherit;font-size:var(--segmented-control-font-size);line-height:16px;font-weight:500;
-  /* The system puts the unselected segment in content.placeholder and the
-     selected one in content.secondary. At 14px placeholder measures 2.9:1,
-     under the 4.5 text needs, so both move up one step: the relationship
-     between them is the same and both read. */
-  color:var(--color-content-secondary);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.acc-segb:hover{color:var(--color-content-primary)}
-.acc-segb.on{background:var(--color-bg-surface);color:var(--color-content-primary);
-  box-shadow:var(--x-clickup-elevation-border-1)}
-.acc-segb:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
 .acc-sum{margin:12px 0;font-size:13px;line-height:20px;color:var(--color-content-secondary)}
 .acc-sum b{color:var(--color-content-primary);font-weight:600}
-.acc-of{margin-left:auto;font-size:12px;line-height:16px;color:var(--color-content-secondary);
-  flex:none;font-variant-numeric:tabular-nums}
-/* The body of an open group: the caption ClickUp puts under its switch, then
-   the two-column grid, then the stored names behind a line of their own. */
-.acc-body{padding:4px 12px 12px 44px;border-bottom:1px solid var(--color-border-subtle);
-  background:var(--color-bg-surface)}
-.acc-cap{margin:0 0 12px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
-.acc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;max-width:520px}
-.acc-cbw{display:flex;min-width:0}
-.acc-cbb{display:flex;align-items:center;gap:8px;width:100%;min-height:26px;padding:0;
+.acc-tree{border-top:1px solid var(--color-border-subtle)}
+/* the chevron on the base chooser, which permissions.js writes as raw markup */
+.pm-cv{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;
+  color:var(--color-content-tertiary)}
+
+/* the group row: switch, then the part that opens */
+.acc-g{display:flex;align-items:center;gap:12px;min-height:32px;padding-right:4px;
+  border-bottom:1px solid var(--color-border-subtle)}
+.acc-g.is-open{border-bottom-color:transparent}
+.acc-gh{flex:1;min-width:0;display:flex;align-items:center;gap:6px;height:32px;padding:0 6px 0 2px;
+  border:0;border-radius:var(--radius-md);background:none;font:inherit;font-size:14px;
+  line-height:16px;color:var(--color-content-primary);text-align:left;cursor:pointer}
+.acc-gh:hover{background:var(--color-bg-hover)}
+.acc-gh:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.acc-gc{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
+  color:var(--color-content-secondary)}
+.acc-gc svg{width:14px;height:14px;fill:currentColor;
+  transition:transform 120ms var(--x-clickup-motion-timing)}
+.acc-gh[aria-expanded="true"] .acc-gc svg{transform:rotate(90deg)}
+.acc-gi{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
+  color:var(--color-content-tertiary)}
+.acc-gi svg{width:16px;height:16px;fill:none}
+.acc-gn{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-gcount{margin-left:auto;flex:none;font-size:12px;line-height:16px;font-weight:400;
+  color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
+
+/* the switch */
+.acc-sw{position:relative;flex:none;width:24px;height:14px;padding:0;border:2px solid;
+  border-radius:var(--radius-full);cursor:pointer;transition:background-color 120ms var(--x-clickup-motion-timing),
+  border-color 120ms var(--x-clickup-motion-timing);
+  background:var(--switch-track-off-bg-default);border-color:var(--switch-track-off-bg-default)}
+.acc-sw:hover:not(:disabled){background:var(--switch-track-off-bg-hover);
+  border-color:var(--switch-track-off-bg-hover)}
+.acc-sw.on,.acc-sw.some{background:var(--switch-track-on-bg-default);
+  border-color:var(--switch-track-on-bg-default)}
+.acc-sw.on:hover:not(:disabled),.acc-sw.some:hover:not(:disabled){
+  background:var(--switch-track-on-bg-hover);border-color:var(--switch-track-on-bg-hover)}
+.acc-sw:disabled{cursor:not-allowed;background:var(--switch-track-off-bg-disabled);
+  border-color:var(--switch-track-off-bg-disabled)}
+.acc-sw.on:disabled,.acc-sw.some:disabled{background:var(--switch-track-on-bg-disabled);
+  border-color:var(--switch-track-on-bg-disabled)}
+.acc-sw:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}
+.acc-swk{position:absolute;left:0;top:0;width:10px;height:10px;border-radius:var(--radius-full);
+  background:var(--switch-knob-bg);transition:transform 120ms var(--x-clickup-motion-timing)}
+.acc-sw.on .acc-swk{transform:translateX(10px)}
+/* half the group: the knob sits between the two ends */
+.acc-sw.some .acc-swk{transform:translateX(5px)}
+
+/* the body */
+.acc-gb{padding:4px 12px 14px 46px;border-bottom:1px solid var(--color-border-subtle)}
+.acc-gcap{margin:0 0 10px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
+/* Capped, because two columns of a 1210px drawer are 605px each and a
+   checkbox with a four-word label does not want 605px. */
+.acc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:var(--property-grid-gap-x);row-gap:4px;max-width:640px}
+
+/* one permission */
+.acc-p{display:flex;min-width:0}
+.acc-pb{display:flex;align-items:center;gap:8px;width:100%;min-height:26px;padding:0;
   border:0;background:none;font:inherit;font-size:14px;line-height:16px;
   color:var(--color-content-primary);text-align:left;cursor:pointer}
-.acc-cbb:disabled{cursor:default}
-.acc-cbb:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px;
-  border-radius:var(--x-clickup-radii-2)}
-.acc-cb{width:16px;height:16px;flex:none;display:flex;align-items:center;justify-content:center;
-  border:1px solid var(--x-clickup-color-border-input);border-radius:var(--x-clickup-radii-2);
-  background:var(--color-bg-surface)}
-.acc-cb svg{width:14px;height:14px;fill:none;color:var(--color-content-on-primary)}
-.acc-cb.on{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default)}
-/* Partly covered: a role grants some of the cell's names but not all. The
-   system's own indeterminate checkbox — unchecked-looking with a primary dash
-   (Checkbox.tsx), aria-checked="mixed". */
-.acc-cb.mixed{position:relative}
-.acc-cb.mixed::after{content:"";position:absolute;left:50%;top:50%;
-  width:8px;height:1.75px;transform:translate(-50%,-50%);
-  background:var(--color-bg-primary-default)}
-.acc-cb.mixed.locked::after{background:var(--x-clickup-color-content-disabled)}
-/* A verb that arrives from the position: ClickUp's greyed row, and the only
-   honest way to show a tick nobody can take back. */
-.acc-cb.locked{background:var(--x-clickup-color-content-disabled);
-  border-color:var(--x-clickup-color-content-disabled)}
-.acc-cbb:disabled .acc-cbt{color:var(--color-content-secondary)}
-.acc-cbt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none}
-/* How many stored names the verb carries, beside the verb rather than pushed
-   to the column's edge, where it read as a number belonging to nothing. */
-.acc-cbn{font-size:11px;line-height:16px;color:var(--color-content-secondary);
-  flex:none;font-variant-numeric:tabular-nums}
-.acc-cbw.gone{opacity:var(--opacity-disabled)}
-.acc-cbw.gone .acc-cb{border-style:dashed;background:none}
-.acc-cbw.gone .acc-cbt{font-size:14px;line-height:16px;color:var(--color-content-secondary)}
-.acc-more{margin-top:10px;height:var(--size-control-xs);padding:0 7px 0 5px;border:0;background:none;
-  border-radius:var(--x-clickup-radii-2-5);font:inherit;font-size:12px;line-height:16px;
-  font-weight:500;color:var(--color-content-secondary);cursor:pointer}
-.acc-more:hover{background:var(--color-bg-hover)}
-.acc-names{margin-top:8px;border-top:1px solid var(--color-border-subtle);padding-top:8px}
-.acc-vh{margin:8px 0 4px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
-.acc-vh:first-child{margin-top:0}
-.acc-vh b{color:var(--color-content-primary);font-weight:600}
-.acc-nr{display:flex;align-items:center;gap:8px;min-height:24px}
-.acc-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:16px;
-  color:var(--color-content-secondary);flex:none;min-width:150px}
-.acc-what{font-size:12px;line-height:16px;color:var(--color-content-secondary);min-width:0;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.acc-risk{display:flex;align-items:center;width:14px;height:14px;flex:none;
-  color:var(--color-content-warning)}
-.acc-risk svg{width:14px;height:14px;fill:none}
-/* A verb the position does not grant still lists what would arrive with it,
-   quietly, so ticking it is a choice rather than a leap. */
-.acc-vh.off,.acc-nr.off{opacity:.55}
-@media (max-width:880px){.acc-grid{grid-template-columns:minmax(0,1fr)}.acc-id{display:none}
-  .acc-body{padding-left:12px}}
+.acc-pb:disabled{cursor:not-allowed}
+.acc-pb:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px;
+  border-radius:var(--radius-sm)}
+.acc-box{width:16px;height:16px;flex:none;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--checkbox-border-default);border-radius:var(--checkbox-radius);
+  background:var(--checkbox-bg-default)}
+.acc-box svg{width:14px;height:14px;fill:none;color:var(--color-content-on-primary)}
+.acc-box.on{background:var(--checkbox-checked-bg);border-color:var(--checkbox-checked-bg)}
+.acc-pb:hover:not(:disabled) .acc-box{border-color:var(--checkbox-border-hover)}
+.acc-pb:hover:not(:disabled) .acc-box.on{background:var(--checkbox-checked-bg-hover);
+  border-color:var(--checkbox-checked-bg-hover)}
+/* disabled keeps its colour rather than dimming, so the label stays readable */
+.acc-pb:disabled .acc-box{background:var(--checkbox-bg-disabled);
+  border-color:var(--checkbox-border-disabled)}
+.acc-pb:disabled .acc-box.on{background:var(--checkbox-checked-bg-disabled);
+  border-color:var(--checkbox-checked-bg-disabled)}
+.acc-pb:disabled .acc-box.on svg{color:var(--x-clickup-color-content-on-dark)}
+.acc-pb:disabled .acc-pn{color:var(--color-content-secondary)}
+.acc-pn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-prisk{display:flex;align-items:center;width:14px;height:14px;flex:none;
+  color:var(--x-clickup-color-content-warning)}
+.acc-prisk svg{width:14px;height:14px;fill:none}
+@media (max-width:880px){
+  .acc-grid{grid-template-columns:minmax(0,1fr)}
+  .acc-gb{padding-left:12px}
+}
+
 /* A project row opens to show its sessions and forms. Same caret and the same
    indent step as the places tree, because it is the same gesture answering the
    same question — what is under this. */
@@ -1210,31 +1222,15 @@ svg use{pointer-events:none}
 .pm-top{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .pm-sum{font-family:var(--mono);font-size:13px;color:var(--color-content-secondary);flex:none}
 .pm-sum b{color:var(--color-content-primary);font-weight:600}
-.pm-ladder{display:grid;gap:4px;align-content:start}
 /* The field ladder and the office ladder share no rung, so the second
    root starts away from the first rather than continuing it. */
-.pm-card[data-root]:not(:first-child){margin-top:12px}
-.pm-card{background:var(--color-bg-surface);border-radius:var(--radius-lg);box-shadow:var(--elevation-raised);
-  overflow:hidden;min-width:0}
-.pm-card.is-open{box-shadow:var(--x-clickup-elevation-border-3)}
-.pm-card.is-theirs{box-shadow:0 0 0 1px var(--x-clickup-color-border-primary-low-contrast),var(--elevation-raised)}
-.pm-ch{display:flex;align-items:center;gap:12px;width:100%;min-height:var(--list-dialogs-share-card-height);
-  padding:10px 16px;border:0;background:none;cursor:pointer;font-family:var(--ui);text-align:left;color:var(--color-content-primary)}
-.pm-ch:hover{background:var(--x-clickup-color-background-on-main)}
-.pm-ch:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
-.pm-cv{width:14px;height:14px;flex:none;fill:none;color:var(--color-content-secondary);transition:transform .14s ease}
-.pm-ch[aria-expanded="true"] .pm-cv{transform:rotate(90deg)}
-.pm-ctx{flex:1;min-width:0;display:grid;gap:2px}
-.pm-cn{display:flex;align-items:center;gap:8px;min-width:0}
 .pm-cn b{font-size:14px;line-height:var(--lh-16);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pm-mine{flex:none;font-size:11px;font-weight:500;line-height:16px;padding:0 6px;border-radius:var(--chip-radius);
   background:var(--color-bg-primary-subtle);color:var(--x-clickup-color-background-primary-pressed)}
-.pm-cl{font-size:13px;line-height:18px;color:var(--color-content-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pm-reach{flex:none;width:96px;font-size:12px;line-height:16px;color:var(--color-content-secondary);text-align:right;
   font-variant-numeric:tabular-nums}
 .pm-reach b{font-size:14px;font-weight:600;color:var(--color-content-primary)}
 .pm-reach .trk{display:block;margin-top:4px}
-.pm-cp{flex:none;width:76px;text-align:right;font-size:12px;color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .pm-cb{padding:4px 16px 16px 42px;display:grid;gap:20px}
 .pm-cb .pm-what{font-size:14px;line-height:21px;color:var(--color-content-secondary);max-width:80ch}
 .pm-sect{display:grid;gap:8px;min-width:0}
@@ -1263,35 +1259,13 @@ svg use{pointer-events:none}
 .pm-rule{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:80ch;margin-top:4px}
 .pm-none{font-size:13px;line-height:18px;color:var(--color-content-secondary)}
 .pm-cfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--color-border-subtle)}
-.pm-more{border:0;background:none;cursor:pointer;font-family:var(--ui);font-size:13px;font-weight:600;
-  color:var(--color-content-link);padding:4px 6px;margin-left:-6px;border-radius:6px}
-.pm-more:hover{background:var(--color-bg-primary-subtle)}
 .pm-kids{font-size:12px;color:var(--color-content-secondary)}
 /* The 112 stored names, one disclosure deeper, each saying which rung it
    arrives from. The search only exists here, because the stored names are
    unreadable; fix the names and it becomes a convenience. */
-.pm-detail{display:grid;gap:16px;padding:16px;border-radius:var(--radius-md);background:var(--color-bg-canvas)}
-.pm-find{width:100%;height:var(--size-control-md);border:1px solid var(--color-border-default);border-radius:var(--radius-md);
-  background:var(--color-bg-surface);font-family:var(--ui);font-size:14px;color:var(--color-content-primary);padding:0 12px}
-.pm-find:focus{outline:none;border-color:var(--x-clickup-color-border-primary-hover);box-shadow:0 0 0 3px var(--color-bg-primary-subtle)}
-.pm-dg{display:grid;gap:2px}
-.pm-drule{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:86ch;margin-top:-8px}
-.pm-dgb{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:86ch;padding-bottom:2px}
-.pm-dgh{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;font-weight:500;
-  color:var(--color-content-secondary);padding-bottom:4px}
 .pm-dgh svg{width:14px;height:14px;fill:none;flex:none}
 .pm-dgh span:first-of-type{flex:1;min-width:0;color:var(--color-content-primary)}
-.pm-dgc{font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums}
-.pm-dr{display:flex;align-items:flex-start;gap:16px;padding:8px 0;border-top:1px solid var(--color-border-subtle)}
-.pm-dl{flex:1;min-width:0;display:grid;gap:2px}
-.pm-dn{display:flex;align-items:baseline;gap:8px}
 .pm-dn code{font-family:var(--mono);font-size:12px;color:var(--color-content-primary)}
-.pm-dv{font-size:11px;line-height:16px;font-weight:500;color:var(--color-content-secondary)}
-.pm-dw{font-size:13px;line-height:18px;color:var(--color-content-secondary);max-width:72ch}
-.pm-drisk{font-size:13px;line-height:18px;font-weight:500;color:var(--color-content-warning);max-width:72ch}
-.pm-dnote{font-size:12px;line-height:16px;color:var(--color-content-secondary)}
-.pm-dsrc{flex:none;width:168px;text-align:right;font-size:12px;line-height:18px;color:var(--color-content-secondary)}
-.pm-dsrc.here{color:var(--x-clickup-color-background-primary-pressed);font-weight:500}
 /* Opened from a person: whose access this is, before any of it is shown. */
 .pm-who{display:flex;align-items:flex-start;gap:12px;background:var(--color-bg-surface);border-radius:var(--radius-lg);
   box-shadow:var(--elevation-raised);padding:16px;margin-bottom:16px}
@@ -1304,11 +1278,8 @@ svg use{pointer-events:none}
 /* The switch. Reads as on or off at a glance and never as a checkbox, because
    a checkbox in a list of 112 says "tick the ones you want" rather than
    "this is currently true". */
-.tg{position:relative;width:34px;height:20px;border-radius:var(--radius-full);border:1px solid var(--color-primitive-grey-600);
-  background:var(--color-primitive-grey-300);cursor:pointer;padding:0;flex:none;transition:background .13s ease,border-color .13s ease}
 .tg .tg-k{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--color-bg-surface);
   box-shadow:var(--elevation-raised);transition:transform .13s ease}
-.tg.on{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default)}
 .tg.on .tg-k{transform:translateX(14px)}
 .tg.some{background:var(--x-clickup-color-effect-primary);border-color:var(--x-clickup-color-border-primary-hover)}
 .tg.some .tg-k{transform:translateX(7px)}
@@ -1577,13 +1548,6 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 
 /* One role's permissions. A list, not a grid — a role is three or four named
    things, and the grid is what a position needs. */
-.rolep{gap:8px;padding-right:8px}
-.rolep-also{margin-left:auto;font-size:11px;line-height:16px;flex:none;
-  color:var(--color-content-secondary)}
-.rolep-x{display:flex;align-items:center;justify-content:center;width:24px;height:24px;
-  flex:none;border:0;background:none;border-radius:var(--x-clickup-radii-2);
-  color:var(--color-content-secondary);cursor:pointer}
-.rolep-x:hover{background:var(--color-bg-hover);color:var(--color-content-danger)}
 .rolep-x svg{width:12px;height:12px;fill:none}
 .rolep-x:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
 
@@ -1595,19 +1559,9 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .posc{gap:10px}
 .posc.is-theirs{box-shadow:0 0 0 1px var(--x-clickup-color-border-primary-low-contrast),var(--elevation-raised)}
 .posc-l{margin:0;font-size:13px;line-height:20px;color:var(--color-content-secondary)}
-.posc-can{display:flex;flex-wrap:wrap;gap:4px}
-.posc-g{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;
-  border:1px solid var(--color-border-subtle);border-radius:var(--x-clickup-radii-3);
-  font-size:11px;line-height:16px;color:var(--color-content-secondary);min-width:0}
-.posc-gi{display:flex;align-items:center;width:11px;height:11px;flex:none;
-  color:var(--x-clickup-color-content-placeholder)}
-.posc-gi svg{width:11px;height:11px;fill:none}
-.posc-gn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* content.placeholder measures 3.32:1 at 11px, under the 4.5 text needs —
    the same trap as content.tertiary. The count reads at the chip's own
    colour; being a number after the name is hierarchy enough. */
-.posc-gv{flex:none;font-variant-numeric:tabular-nums}
-.posc-none{font-size:12px;line-height:16px;color:var(--color-content-secondary)}
 /* The reach bar sits in the card's footer rather than a ladder row, so it
    gives up the fixed width it had there. */
 .posc .pm-reach{display:flex;align-items:center;gap:6px;min-width:0;white-space:nowrap}
@@ -1616,3 +1570,16 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
    gives up the width instead. */
 .posc .pm-reach > span{flex:none}
 .posc .pm-reach .trk{width:52px;flex:none}
+
+/* ---------------- the threads, drawn over the row rules ----------------
+   A row's background is painted before its own border, so a thread painted
+   on the row was cut once per row — seventeen 1px nicks of #f0f0f0 down one
+   line, which is why it read as a stack of segments rather than a line. A
+   positioned child paints after the border, and reaching 1px past the bottom
+   bridges the rule the row draws under itself. */
+.plr,.prow-n{position:relative}
+.plr::after,.prow-n::after{content:"";position:absolute;left:0;right:0;top:0;bottom:-1px;
+  background-image:var(--guides-img,none);
+  background-position:var(--guides-pos,0 0);
+  background-size:var(--guides-size,auto);
+  background-repeat:no-repeat;pointer-events:none}

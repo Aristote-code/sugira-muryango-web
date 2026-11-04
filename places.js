@@ -153,19 +153,23 @@
      background-image's to take, and one handed them is dropped whole. */
   function guides(node, depth, xs) {
     if (!node) return;
-    node.style.backgroundImage = '';
-    node.style.backgroundPosition = '';
-    node.style.backgroundSize = '';
+    node.style.removeProperty('--guides-img');
+    node.style.removeProperty('--guides-pos');
+    node.style.removeProperty('--guides-size');
     if (!depth) return;
     var img = [], pos = [];
     for (var i = 0; i < depth; i++) {
       img.push('linear-gradient(var(--color-border-strong),var(--color-border-strong))');
       pos.push(xs[Math.min(i, xs.length - 1)] + 'px 0');
     }
-    node.style.backgroundImage = img.join(',');
-    node.style.backgroundPosition = pos.join(',');
-    node.style.backgroundSize = img.map(function () { return '1px 100%'; }).join(',');
-    node.style.backgroundRepeat = 'no-repeat';
+    /* Handed to a pseudo-element rather than painted on the row itself. A
+       row's own background is painted before its border, so the border cut
+       the thread once per row — seventeen 1px nicks down one line, which is
+       what made it look like a stack of segments. A positioned child paints
+       after the border, and reaches 1px past the bottom to bridge it. */
+    node.style.setProperty('--guides-img', img.join(','));
+    node.style.setProperty('--guides-pos', pos.join(','));
+    node.style.setProperty('--guides-size', img.map(function () { return '1px 100%'; }).join(','));
   }
   window.SugiraTree = { guides: guides };
 

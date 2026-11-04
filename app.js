@@ -387,13 +387,6 @@
           + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Five roles exist. Before making a sixth, the next screen says which of them already grant what you are about to grant \u2014 the live system carries twenty-one roles for ten jobs because nobody could see the twenty that were already there.</span></p>',
       done: 'Role created \u2014 give it permissions, then give it to someone'
     },
-    roleperm: {
-      title: 'Add a permission to Form translator',
-      ok: 'Add it',
-      body: '<div><label for="f-rp">Permission</label><select id="f-rp"><option>language-create \u2014 Add a language</option><option>question-list \u2014 See the questions on a form</option><option>form-edit \u2014 Change a form that already exists</option><option>construct-list \u2014 See what a form measures</option></select></div>'
-          + '<p class="m-lead">Six people hold this role. Adding here gives it to all six, whatever position each of them has.</p>',
-      done: 'Added \u2014 all 6 holders have it from their next sign-in'
-    },
     roleadd: {
       title: 'Give a role to someone',
       ok: 'Give it to them',
