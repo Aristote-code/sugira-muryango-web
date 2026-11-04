@@ -1036,10 +1036,16 @@ svg use{pointer-events:none}
   color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
 .acc-gcount b{font-weight:600;color:var(--color-content-primary)}
 .acc-gcount.none b{font-weight:400;color:var(--color-content-secondary)}
+/* The part that opens starts where the group's icon starts, not where its
+   caret does. Left at nothing, the first checkbox sat flush under the caret
+   and the permissions read as eight more rows of the same list rather than
+   as what is inside Households. The indent is the caret's own width plus the
+   row's gap — 16 + 6 — so it is the same number wherever the row is drawn. */
+.acc-gb{padding-left:22px}
 /* Two columns sized to their content rather than to the drawer: at 1fr each
    they were 605px wide, so "Record a visit" sat half a screen from "See
-   visits and answers" and the pair read as two lists. They start under the
-   group's own name and stop where the longest label does. */
+   visits and answers" and the pair read as two lists. They stop where the
+   longest label does. */
 .acc-grid{display:grid;grid-template-columns:repeat(2,max-content);
   column-gap:32px;row-gap:4px}
 
@@ -1070,9 +1076,11 @@ svg use{pointer-events:none}
 .acc-prisk{display:flex;align-items:center;width:14px;height:14px;flex:none;
   color:var(--x-clickup-color-content-warning)}
 .acc-prisk svg{width:14px;height:14px;fill:none}
+/* Narrow: one column. The indent stays — 22px is cheap, and clawing it back
+   here would put the checkbox under the caret again on exactly the screens
+   where the group row is hardest to read. */
 @media (max-width:880px){
   .acc-grid{grid-template-columns:minmax(0,1fr)}
-  .acc-gb{padding-left:12px}
 }
 
 /* A project row opens to show its sessions and forms. Same caret and the same

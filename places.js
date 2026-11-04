@@ -180,9 +180,13 @@
       r.type = 'button';
       r.setAttribute('aria-expanded', String(open));
     }
-    r.style.paddingLeft = (12 + depth * 20) + 'px';
+    /* The step is the caret's width plus the row's gap — 16 + 8 — so a child
+       begins exactly where its parent's icon begins. At 20 it fell 4px short
+       of that icon every level down, which is close enough to look like a
+       mistake and too far to look like a column. */
+    r.style.paddingLeft = (12 + depth * 24) + 'px';
     /* a row's marker is its caret, at the indent its depth gives it */
-    guides(r, depth, [19, 39, 59, 79, 99, 119]);
+    guides(r, depth, [19, 43, 67, 91, 115, 139]);
 
     var caret = el('span', 'plr-c');
     if (kids) caret.innerHTML = '<svg aria-hidden="true"><use href="#i-caret"/></svg>';

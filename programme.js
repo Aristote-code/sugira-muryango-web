@@ -211,17 +211,20 @@
 
   /* ---- the tree, under the project rows on Programme ---- */
 
-  var INDENT = 28;
+  /* The step is the caret's width plus its gap — 16 + 8 — so a session begins
+     exactly where its project's icon begins, and a form exactly where that
+     session's icon begins. At 28 each level overshot its parent's icon by
+     4px, which read as a second, slightly wrong column. */
+  var INDENT = 24;
   /* Where each level's marker sits inside the name cell, measured rather
      than stepped: the project row carries a caret before its icon and its
      children carry a spacer, so the first two are not INDENT apart. */
   /* Measured from the pixels, not from the box model: the caret glyph a
-     thread hangs from centres at 20 on a project row and 48 on a first
-     level child, then steps by INDENT. The earlier numbers were taken
-     before the name cell stopped being a flex container, which moved
-     everything in it — the second-level thread sat 6px right of the
-     caret it belongs to. */
-  var LINES = [20, 48, 76, 104, 132];
+     thread hangs from centres at 20 on a project row and steps by INDENT
+     from there. The earlier numbers were taken before the name cell stopped
+     being a flex container, which moved everything in it — the second-level
+     thread sat 6px right of the caret it belongs to. */
+  var LINES = [20, 44, 68, 92, 116];
 
   function kidRow(o) {
     var tr = el('tr', 'prow-kid');
