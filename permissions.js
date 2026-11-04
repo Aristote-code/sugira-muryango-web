@@ -354,9 +354,7 @@
   /* "Everything IZU at Village has, plus five more things." The sentence is
      the whole point of the model, so it is what the collapsed card shows. */
   function lineage(p) {
-    if (!p.base) {
-      return 'Built from nothing — there is no smaller position to start from.';
-    }
+    if (!p.base) return 'Built from nothing.';
     var b = byId(p.base);
     if (!b) return 'Built on a position that no longer exists.';
     var n = p.adds.length;
@@ -382,8 +380,6 @@
     s.appendChild(u);
     return s;
   }
-  var CHEV = '<svg class="pm-cv" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" ' +
-    'stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   function reach(n) {
     var w = el('span', 'pm-reach');
@@ -393,94 +389,6 @@
     trk.appendChild(el('i')).style.width = Math.round(n / 112 * 100) + '%';
     w.appendChild(trk);
     return w;
-  }
-
-  /* ---- the base chooser ----
-     DialogSelect's shape (AppDialog.tsx:404): icon tile, title with a chevron,
-     and the description on a second line, read without opening anything. The
-     menu rows carry MenuRadioItem's description, which here says what the
-     change would cost: a base that grants something this position does not
-     hold can only add it, never remove it. */
-
-  function baseOptions(p) {
-    var mine = held(p);
-    return state.pos.filter(function (q) {
-      if (q.id === p.id) return false;
-      /* no cycles: a position cannot be built on something built on it */
-      return chain(q).indexOf(p) < 0;
-    }).map(function (q) {
-      var theirs = held(q), gained = [];
-      for (var k in theirs) if (theirs.hasOwnProperty(k) && !mine[k]) gained.push(k);
-      return { pos: q, gained: gained };
-    }).sort(function (a, b) { return total(a.pos) - total(b.pos); });
-  }
-
-  function setBase(p, baseId) {
-    var mine = held(p);
-    p.base = baseId;
-    /* Inherit-only: keep everything this position already had. Whatever the new
-       base does not supply stays as an addition; whatever it supplies and the
-       position lacked is now granted, because a base cannot be subtracted. */
-    var now = baseId ? held(byId(baseId)) : {};
-    var keep = [];
-    for (var k in mine) {
-      if (!mine.hasOwnProperty(k) || now[k]) continue;
-      keep.push(k);
-    }
-    var order = ALL.map(function (x) { return x.id; });
-    keep.sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); });
-    p.adds = keep;
-  }
-
-  function baseSelect(p) {
-    var wrap = el('div', 'pm-sect');
-    wrap.appendChild(el('p', 'pm-lbl', 'Starts from'));
-    var b = byId(p.base);
-    var btn = el('button', 'pm-bsel');
-    btn.type = 'button';
-    btn.setAttribute('aria-haspopup', 'menu');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Starts from: ' + (b ? b.name : 'nothing'));
-
-    var tile = el('span', 'pm-bico' + (b ? ' fill' : ''));
-    tile.appendChild(icon(b ? 'i-hierarchy' : 'i-plus'));
-    btn.appendChild(tile);
-
-    var tx = el('span', 'pm-btx');
-    var t = el('span', 'pm-bt');
-    t.appendChild(el('span', null, b ? b.name : 'Nothing — built from zero'));
-    t.innerHTML += CHEV;
-    tx.appendChild(t);
-    tx.appendChild(el('span', 'pm-bd', b
-      ? total(b) + ' of the ' + ALL.length + ' permissions come from here. ' + b.what
-      : 'Every one of this position’s permissions is granted on this card.'));
-    btn.appendChild(tx);
-
-    btn.onclick = function (e) {
-      e.stopPropagation();
-      var items = [{ heading: true, label: 'Build this position on' }];
-      items.push({
-        label: 'Nothing — build from zero',
-        description: 'Every permission is granted here. Only a root position should need this.',
-        selected: !p.base,
-        onPick: function () { window.SugiraMenu.close(); setBase(p, null); render(); }
-      });
-      baseOptions(p).forEach(function (o) {
-        items.push({
-          label: o.pos.name,
-          hint: total(o.pos) + '',
-          selected: p.base === o.pos.id,
-          description: o.gained.length
-            ? 'Would also grant ' + o.gained.length + (o.gained.length === 1 ? ' thing' : ' things')
-              + ' this position does not have today. A base can only add.'
-            : 'Everything it holds, this position already holds.',
-          onPick: function () { window.SugiraMenu.close(); setBase(p, o.pos.id); render(); }
-        });
-      });
-      window.SugiraMenu.show(btn, items, { width: 420 });
-    };
-    wrap.appendChild(btn);
-    return wrap;
   }
 
   /* ---- the additions ----
@@ -495,8 +403,6 @@
 
   function addsList(p) {
     var wrap = el('div', 'pm-sect');
-    wrap.appendChild(el('p', 'pm-lbl', p.base ? 'Plus, on top of that' : 'Granted here'));
-
     var host = el('div', 'pm-perm');
     wrap.appendChild(host);
     if (!window.SugiraAccess) return wrap;
@@ -534,29 +440,8 @@
         render();
       },
 
-      caption: function (key) { return groupByKey(key).blurb; },
 
-      summary: function () {
-        var from = held(p), n = 0, mine = 0;
-        for (var k in from) if (from.hasOwnProperty(k)) { n++; if (from[k] === p) mine++; }
-        var s = el('p', 'acc-sum');
-        s.appendChild(el('b', null, String(n)));
-        s.appendChild(document.createTextNode(' of the ' + ALL.length + ' permissions'));
-        if (p.base) {
-          s.appendChild(document.createTextNode(' — ' + (n - mine) + ' from '
-            + shortOf(byId(p.base)) + ', and ' + mine
-            + (mine === 1 ? ' thing added here.' : ' things added here.')));
-        } else {
-          s.appendChild(document.createTextNode(', all granted here.'));
-        }
-        var kids = children(p);
-        if (kids.length) {
-          s.appendChild(document.createTextNode(' ' + (kids.length === 1
-            ? shortOf(kids[0]) + ' is built on this one, so a change here reaches it too.'
-            : kids.length + ' positions are built on this one, so a change here reaches them too.')));
-        }
-        return s;
-      },
+
 
       redraw: function () { window.SugiraAccess.render(host, model); }
     };
@@ -609,8 +494,7 @@
     if (!root) return;
     var p = byId(state.open) || state.pos[0];
     if (!p) return;
-    var sec = root;
-    sec.innerHTML = '';
+    root.innerHTML = '';
 
     var rec = el('div', 'rec');
     var rtop = el('div', 'rec-top');
@@ -618,67 +502,34 @@
     type.appendChild(icon('i-hierarchy'));
     type.appendChild(el('span', null, 'Position'));
     rtop.appendChild(type);
-    rtop.appendChild(el('span', 'rec-id', p.people + (p.people === 1 ? ' person' : ' people')));
+
+    /* Who holds it was a card of its own at the foot of the drawer, with the
+       count and the action buried in a paragraph. The count belongs beside
+       the name, and the action is the one thing you do to a position, so it
+       is the primary button at the top where every other record puts its. */
+    var who = el('button', 'rec-who');
+    who.type = 'button';
+    who.setAttribute('data-go', 'people');
+    who.textContent = p.people + (p.people === 1 ? ' person holds it' : ' people hold it');
+    rtop.appendChild(who);
+
+    var acts = el('span', 'acts');
+    var give = el('button', 'btn');
+    give.type = 'button';
+    give.setAttribute('data-modal', 'posadd');
+    give.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
+    give.appendChild(document.createTextNode('Give it to someone'));
+    acts.appendChild(give);
+    rtop.appendChild(acts);
+
     rec.appendChild(rtop);
     rec.appendChild(el('h1', null, p.name));
-    /* No description paragraph, for the reason the others came out: the record
-       says what it is through its fields, not through prose about itself.
-       `p.what` stays in the data. */
-    sec.appendChild(rec);
+    root.appendChild(rec);
 
-    var body = el('div', 'pm-cb');
-    body.appendChild(baseSelect(p));
-    body.appendChild(addsList(p));
-
-    /* The stored names used to be a second list under this one. They are on
-       the permission now — hover any row and it tells you which of the old
-       112 it replaces — so there is nothing left to disclose. */
-    var foot = el('div', 'pm-cfoot');
-    foot.appendChild(el('span', 'pm-kids', ALL.length + ' permissions in all, written for this '
-      + 'programme. They replace the 111 of the live system’s 112 that mean something; '
-      + 'roh-delete is retired rather than granted.'));
-    body.appendChild(foot);
-
-    sec.appendChild(body);
-    sec.appendChild(holders(p));
+    root.appendChild(addsList(p));
   }
 
-  /* Who actually holds this position. The card said "11 people" and gave you
-     no way to reach them or add a twelfth — the role drawer had both, and
-     these are the same record with the same two questions. */
-  function holders(p) {
-    var card = el('div', 'card');
-    var h = el('div', 'card-h');
-    h.appendChild(el('h3', null, 'Who holds it'));
-    var side = el('span', 'side');
-    var add = el('button', 'btn sec sm');
-    add.type = 'button';
-    add.setAttribute('data-modal', 'posadd');
-    add.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
-    add.appendChild(document.createTextNode(' Give it to someone'));
-    side.appendChild(add);
-    h.appendChild(side);
-    card.appendChild(h);
 
-    var kids = children(p);
-    card.appendChild(el('p', 'pm-rule',
-      p.people + (p.people === 1 ? ' person holds this position' : ' people hold this position')
-      + '. Everything above is theirs together \u2014 a change here reaches all of them'
-      + (kids.length
-          ? ', and everyone on the ' + (kids.length === 1 ? 'position' : kids.length + ' positions')
-            + ' built on it.'
-          : '.')
-      + ' Where each of them works \u2014 which sector, which district \u2014 is set on their own'
-      + ' record, not here.'));
-
-    var go = el('button', 'rel');
-    go.type = 'button';
-    go.setAttribute('data-go', 'people');
-    go.innerHTML = '<svg aria-hidden="true"><use href="#i-admin"/></svg>';
-    go.appendChild(document.createTextNode('See the ' + p.people + ' in People'));
-    card.appendChild(go);
-    return card;
-  }
 
   /* ---- the screen ---- */
 
@@ -698,20 +549,15 @@
     mark.setAttribute('aria-expanded', 'false');
     mark.setAttribute('aria-label', 'What a position is');
     mark.setAttribute('data-tip',
-      'A position is built on the one below it and may only add to it. Nobody starts from '
-      + '112 blank checkboxes, which is what produced 21 roles for 10 jobs. Where a position '
-      + 'applies — which sector, which district — is set when it is given to a person, not here.');
+      'A position is built on the one below it and may only add to it. Eight of them stand '
+      + 'for the ten jobs the programme has; the live system carries twenty-one roles for '
+      + 'those ten, three of them called Test role, because there was no way to give one '
+      + 'person one extra thing. Two more could not be read from the capture. Where a '
+      + 'position applies — which sector, which district — is set when it is given to a '
+      + 'person, not here.');
     mark.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
     top.appendChild(mark);
 
-    var sum = el('span', 'pm-sum');
-    sum.appendChild(el('b', null, String(state.pos.length)));
-    sum.appendChild(el('span', null, ' positions · '));
-    sum.appendChild(el('b', null, String(ALL.length)));
-    sum.appendChild(el('span', null, ' permissions · '));
-    sum.appendChild(el('b', null, String(state.pos.reduce(function (n, p) { return n + p.people; }, 0))));
-    sum.appendChild(el('span', null, ' people'));
-    top.appendChild(sum);
 
     /* Each tab builds its own action, because the two tabs make two different
        things and the screen's shared .acts group could only ever name one.
@@ -767,22 +613,19 @@
     add.setAttribute('data-modal', 'role');
     add.appendChild(icon('i-plus', 'rolec-i'));
     add.appendChild(el('span', 'rolec-n', 'New position'));
-    add.appendChild(el('p', 'rolec-w',
-      'A job, not a task. It starts from the nearest position below it and adds — so if '
-      + 'the new one would be an existing position plus one thing for one person, that '
-      + 'belongs on their record as an exception instead.'));
+    add.appendChild(el('p', 'rolec-w', 'A job, not a task.'));
+    add.setAttribute('data-tip',
+      'It starts from the nearest position below it and adds. If the new one would be an '
+      + 'existing position plus one thing for one person, that belongs on their record as '
+      + 'an exception instead.');
     ladder.appendChild(add);
     root.appendChild(ladder);
 
+    /* What this paragraph said — eight positions for ten jobs, twenty-one
+       roles in the live system, two that could not be read — is in the mark
+       on the toolbar, where an explanation can be asked for rather than read
+       every time. What is left are the two things you can go and do. */
     var foot = el('p', 'pm-foot');
-    foot.appendChild(document.createTextNode(
-      'Eight positions stand for the ten jobs the programme actually has. The live system '
-      + 'carries twenty-one roles for those ten — three of them called Test role — because there '
-      + 'was no way to give one person one extra thing. Two more, BC office and Sugira Muryango '
-      + 'coordination office, could not be read from the capture and are not shown. '));
-    /* The ten roles as they are stored today are the evidence for all of the
-       above, and they were reachable only from a chip on a safeguarding row.
-       They belong next to the thing that replaces them. */
     var asis = el('button', 'rel');
     asis.type = 'button';
     asis.setAttribute('data-go', 'roles');

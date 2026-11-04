@@ -156,21 +156,12 @@
     mark.setAttribute('data-tip',
       'A role is a small bundle of permissions for work that is not a job. Translating a '
       + 'form, building a report, managing cohorts — the people who do these sit at every '
-      + 'level. A role only adds to what a position already gives; it can never take '
-      + 'something away, so a person is still their position plus a named list.');
+      + 'level, so none of them is a rung. A Sector lead who translates holds the Sector '
+      + 'lead position and the Form translator role, not a position called “Sector lead '
+      + 'who translates”. A role only adds; it can never take something away.');
     mark.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
     top.appendChild(mark);
 
-    var sum = el('span', 'pm-sum');
-    sum.appendChild(el('b', null, String(state.roles.length)));
-    sum.appendChild(el('span', null, ' roles · '));
-    sum.appendChild(el('b', null, String(state.roles.reduce(function (n, r) {
-      return n + r.grants.length; }, 0))));
-    sum.appendChild(el('span', null, ' permissions given · '));
-    sum.appendChild(el('b', null, String(state.roles.reduce(function (n, r) {
-      return n + r.people; }, 0))));
-    sum.appendChild(el('span', null, ' holders'));
-    top.appendChild(sum);
 
     /* It used to clone the screen's end group, which by then the positions
        tab had already taken, so this tab's toolbar was empty. It builds its
@@ -193,17 +184,13 @@
     add.setAttribute('data-modal', 'rolenew');
     add.appendChild(svg('i-plus', 'rolec-i'));
     add.appendChild(el('span', 'rolec-n', 'New role'));
-    add.appendChild(el('p', 'rolec-w',
-      'For work that is not a job. Before it is made, this says what already grants the '
-      + 'same thing — which is the check the live system never had.'));
+    add.appendChild(el('p', 'rolec-w', 'For work that is not a job.'));
+    add.setAttribute('data-tip',
+      'Before it is made, the sheet says what already grants the same thing — the check '
+      + 'the live system never had, which is why it carries twenty-one roles for ten jobs.');
     grid.appendChild(add);
     root.appendChild(grid);
 
-    root.appendChild(el('p', 'pm-foot',
-      'None of these is a rung. A Sector lead who translates forms holds the Sector lead '
-      + 'position and the Form translator role — not a position called “Sector lead who '
-      + 'translates”, which is how the live system came to carry twenty-one roles for ten '
-      + 'jobs. A role adds; it never takes away.'));
   }
 
   /* ---- one role, in a drawer ---- */
@@ -221,6 +208,24 @@
     type.appendChild(svg(r.icon, null));
     type.appendChild(el('span', null, 'Role'));
     top.appendChild(type);
+
+    /* Who holds it, and the one thing you do to a role, in the header — the
+       same shape the position drawer took, so the two read as one record
+       type seen twice rather than two screens. */
+    var who = el('button', 'rec-who');
+    who.type = 'button';
+    who.setAttribute('data-go', 'people');
+    who.textContent = r.people + (r.people === 1 ? ' person holds it' : ' people hold it');
+    top.appendChild(who);
+
+    var acts = el('span', 'acts');
+    var give = el('button', 'btn');
+    give.type = 'button';
+    give.setAttribute('data-modal', 'roleadd');
+    give.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
+    give.appendChild(document.createTextNode('Give it to someone'));
+    acts.appendChild(give);
+    top.appendChild(acts);
     head.appendChild(top);
     head.appendChild(el('h1', null, r.name));
     /* No description paragraph. Prose explaining the record to the person
@@ -231,13 +236,9 @@
 
     /* what it grants — the same block the position drawer uses. A role has no
        base, so nothing in it is locked; everything is this role's own. */
-    var card1 = el('div', 'card');
-    var h1 = el('div', 'card-h');
-    h1.appendChild(el('h3', null, 'What it grants'));
-    card1.appendChild(h1);
-
+    var wrap = el('div', 'pm-sect');
     var host = el('div', 'pm-perm');
-    card1.appendChild(host);
+    wrap.appendChild(host);
 
     if (window.SugiraAccess) {
       var model = {
@@ -281,47 +282,14 @@
           return null;
         },
 
-        summary: function () {
-          var s = el('p', 'acc-sum');
-          s.appendChild(el('b', null, String(r.grants.length)));
-          s.appendChild(document.createTextNode(r.grants.length === 1
-            ? ' permission. A role only adds — whatever is ticked here is given on top of '
-            : ' permissions. A role only adds — whatever is ticked here is given on top of '));
-          s.appendChild(document.createTextNode('each holder’s position, and can never take '
-            + 'something away.'));
-          return s;
-        },
+
 
         redraw: function () { window.SugiraAccess.render(host, model); }
       };
       model.redraw();
     }
-    root.appendChild(card1);
+    root.appendChild(wrap);
 
-    /* who holds it */
-    var card2 = el('div', 'card');
-    var h2 = el('div', 'card-h');
-    h2.appendChild(el('h3', null, 'Who holds it'));
-    var side2 = el('span', 'side');
-    var addp = el('button', 'btn sec sm');
-    addp.type = 'button';
-    addp.setAttribute('data-modal', 'roleadd');
-    addp.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
-    addp.appendChild(document.createTextNode(' Give it to someone'));
-    side2.appendChild(addp);
-    h2.appendChild(side2);
-    card2.appendChild(h2);
-    card2.appendChild(el('p', 'pm-rule', r.people
-      + (r.people === 1 ? ' person holds this role' : ' people hold this role')
-      + ', across every position. Taking a permission out of it above takes it from all '
-      + 'of them at once.'));
-    var who = el('button', 'rel');
-    who.type = 'button';
-    who.setAttribute('data-go', 'people');
-    who.innerHTML = '<svg aria-hidden="true"><use href="#i-admin"/></svg>';
-    who.appendChild(document.createTextNode('See the ' + r.people + ' in People'));
-    card2.appendChild(who);
-    root.appendChild(card2);
   }
 
   /* ---- routing ---- */

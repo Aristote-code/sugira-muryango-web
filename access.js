@@ -114,38 +114,28 @@
     var t = tally(model, g);
     var open = !!model.open[g.key];
 
-    var row = el('div', 'acc-g' + (open ? ' is-open' : ''));
-
-    var sw = el('button', 'acc-sw' + (t.all ? ' on' : t.some ? ' some' : ''));
-    sw.type = 'button';
-    sw.setAttribute('role', 'switch');
-    sw.setAttribute('aria-checked', t.some ? 'mixed' : String(t.all));
-    sw.setAttribute('aria-label', g.name);
-    sw.disabled = t.frozen;
-    sw.appendChild(el('span', 'acc-swk'));
-    sw.setAttribute('data-tip', t.frozen
-      ? 'Everything here arrives from a position below and cannot be changed on this screen.'
-      : (t.all ? 'Turn off every permission in ' : 'Turn on every permission in ') + g.name + '.');
-    if (!t.frozen) sw.onclick = function () { model.setGroup(g.key, !t.all); };
-    row.appendChild(sw);
-
-    var head = el('button', 'acc-gh');
-    head.type = 'button';
-    head.setAttribute('aria-expanded', String(open));
-    head.appendChild(svg('i-caret', 'acc-gc'));
-    head.appendChild(svg(g.icon, 'acc-gi'));
-    head.appendChild(el('span', 'acc-gn', g.name));
-    head.appendChild(el('span', 'acc-gcount', t.on + ' of ' + t.n));
-    head.onclick = function () { model.open[g.key] = !open; model.redraw(); };
-    row.appendChild(head);
-
+    /* The switch is gone. It led every row, so the eye met a control before it
+       met a name, and it said the same thing the count beside it already said.
+       The count is the row's whole right-hand side now, in a column of its
+       own so the eight line up, and close enough to the names to be read with
+       them rather than across a gap. Turning a group on or off is the job of
+       the permissions inside it. */
+    var row = el('button', 'acc-g' + (open ? ' is-open' : ''));
+    row.type = 'button';
+    row.setAttribute('aria-expanded', String(open));
+    row.appendChild(svg('i-caret', 'acc-gc'));
+    row.appendChild(svg(g.icon, 'acc-gi'));
+    row.appendChild(el('span', 'acc-gn', g.name));
+    var c = el('span', 'acc-gcount' + (t.on ? '' : ' none'));
+    c.appendChild(el('b', null, String(t.on)));
+    c.appendChild(document.createTextNode(' of ' + t.n));
+    row.appendChild(c);
+    row.onclick = function () { model.open[g.key] = !open; model.redraw(); };
     return row;
   }
 
   function groupBody(model, g) {
     var body = el('div', 'acc-gb');
-    var cap = model.caption && model.caption(g.key);
-    if (cap) body.appendChild(el('p', 'acc-gcap', cap));
     var grid = el('div', 'acc-grid');
     g.perms.forEach(function (p) { grid.appendChild(checkbox(model, p)); });
     body.appendChild(grid);
@@ -249,9 +239,12 @@
         s.appendChild(document.createTextNode(', and ' + ex
           + (ex === 1 ? ' thing granted by name' : ' things granted by name')));
       }
-      s.appendChild(document.createTextNode('. The greyed ones arrive from somewhere else and '
+      s.appendChild(document.createTextNode('.'));
+      /* Why a greyed box is greyed is on the box itself, where someone meets
+         it, rather than in a sentence above the whole list. */
+      s.setAttribute('data-tip', 'The greyed ones arrive from the position or a role and '
         + 'cannot be taken away here — change the position, or move ' + whoName()
-        + ' to a different one.'));
+        + ' to a different one.');
       return s;
     },
 

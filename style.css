@@ -702,6 +702,12 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .dw-body .tabs{padding:0 var(--inset)}
 .dw-body .lockwrap{padding:0 var(--inset) 24px}
 .dw-body .rnote{margin-inline:var(--inset)}
+/* A position's permissions are not in a .pad, so they were sitting at the
+   drawer's edge while the title and the chip above them sat at the inset —
+   56px of disagreement down the left of one drawer. Everything in it takes
+   the one inset. */
+.dw-body #positionBody>.pm-sect,.dw-body #roleCardBody>.pm-sect{padding-inline:var(--inset)}
+#positionBody>.pm-sect,#roleCardBody>.pm-sect{margin-top:20px}
 .dw-body .tab[data-panel="relations"],.dw-body [data-panelid="relations"]{display:none}
 .dw-body{flex:1;min-width:0;min-height:0;overflow:auto;background:var(--color-bg-surface);
   overscroll-behavior:contain}
@@ -995,61 +1001,47 @@ svg use{pointer-events:none}
 .pm-perm .acc-sum{margin:8px 0 12px}
 .acc-sum{margin:12px 0;font-size:13px;line-height:20px;color:var(--color-content-secondary)}
 .acc-sum b{color:var(--color-content-primary);font-weight:600}
-.acc-tree{border-top:1px solid var(--color-border-subtle)}
+/* Wide enough for "Risk-of-harm cases", which is the longest of the eight. */
+.acc-tree{--acc-name:168px;border-top:1px solid var(--color-border-subtle)}
 /* the chevron on the base chooser, which permissions.js writes as raw markup */
 .pm-cv{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;
   color:var(--color-content-tertiary)}
 
 /* the group row: switch, then the part that opens */
-.acc-g{display:flex;align-items:center;gap:12px;min-height:32px;padding-right:4px;
-  border-bottom:1px solid var(--color-border-subtle)}
+/* The row is the control now: caret, icon, name, count. The switch that used
+   to lead it is gone — it met the eye before the name did and said what the
+   count beside it already said.
+
+   The name takes a fixed column so the eight counts line up under each other,
+   and that column is as wide as the longest name rather than the whole row,
+   so a count is read with its name instead of across a gap. */
+.acc-g{display:flex;align-items:center;gap:6px;height:32px;width:100%;
+  padding:0;border:0;border-bottom:1px solid var(--color-border-subtle);
+  border-radius:0;background:none;font:inherit;font-size:14px;line-height:16px;
+  color:var(--color-content-primary);text-align:left;cursor:pointer}
 .acc-g.is-open{border-bottom-color:transparent}
-.acc-gh{flex:1;min-width:0;display:flex;align-items:center;gap:6px;height:32px;padding:0 6px 0 2px;
-  border:0;border-radius:var(--radius-md);background:none;font:inherit;font-size:14px;
-  line-height:16px;color:var(--color-content-primary);text-align:left;cursor:pointer}
-.acc-gh:hover{background:var(--color-bg-hover)}
-.acc-gh:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.acc-g:hover{background:var(--color-bg-hover)}
+.acc-g:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
 .acc-gc{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
   color:var(--color-content-secondary)}
 .acc-gc svg{width:14px;height:14px;fill:currentColor;
   transition:transform 120ms var(--x-clickup-motion-timing)}
-.acc-gh[aria-expanded="true"] .acc-gc svg{transform:rotate(90deg)}
+.acc-g[aria-expanded="true"] .acc-gc svg{transform:rotate(90deg)}
 .acc-gi{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
   color:var(--color-content-tertiary)}
 .acc-gi svg{width:16px;height:16px;fill:none}
-.acc-gn{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.acc-gcount{margin-left:auto;flex:none;font-size:12px;line-height:16px;font-weight:400;
+.acc-gn{width:var(--acc-name);flex:none;font-weight:500;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-gcount{flex:none;font-size:12px;line-height:16px;
   color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
-
-/* the switch */
-.acc-sw{position:relative;flex:none;width:24px;height:14px;padding:0;border:2px solid;
-  border-radius:var(--radius-full);cursor:pointer;transition:background-color 120ms var(--x-clickup-motion-timing),
-  border-color 120ms var(--x-clickup-motion-timing);
-  background:var(--switch-track-off-bg-default);border-color:var(--switch-track-off-bg-default)}
-.acc-sw:hover:not(:disabled){background:var(--switch-track-off-bg-hover);
-  border-color:var(--switch-track-off-bg-hover)}
-.acc-sw.on,.acc-sw.some{background:var(--switch-track-on-bg-default);
-  border-color:var(--switch-track-on-bg-default)}
-.acc-sw.on:hover:not(:disabled),.acc-sw.some:hover:not(:disabled){
-  background:var(--switch-track-on-bg-hover);border-color:var(--switch-track-on-bg-hover)}
-.acc-sw:disabled{cursor:not-allowed;background:var(--switch-track-off-bg-disabled);
-  border-color:var(--switch-track-off-bg-disabled)}
-.acc-sw.on:disabled,.acc-sw.some:disabled{background:var(--switch-track-on-bg-disabled);
-  border-color:var(--switch-track-on-bg-disabled)}
-.acc-sw:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}
-.acc-swk{position:absolute;left:0;top:0;width:10px;height:10px;border-radius:var(--radius-full);
-  background:var(--switch-knob-bg);transition:transform 120ms var(--x-clickup-motion-timing)}
-.acc-sw.on .acc-swk{transform:translateX(10px)}
-/* half the group: the knob sits between the two ends */
-.acc-sw.some .acc-swk{transform:translateX(5px)}
-
-/* the body */
-.acc-gb{padding:4px 12px 14px 46px;border-bottom:1px solid var(--color-border-subtle)}
-.acc-gcap{margin:0 0 10px;font-size:12px;line-height:16px;color:var(--color-content-secondary)}
-/* Capped, because two columns of a 1210px drawer are 605px each and a
-   checkbox with a four-word label does not want 605px. */
-.acc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  column-gap:var(--property-grid-gap-x);row-gap:4px;max-width:640px}
+.acc-gcount b{font-weight:600;color:var(--color-content-primary)}
+.acc-gcount.none b{font-weight:400;color:var(--color-content-secondary)}
+/* Two columns sized to their content rather than to the drawer: at 1fr each
+   they were 605px wide, so "Record a visit" sat half a screen from "See
+   visits and answers" and the pair read as two lists. They start under the
+   group's own name and stop where the longest label does. */
+.acc-grid{display:grid;grid-template-columns:repeat(2,max-content);
+  column-gap:32px;row-gap:4px}
 
 /* one permission */
 .acc-p{display:flex;min-width:0}
@@ -1583,3 +1575,21 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   background-position:var(--guides-pos,0 0);
   background-size:var(--guides-size,auto);
   background-repeat:no-repeat;pointer-events:none}
+
+/* Three of the symbols are filled shapes, not strokes, and they carried a
+   `fillicon` class that no rule ever read. Anywhere a container set the
+   fill:none that stroke icons need, they rendered as nothing — the Position
+   chip's icon was in the DOM, at full size, and invisible. One rule, keyed on
+   what the <use> points at, so it holds wherever they are used next. */
+svg:has(> use[href="#i-hierarchy"]),
+svg:has(> use[href="#i-relation"]),
+svg:has(> use[href="#i-caret"]){fill:currentColor;stroke:none}
+
+/* How many hold it, beside the record's type. It is a fact about the record,
+   like the id beside every other one — not a control, so it is not boxed. */
+.rec-top .rec-who{border:0;background:none;padding:0;font:inherit;font-size:12px;
+  line-height:16px;color:var(--color-content-secondary);cursor:pointer;
+  font-variant-numeric:tabular-nums}
+.rec-top .rec-who:hover{color:var(--color-content-link);text-decoration:underline}
+.rec-top .rec-who:focus-visible{outline:2px solid var(--color-bg-primary-default);
+  outline-offset:2px;border-radius:var(--x-clickup-radii-2)}
