@@ -541,7 +541,11 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .tbl td,.tbl th{white-space:nowrap}
 .tbl td{padding:4px 12px;height:32px;font-size:13px;line-height:16px;border-bottom:1px solid var(--color-border-subtle);vertical-align:middle;color:var(--color-content-secondary)}
 .tbl tbody tr{cursor:pointer}
-.tbl tbody tr:hover{background:var(--color-bg-canvas)}
+/* One token for one state, and both on the cell rather than one on the row
+   and one on the cell. They were bg-canvas (#fcfcfc) and bg-hover (0.024
+   black, #f9f9f9) — two whites — and a row that was open AND hovered stacked
+   them into a third, #f6f6f6. */
+.tbl tbody tr:hover>td{background:var(--color-bg-hover)}
 .tbl tbody tr:last-child td{border-bottom:0}
 .tbl .num{font-variant-numeric:tabular-nums;text-align:right}
 .tbl .nm{font-weight:500;color:var(--color-content-primary)}
@@ -1074,7 +1078,7 @@ svg use{pointer-events:none}
 .prow-t[aria-expanded="true"] svg{transform:rotate(90deg)}
 .prow-t:hover{background:var(--color-bg-hover);color:var(--color-content-secondary)}
 .prow-t:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
-.tbl tr.is-open>td{background:var(--color-bg-hover)}
+.tbl tbody tr.is-open>td{background:var(--color-bg-hover)}
 /* A child row is an ordinary row. Only the name cell knows the depth, through
    a spacer, which is how ClickUp's TaskRow indents a subtask: the cells after
    it stay on the same grid as the parent's. */

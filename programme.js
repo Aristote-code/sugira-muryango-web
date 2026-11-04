@@ -241,7 +241,13 @@
   /* Where each level's marker sits inside the name cell, measured rather
      than stepped: the project row carries a caret before its icon and its
      children carry a spacer, so the first two are not INDENT apart. */
-  var LINES = [20, 54, 82, 110, 138];
+  /* Measured from the pixels, not from the box model: the caret glyph a
+     thread hangs from centres at 20 on a project row and 48 on a first
+     level child, then steps by INDENT. The earlier numbers were taken
+     before the name cell stopped being a flex container, which moved
+     everything in it — the second-level thread sat 6px right of the
+     caret it belongs to. */
+  var LINES = [20, 48, 76, 104, 132];
 
   function kidRow(o) {
     var tr = el('tr', 'prow-kid');
