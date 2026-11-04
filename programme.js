@@ -211,8 +211,28 @@
 
   /* ---- the tree, under the project rows on Programme ---- */
 
+  /* For a flat list of rows that carry their own depth, the line at each
+     ancestor level is drawn while that branch still has rows to come. Worked
+     out once over the finished list rather than guessed per row, because a
+     row cannot see its own siblings from inside itself. */
+  function trails(depths) {
+    return depths.map(function (d, i) {
+      var t = [];
+      for (var j = 0; j < d; j++) {
+        var more = false;
+        for (var k = i + 1; k < depths.length; k++) {
+          if (depths[k] < j + 1) break;
+          if (depths[k] === j + 1) { more = true; break; }
+        }
+        t.push(more);
+      }
+      return t;
+    });
+  }
+
   function childRow(depth, iconId, name, note, right, go) {
     var tr = el('tr', 'prow-kid');
+    tr.dataset.depth = depth;
     var td = el('td');
     td.colSpan = 4;
     var w = el('div', 'prk');
@@ -276,6 +296,15 @@
           return;
         }
         kids = build(p, tr);
+        if (window.SugiraTree) {
+          var ts = trails(kids.map(function (k) { return +k.dataset.depth; }));
+          kids.forEach(function (k, n) {
+            /* measured: the project's caret centres at 20 from the cell edge
+               and a first-level child's icon at 30, after which the indent
+               steps by 22 */
+            window.SugiraTree.guides(k.querySelector('.prk'), ts[n], [20, 30, 52, 74]);
+          });
+        }
         kids.forEach(function (k, n) {
           tr.parentNode.insertBefore(k, n === 0 ? tr.nextSibling : kids[n - 1].nextSibling);
         });

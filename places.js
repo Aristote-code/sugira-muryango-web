@@ -126,7 +126,41 @@
 
   function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 
-  function row(node, depth, open, onToggle) {
+  /* A tree reads as a tree when the levels are drawn, not only indented. One
+     1px line per ancestor that still has rows below it, at that ancestor's own
+     indent — so a line stops under the last child of its branch rather than
+     running to the bottom of the list. Drawn as background images because the
+     rows are siblings in the DOM, not nested, and a sibling cannot be wrapped
+     by its parent's border. */
+  /* `xs` is where each level's marker actually sits, because the levels are
+     not evenly spaced everywhere: on Programme the project row has a caret
+     before its icon and its children do not, so the first two lines are 10px
+     apart and the rest 22. A step and an offset guessed that wrong by 12px. */
+  function guides(node, trail, xs) {
+    if (!trail.length) return;
+    var img = [], pos = [];
+    trail.forEach(function (more, i) {
+      /* The last entry is the immediate parent's line down to these children,
+         which is always drawn. The ones above it are ancestors, and theirs is
+         drawn only while that ancestor still has rows to come — otherwise the
+         line would run past the end of its own branch. */
+      if (!more && i !== trail.length - 1) return;
+      var x = xs[Math.min(i, xs.length - 1)];
+      img.push('linear-gradient(var(--color-border-default),var(--color-border-default))');
+      pos.push(x + 'px 0');
+    });
+    if (!img.length) return;
+    /* Three long-hands, not the one shorthand: position and size are not
+       background-image's to take, and a background-image given them is
+       dropped whole — which is how these lines were set and invisible. */
+    node.style.backgroundImage = img.join(',');
+    node.style.backgroundPosition = pos.join(',');
+    node.style.backgroundSize = img.map(function () { return '1px 100%'; }).join(',');
+    node.style.backgroundRepeat = 'no-repeat';
+  }
+  window.SugiraTree = { guides: guides };
+
+  function row(node, depth, open, onToggle, trail) {
     var kids = node.children && node.children.length;
     var r = el(kids ? 'button' : 'div', 'plr' + (kids ? '' : ' leaf'));
     if (kids) {
@@ -134,6 +168,8 @@
       r.setAttribute('aria-expanded', String(open));
     }
     r.style.paddingLeft = (12 + depth * 20) + 'px';
+    /* a row's marker is its caret, at the indent its depth gives it */
+    guides(r, trail || [], [19, 39, 59, 79, 99, 119]);
 
     var caret = el('span', 'plr-c');
     if (kids) caret.innerHTML = '<svg aria-hidden="true"><use href="#i-caret"/></svg>';
@@ -170,8 +206,8 @@
 
     function draw() {
       host.innerHTML = '';
-      (function walk(nodes, depth, path) {
-        nodes.forEach(function (n) {
+      (function walk(nodes, depth, path, trail) {
+        nodes.forEach(function (n, i) {
           var k = key(n, path);
           var isOpen = !!open[depth === 0 ? n.name : k];
           host.appendChild(row(n, depth, isOpen, function (e) {
@@ -179,10 +215,13 @@
             var kk = depth === 0 ? n.name : k;
             open[kk] = !open[kk];
             draw();
-          }));
-          if (isOpen && n.children && n.children.length) walk(n.children, depth + 1, k);
+          }, trail));
+          /* this node's own line continues only while it has siblings left */
+          if (isOpen && n.children && n.children.length) {
+            walk(n.children, depth + 1, k, trail.concat(i < nodes.length - 1));
+          }
         });
-      })(roots, 0, '');
+      })(roots, 0, '', []);
       var total = roots.reduce(function (a, r) { return a + r.households; }, 0);
       var vs = roots.reduce(function (a, r) { return a + r.villages; }, 0);
       var cap = document.getElementById('placeCount');
