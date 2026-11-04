@@ -38,6 +38,13 @@
 
   var EVERY_SESSION = SESSIONS.slice(1);
 
+  /* The four sessions a supervisor sits in on. The old Monitoring forms tab
+     listed these as modules of their own, with the same names as the sessions
+     they shadow — the programme written out twice so that supervisors had
+     somewhere to hang two forms. */
+  var MONITORED = ['Welcome session', '1.Family Narrative',
+    '4.The Importance of Good Hygiene', '6.The Importance of Good Health'];
+
   /* project, tab tag, flag, its sessions, and its forms —
      each form: name, Kinyarwanda, questions, responses, status, sessions used in.
 
@@ -46,76 +53,83 @@
      that nothing in the app names is not in this list. */
   var P = [
     ['Household Module Tracking', 'tablet', null, SESSIONS, [
-      ['Family Enrollment and Composition Form', 'Ifishi yo kubarura Abagize Urugo', 24, 2210, 'Active', ['Welcome session']],
-      ['Anthropometric measurement', 'Gupima imikurire y’abana', 9, 1884, 'Active', ['Welcome session', '6.The Importance of Good Health']],
-      ['Flash weekly report on every module', 'Raporo yihuse ya buri kiganiro', 11, 986, 'Active', EVERY_SESSION],
-      ['General Questions-Self report', 'Ibibazo Rusange ku biganiro byose', 18, 412, 'Active', EVERY_SESSION],
-      ['Family-Specific Competencies-Self-report', 'Ibibazo ku bushobozi bwo gutanga ikiganiro', 16, 388, 'Active', EVERY_SESSION],
-      ['Visit record', '', 30, 986, 'Active', ['6.The Importance of Good Health']],
-      ['Caregiver observation', '', 12, 986, 'Active', ['6.The Importance of Good Health']],
-      ['Supervisor spot-check', '', 8, 141, 'Active', ['6.The Importance of Good Health']],
-      ['Managing the Stresses of Parenting — visit record', '', 34, 0, 'Draft', ['7.Managing the Stresses of Parenting and Family Life']],
-      ['Resolving Conflicts in the Home — visit record', '', 41, 0, 'Draft', ['8.Resolving Conflicts in the Home']]
+      ['Family Enrollment and Composition Form', 'Ifishi yo kubarura Abagize Urugo', 24, 2210, 'Active', ['Welcome session'], 'IZU at Village'],
+      ['Anthropometric measurement', 'Gupima imikurire y’abana', 9, 1884, 'Active', ['Welcome session', '6.The Importance of Good Health'], 'IZU at Village'],
+      ['Flash weekly report on every module', 'Raporo yihuse ya buri kiganiro', 11, 986, 'Active', EVERY_SESSION, 'IZU at Village'],
+      ['General Questions-Self report', 'Ibibazo Rusange ku biganiro byose', 18, 412, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
+      ['Family-Specific Competencies-Self-report', 'Ibibazo ku bushobozi bwo gutanga ikiganiro', 16, 388, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
+      ['Visit record', '', 30, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
+      ['Caregiver observation', '', 12, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
+      ['Supervisor spot-check', '', 8, 141, 'Active', ['6.The Importance of Good Health'], 'Sector lead (SLA)'],
+      ['Managing the Stresses of Parenting — visit record', '', 34, 0, 'Draft', ['7.Managing the Stresses of Parenting and Family Life'], 'IZU at Village'],
+      ['Resolving Conflicts in the Home — visit record', '', 41, 0, 'Draft', ['8.Resolving Conflicts in the Home'], 'IZU at Village'],
+      /* The two that used to hang off the parallel monitoring tree. They are
+         imported into the four sessions that are monitored, like any other
+         form, and the column that says who fills them in is what makes them
+         monitoring forms. */
+      ['Session in action', '', 22, 412, 'Active', MONITORED, 'IZU Cell Coordinator'],
+      ['IZU quality score', '', 16, 344, 'Active', MONITORED, 'IZU Cell Coordinator']
     ]],
     ['Household Tracking Project', 'tablet', 'near-duplicate', ['Welcome session', '1.Family Narrative'], [
-      ['Household visit record v1', '', 30, 0, 'Archived', ['Welcome session']],
-      ['Household visit record v2', '', 30, 0, 'Archived', ['1.Family Narrative']]
+      ['Household visit record v1', '', 30, 0, 'Archived', ['Welcome session'], 'IZU at Village'],
+      ['Household visit record v2', '', 30, 0, 'Archived', ['1.Family Narrative'], 'IZU at Village']
     ]],
     ['Household Enrollment', 'tablet', null, [], [
-      ['Enrollment of Beneficiaries', '', 24, 2210, 'Active', []],
-      ['Caregiver observation (pilot)', '', 12, 412, 'Archived', []]
+      ['Enrollment of Beneficiaries', '', 24, 2210, 'Active', [], 'IZU at Village'],
+      ['Caregiver observation (pilot)', '', 12, 412, 'Archived', [], 'IZU at Village']
     ]],
     ['Risk of Harm/other family problems Management', 'tablet', null, [], [
-      ['Risk of Harm management — intake', '', 28, 344, 'Active', []],
-      ['Risk of Harm management — 72-hour review', '', 9, 318, 'Active', []]
+      ['Risk of Harm management — intake', '', 28, 344, 'Active', [], 'IZU at Village'],
+      ['Risk of Harm management — 72-hour review', '', 9, 318, 'Active', [], 'Sector lead (SLA)']
     ]],
     ['FCG participation and interaction form', 'tablet', null, [], [
-      ['FCG participation and interaction', '', 14, 1204, 'Active', []]
+      ['FCG participation and interaction', '', 14, 1204, 'Active', [], 'IZU at Village']
     ]],
     ['Play Collaborative Meetings', 'tablet', null, [], [
-      ['Play session attendance', '', 10, 876, 'Active', []]
+      ['Play session attendance', '', 10, 876, 'Active', [], 'IZU at Village'],
+      ['Sector supervision in action', '', 19, 212, 'Active', [], 'IZU Sector Coordinator']
     ]],
     ['IZU at Village Demographics', 'tablet', null, [], [
-      ['IZU at Village demographics', '', 19, 193, 'Active', []]
+      ['IZU at Village demographics', '', 19, 193, 'Active', [], 'IZU at Village']
     ]],
     ['IZU Cell Coordinator Demographics', 'tablet', null, [], [
-      ['IZU Cell Coordinator demographics', '', 19, 63, 'Active', []]
+      ['IZU Cell Coordinator demographics', '', 19, 63, 'Active', [], 'IZU Cell Coordinator']
     ]],
     ['IZU Cell Coordinator Telephone Supervision management', 'tablet', null, [], [
-      ['IZU Telephone Supervision — weekly call', '', 52, 488, 'Active', []],
-      ['IZU Telephone Supervision — missed call', '', 11, 174, 'Active', []]
+      ['IZU Telephone Supervision — weekly call', '', 52, 488, 'Active', [], 'IZU Cell Coordinator'],
+      ['IZU Telephone Supervision — missed call', '', 11, 174, 'Active', [], 'IZU Cell Coordinator']
     ]],
     ['IZU Sector Coordinator Telephone Supervision', 'tablet', null, [], [
-      ['Sector Telephone Supervision — weekly call', '', 52, 212, 'Active', []]
+      ['Sector Telephone Supervision — weekly call', '', 52, 212, 'Active', [], 'IZU Sector Coordinator']
     ]],
     ['District Performance Evaluation of Sugira Muryango program', 'tablet', null, [], [
-      ['District performance evaluation', '', 27, 20, 'Active', []]
+      ['District performance evaluation', '', 27, 20, 'Active', [], 'HQ officer']
     ]],
     ['IZU Sector Coordinator Demographics', 'notablet', null, [], [
-      ['IZU Sector Coordinator demographics', '', 19, 19, 'Active', []]
+      ['IZU Sector Coordinator demographics', '', 19, 19, 'Active', [], 'IZU Sector Coordinator']
     ]],
     ['SLA User Management', 'notablet', null, [], [
-      ['Add a user', '', 11, 539, 'Active', []],
-      ['Change what a user may do', '', 6, 212, 'Active', []]
+      ['Add a user', '', 11, 539, 'Active', [], 'Sector lead (SLA)'],
+      ['Change what a user may do', '', 6, 212, 'Active', [], 'Sector lead (SLA)']
     ]],
     ['SM PROGRAM REPORTS BY SM STAFF', 'notablet', null, [], [
-      ['Staff programme report', '', 23, 148, 'Active', []]
+      ['Staff programme report', '', 23, 148, 'Active', [], 'HQ officer']
     ]],
     ['Women Economic Empowerment', 'notablet', null, [], [
-      ['Enrollment of Beneficiaries in WEE', '', 26, 0, 'Archived', []],
-      ['Gender Questionnaire Form', '', 18, 0, 'Draft', []]
+      ['Enrollment of Beneficiaries in WEE', '', 26, 0, 'Archived', [], 'IZU at Village'],
+      ['Gender Questionnaire Form', '', 18, 0, 'Draft', [], 'IZU at Village']
     ]],
     ['IZU Self-Efficacy', 'notablet', null, [], [
-      ['IZU self-efficacy', '', 15, 193, 'Active', []]
+      ['IZU self-efficacy', '', 15, 193, 'Active', [], 'IZU at Village']
     ]],
     ['SM END OF WEEK REPORT', 'notablet', null, [], [
-      ['End of week report', '', 12, 744, 'Active', []]
+      ['End of week report', '', 12, 744, 'Active', [], 'Sector lead (SLA)']
     ]],
     ['Think Aloud testing without Module', 'notablet', 'test', [], [
-      ['Think Aloud testing without Module', '', 5, 3, 'Archived', []]
+      ['Think Aloud testing without Module', '', 5, 3, 'Archived', [], 'HQ officer']
     ]],
     ['Test Project', 'notablet', 'test', [], [
-      ['Get Stakeholders', '', 2, 0, 'Archived', []]
+      ['Get Stakeholders', '', 2, 0, 'Archived', [], 'HQ officer']
     ]]
   ];
 
@@ -125,7 +139,10 @@
     var forms = p[4].map(function (f) {
       return {
         name: f[0], rw: f[1], questions: f[2], responses: f[3],
-        status: f[4], sessions: f[5], project: p[0]
+        status: f[4], sessions: f[5], by: f[6], project: p[0],
+        /* the app's own definition, from the permission that governs it:
+           "the forms supervisors fill in rather than home visitors" */
+        bySupervisor: f[6] !== 'IZU at Village'
       };
     });
     return {
@@ -161,6 +178,20 @@
     c.appendChild(el('i'));
     c.appendChild(document.createTextNode(text));
     return c;
+  }
+
+  /* The rest of the app spells IZU, SLA and HQ out on hover rather than in the
+     row. Built here rather than written into thirty-seven cells. */
+  var SHORT = {
+    'IZU': 'IZU — the home visitor at village level, one per village',
+    'SLA': 'SLA — Sugira Muryango Sector lead',
+    'HQ': 'HQ — the FXB Rwanda head office team'
+  };
+
+  function spellOut(text) {
+    return String(text).replace(/\b(IZU|SLA|HQ)\b/g, function (a) {
+      return '<abbr data-tip="' + SHORT[a] + '">' + a + '</abbr>';
+    });
   }
 
   /* "6.The Importance of Good Health" is the session's stored name; everywhere
@@ -255,9 +286,12 @@
       var out = [];
       var tags = tr.getAttribute('data-tags') || '';
 
+      /* A supervisor's form says so on the row. That is the whole of what the
+         Monitoring forms tab was telling you, said where the form is. */
       function formRow(depth, f) {
         return childRow(depth, 'i-reports', f.name,
-          f.questions + ' questions', fmt(f.responses) + ' responses', 'form');
+          f.questions + ' questions' + (f.bySupervisor ? ' · ' + f.by : ''),
+          fmt(f.responses) + ' responses', 'form');
       }
       function count(n) { return n + (n === 1 ? ' form' : ' forms'); }
 
@@ -299,9 +333,12 @@
     var table = el('table', 'tbl');
     var head = el('thead');
     var hr = el('tr');
-    ['Form', 'Kinyarwanda', 'Project', 'Used in', 'Questions', 'Responses', 'Status']
+    /* Questions is not here. It is on the form and in the tree, and a column
+       that wide pushed Filled in by off the card — which is the column that
+       tells a monitoring form from a visit form. */
+    ['Form', 'Kinyarwanda', 'Project', 'Used in', 'Filled in by', 'Responses', 'Status']
       .forEach(function (h, i) {
-        hr.appendChild(el('th', i === 4 || i === 5 ? 'num' : null, h));
+        hr.appendChild(el('th', i === 5 ? 'num' : null, h));
       });
     head.appendChild(hr);
     table.appendChild(head);
@@ -311,7 +348,8 @@
       var tr = el('tr');
       tr.setAttribute('data-go', 'form');
       tr.setAttribute('data-tags', (f.rw ? 'translated' : 'untranslated')
-        + ' ' + f.status.toLowerCase());
+        + ' ' + f.status.toLowerCase()
+        + (f.bySupervisor ? ' supervisor' : ' visit'));
 
       tr.appendChild(el('td', 'nm', f.name));
 
@@ -352,7 +390,10 @@
       }
       tr.appendChild(used);
 
-      tr.appendChild(el('td', 'num mut', String(f.questions)));
+      var by = el('td', 'mut');
+      by.innerHTML = spellOut(f.by);
+      tr.appendChild(by);
+
       tr.appendChild(el('td', 'num', fmt(f.responses)));
 
       var st = el('td');
@@ -372,10 +413,12 @@
        counts strings, not names; two numbers about translation on two screens
        meaning two different things is how the live system got into trouble. */
     var foot = el('div', 'tfoot');
-    foot.appendChild(el('span', null,
-      library.length + ' forms across ' + projects.length + ' projects · '
-      + fmt(library.reduce(function (a, f) { return a + f.responses; }, 0))
-      + ' responses collected'));
+    var span = el('span');
+    span.innerHTML = library.length + ' forms across ' + projects.length
+      + ' projects · ' + fmt(library.reduce(function (a, f) { return a + f.responses; }, 0))
+      + ' responses collected · the three that had a monitoring programme of '
+      + 'their own are in here too, on the sessions they monitor';
+    foot.appendChild(span);
     host.appendChild(foot);
   }
 
