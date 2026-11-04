@@ -872,6 +872,14 @@
       $$('[data-panelid]', screen).forEach(function (x) {
         x.hidden = x.getAttribute('data-panelid') !== panel;
       });
+      // An action belongs to what is showing. "New project" above a list of
+      // forms is the wrong verb for the thing in front of you.
+      $$('[data-forpanel]', screen).forEach(function (x) {
+        x.hidden = x.getAttribute('data-forpanel').split(' ').indexOf(panel) === -1;
+      });
+      $$('[data-offpanel]', screen).forEach(function (x) {
+        x.hidden = x.getAttribute('data-offpanel').split(' ').indexOf(panel) !== -1;
+      });
       var sc = document.getElementById('scroll');
       if (sc) sc.scrollTop = 0;
     });

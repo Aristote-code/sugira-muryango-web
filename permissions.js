@@ -792,11 +792,22 @@
     ordered().forEach(function (p) { ladder.appendChild(card(p)); });
     root.appendChild(ladder);
 
-    root.appendChild(el('p', 'pm-foot',
+    var foot = el('p', 'pm-foot');
+    foot.appendChild(document.createTextNode(
       'Eight positions stand for the ten jobs the programme actually has. The live system '
       + 'carries twenty-one roles for those ten — three of them called Test role — because there '
       + 'was no way to give one person one extra thing. Two more, BC office and Sugira Muryango '
-      + 'coordination office, could not be read from the capture and are not shown.'));
+      + 'coordination office, could not be read from the capture and are not shown. '));
+    /* The ten roles as they are stored today are the evidence for all of the
+       above, and they were reachable only from a chip on a safeguarding row.
+       They belong next to the thing that replaces them. */
+    var asis = el('button', 'rel');
+    asis.type = 'button';
+    asis.setAttribute('data-go', 'roles');
+    asis.innerHTML = '<svg aria-hidden="true"><use href="#i-admin"/></svg>';
+    asis.appendChild(document.createTextNode('How it works today'));
+    foot.appendChild(asis);
+    root.appendChild(foot);
   }
 
   /* ---- entry points ---- */

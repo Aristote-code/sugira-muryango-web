@@ -54,7 +54,7 @@
       title: 'Household Module Tracking',
       rel: [
         ['Sessions', 'i-programme', '12 sessions, a welcome, a closing and three boosters', 'module', 'What a household receives'],
-        ['Forms', 'i-reports', '7 forms carry this project’s questions', 'form', 'Filled on the tablet during a visit'],
+        ['Forms', 'i-reports', '10 forms carry this project’s questions', 'form', 'Five belong to the project, five to a session'],
         ['Cohorts', 'i-visits', 'Cohort 1, Cohort 2', 'cohorts', 'Decide who gets which session when'],
         ['Households', 'i-households', '2 210 enrolled', 'households', 'Everyone on this curriculum']
       ],

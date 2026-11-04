@@ -405,7 +405,15 @@
     var tabs = $$('.tab[data-tab]', bar);
     if (!tabs.length) return;
     var screen = bar.closest('.screen');
-    var table = screen && screen.querySelector('.tbl');
+    if (!screen) return;
+    /* The table is the one in the panel these tabs name, not the first table on
+       the screen. On Programme the Archived panel is written above the project
+       list, so All / Visible on App / Not visible on App had been selecting
+       rows in the archive — the underline moved, six archived projects sat
+       there, and the list below never changed. */
+    var panelId = tabs[0].getAttribute('data-panel');
+    var scope = (panelId && screen.querySelector('[data-panelid="' + panelId + '"]')) || screen;
+    var table = scope.querySelector('.tbl');
     if (!table) return;
 
     function select(tag) {

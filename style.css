@@ -940,6 +940,76 @@ svg use{pointer-events:none}
 .plr-r span{min-width:110px;text-align:right}
 @media (max-width:880px){.plr-l,.plr-r span:last-child{display:none}}
 
+/* ---------------- what one person can open ----------------
+   The same .plr rows as the places tree, with four switches on the right. Each
+   switch column is a fixed 52, shared by the heading and the cell under it, so
+   the four line up however long a group's name is. */
+.acc-vs{margin-left:auto;display:flex;align-items:center;gap:4px;flex:none}
+.acc-vl{width:var(--acc-col);text-align:center;font-size:11px;line-height:16px;
+  font-weight:500;color:var(--color-content-secondary)}
+.plr.head{--acc-col:52px;cursor:default;background:var(--x-clickup-color-background-on-main);
+  min-height:var(--size-control-xs)}
+.plr.head:hover{background:var(--x-clickup-color-background-on-main)}
+.acc-c{--acc-col:52px;width:var(--acc-col);height:24px;display:flex;align-items:center;
+  justify-content:center;border:0;background:none;border-radius:var(--x-clickup-radii-3);
+  cursor:pointer;padding:0}
+.acc-c:hover{background:var(--color-bg-hover)}
+.acc-c:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
+.acc-c.none{cursor:default}
+.acc-c.none:hover{background:none}
+/* Off is a ring, on is filled, an exception is filled and ringed — so the one
+   that is this person's alone is the one that looks different. */
+.acc-d{width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--color-border-default)}
+.acc-c.on .acc-d{background:var(--color-bg-primary-default);box-shadow:none}
+.acc-c.exc .acc-d{background:var(--color-content-warning);
+  box-shadow:0 0 0 2px var(--color-bg-surface),0 0 0 3.5px var(--color-content-warning)}
+.acc-c.none .acc-d{box-shadow:none;width:4px;height:4px;background:var(--color-border-default)}
+.acc-vr .plr-n{font-weight:500}
+.acc-vr{color:var(--color-content-secondary)}
+.acc-src{margin-left:auto;font-size:11px;line-height:16px;color:var(--color-content-secondary);flex:none}
+.acc-pr{gap:8px;padding-right:12px}
+.acc-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:16px;
+  color:var(--color-content-secondary);flex:none;min-width:150px}
+.acc-what{font-size:12px;line-height:16px;color:var(--color-content-secondary);min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-risk{display:flex;align-items:center;width:14px;height:14px;flex:none;color:var(--color-content-warning)}
+.acc-risk svg{width:14px;height:14px;fill:none}
+/* A verb the position does not grant still lists what would arrive with it,
+   quietly, so the switch is a choice rather than a leap. */
+.acc-vr.off,.acc-pr.off{opacity:.55}
+.acc-foot{padding:8px 12px;margin:0;font-size:12px;line-height:16px;
+  color:var(--color-content-secondary);border-top:1px solid var(--color-border-subtle)}
+.acc-foot b{color:var(--color-content-primary);font-weight:600}
+@media (max-width:880px){.acc-id{display:none}}
+
+/* A project row opens to show its sessions and forms. Same caret and the same
+   indent step as the places tree, because it is the same gesture answering the
+   same question — what is under this. */
+.prow-t{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;
+  margin-right:8px;padding:0;border:0;border-radius:var(--radius-sm);background:none;
+  color:var(--color-content-tertiary);cursor:pointer;vertical-align:-3px}
+.prow-t svg{width:16px;height:16px;fill:currentColor;
+  transition:transform 120ms var(--x-clickup-motion-timing)}
+.prow-t[aria-expanded="true"] svg{transform:rotate(90deg)}
+.prow-t:hover{background:var(--color-bg-hover);color:var(--color-content-secondary)}
+.prow-t:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
+.prow-s{display:block;margin-top:2px;font-size:12px;line-height:16px;
+  color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
+.tbl tr.is-open>td{background:var(--color-bg-hover)}
+.prow-kid>td{padding:0;background:var(--color-bg-surface)}
+.prow-kid:hover>td{background:var(--color-bg-hover)}
+.prk{display:flex;align-items:center;gap:8px;min-height:var(--size-control-md);
+  padding:0 12px;font-size:13px;line-height:16px;color:var(--color-content-secondary)}
+.prk-i{display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;
+  color:var(--color-content-tertiary)}
+.prk-i svg{width:16px;height:16px;fill:none}
+.prk-n{color:var(--color-content-primary);min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prk-note{flex:none;color:var(--color-content-secondary);font-size:12px}
+.prk-r{margin-left:auto;flex:none;font-size:12px;color:var(--color-content-secondary);
+  font-variant-numeric:tabular-nums}
+@media (max-width:880px){.prk-note{display:none}}
+
 /* login sits outside the app chrome */
 .shell.bare .rail,.shell.bare .topbar{display:none}
 .shell.bare{grid-template-columns:1fr}
