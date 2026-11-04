@@ -348,8 +348,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .rec h1.inplace,.rec-desc.inplace{background:var(--color-bg-surface);
   outline:1px solid var(--x-clickup-color-border-primary-focus);
   box-shadow:0 0 0 3px var(--x-clickup-color-effect-primary)}
-.toast-undo{margin-left:12px;padding:0;border:0;background:none;font:inherit;font-size:14px;
-  font-weight:600;color:var(--color-content-on-primary);text-decoration:underline;cursor:pointer}
+/* ClickUp's toast action is a real button, not underlined text: 24 high, r6,
+   1px border.default on the surface, 12/16 500 secondary, padding 0 7. */
+.toast-undo{margin-left:auto;height:var(--size-control-xs);padding:0 7px;
+  border:1px solid var(--color-border-default);border-radius:var(--button-sm-radius);
+  background:var(--color-bg-surface);font:inherit;font-size:12px;line-height:16px;
+  font-weight:500;color:var(--color-content-secondary);text-decoration:none;cursor:pointer;flex:none}
+.toast-undo:hover{background:var(--color-bg-hover)}
 /* ---------------- relations ---------------- */
 /* A related record is a row you can open, so it is a row: the kind it plays
    on the left, the record, and why it matters on the right. Geometry is the
@@ -527,7 +532,14 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .cellmark{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px;color:var(--color-content-tertiary)}
 .cellmark svg{width:16px;height:16px;fill:none}
 .tbl .mut{color:var(--color-content-secondary)}
-.tblwrap{overflow-x:auto}
+/* The column names stay put while rows scroll, as they do on ClickUp.
+   Sticky alone does nothing here: overflow-x makes this element the scroll
+   container on both axes, so the header had nothing to stick to and scrolled
+   away with the page. Capping the height gives the body its own scroll, which
+   is what the header then pins against. Short tables are under the cap and are
+   unaffected. */
+.tblwrap{overflow:auto;max-height:calc(100vh - 260px)}
+.tbl thead th{position:sticky;top:0;z-index:2;background:var(--color-bg-surface)}
 /* On a wide display the name column absorbs the slack, so the figures stay grouped
    on the right instead of drifting apart across the row. */
 @media (min-width:1500px){.tbl th:first-child,.tbl td:first-child{width:34%}}
@@ -765,7 +777,11 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
    and values that wrapped — which is what made the rhythm look arbitrary. */
 .pg{display:grid;margin-top:16px;row-gap:4px}
 @media (min-width:1360px){.pg{grid-template-columns:1fr 1fr;column-gap:40px}}
-.dw-body .pg,.dw.as-sidebar .pg{grid-template-columns:1fr}
+/* Only the side panel is too narrow for two columns. This used to force one
+   column on .dw-body as well, which covers both layouts, so the record opened
+   as a modal 1392 wide and still ran its properties down a single column with
+   446px empty beside every row. ClickUp puts them two-up once there is room. */
+.dw.as-sidebar .pg{grid-template-columns:1fr}
 .pgr{display:grid;grid-template-columns:var(--property-grid-property-label-width) minmax(0,1fr);
   align-items:center;height:var(--size-control-md);column-gap:var(--property-grid-margin-left)}
 .pgr .k{display:flex;align-items:center;gap:6px;height:var(--size-control-md);font-size:var(--property-grid-font-size);line-height:16px;color:var(--color-content-secondary);min-width:0}
@@ -833,8 +849,19 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 .modal textarea:focus,.modal input:focus,.modal select:focus{border-color:var(--x-clickup-color-border-primary-hover);outline:2px solid var(--x-clickup-color-effect-primary);outline-offset:0}
 .modal textarea{min-height:96px}
 .modal .mf{display:flex;gap:8px;justify-content:flex-end;padding:16px var(--inset);background:var(--x-clickup-color-background-on-main);border-top:1px solid var(--color-border-default)}
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--brand);color:var(--color-content-on-primary);font-size:14px;font-weight:600;
-  padding:12px 20px;border-radius:var(--radius-full);z-index:var(--z-toast);box-shadow:var(--elevation-modal)}
+/* ClickUp's Toast: 320x48, r12, menu surface, elevation-3, in the bottom-left
+   corner just past the rail (x = rail + 8) and 16 from the bottom. This was a
+   burgundy pill centred at the bottom — a different component, and the loudest
+   thing on screen for an "Added" confirmation. Left is measured from the rail
+   so it follows the rail when it collapses. */
+.toast{position:fixed;bottom:16px;left:calc(268px + 7px + 8px);
+  display:flex;align-items:center;gap:4px;min-width:320px;min-height:48px;
+  box-sizing:border-box;padding:12px 16px;
+  background:var(--x-clickup-color-background-menu);color:var(--color-content-primary);
+  font-size:14px;line-height:16px;font-weight:500;
+  border-radius:var(--radius-lg);z-index:var(--z-toast);box-shadow:var(--elevation-overlay)}
+body:has(.shell.mini) .toast{left:calc(76px + 7px + 8px)}
+@media (max-width:880px){.toast{left:16px;right:16px;min-width:0}}
 .toast[hidden]{display:none}
 /* standalone document: the artifact skeleton used to provide these */
 [hidden]{display:none!important}
@@ -1277,8 +1304,10 @@ svg use{pointer-events:none}
 .qrange{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
 .qrange span{font-size:12px;color:var(--color-content-secondary)}
 .qcols{display:grid;gap:1px}
-.qcol{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;border:0;background:none;
-  cursor:pointer;font-family:var(--ui);font-size:14px;color:var(--color-content-primary);text-align:left;width:100%}
+/* ClickUp's menu rows are 28 at r7, not 29 at r6. */
+.qcol{display:flex;align-items:center;gap:8px;height:var(--size-control-sm);padding:6px 8px;
+  border-radius:var(--x-clickup-radii-3-5);border:0;background:none;
+  cursor:pointer;font-family:var(--ui);font-size:14px;line-height:16px;color:var(--color-content-primary);text-align:left;width:100%}
 .qcol:hover{background:var(--x-clickup-color-background-on-main)}
 .qcol .bx{width:16px;height:16px;border-radius:4px;border:1px solid var(--color-primitive-grey-600);flex:none;
   display:inline-flex;align-items:center;justify-content:center;color:transparent}

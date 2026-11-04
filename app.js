@@ -660,7 +660,11 @@
   }
 
   // ---- layout switch: sidebar, modal, or promote to a full page ----
-  var dwLayout = 'sidebar';
+  /* Modal is the default because that is what ClickUp opens a record into:
+     TaskModal is inset 24 with r12 over the backdrop, and the as-modal layout
+     here already measures exactly that. The side panel stays one click away for
+     anyone who wants the list visible beside the record. */
+  var dwLayout = 'modal';
   function setLayout(next) {
     if (next === 'page') {
       var key = dwStack[dwStack.length - 1];
