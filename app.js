@@ -377,6 +377,17 @@
           + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>A position replaces whatever position they hold now. Roles they hold are left alone \u2014 those add on top of whichever position someone has.</span></p>',
       done: 'Position given \u2014 it takes effect the next time they sign in'
     },
+    permnew: {
+      title: 'Add a permission',
+      ok: 'Add it',
+      body: '<div><label for="f-pn">What it lets someone do</label><input id="f-pn" type="text" placeholder="e.g. Close a risk-of-harm case"></div>'
+          + '<div><label for="f-pd">What that means</label><textarea id="f-pd" placeholder="One sentence, in the words someone in the programme would use. This is what the row shows, and what a tick on a position means."></textarea></div>'
+          + '<div><label for="f-pg">Group</label><select id="f-pg"><option>Households</option><option>Visits</option><option>Risk-of-harm cases</option><option>Programme</option><option>Reports</option><option>Field support</option><option>People &amp; access</option><option>Maintenance</option></select></div>'
+          + '<div><label for="f-pr">Replaces, in the live system</label><input id="f-pr" type="text" placeholder="Optional \u2014 the stored names this stands for, comma separated"></div>'
+          + '<p class="m-lead">It is granted by nothing until a position or a role takes it, and appears on every position\u2019s list unticked.</p>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Twenty-six cover the whole programme. The live system carries a hundred and twelve because each screen added its own rather than reusing one \u2014 so check the list first for something that already does this.</span></p>',
+      done: 'Permission added \u2014 it is on every position, waiting to be granted'
+    },
     rolenew: {
       title: 'New role',
       ok: 'Create the role',
@@ -1141,6 +1152,7 @@
        else, so it is dropped here rather than in each of the loops below —
        after the indexes are taken, so every column still reads its own cell. */
     cols = cols.filter(function (c) { return !c.gap; });
+    var hasGap = cols.length !== ths.length;
 
     var host = table.closest('.card') || table.closest('.tblwrap');
     if (!host || !host.parentNode) return;
@@ -1167,16 +1179,35 @@
        makes the wrapper display:contents, so they become its own children)
        rather than opening a second band of chrome. */
     var fRow = host.previousElementSibling;
-    if (fRow && fRow.classList.contains('filters')) {
+    var joined = !!(fRow && fRow.classList.contains('filters'));
+    if (joined) {
       bar.className = 'tq tq-in';
       fRow.appendChild(bar);
     } else {
       host.parentNode.insertBefore(bar, host);
     }
+    /* Where a domain filter bar already governs this table — place, cohort,
+       module, the pills that know the hierarchy — the generic Filter and
+       Export would be a second way to do the same thing with a different idea
+       of what is applied, so they go. Columns and column sorting stay,
+       because the domain bar does not do those.
+
+       What governs it is the bar in its own panel, or on the screen when the
+       table is not in one. Asking the screen alone said yes on Programme,
+       where the pills sit behind a tab of their own: the nineteen projects
+       and the thirty-seven forms were left with no Filter and no Export and
+       a text search for the whole of it. The grouping chip is drawn as a pill
+       too, so it is named here and excluded. */
+    var scope = host.closest('[data-panelid]') || host.closest('.screen');
+    var owned = !!(scope && scope.querySelector('.filters .fl:not(.grpby)'));
 
     var filterBtn = bar.querySelector('[data-q="filter"]');
     var colsBtn = bar.querySelector('[data-q="cols"]');
     var count = bar.querySelector('.tq-count');
+    if (owned) {
+      filterBtn.hidden = true;
+      bar.querySelector('[data-q="export"]').hidden = true;
+    }
 
     /* ---- popovers ---- */
     function popover(cls) {
@@ -1421,6 +1452,18 @@
           c.th.querySelector('.ttl').appendChild(b);
         }
       });
+      /* The last column holds the slack, so hiding it would leave nothing to
+         hold it and the gaps would spread themselves across the row again.
+         The last column still showing takes the job instead. Tables that
+         carry a spacer need none of this: the spacer is never hidden. */
+      if (!hasGap) {
+        var tail = cols.filter(function (c) { return c.shown; }).pop();
+        cols.forEach(function (c) {
+          var on = c === tail && c !== cols[cols.length - 1];
+          c.th.classList.toggle('grow', on);
+          rows.forEach(function (r) { r.cells[c.i].classList.toggle('grow', on); });
+        });
+      }
       var active = activeCount();
       filterBtn.classList.toggle('on', active > 0);
       filterBtn.innerHTML = ICON.filter + 'Filter' + (active ? '<span class="n">' + active + '</span>' : '');
