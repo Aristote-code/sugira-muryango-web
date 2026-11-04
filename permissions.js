@@ -713,7 +713,6 @@
     var tr = el('tr');
 
     var nm = el('td', 'nm');
-    nm.appendChild(icon(g.icon, 'cellmark'));
     nm.appendChild(document.createTextNode(perm.label));
     if (perm.risk) {
       /* .acc-prisk, which exists and is sized. The class this first used had
@@ -726,7 +725,10 @@
     }
     tr.appendChild(nm);
 
-    tr.appendChild(el('td', 'mut', g.name));
+    var gt = el('td', 'mut');
+    gt.appendChild(icon(g.icon, 'cellmark'));
+    gt.appendChild(document.createTextNode(g.name));
+    tr.appendChild(gt);
     /* The sentence is the long one, and a row here is 32 like every other row
        in the app. It ellipsises and carries the whole of itself on hover. */
     var what = el('td', 'mut pm-what');
@@ -760,7 +762,11 @@
     if (!root) return;
     root.innerHTML = '';
 
-    var top = el('div', 'pm-top');
+    /* A `.filters` rather than a pm-top: app.js puts the table's own Filter,
+       Columns and Export into the row above when that row is one of these,
+       so the tab gets one band of chrome like every other screen instead of
+       two stacked with nothing between them. */
+    var top = el('div', 'filters');
     var find = el('div', 'search');
     find.innerHTML = '<svg aria-hidden="true"><use href="#i-search"/></svg>';
     var inp = el('input');

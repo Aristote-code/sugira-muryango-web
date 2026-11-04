@@ -1243,7 +1243,9 @@ svg use{pointer-events:none}
    (blocks/ListDialogs.tsx): cards at rest show only their header, one is
    expanded, and the header carries enough to be read without opening. The
    cards indent by what they are built on, so the ladder is the layout. */
-.pm-top{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+/* The gap below it is the container's now, so its own margin would be
+   counted twice — which is what took these two tabs to 52. */
+.pm-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .pm-sum{font-family:var(--mono);font-size:13px;color:var(--color-content-secondary);flex:none}
 .pm-sum b{color:var(--color-content-primary);font-weight:600}
 /* The field ladder and the office ladder share no rung, so the second
@@ -1298,6 +1300,12 @@ svg use{pointer-events:none}
 .pm-whon{font-size:14px;line-height:var(--lh-16);color:var(--color-content-primary)}
 .pm-whon b{font-weight:600}
 .pm-whod{font-size:13px;line-height:18px;color:var(--color-content-secondary);max-width:86ch}
+/* The three tabs render inside a div of their own rather than straight into
+   .pad, so they did not inherit its 20px rhythm — the permissions table sat
+   flush against its toolbar while every other screen on the app leaves 20,
+   and the positions footer sat flush against the grid. They are grids of
+   their own now, with the same gap. */
+#permBody,#roleBody,#permsBody{display:grid;gap:20px;align-content:start}
 .pm-foot{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:92ch;padding:0 2px}
 /* The switch. Reads as on or off at a glance and never as a checkbox, because
    a checkbox in a list of 112 says "tick the ones you want" rather than
@@ -1544,7 +1552,7 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
    than a ladder, because roles have no order — none is built on another, which
    is the difference between a role and a position. */
 .rolegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:12px;margin-top:16px}
+  gap:12px}
 .rolec{display:flex;flex-direction:column;gap:8px;padding:16px;text-align:left;
   background:var(--color-bg-surface);border:0;border-radius:var(--radius-lg);
   box-shadow:var(--elevation-raised);font:inherit;cursor:pointer}
