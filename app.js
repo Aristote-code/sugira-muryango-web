@@ -1536,6 +1536,9 @@
       t.dataset.enhanced = '1';
       try { enhance(t); } catch (err) { /* one bad table must not stop the rest */ }
     });
+    /* Read by anything that must not touch a toolbar before it exists, for
+       the case where that module loads after this has already run. */
+    window.SugiraTablesReady = true;
     document.dispatchEvent(new Event('tables:ready'));
   }
 

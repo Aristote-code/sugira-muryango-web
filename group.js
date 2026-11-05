@@ -73,8 +73,12 @@
       tq = bar.classList.contains('tq') || bar.classList.contains('filters')
         ? bar : bar.querySelector('.tq, .filters');
     }
+    /* A table whose panel writes its own filter row somewhere other than
+       directly above it. Its own panel, not the screen: the screen's first
+       filter row belongs to whichever table comes first, which on a screen of
+       tabs is a table on another tab. */
     if (!tq) {
-      var sc = table.closest('.screen');
+      var sc = table.closest('[data-panelid]') || table.closest('.screen');
       tq = sc && (sc.querySelector('.filters') || sc.querySelector('.tq'));
     }
     if (!tq) return;
@@ -220,7 +224,16 @@
       .forEach(function (t) { try { setup(t); } catch (e) { /* one table must not stop the rest */ } });
   }
 
-  /* after the tables have their toolbars */
+  /* After the tables have their toolbars — and only after.
+
+     The second line used to be a timer, which was harmless while app.js built
+     the toolbars as it parsed: by the time anything here ran they all existed.
+     Now that it waits for DOMContentLoaded the timer can win the race, and a
+     table with no toolbar yet sent its chip to the fallback below — the
+     screen's filter row. On Field support that is the search row above the
+     tabs, so all four tables put a Group chip there, three of them for tables
+     nobody was looking at. It happened on roughly one load in two, and
+     dataset.grouped meant the correct pass afterwards did nothing. */
   document.addEventListener('tables:ready', init);
-  if (document.readyState !== 'loading') setTimeout(init, 0);
+  if (window.SugiraTablesReady) init();
 })();
