@@ -88,7 +88,10 @@
     project:  { all: 'Any',         options: PROJECTS },
     year:     { all: 'All',         options: ['2026', '2025', '2024'] },
     izu:      { all: 'All',         options: ['M. Dusabe', 'J. Kamanzi', 'E. Mutesi', 'A. Nyirahabimana', 'B. Uwamahoro'] },
-    level:    { all: 'All',         options: ['Province', 'District', 'Sector'] }
+    level:    { all: 'All',         options: ['Province', 'District', 'Sector'] },
+    /* A document type is a folder somebody made, so the list of them is read
+       off the documents rather than written here. */
+    type:     { all: 'All',         options: [] }
   };
 
   /* The dashboard goes on a wall, so its filters have to move the numbers
@@ -324,6 +327,7 @@
     level:    ['level'],
     form:     ['form', 'survey'],
     izu:      ['izu', 'visitor'],
+    type:     ['type'],
     /* Every heading in this app that holds a moment. They are worth listing
        rather than guessing at, because a column called Waiting holds days and
        a column called Minutes holds neither. */

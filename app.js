@@ -394,6 +394,21 @@
             'but leaves the ones already on a visitor\u2019s list for this week.</p></div>',
       done: 'Cohort 1 saved \u2014 1\u202F104 households rescheduled'
     },
+    /* "Document types you can create", behaving as folders, "with their own
+       search". A folder was a string typed into the upload dialog, which is
+       how you end up with Policy and policy. Made here, it is a thing with a
+       name and a default audience, and every document put in it starts from
+       that rather than from whatever the last person chose. */
+    doctype: {
+      title: 'New document type',
+      ok: 'Create the type',
+      body: '<div><label for="f-dtn">Name</label><input id="f-dtn" type="text" placeholder="e.g. Consent forms"></div>'
+          + '<div><label for="f-dtv">Who it is for, to begin with</label><select id="f-dtv">'
+          + '<option>Everyone</option><option>IZU at Village</option>'
+          + '<option>Supervisors and above</option><option>M&amp;E only</option></select></div>'
+          + '<p class="mhint">Each document can be narrowed further. Nothing in a type is opened here — a document is downloaded, which is what the field asked for.</p>',
+      done: 'Type created — it is offered the next time anything is uploaded'
+    },
     publish: {
       title: 'Publish to the field',
       ok: 'Publish',
@@ -401,7 +416,9 @@
             '<div><label for="f-pt">Title</label><input id="f-pt" type="text" placeholder="e.g. Recognising signs of harm"></div>' +
             '<div><label for="f-pf">File</label><input id="f-pf" type="file"></div>' +
             '<p class="mhint">MP4 or PDF, up to 200 MB. A video is re-encoded for the tablet, which takes a few minutes after you publish.</p>' +
-            '<div><label for="f-pd">Folder</label><select id="f-pd"><option>Using the tablet</option><option>Safeguarding</option><option>Session guidance</option><option>Forms and reporting</option><option>New folder\u2026</option></select></div>' +
+            /* A type, not a typed-in folder name \u2014 the types are the ones that
+               exist, and a new one is made where types are made. */
+            '<div><label for="f-pd">Type</label><select id="f-pd"><option>Policy</option><option>Field</option><option>Reporting</option><option>Session guidance</option></select></div>' +
             '<div><label for="f-pl">Language</label><select id="f-pl"><option>Kinyarwanda</option><option>English</option><option>Both</option></select></div>' +
             '<div><label for="f-pv">Visible to</label><select id="f-pv"><option>Everyone</option><option>Home visitors</option><option>Supervisors and above</option><option>Social workers only</option></select></div>' +
             '<p class="mhint">Visibility reads from the same roles as Roles &amp; access.</p>',
