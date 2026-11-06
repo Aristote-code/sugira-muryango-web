@@ -495,7 +495,23 @@
       by.innerHTML = spellOut(f.by);
       tr.appendChild(by);
 
-      tr.appendChild(el('td', 'num', fmt(f.responses)));
+      /* "I enter a module, I go to see forms of this module, I go into data of
+         a specific form, to filter, to export… it's a very long flow." The
+         count is the only thing on the row that is about the data, so it is
+         the way into it: one click to this form's Data tab, where the filter
+         and Export already live. A form nobody has answered has nothing to
+         open. */
+      var rc = el('td', 'num');
+      if (f.responses) {
+        var rb = el('button', 'rel');
+        rb.type = 'button';
+        rb.setAttribute('data-go', 'form');
+        rb.setAttribute('data-view', 'tab:Data');
+        rb.setAttribute('data-tip', 'Open these responses, where they can be filtered and exported');
+        rb.textContent = fmt(f.responses);
+        rc.appendChild(rb);
+      } else rc.textContent = fmt(f.responses);
+      tr.appendChild(rc);
 
       var st = el('td');
       st.appendChild(chip(f.status,
