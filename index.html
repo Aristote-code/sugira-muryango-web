@@ -433,16 +433,16 @@
           <h1>Mukamana Jeanne</h1>
           <div class="pg" id="pg-hh">
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg><span>Status</span></span><span class="v"><span class="pg-badge bad">Risk of harm</span></span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Caregiver</span></span><span class="v">Mukamana Jeanne</span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Place</span></span><span class="v"><button class="rel" type="button" data-go="places"><svg aria-hidden="true"><use href="#i-location"/></svg>Kabare &middot; Kibungo</button></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Head of household</span></span><span class="v"><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-admin"/></svg>Mukamana Jeanne</button><span class="conseq">also the caregiver</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Isibo</span></span><span class="v"><button class="rel" type="button" data-go="places" data-tip="Isibo — the cluster of about twenty households below a village"><svg aria-hidden="true"><use href="#i-households"/></svg>Rugando isibo</button><span class="conseq">18 households</span></span></div><div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Village</span></span><span class="v"><button class="rel" type="button" data-go="places"><svg aria-hidden="true"><use href="#i-location"/></svg>Kabare village</button><span class="conseq">Kibungo &middot; Ngoma</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-visits"/></svg><span>Session</span></span><span class="v"><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Session 6</button><span class="conseq">4 weeks behind</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>National ID</span></span><span class="v">1 1987 8 0054312 0 78</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Family ID</span></span><span class="v">F-4311-007</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-building"/></svg><span>Family type</span></span><span class="v">Single mother-headed household</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-call"/></svg><span>Phone</span></span><span class="v">+250 78 555 0192</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</span></span><span class="v"><button class="rel" type="button" data-go="people"><svg aria-hidden="true"><use href="#i-admin"/></svg>M. Dusabe</button></span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Cohort</span></span><span class="v"><button class="rel" type="button" data-go="cohorts"><svg aria-hidden="true"><use href="#i-visits"/></svg>Cohort 1</button></span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Children</span></span><span class="v">3 &middot; two under five</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Cohort</span></span><span class="v"><button class="rel" type="button" data-go="cohorts"><svg aria-hidden="true"><use href="#i-visits"/></svg>Cohort 1 &middot; 2026</button></span></div><div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Supervisor</span></span><span class="v"><button class="rel" type="button" data-go="people"><svg aria-hidden="true"><use href="#i-admin"/></svg>C. Uwimana</button><span class="conseq">reviews this household’s cases</span></span></div><div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Project</span></span><span class="v"><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-programme"/></svg>Household Module Tracking</button></span></div>
+            
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Enrolled</span></span><span class="v">12 June 2026</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Consent</span></span><span class="v">Given 12 June 2026</span></div>
             <div class="pgr is-empty"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Needs</span></span><span class="v empty">&mdash;</span></div>
@@ -452,7 +452,7 @@
         <div class="tabs">
           <button class="tab on" type="button" data-panel="overview">Overview</button>
           <button class="tab" type="button" data-panel="visits">Visits</button>
-          <button class="tab" type="button" data-panel="children">Children</button>
+          <button class="tab" type="button" data-panel="children">Members<span class="chip" style="margin-left:8px">4</span></button>
           <button class="tab" type="button" data-panel="risk">Risk of harm</button>
           <button class="tab" type="button" data-panel="referrals">Referrals</button>
         </div>
@@ -525,14 +525,15 @@
         <div class="pad" data-panelid="children" hidden>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th data-person>Name</th><th>Age</th><th>Sex</th><th>Growth check</th><th>Status</th></tr></thead>
+              <thead><tr><th data-person>Name</th><th>In the household</th><th class="num">Age</th><th>Sex</th><th>Growth check</th><th>Status</th><th class="gap"></th></tr></thead>
               <tbody>
-                <tr><td>Mukamana Alice</td><td>2</td><td>F</td><td>Overdue since August</td><td><span class="chip bad"><i></i>In the open case</span></td></tr>
-                <tr><td>Mukamana Eric</td><td>5</td><td>M</td><td>Up to date</td><td><span class="chip ok"><i></i>On track</span></td></tr>
-                <tr><td>Mukamana Diane</td><td>8</td><td>F</td><td>Not applicable</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr><td class="nm">Mukamana Jeanne</td><td class="mut">Head &middot; caregiver</td><td class="num">39</td><td>F</td><td class="mut"><span class="rd">Not applicable</span></td><td><span class="chip ok"><i></i>On track</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">Mukamana Alice</td><td class="mut">Child</td><td class="num">2</td><td>F</td><td class="mut">Overdue since August</td><td><span class="chip bad"><i></i>In the open case</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">Mukamana Eric</td><td class="mut">Child</td><td class="num">5</td><td>M</td><td class="mut">Up to date</td><td><span class="chip ok"><i></i>On track</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">Mukamana Diane</td><td class="mut">Child</td><td class="num">8</td><td>F</td><td class="mut"><span class="rd">Not applicable</span></td><td><span class="chip ok"><i></i>On track</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>3 children &middot; one under five, which is what the programme is built around</span></div>
+            <div class="tfoot"><span>4 in the household &middot; three children, one under five, which is what the programme is built around</span></div>
           </div>
         </div>
         <div class="pad" data-panelid="referrals" hidden>

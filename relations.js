@@ -269,7 +269,20 @@
   }
 
   function mount() {
-    Object.keys(R).forEach(function (k) { build(k, R[k]); });
+    /* "Relation ntago ari ngombwa" — Relation is not necessary — said of a
+       household, while describing what it should show instead: the head of
+       the household and those in it, and the things of isibo and village.
+       They were right about the household: its tab was the record read back
+       to itself, with the supervisor and the project the only lines it had
+       that the fields did not. Both are fields now, so the tab goes.
+
+       It stays on the other five for the moment. There it is not a restatement
+       — a form's tab is the only place that names the projects using it — and
+       taking it off them would lose that with nowhere to put it. */
+    Object.keys(R).forEach(function (k) {
+      if (k === 'household') return;
+      build(k, R[k]);
+    });
     watch();
   }
 
