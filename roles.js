@@ -398,11 +398,50 @@
     renderOne: renderOne
   };
 
+  /* ---- a person, who is one position plus these ----------------------
+
+     The person drawer names its roles in two places — the property grid at
+     the top and the access panel below. Both used to be typed by hand, which
+     is how "at four different positions" was still on the screen after the
+     data said five. Both read the one list now: the ids on #accessTree, the
+     same ones the permission rows are computed from. */
+
+  function personRoles() {
+    var t = document.getElementById('accessTree');
+    var ids = ((t && t.getAttribute('data-roles')) || '').split(',').filter(Boolean);
+    return ids.map(byId).filter(Boolean);
+  }
+
+  function fillPersonRoles() {
+    var rs = personRoles();
+    Array.prototype.forEach.call(
+      document.querySelectorAll('[data-person-roles]'), function (slot) {
+        slot.innerHTML = '';
+        var row = slot.closest ? slot.closest('.pgr') : null;
+        if (row) row.classList.toggle('is-empty', !rs.length);
+        if (!rs.length) {
+          var none = el('span', 'empty', '—');
+          slot.appendChild(none);
+          return;
+        }
+        rs.forEach(function (r) {
+          var b = el('button', 'rel');
+          b.type = 'button';
+          b.setAttribute('data-go', 'rolecard');
+          b.setAttribute('data-role-id', r.id);
+          b.appendChild(svg(r.icon, null));
+          b.appendChild(document.createTextNode(r.name));
+          slot.appendChild(b);
+        });
+      });
+  }
+
   function mount() {
     if (!document.getElementById('roleBody')) return;
     if (!window.SugiraPerms) { setTimeout(mount, 30); return; }
     renderList();
     renderOne();
+    fillPersonRoles();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);

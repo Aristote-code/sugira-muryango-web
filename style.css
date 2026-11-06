@@ -1022,10 +1022,6 @@ svg use{pointer-events:none}
 .acc-sum b{color:var(--color-content-primary);font-weight:600}
 /* Wide enough for "Risk-of-harm cases", which is the longest of the eight. */
 .acc-tree{--acc-name:168px;border-top:1px solid var(--color-border-subtle)}
-/* the chevron on the base chooser, which permissions.js writes as raw markup */
-.pm-cv{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;
-  color:var(--color-content-tertiary)}
-
 /* the group row: switch, then the part that opens */
 /* The row is the control now: caret, icon, name, count. The switch that used
    to lead it is gone — it met the eye before the name did and said what the
@@ -1260,29 +1256,13 @@ svg use{pointer-events:none}
 .pm-cb{padding:4px 16px 16px 42px;display:grid;gap:20px}
 .pm-cb .pm-what{font-size:14px;line-height:21px;color:var(--color-content-secondary);max-width:80ch}
 .pm-sect{display:grid;gap:8px;min-width:0}
-.pm-lbl{font-size:12px;line-height:16px;font-weight:500;color:var(--color-content-secondary);margin:0}
 .pm-sh{display:flex;align-items:center;gap:8px}
-.pm-sh .pm-lbl{flex:1;min-width:0}
-/* "Starts from" is DialogSelect (components/AppDialog.tsx:404): a 36 px icon
-   tile, the title with a chevron, and the description on its own line so the
-   choice explains itself without being opened. */
-.pm-bsel{display:flex;align-items:center;gap:8px;width:100%;max-width:560px;margin-left:-8px;
-  padding:8px 20px 8px 8px;border:0;background:none;cursor:pointer;text-align:left;font-family:var(--ui);
-  border-radius:var(--app-dialog-dialog-select-trigger-radius)}
-.pm-bsel:hover{background:var(--x-clickup-color-background-on-main)}
-.pm-bsel:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-2px}
-.pm-bico{display:flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;
-  border-radius:var(--app-dialog-radius-2);background:var(--x-clickup-color-background-on-main);color:var(--color-content-secondary)}
-.pm-bico svg{width:18px;height:18px;fill:none}
-.pm-bico.fill svg{fill:currentColor;stroke:none}
-.pm-btx{display:grid;gap:2px;min-width:0}
-.pm-bt{display:flex;align-items:center;gap:2px;font-size:14px;line-height:var(--lh-16);font-weight:500;color:var(--color-content-primary)}
-.pm-bt .pm-cv{transform:rotate(90deg);color:var(--x-clickup-color-content-placeholder)}
-/* The same row used to go somewhere rather than to open a menu: the chevron
-   points the way it leads. */
-.pm-bsel.go .pm-bt .pm-cv{transform:none}
-.pm-bd{font-size:12px;line-height:18px;color:var(--color-content-secondary)}
-.pm-rule{font-size:12px;line-height:18px;color:var(--color-content-secondary);max-width:80ch;margin-top:4px}
+/* The person panel used to open with a card naming their position and the one
+   it was built on, each under a label and each with a paragraph describing
+   it — pm-bsel, pm-bico, pm-btx, pm-bt, pm-bd, pm-lbl, pm-rule. The property
+   grid above it already carries Position and Roles as facts, so the card was
+   the same two things said twice and longer. It went, and so did the fifteen
+   rules that dressed it. */
 .pm-none{font-size:13px;line-height:18px;color:var(--color-content-secondary)}
 .pm-cfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--color-border-subtle)}
 .pm-kids{font-size:12px;color:var(--color-content-secondary)}

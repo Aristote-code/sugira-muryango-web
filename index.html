@@ -1422,7 +1422,8 @@
           <div class="pg" id="pg-person">
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Status</span></span><span class="v"><span class="pg-badge ok">Active</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Email</span></span><span class="v">c.uwimana@fxbrwanda.org</span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Position</span></span><span class="v"><button class="rel" type="button" data-go="permissions" data-perms="role" data-perms-role="Sugira Muryango Sector lead (SLA)"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</button></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span data-tip="The job a person holds. One each, and each builds on the one before it.">Position</span></span><span class="v"><button class="rel" type="button" data-go="permissions" data-perms="role" data-perms-role="Sugira Muryango Sector lead (SLA)"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</button></span></div>
+            <div class="pgr" data-pgr="roles"><span class="k"><svg aria-hidden="true"><use href="#i-plus"/></svg><span data-tip="Permissions added on top of a position. A person may hold any number of these, or none.">Roles</span></span><span class="v" data-person-roles></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Place</span></span><span class="v"><button class="rel" type="button" data-go="places"><svg aria-hidden="true"><use href="#i-location"/></svg>Kibungo &middot; Ngoma</button><span class="conseq">sector</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-building"/></svg><span>Projects</span></span><span class="v"><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Enrollment</button><span class="conseq">+1</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Can open</span></span><span class="v">Sector &mdash; their own, and nothing above it</span></div>
@@ -1441,36 +1442,7 @@
 
         <div class="pad" data-panelid="can">
           <div class="card">
-            <div class="card-h"><h3>Where their access comes from<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A position is built on the one below it and adds to it. Nothing it gives is this person’s alone — changing any of it changes it for all eleven who hold it. One thing for one person is an exception, below. Everything C. Uwimana can open arrives down that chain, so this page names the chain rather than re-listing permissions that belong to eleven other people too."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="access"><svg aria-hidden="true"><use href="#i-settings"/></svg> Change position</button></span></div>
-            <div class="pm-sect">
-              <p class="pm-lbl">Position</p>
-              <button class="pm-bsel go" type="button" data-go="permissions" data-perms="person" data-perms-who="C. Uwimana" data-perms-role="Sugira Muryango Sector lead (SLA)">
-                <span class="pm-bico fill"><svg aria-hidden="true"><use href="#i-hierarchy"/></svg></span>
-                <span class="pm-btx">
-                  <span class="pm-bt"><span>Sugira Muryango Sector lead (SLA)</span><svg class="pm-cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></span>
-                  <span class="pm-bd">Everything IZU at Village has, plus changing a visit, opening and closing a case, seeing the programme and building reports. 14 of the 26 permissions.</span>
-                </span>
-              </button>
-            </div>
-            <div class="pm-sect">
-              <p class="pm-lbl">Which is built on</p>
-              <button class="pm-bsel go" type="button" data-go="permissions" data-perms="role" data-perms-role="IZU at Village">
-                <span class="pm-bico"><svg aria-hidden="true"><use href="#i-visits"/></svg></span>
-                <span class="pm-btx">
-                  <span class="pm-bt"><span>IZU at Village</span><svg class="pm-cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></span>
-                  <span class="pm-bd">Built from nothing — the home visitor, one per village. 8 of the 26 permissions, and every one of them is C. Uwimana’s too.</span>
-                </span>
-              </button>
-            </div>
-            <p class="pm-rule">Eleven people hold this position.</p>
-          </div>
-          <div class="card">
-            <div class="card-h"><h3>Roles<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A role is work that is not a job — translating a form, building a report. The people who do it sit at every level, which is why it is not a rung. It adds to the position and can never take anything away, so C. Uwimana is still a Sector lead plus whatever these give."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="roleadd"><svg aria-hidden="true"><use href="#i-plus"/></svg> Give them a role</button></span></div>
-            <p class="pm-rule">Six people hold Form translator, at four different positions.</p>
-            <button class="rel" type="button" data-go="rolecard" data-role-id="translator"><svg aria-hidden="true"><use href="#i-reports"/></svg>Form translator</button>
-          </div>
-          <div class="card">
-            <div class="card-h"><h3>What they can open<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Eight groups by four verbs — thirty-two switches, not a hundred and twelve checkboxes. That is what a position actually stores; the names underneath are what each switch contains. Open a group to read them."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
+            <div class="card-h"><h3>What they can open<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Eight groups by four verbs — thirty-two switches, not a hundred and twelve checkboxes. That is what a position actually stores; the names underneath are what each switch contains. Open a group to read them."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="access"><svg aria-hidden="true"><use href="#i-settings"/></svg> Change position</button><button class="btn sec sm" type="button" data-modal="roleadd"><svg aria-hidden="true"><use href="#i-plus"/></svg> Give them a role</button></span></div>
             <div class="tree" id="accessTree" data-who="C. Uwimana" data-role="Sugira Muryango Sector lead (SLA)" data-roles="translator"></div>
           </div>
           <div class="card">
