@@ -33,29 +33,40 @@
 (function () {
   'use strict';
 
+  /* `across` is the positions a role's holders actually occupy, and it is the
+     whole difference between this tab and the one beside it: a position is a
+     rung, so nobody is on two of them, while a role sits on top of as many
+     rungs as it likes. Each of these used to be asserted in the description
+     — "the people who translate sit at every level", "national and district
+     level alike" — which is a sentence doing a column's job. The sentences
+     are gone; the fact is data now, and the card and drawer both show it. */
   var SEED = [
     { id: 'translator', name: 'Form translator', icon: 'i-reports', people: 6,
-      what: 'Writes the Kinyarwanda alongside the English. Not a rung — the people who '
-        + 'translate sit at every level, and none of them needs a position of their own.',
+      across: ['IZU', 'SLA', 'ICC', 'DTL', 'HQ'],
+      what: 'Writes the Kinyarwanda alongside the English.',
       grants: ['prog-translate', 'prog-see'] },
 
     { id: 'reporter', name: 'Report builder', icon: 'i-reports', people: 9,
+      across: ['NCDA', 'CPWO', 'DTL', 'HQ'],
       what: 'Builds reports beyond the standard ones and takes the numbers out of the '
-        + 'system. Held by M&E staff at national and district level alike.',
+        + 'system.',
       grants: ['rep-see', 'rep-build', 'rep-export'] },
 
     { id: 'cohorts', name: 'Cohort manager', icon: 'i-visits', people: 4,
+      across: ['CPWO', 'ICC', 'DTL'],
       what: 'Decides which households are grouped together and what dates the group runs '
-        + 'between. One or two people per district do this, whatever else they are.',
+        + 'between.',
       grants: ['prog-cohorts'] },
 
     { id: 'publisher', name: 'Form publisher', icon: 'i-programme', people: 2,
+      across: ['HQ', 'Admin'],
       what: 'Publishes a new version of a form that is already in use, and takes a project '
-        + 'off the tablet. The riskiest thing on this list — it reaches every tablet.',
+        + 'off the tablet.',
       grants: ['prog-change', 'prog-archive'],
       risk: 'Publishing reaches every tablet in the programme at once.' },
 
     { id: 'community', name: 'Community manager', icon: 'i-message', people: 3,
+      across: ['SLA', 'DTL', 'HQ'],
       what: 'Answers what field staff post, and keeps the guidance they read current.',
       grants: ['fs-see', 'fs-change', 'fs-community'] }
   ];
@@ -63,7 +74,8 @@
   function fresh() {
     return SEED.map(function (r) {
       return { id: r.id, name: r.name, icon: r.icon, people: r.people, what: r.what,
-               risk: r.risk, grants: r.grants.slice() };
+               risk: r.risk, grants: r.grants.slice(),
+               across: (r.across || []).slice() };
     });
   }
 
@@ -114,6 +126,29 @@
     });
   }
 
+  /* The positions a role reaches, as position records rather than ids. */
+  function heldIn(r) {
+    if (!perms() || !r.across) return [];
+    var all = perms().positions();
+    return r.across.map(function (id) {
+      for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
+      return null;
+    }).filter(Boolean);
+  }
+
+  /* "the Sector lead" is how a position reads mid-sentence; in a chip the
+     article is in the way. */
+  function chipName(p) {
+    return (p.short || p.name).replace(/^the /, '');
+  }
+
+  function spread(r) {
+    var n = heldIn(r).length;
+    var who = r.people + (r.people === 1 ? ' person' : ' people');
+    if (!n) return who;
+    return who + (n === 1 ? ' in one position' : ' across ' + n + ' positions');
+  }
+
   /* ---- the list ---- */
 
   function card(r) {
@@ -144,8 +179,7 @@
     cnt.appendChild(el('b', null, '+' + n));
     cnt.appendChild(el('span', null, n === 1 ? ' permission' : ' permissions'));
     foot.appendChild(cnt);
-    foot.appendChild(el('span', 'rolec-p',
-      r.people + (r.people === 1 ? ' person' : ' people')));
+    foot.appendChild(el('span', 'rolec-p', spread(r)));
     a.appendChild(foot);
     return a;
   }
@@ -263,6 +297,27 @@
        reading it is the thing the drawers were asked twice to stop doing, and
        the six written into index.html came out for the same reason. `r.what`
        stays in the data for whatever wants it next. */
+    /* The positions its holders are in. A position drawer can carry nothing
+       like this — you hold one position and that is the end of it — so this
+       row is the clearest statement on the screen of what a role is: the
+       thing that sits on top of several rungs at once. Chips, not a
+       sentence, and no box around them. */
+    var inPos = heldIn(r);
+    if (inPos.length) {
+      var held = el('div', 'rec-held');
+      held.appendChild(el('span', 'rec-held-k', 'Held in'));
+      var chips = el('span', 'rec-held-v');
+      inPos.forEach(function (p) {
+        var c = el('button', 'chip');
+        c.type = 'button';
+        c.setAttribute('data-go', 'position');
+        c.setAttribute('data-pos-id', p.id);
+        c.textContent = chipName(p);
+        chips.appendChild(c);
+      });
+      held.appendChild(chips);
+      head.appendChild(held);
+    }
     root.appendChild(head);
 
     /* what it grants — the same block the position drawer uses. A role has no
