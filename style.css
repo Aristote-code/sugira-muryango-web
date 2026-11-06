@@ -136,7 +136,34 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .topbar .tools{margin-left:auto;display:flex;align-items:center;gap:4px;flex:none}
 .userchip{display:flex;align-items:center;gap:8px;height:28px;cursor:pointer;background:none;border:0;padding:0 8px 0 4px;border-radius:var(--button-md-radius)}
 .userchip:hover{background:var(--x-clickup-color-background-on-main)}
-.av{width:20px;height:20px;border-radius:50%;background:var(--color-bg-primary-default);color:var(--color-content-on-primary);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:none}
+/* ClickUp's letter avatar (Avatar.tsx): a circle holding up to two initials in
+   white. One colour per person, so a name is recognised before it is read —
+   the colour does the work in a list of forty rows, the letters confirm it.
+
+   The hues are ClickUp's own avatar palette, one step down from the 800s it
+   ships (the 1000s). At 800 white initials sit between 2.3 and 3.8 to 1,
+   because there the letter is decoration — ClickUp's SpaceBadge is literally
+   aria-hidden. Ours carries a name, so it is read: at 1000 every hue carries
+   white at 5.2 to 1 or better.
+
+   Four of the fourteen are missing on purpose. Green, amber, orange and red
+   already mean something here — Active, Needs validation, Overdue, Refused —
+   and a person must never look like a status. Grey is out too: grey is how
+   this app says nobody. Seven remain, not eight: ClickUp's teal and mint are
+   four degrees apart, and two people side by side in them look like one. */
+.h1{--av:#5a43d6}  /* purple     6.5:1 */
+.h2{--av:#3451b2}  /* neon blue  7.1:1 */
+.h3{--av:#0b68cb}  /* azure      5.4:1 */
+.h4{--av:#067a6f}  /* teal       5.2:1 */
+.h5{--av:#cb1d63}  /* pink       5.4:1 */
+.h6{--av:#9c2bad}  /* violet     6.2:1 */
+.h7{--av:#7d5e54}  /* brown      5.8:1 */
+.av{width:20px;height:20px;border-radius:50%;background:var(--av,var(--color-bg-primary-default));color:var(--color-content-on-primary);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:none}
+.av[data-i]::before{content:attr(data-i)}
+/* In a table cell the avatar leads the name and the two read as one thing. */
+.who-c{display:flex;align-items:center;gap:8px;min-width:0}
+.who-c .av{width:18px;height:18px;font-size:11px}
+.who-c .who-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .userchip .who{display:flex;align-items:baseline;gap:6px;text-align:left;line-height:var(--lh-16)}
 .userchip .who b{font-size:14px;font-weight:500;color:var(--color-content-primary)}
 .userchip .who span{font-size:12px;color:var(--color-content-secondary)}
@@ -160,7 +187,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .pbar .btn svg{width:14px;height:14px}
 .phead{padding:20px 24px 0;background:var(--color-bg-surface)}
 .phead .row{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
-.phead .big{width:64px;height:64px;border-radius:50%;background:var(--color-bg-primary-default);color:var(--color-content-on-primary);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;flex:none}
+.phead .big{width:64px;height:64px;border-radius:50%;background:var(--av,var(--color-bg-primary-default));color:var(--color-content-on-primary);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;flex:none}
 .phead h1{font-size:24px;line-height:30px;font-weight:600}
 .phead .meta{display:flex;flex-wrap:wrap;gap:4px 20px;margin-top:8px;font-size:.875rem;color:var(--color-content-secondary)}
 .phead .meta span{display:inline-flex;align-items:center;gap:8px}
