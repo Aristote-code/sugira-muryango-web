@@ -1312,6 +1312,11 @@ svg use{pointer-events:none}
 /* what changing this would affect — the reason the relationship matters */
 .conseq{font-size:11px;line-height:16px;color:var(--color-content-warning);white-space:nowrap}
 .conseq.plain{color:var(--color-content-secondary)}
+/* Something that has already run out is not a warning any more — it is a fact
+   about the past, and it stays on the record because that is what an auditor
+   came to read. */
+.conseq.rd{color:var(--color-content-secondary);text-decoration:line-through;
+  text-decoration-color:var(--color-border-strong)}
 /* ---------------- query bar: filter, sort, columns, export ----------------
    Built to ClickUp's measured specs. SelectTrigger: 28 high, r7, 1px border.strong,
    padding 0 7, gap 4. SortBadge: 20x18, r10, bg.selected, 12px icon in link colour.
