@@ -385,6 +385,24 @@
   function children(p) {
     return state.pos.filter(function (q) { return q.base === p.id; });
   }
+
+  /* Everything downstream, not just the next rung. A position is edited here;
+     what it gives is given to every position built on it, and to every
+     position built on those. National NCDA is held by two people and carries
+     to thirty-four, which is the kind of thing the screen has to say before
+     somebody ticks a box on it rather than after. */
+  function descendants(p) {
+    var out = [], seen = {};
+    (function walk(x) {
+      children(x).forEach(function (k) {
+        if (seen[k.id]) return;
+        seen[k.id] = 1;
+        out.push(k);
+        walk(k);
+      });
+    })(p);
+    return out;
+  }
   /* Every capability a position holds, and the rung each one arrives from. */
   /* Every permission this position holds, and the rung it first arrives from.
      The value is the position, not just true, because "where does this come
@@ -636,6 +654,35 @@
       rv.appendChild(rc);
       rw.appendChild(rv);
       rec.appendChild(rw);
+    }
+
+    /* What a change here carries to. The card says what this position builds
+       on, which is the backwards half and the harmless one — the permissions
+       that arrive that way are already drawn below, locked, saying where they
+       came from. The forwards half was nowhere: National NCDA is held by two
+       people and anything ticked on it lands on thirty-four, every admin
+       among them. An edit whose reach is invisible is the same failure as a
+       grant whose reach is invisible. */
+    var down = descendants(p);
+    if (down.length) {
+      var dw = el('div', 'rec-reach');
+      dw.appendChild(el('span', 'rec-reach-k', 'Inherited by'));
+      var dv = el('span', 'rec-reach-v');
+      down.forEach(function (q) {
+        var c = el('button', 'chip');
+        c.type = 'button';
+        c.setAttribute('data-go', 'position');
+        c.setAttribute('data-pos-id', q.id);
+        c.textContent = shortOf(q).replace(/^the /, '');
+        dv.appendChild(c);
+      });
+      var heads = down.reduce(function (a, q) { return a + q.people; }, 0);
+      var tot = el('span', 'rec-reach-n', heads + (heads === 1 ? ' person' : ' people'));
+      tot.setAttribute('data-tip', 'Anything added to this position is added to these as well, '
+        + 'so a tick here reaches ' + heads + ' people beyond the ' + p.people + ' who hold it.');
+      dv.appendChild(tot);
+      dw.appendChild(dv);
+      rec.appendChild(dw);
     }
     root.appendChild(rec);
 

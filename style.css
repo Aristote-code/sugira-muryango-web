@@ -1600,6 +1600,11 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 .rec-held,.rec-reach{display:flex;align-items:baseline;gap:8px;margin-top:12px;
   font-size:12px;line-height:16px}
 .rec-held-k,.rec-reach-k{flex:none;color:var(--color-content-secondary)}
+/* The headcount after the chips. Not a chip itself — it is what the chips add
+   up to, and the whole point is that it is larger than the number in the
+   header. */
+.rec-reach-n{margin-left:4px;font-weight:500;color:var(--color-content-primary);
+  white-space:nowrap;cursor:help}
 .rec-held-v,.rec-reach-v{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
 /* .chip is normally a span; as a button it arrives with the browser's own
    border and font, neither of which belongs on a pill. */
