@@ -37,6 +37,37 @@ fi
 
 if [ -f "$DIR/style.css" ]; then
   python3 "$HERE/audit-tokens.py" "$DIR/style.css" || fail=1
+
+  # A stray */ closes nothing and turns the prose above it into CSS, which the
+  # parser then skips along with the rule after it. It has happened twice, both
+  # times silently: a palette stopped applying and nothing said so.
+  stray=$(python3 - "$DIR/style.css" <<'PY'
+import sys
+s = open(sys.argv[1], encoding="utf-8").read()
+depth, i, bad = 0, 0, []
+line = 1
+while i < len(s) - 1:
+    if s[i] == '\n':
+        line += 1
+    elif s[i:i+2] == '/*':
+        depth += 1; i += 2; continue
+    elif s[i:i+2] == '*/':
+        depth -= 1
+        if depth < 0:
+            bad.append(str(line)); depth = 0
+        i += 2; continue
+    i += 1
+if depth > 0:
+    bad.append("unclosed at end of file")
+print(",".join(bad))
+PY
+)
+  if [ -n "$stray" ]; then
+    echo "  css: a */ that closes nothing, at line $stray"
+    fail=1
+  else
+    echo "  css: every comment opens and closes"
+  fi
 fi
 
 if [ -f "$DIR/index.html" ]; then
