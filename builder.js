@@ -259,19 +259,23 @@
 
     /* The two things this programme does with a question that ClickUp's form
        has no equivalent for: ask it only sometimes, and open a case. */
+    var on = q.when ? FORM.q.indexOf(at(q.when.q)) : -1;
+    var broken = q.when && on >= i;
     var cond = el('button', 'fb-link');
     cond.type = 'button';
-    cond.textContent = q.when
-      ? 'Shows when ' + (FORM.q.indexOf(at(q.when.q)) + 1) + ' is ' + q.when.is
-      : 'Always asked';
-    cond.classList.toggle('on', !!q.when);
+    cond.textContent = q.when ? 'Shows when ' + (on + 1) + ' is ' + q.when.is : 'Always asked';
+    cond.classList.toggle('on', !!q.when && !broken);
+    cond.classList.toggle('is-broken', !!broken);
     cond.onclick = function (e) {
       e.stopPropagation();
       var rows = [{ label: 'Always asked', selected: !q.when, onPick: function () {
         delete q.when; window.SugiraMenu.close(); draw();
       } }];
-      FORM.q.forEach(function (other, oi) {
-        if (other.id === q.id || !other.opts) return;
+      /* Only the questions asked before this one. The tablet asks one at a
+         time, in order, so a condition on a later answer is a condition that
+         can never be true — and offering it is offering a dead end. */
+      FORM.q.slice(0, i).forEach(function (other, oi) {
+        if (!other.opts) return;
         other.opts.forEach(function (v) {
           rows.push({
             label: 'When ' + (oi + 1) + ' is ' + v,
@@ -284,9 +288,29 @@
           });
         });
       });
+      if (rows.length === 1) {
+        rows.push({ separator: true });
+        rows.push({ label: 'Nothing is asked before this one', disabled: true });
+      }
       window.SugiraMenu.show(cond, rows, { width: 260 });
     };
     foot.appendChild(cond);
+
+    /* Reordering is free while you build, so a move can put a question above
+       the one it needs. That is not a move to refuse — it is a state to name,
+       because the person who made it is the person who can fix it. */
+    if (broken) {
+      li.classList.add('is-broken');
+      var bad = el('span', 'fb-bad');
+      bad.setAttribute('data-tip', 'The tablet asks one question at a time, in '
+        + 'order. This one is asked at ' + (i + 1) + ', before ' + (on + 1)
+        + ' has been answered, so the condition can never be true and the '
+        + 'question would never appear. Move it below ' + (on + 1) + ', or '
+        + 'point it at something asked earlier.');
+      bad.innerHTML = '<svg aria-hidden="true"><use href="#i-alert"/></svg>'
+        + 'Asked before ' + (on + 1);
+      foot.appendChild(bad);
+    }
 
     if (q.opens) {
       var c = el('span', 'chip bad');
@@ -335,6 +359,16 @@
     h.appendChild(n);
     pane.appendChild(h);
 
+    if (!FORM.q.length) {
+      /* A form with nothing in it is not an error, it is the start. It says
+         what to do next and points at the only thing that can do it. */
+      var none = el('div', 'fb-empty');
+      none.appendChild(el('p', 'fb-empty-t', 'No questions yet'));
+      none.appendChild(el('p', 'fb-empty-s',
+        'Pick a kind on the left and it joins the form here.'));
+      pane.appendChild(none);
+      return pane;
+    }
     var ol = el('ol', 'fb-list');
     ol.setAttribute('aria-label', 'The questions in this form');
     FORM.q.forEach(function (q, i) { ol.appendChild(card(q, i)); });
@@ -346,7 +380,21 @@
   function preview() {
     var pane = el('div', 'fb-pane fb-prev');
     var h = el('div', 'fb-h');
-    h.appendChild(el('h3', null, 'On the tablet'));
+    /* "On the tablet" was a promise this column does not keep: the tablet
+       asks one question at a time, and this shows all of them at once —
+       which is what you want while building, because checking question
+       thirty should not cost thirty taps. So it says what it is, and the
+       tab that does walk it one at a time is named in the mark. */
+    var ttl = el('h3', null, 'How it will read');
+    var help = el('button', 'ihelp');
+    help.type = 'button';
+    help.setAttribute('aria-label', 'What this is');
+    help.setAttribute('data-tip', 'Every question at once, in the language the '
+      + 'field works in, so you can see the whole shape while you build. The '
+      + 'tablet itself asks one at a time; the Preview tab walks it that way.');
+    help.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
+    ttl.appendChild(help);
+    h.appendChild(ttl);
     h.appendChild(langSeg());
     pane.appendChild(h);
 
@@ -379,6 +427,10 @@
     if (!dev) return;
     dev.innerHTML = '';
     dev.appendChild(el('p', 'fb-dev-t', lang === 'rw' ? (FORM.rw || FORM.name) : FORM.name));
+    if (!FORM.q.length) {
+      dev.appendChild(el('p', 'fb-dq-w', 'Nothing to ask yet.'));
+      return;
+    }
 
     FORM.q.forEach(function (q, i) {
       var box = el('div', 'fb-dq' + (picked === q.id ? ' on' : '')
@@ -395,10 +447,13 @@
       box.appendChild(label);
 
       if (q.when) {
-        var w = el('p', 'fb-dq-w');
-        w.textContent = 'Only asked when ' + (FORM.q.indexOf(at(q.when.q)) + 1)
-          + ' is “' + q.when.is + '”';
+        var on = FORM.q.indexOf(at(q.when.q));
+        var w = el('p', 'fb-dq-w' + (on >= i ? ' is-broken' : ''));
+        w.textContent = on >= i
+          ? 'Never asked — ' + (on + 1) + ' has not been answered yet'
+          : 'Only asked when ' + (on + 1) + ' is “' + q.when.is + '”';
         box.appendChild(w);
+        if (on >= i) box.classList.add('is-broken');
       }
       /* Showing the Kinyarwanda is showing what the field will read. If the
          English has moved on, this is the sentence they will actually get,

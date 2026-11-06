@@ -1630,6 +1630,17 @@ svg use{pointer-events:none}
   text-decoration:underline;text-decoration-color:var(--color-border-strong);
   text-underline-offset:2px}
 .fb-link.on{color:var(--color-bg-primary-default)}
+/* A condition that can never be true. Not an error to block the move with —
+   you are still building — but the one thing on the card that has to be seen
+   without reading it. */
+.fb-f.is-broken{box-shadow:0 0 0 1px var(--x-clickup-color-border-warning)}
+.fb-link.is-broken{color:var(--color-content-warning);
+  text-decoration-color:var(--color-content-warning)}
+.fb-bad{display:inline-flex;align-items:center;gap:var(--space-1);
+  font-size:11px;line-height:16px;color:var(--color-content-warning)}
+.fb-bad svg{width:12px;height:12px;flex:none;fill:none}
+.fb-dq.is-broken{box-shadow:0 0 0 1px var(--x-clickup-color-border-warning)}
+.fb-dq-w.is-broken{color:var(--color-content-warning)}
 .fb-rw{font-size:11px;line-height:16px;color:var(--color-content-success)}
 .fb-rw.is-missing,.fb-rw.is-stale{color:var(--color-content-warning)}
 .fb-dq-w.is-stale{color:var(--color-content-warning)}
@@ -1639,6 +1650,13 @@ svg use{pointer-events:none}
   background:none;color:var(--color-content-tertiary);cursor:pointer}
 .fb-del:hover{background:var(--color-bg-danger-subtle);color:var(--color-content-danger)}
 .fb-del svg{width:12px;height:12px;fill:none}
+
+.fb-empty{display:flex;flex-direction:column;gap:var(--space-1);
+  padding:var(--space-8) var(--space-4);border-radius:var(--radius-lg);
+  border:1px dashed var(--color-border-default);text-align:center}
+.fb-empty-t{font-size:13px;line-height:18px;font-weight:500;
+  color:var(--color-content-primary)}
+.fb-empty-s{font-size:12px;line-height:16px;color:var(--color-content-secondary)}
 
 /* the tablet */
 .fb-dev{display:flex;flex-direction:column;gap:var(--space-3);
