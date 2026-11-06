@@ -441,6 +441,12 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
    No letter-spacing: the system specifies 12/16 500 and no tracking, and
    inventing some here would be a different component again. */
 .chip:has(i){text-transform:uppercase}
+/* A status that is also a way in: the same pill, borrowing the border-colour
+   hover the other clickable pills use, so it reads as pressable without
+   becoming a second component. */
+button.chip{border:0;cursor:pointer;font-family:inherit}
+button.chip:hover{filter:brightness(.96)}
+button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
 .chip.ok{background:var(--color-bg-success-subtle);color:var(--color-content-success)}
 .chip.warn{background:var(--color-bg-warning-subtle);color:var(--color-content-warning)}
 .chip.bad{background:var(--color-bg-danger-subtle);color:var(--color-content-danger)}

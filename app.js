@@ -355,6 +355,55 @@
         draw();
       }
     },
+    /* A conflict left open has to be reachable, or "1 conflict open" is a
+       label on a dead end. It is the same dialog as the one that raised it —
+       the same three ways out, the same words — because settling one later is
+       not a different act from settling it then. What it adds is the two
+       things you did not have at the time: who left it, and when. */
+    settle: {
+      title: 'Settle this conflict',
+      ok: 'Settle it',
+      body: '<p class="mhint" id="f-stw"></p><div id="f-stc"></div>'
+          + '<div class="impact"><b>What this changes</b>'
+          + '<p>Access to one form, in one project. Nothing the IZU Cell '
+          + 'Coordinator holds in the two other projects this form is in '
+          + 'moves, because each pairing is settled on its own.</p></div>',
+      done: 'Settled — the pairing reads as settled from both ends',
+      init: function (body, from) {
+        var proj = (from && from.getAttribute('data-settle')) || 'this project';
+        body.querySelector('#f-stw').textContent =
+          'Left open on 14 October by A. Gahimana, when this form was added to '
+          + proj + '.';
+        var host = body.querySelector('#f-stc');
+        var box = document.createElement('div');
+        box.className = 'impact';
+        var h = document.createElement('b');
+        h.textContent = '1 conflict to settle';
+        box.appendChild(h);
+        var r = document.createElement('div');
+        r.className = 'cfl';
+        var who = document.createElement('span');
+        who.className = 'cfl-w';
+        who.textContent = 'IZU Cell Coordinator';
+        var what = document.createElement('span');
+        what.className = 'cfl-t';
+        what.textContent = 'has Report access in Risk of Harm management, and Data access only here';
+        var pick = document.createElement('select');
+        pick.setAttribute('aria-label', 'What the IZU Cell Coordinator gets in ' + proj);
+        ['Keep what this project gives', 'Take what the form carries', 'Leave it open']
+          .forEach(function (o) {
+            var op = document.createElement('option');
+            op.textContent = o;
+            pick.appendChild(op);
+          });
+        r.appendChild(who);
+        r.appendChild(what);
+        r.appendChild(pick);
+        box.appendChild(r);
+        host.appendChild(box);
+        if (window.SugiraMenu) window.SugiraMenu.enhance(host);
+      }
+    },
     qedit: {
       title: 'Question 3',
       ok: 'Save the question',
