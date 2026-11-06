@@ -1204,14 +1204,21 @@ svg use{pointer-events:none}
    but all 86 property values were dead ends. These make the value navigable.
    The chip is ClickUp's own measured RelationshipChips spec (max 136 x 20, 1px border, r6,
    padding 0 4, 11/13.2), which already sits on the token scale. */
-.rel{display:inline-flex;align-items:center;gap:4px;max-width:136px;height:20px;
+/* The chip is a block container, not a flex one, so that a name too long for
+   136px ends in an ellipsis instead of being cut mid-word — "Flash weekly
+   report on every module" was reading as "Flash weekly report or". Laid out
+   as flex, the name is an anonymous flex item and text-overflow has nothing
+   to apply to; the icon sits inline instead, and the name gets its ellipsis.
+   Line 18 = 20 minus the two borders, so one line centres in the chip. */
+.rel{display:inline-block;max-width:136px;height:20px;vertical-align:middle;
   border:1px solid var(--color-border-default);border-radius:var(--x-clickup-radii-3);
   padding:0 4px;background:var(--color-bg-surface);
-  font-family:var(--ui);font-size:11px;line-height:16px;color:var(--color-content-primary);cursor:pointer;
+  font-family:var(--ui);font-size:11px;line-height:18px;color:var(--color-content-primary);cursor:pointer;
   overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-width:0}
 .rel:hover{border-color:var(--x-clickup-color-border-primary-low-contrast);color:var(--x-clickup-color-background-primary-pressed);background:var(--color-bg-primary-subtle)}
 .rel:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
-.rel svg{width:11px;height:11px;flex:none;fill:none;color:var(--x-clickup-color-content-placeholder)}
+.rel svg{width:11px;height:11px;flex:none;fill:none;vertical-align:-2px;margin-right:4px;
+  color:var(--x-clickup-color-content-placeholder)}
 .rel:hover svg{color:var(--color-bg-primary-default)}
 .rel.more{color:var(--color-content-secondary);border-style:dashed}
 .pgr .v .rel{max-width:min(100%,340px)}

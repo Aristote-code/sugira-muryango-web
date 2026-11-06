@@ -1785,14 +1785,16 @@
 
   function hide() {
     if (!owner) return;
-    owner.setAttribute('aria-expanded', 'false');
+    if (owner.hasAttribute('aria-expanded')) owner.setAttribute('aria-expanded', 'false');
     owner.removeAttribute('aria-describedby');
     owner = null;
     el().hidden = true;
   }
 
+  function own(el) { return (el.textContent || '').replace(/\s+/g, ' ').trim(); }
+
   function show(btn) {
-    var text = btn.getAttribute('data-tip');
+    var text = btn.getAttribute('data-tip') || own(btn);
     if (!text) return;
     var t = el();
     hide();
@@ -1808,12 +1810,24 @@
     t.style.left = (left + window.scrollX) + 'px';
     t.style.top = (top + window.scrollY) + 'px';
     owner = btn;
-    btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-describedby', t.id);
+    /* A chip showing its own name adds nothing a screen reader has not already
+       read out, so it is shown but not announced twice. */
+    if (text !== own(btn)) {
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-describedby', t.id);
+    }
   }
 
   function mark(e) {
-    return e.target && e.target.closest ? e.target.closest('[data-tip]') : null;
+    if (!e.target || !e.target.closest) return null;
+    var tip = e.target.closest('[data-tip]');
+    if (tip) return tip;
+    /* A chip too narrow for its own name is a name nobody can read. Rather
+       than writing every name into the app twice, the chip that is cut off
+       offers itself: hover or focus it and it says what it says. */
+    var chip = e.target.closest('.rel');
+    if (chip && chip.scrollWidth > chip.clientWidth + 1) return chip;
+    return null;
   }
 
   document.addEventListener('mouseover', function (e) {
