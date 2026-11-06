@@ -90,8 +90,10 @@
     izu:      { all: 'All',         options: ['M. Dusabe', 'J. Kamanzi', 'E. Mutesi', 'A. Nyirahabimana', 'B. Uwamahoro'] },
     level:    { all: 'All',         options: ['Province', 'District', 'Sector'] },
     /* A document type is a folder somebody made, so the list of them is read
-       off the documents rather than written here. */
-    type:     { all: 'All',         options: [] }
+       off the documents rather than written here. Same for the kind of thing a
+       follow-up is chasing. */
+    type:     { all: 'All',         options: [] },
+    kind:     { all: 'Any',         options: [] }
   };
 
   /* The dashboard goes on a wall, so its filters have to move the numbers
@@ -328,12 +330,16 @@
     form:     ['form', 'survey'],
     izu:      ['izu', 'visitor'],
     type:     ['type'],
-    /* Every heading in this app that holds a moment. They are worth listing
-       rather than guessing at, because a column called Waiting holds days and
-       a column called Minutes holds neither. */
-    when:     ['when', 'date', 'last visit', 'last run', 'last active',
-               'last sync', 'last edited', 'added', 'sent', 'updated',
-               'archived', 'review due', 'posted', 'opened']
+    kind:     ['kind'],
+    /* Every heading in this app that holds a moment, matched whole. As
+       fragments they caught four columns that hold nothing of the kind:
+       "Posted by" and "Archived by" are people, "Opened" is a count, and
+       "When this answer is given" is a condition. A chip bound to one of those
+       filters a column it cannot read, which empties a list for no reason
+       anybody can see. */
+    when:     ['=when', '=date', '=last visit', '=last run', '=last active',
+               '=last sync', '=last edited', '=archived', '=sent', '=updated',
+               '=review due', '=waiting', '=posted']
   };
 
   /* ---- reading the dates this app writes ----------------------------------
@@ -402,7 +408,14 @@
     });
     for (var i = 0; i < heads.length; i++) {
       for (var j = 0; j < aliases.length; j++) {
-        if (heads[i].indexOf(aliases[j]) > -1) return i;
+        var a = aliases[j];
+        /* "=" asks for the whole heading. Most dimensions want the fragment —
+           Project has to find "Project, exactly as it is stored" — but a
+           dimension that reads the cell rather than compares it as text has to
+           be sure of the column it got. */
+        var hit = a.charAt(0) === '=' ? heads[i] === a.slice(1)
+          : heads[i].indexOf(a) > -1;
+        if (hit) return i;
       }
     }
     return -1;
