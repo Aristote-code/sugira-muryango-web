@@ -57,6 +57,12 @@
     });
   }
 
+  /* Rows gathered under headings — the same stroke weight as the toolbar's
+     other two, drawn here because the icon set lives in app.js. */
+  var GLYPH = '<svg viewBox="0 0 24 24" aria-hidden="true">'
+    + '<path d="M4 6h16M4 11h16M4 16h10M4 20h10" stroke="currentColor" '
+    + 'stroke-width="1.6" stroke-linecap="round"/></svg>';
+
   function setup(table) {
     if (table.dataset.grouped) return;
     var cols = groupable(table);
@@ -86,31 +92,32 @@
     var body = table.querySelector('tbody');
     var state = { col: null, shut: {} };
 
+    /* Group used to lead every toolbar, which is the wrong billing: "I can
+       have like 100,000 families, or at national level — seeing that you are
+       grouping here would be very difficult. Making this group in listing
+       would not be possible. What could be done is the part of filtering."
+
+       It is still worth having on a list of nine. So it keeps its place in the
+       room and loses the front seat: a view control beside Filter and Columns,
+       in ClickUp's own toolbar order, instead of the first thing on the row
+       and the only one dressed as a filter. It names its column when it is
+       doing something, the way Columns carries its count. */
     var chip = document.createElement('button');
-    chip.className = 'fl grpby';
+    chip.className = 'tq-btn grpby';
     chip.type = 'button';
     chip.setAttribute('aria-haspopup', 'menu');
     paintChip();
 
     var cols0 = tq.querySelector('[data-q="cols"]');
-    if (cols0 && cols0.parentNode === tq) tq.insertBefore(chip, cols0.nextSibling);
-    else tq.insertBefore(chip, tq.firstChild);
+    if (cols0) cols0.parentNode.insertBefore(chip, cols0);
+    else tq.appendChild(chip);
 
     function paintChip() {
-      chip.innerHTML = '';
-      var k = document.createElement('span');
-      k.className = 'k';
-      k.textContent = 'Group';
-      var b = document.createElement('b');
-      b.textContent = state.col === null ? 'None'
-        : (cols.filter(function (c) { return c.i === state.col; })[0] || {}).name;
-      var cv = document.createElement('span');
-      cv.className = 'cv';
-      cv.textContent = '▼';
-      chip.appendChild(k);
-      chip.appendChild(b);
-      chip.appendChild(cv);
-      chip.classList.toggle('on', state.col !== null);
+      var on = state.col !== null;
+      var name = on ? (cols.filter(function (c) { return c.i === state.col; })[0] || {}).name : '';
+      chip.innerHTML = GLYPH + 'Group'
+        + (on ? '<span class="n">' + name + '</span>' : '');
+      chip.classList.toggle('on', on);
     }
 
     var menu = null;

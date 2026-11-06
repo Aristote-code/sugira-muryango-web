@@ -272,8 +272,9 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   max-width:40ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .grp-n{font-size:var(--task-group-group-count-font-size);line-height:16px;
   color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
-.fl.grpby.on{background:var(--color-bg-primary-subtle);
-  border-color:var(--x-clickup-color-border-primary-low-contrast)}
+/* Group sits with Filter and Columns now, so .tq-btn.on dresses it. The badge
+   carries a column name rather than a count, so it is not forced square. */
+.tq-btn.grpby .n{padding:0 6px;font-variant-numeric:normal}
 /* ---------------- fields ---------------- */
 /* CustomFieldRow as measured: 36 high on a 1px top border.subtle, a 220
    label column with a 16 type icon and the name 8 after it, the value
