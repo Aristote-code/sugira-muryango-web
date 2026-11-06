@@ -304,6 +304,7 @@
   var state = {
     pos: freshPositions(),
     open: null,          // the one expanded card
+    find: '',            // the search box reads this before anyone types
     who: null,           // set when the screen is opened from a person
     whoRole: null
   };
@@ -358,14 +359,20 @@
   function shortOf(p) { return p.short || p.name.replace(/ \(.*\)$/, ''); }
   /* "Everything IZU at Village has, plus five more things." The sentence is
      the whole point of the model, so it is what the collapsed card shows. */
+  /* The card used to carry a whole sentence here — "Everything National NCDA
+     has, plus 2 things." The client asked, in front of the screen, what
+     positions and roles even are, and a sentence that long on every card was
+     part of why the two tabs read as the same grid twice.
+
+     What a position builds on is structure, so it now says so as a label. A
+     position that starts the ladder says nothing at all, which carries the
+     fact better than "Built from nothing" ever did — and that phrase is one
+     Aristote asked three times to be rid of. How many it adds is already on
+     the card as the meter, and in the drawer in full. */
   function lineage(p) {
-    if (!p.base) return 'Built from nothing.';
+    if (!p.base) return '';
     var b = byId(p.base);
-    if (!b) return 'Built on a position that no longer exists.';
-    var n = p.adds.length;
-    if (!n) return 'Exactly what ' + shortOf(b) + ' has, and nothing more.';
-    return 'Everything ' + shortOf(b) + ' has, plus '
-      + n + (n === 1 ? ' thing' : ' things') + '.';
+    return 'Builds on ' + (b ? shortOf(b) : 'a position that is gone');
   }
 
   /* ---- bits ---- */
@@ -477,8 +484,10 @@
     a.appendChild(top);
 
     /* The indent used to say what this is built on. A grid has no indent, so
-       the sentence says it, and the cards stay in chain order. */
-    a.appendChild(el('p', 'posc-l', lineage(p)));
+       the label says it, and the cards stay in chain order. The ones that
+       start a ladder get no label, and the gap is the point. */
+    var on = lineage(p);
+    if (on) a.appendChild(el('p', 'posc-l', on));
 
     var foot = el('div', 'rolec-f');
     foot.appendChild(reach(total(p)));

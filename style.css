@@ -1572,6 +1572,9 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   font-size:12px;line-height:16px;color:var(--color-content-secondary);
   font-variant-numeric:tabular-nums}
 .rolec-p{margin-left:auto}
+/* Same weight as a position's "14 of 26", so the two tabs read as two kinds
+   of fact rather than one card shouting louder than the other. */
+.rolec-c b{font-size:14px;font-weight:600;color:var(--color-content-primary)}
 /* The one that makes a new role says what the check is for before you click. */
 .rolec.new{border:1px dashed var(--color-border-default);box-shadow:none;
   background:none;color:var(--color-content-secondary)}

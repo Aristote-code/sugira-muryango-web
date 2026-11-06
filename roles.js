@@ -134,9 +134,16 @@
     a.appendChild(top);
     a.appendChild(el('p', 'rolec-w', r.what));
 
+    /* The plus is the whole difference between this tab and the one beside
+       it. A position card shows a share of everything — "14 of 26", with a
+       meter. A role never has a share; it only ever adds to whatever the
+       position already gave. One character says that, from across a room. */
     var foot = el('div', 'rolec-f');
-    foot.appendChild(el('span', 'rolec-c',
-      r.grants.length + (r.grants.length === 1 ? ' permission' : ' permissions')));
+    var n = r.grants.length;
+    var cnt = el('span', 'rolec-c');
+    cnt.appendChild(el('b', null, '+' + n));
+    cnt.appendChild(el('span', null, n === 1 ? ' permission' : ' permissions'));
+    foot.appendChild(cnt);
     foot.appendChild(el('span', 'rolec-p',
       r.people + (r.people === 1 ? ' person' : ' people')));
     a.appendChild(foot);
