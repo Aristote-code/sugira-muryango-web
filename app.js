@@ -221,13 +221,22 @@
             '<p style="font-size:.82rem;color:var(--ink-3);margin:0">Created in this session, not imported from a global library.</p>',
       done: 'Form created in Session 6'
     },
+    /* "Cohort 1 2026 ... it won't just be numbers, it will be what happened in
+       the year", "it has to last four months", and a limit, "otherwise cohorts
+       would keep being created, created, created without any limit". The year
+       and the length are not extra fields on a cohort: they are what a cohort
+       is, so the dialog asks for them before it asks for districts, and the
+       limit is stated where it binds rather than discovered on refusal. */
     cohort: {
       title: 'New cohort',
       ok: 'Create cohort',
-      body: '<div><label for="f-cn">Cohort name</label><input id="f-cn" type="text" placeholder="e.g. Cohort 5"></div>' +
-            '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Ngoma</option><option>Nyanza</option><option>Rubavu</option></select></div>' +
-            '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>',
-      done: 'Cohort created as a draft \u2014 no household is scheduled yet'
+      body: '<div><label for="f-cy">Year</label><select id="f-cy"><option>2027</option><option>2026</option></select></div>' +
+            '<p class="mhint">2026 already has its four cohorts. A fifth would have to replace one.</p>' +
+            '<div><label for="f-cn">Number in that year</label><input id="f-cn" type="text" value="1"></div>' +
+            '<div><label for="f-cr">Runs for</label><select id="f-cr"><option>Four months</option><option>Six months</option><option>Twelve months</option></select></div>' +
+            '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>' +
+            '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Ngoma</option><option>Nyanza</option><option>Rubavu</option></select></div>',
+      done: 'Cohort 1 \u00b7 2027 created as a draft \u2014 no household is scheduled yet'
     },
     qedit: {
       title: 'Question 3',
@@ -253,11 +262,13 @@
       done: 'Question added as number 31 \u2014 publish the form to send it to the tablet'
     },
     cmanage: {
-      title: 'Manage Cohort 1',
+      title: 'Manage Cohort 1 · 2026',
       ok: 'Save the cohort',
-      body: '<div><label for="f-ml">Label</label><input id="f-ml" type="text" value="Cohort 1"></div>' +
+      body: '<div><label for="f-ml">Label</label><input id="f-ml" type="text" value="Cohort 1 · 2026"></div>' +
             '<div><label for="f-md">Districts</label><select id="f-md"><option>All five districts</option><option>Kirehe, Musanze, Ngoma</option><option>Nyanza, Rubavu</option></select></div>' +
             '<div><label for="f-mf">First session falls on</label><input id="f-mf" type="date" value="2026-01-12"></div>' +
+            '<div><label for="f-mr">Runs for</label><select id="f-mr"><option>Four months</option><option>Six months</option><option>Twelve months</option></select></div>' +
+            '<p class="mhint">Ends 11 May 2026. Four months holds nine of the twelve fortnightly sessions; session 12 falls on 15 June.</p>' +
             '<div><label for="f-ms">Status</label><select id="f-ms"><option>Active</option><option>Paused</option><option>Closed</option></select></div>' +
             '<div class="impact"><b>What this moves</b>' +
             '<p>1\u202F216 households are on Cohort 1, and 1\u202F104 of them have sessions still to come. ' +
