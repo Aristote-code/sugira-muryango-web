@@ -238,6 +238,123 @@
             '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Ngoma</option><option>Nyanza</option><option>Rubavu</option></select></div>',
       done: 'Cohort 1 \u00b7 2027 created as a draft \u2014 no household is scheduled yet'
     },
+    /* "I can create a form and it exists; when I come to put it in a project,
+       that's when I set permission in that specific project. Because
+       permissions, if I put them on a form and put it in another project,
+       there could be conflict."
+
+       — "Wait. So do we put those access on form or on project?"
+       — "However it goes — even though access we put them on form, it will go
+          into project, because a certain project has its own permutations."
+
+       So access is not a property of the form and not a property of the
+       project. It belongs to the pair, and the moment the pair comes into
+       existence is the moment to settle it. That moment is here.
+
+       "Before you are in a project going to add a form — you have added it,
+       then they immediately show you like a pop-up telling you that there is
+       conflict on this and this, and you go and choose to solve those
+       conflicts. Simple, because those permissions won't be many." And twice,
+       seventy seconds apart, by two people: "as dynamic as possible." So the
+       conflicts are not a warning to read past — they are the form, and they
+       change as soon as you choose a different form.
+
+       Three kinds, not four. View was raised and dropped in the room: "only we
+       give you view access without giving you data access — what will you do
+       with the form? I don't know what it would be useful for. Instead we
+       could have data access, report access, edit access." */
+    addform: {
+      title: 'Add a form to this project',
+      ok: 'Add it and save the access',
+      body: '<div><label for="f-af">Form</label><select id="f-af"></select></div>'
+          + '<p class="mhint" id="f-afw"></p>'
+          + '<div><label for="f-ad">Data access</label><select id="f-ad">'
+          + '<option>IZU at Village and above</option><option>Supervisors and above</option>'
+          + '<option>Nobody yet</option></select></div>'
+          + '<div><label for="f-ar">Report access</label><select id="f-ar">'
+          + '<option>Supervisors and above</option><option>M&amp;E and above</option>'
+          + '<option>Nobody yet</option></select></div>'
+          + '<div><label for="f-ae2">Edit access</label><select id="f-ae2">'
+          + '<option>M&amp;E and above</option><option>HQ only</option>'
+          + '<option>Nobody yet</option></select></div>'
+          + '<div id="f-afc"></div>',
+      done: 'Form added — its access in this project is saved',
+      init: function (body, from) {
+        var sel = body.querySelector('#f-af');
+        var warn = body.querySelector('#f-afw');
+        var host = body.querySelector('#f-afc');
+        var here = (from && from.getAttribute('data-report-project')) || 'this project';
+
+        /* A form already in use somewhere carries what that project gave it.
+           Nothing here is a rule about forms in general — it is what these
+           two projects happen to have decided, which is the whole point. */
+        var FORMS = [
+          { name: 'Anthropometric measurement', used: ['Risk of Harm management'],
+            clash: [['IZU at Village', 'Edit access in Risk of Harm management',
+                     'Data access only here'],
+                    ['Sector lead', 'no access in Risk of Harm management',
+                     'Report access here']] },
+          { name: 'Household Referral Checklist', used: ['Risk of Harm management',
+              'IZU Cell Coordinator Telephone Supervision'],
+            clash: [['Social worker', 'Data access in Risk of Harm management',
+                     'no access here'],
+                    ['IZU Cell Coordinator', 'Report access in Telephone Supervision',
+                     'Data access only here'],
+                    ['District lead', 'Edit access in Risk of Harm management',
+                     'Report access here']] },
+          { name: 'Session in action', used: [], clash: [] },
+          { name: 'FCG participation and interaction form', used: [], clash: [] }
+        ];
+
+        function draw() {
+          var f = FORMS.filter(function (x) { return x.name === sel.value; })[0] || FORMS[0];
+          warn.textContent = f.used.length
+            ? 'Already in ' + f.used.join(' and ') + '. What it carries there does not follow it here.'
+            : 'Not in any other project, so nothing to reconcile.';
+          host.innerHTML = '';
+          if (!f.clash.length) return;
+
+          var box = document.createElement('div');
+          box.className = 'impact';
+          var h = document.createElement('b');
+          h.textContent = f.clash.length + (f.clash.length === 1 ? ' conflict' : ' conflicts')
+            + ' to settle';
+          box.appendChild(h);
+          f.clash.forEach(function (c, i) {
+            var r = document.createElement('div');
+            r.className = 'cfl';
+            var who = document.createElement('span');
+            who.className = 'cfl-w';
+            who.textContent = c[0];
+            var what = document.createElement('span');
+            what.className = 'cfl-t';
+            what.textContent = 'has ' + c[1] + ', and ' + c[2];
+            var pick = document.createElement('select');
+            pick.setAttribute('aria-label', 'What ' + c[0] + ' gets in ' + here);
+            ['Keep what this project gives', 'Take what the form carries', 'Decide later']
+              .forEach(function (o) {
+                var op = document.createElement('option');
+                op.textContent = o;
+                pick.appendChild(op);
+              });
+            r.appendChild(who);
+            r.appendChild(what);
+            r.appendChild(pick);
+            box.appendChild(r);
+          });
+          host.appendChild(box);
+          if (window.SugiraMenu) window.SugiraMenu.enhance(host);
+        }
+
+        FORMS.forEach(function (f) {
+          var o = document.createElement('option');
+          o.textContent = f.name;
+          sel.appendChild(o);
+        });
+        sel.addEventListener('change', draw);
+        draw();
+      }
+    },
     qedit: {
       title: 'Question 3',
       ok: 'Save the question',
