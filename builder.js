@@ -116,6 +116,7 @@
             ? ['Option 1', 'Option 2'] : undefined };
         FORM.q.push(q);
         picked = q.id;
+        changed();
         draw();
         var row = host.querySelector('[data-q="' + q.id + '"] .fb-q');
         if (row) { row.focus(); row.select(); }
@@ -204,6 +205,7 @@
          English moves it is behind, and the field is the last place that
          should find that out. */
       if (q.rw) q.stale = true;
+      if (!q.touched) { q.touched = true; changed(); }
       var state = li.querySelector('.fb-rw');
       if (state) {
         state.className = 'fb-rw' + (q.rw ? (q.stale ? ' is-stale' : '') : ' is-missing');
@@ -224,6 +226,7 @@
             q.opts = ['Option 1', 'Option 2'];
           }
           window.SugiraMenu.close();
+          changed();
           draw();
         } };
       }), { width: 200 });
@@ -233,15 +236,25 @@
     top.appendChild(kb);
     body.appendChild(top);
 
-    if (q.opts) {
+    /* A choice question with nothing to choose from is a question the field
+       cannot answer, and the tablet would draw it as an empty space with a
+       Next button under it. */
+    var needsOpts = q.kind === 'single' || q.kind === 'multi' || q.kind === 'check'
+      || q.kind === 'yesno';
+    var noOpts = needsOpts && (!q.opts || !q.opts.length);
+    if (noOpts) li.classList.add('is-broken');
+
+    if (q.opts || needsOpts) {
       var o = el('input', 'fb-opts');
       o.type = 'text';
-      o.value = q.opts.join(', ');
+      o.value = (q.opts || []).join(', ');
+      o.placeholder = 'Separate each answer with a comma';
       o.setAttribute('aria-label', 'Answers offered for ' + q.en);
       o.onchange = function () {
         q.opts = o.value.split(',').map(function (s) { return s.trim(); })
           .filter(Boolean);
-        redrawPreview();
+        changed();
+        draw();
       };
       body.appendChild(o);
     }
@@ -252,7 +265,7 @@
     var cb = el('input');
     cb.type = 'checkbox';
     cb.checked = !!q.req;
-    cb.onchange = function () { q.req = cb.checked; redrawPreview(); };
+    cb.onchange = function () { q.req = cb.checked; changed(); redrawPreview(); };
     req.appendChild(cb);
     req.appendChild(el('span', null, 'Required'));
     foot.appendChild(req);
@@ -299,6 +312,16 @@
     /* Reordering is free while you build, so a move can put a question above
        the one it needs. That is not a move to refuse — it is a state to name,
        because the person who made it is the person who can fix it. */
+    if (noOpts) {
+      var none = el('span', 'fb-bad');
+      none.setAttribute('data-tip', 'A ' + kindOf(q.kind).label.toLowerCase()
+        + ' question needs something to choose from. As it stands the tablet '
+        + 'would show the question with nothing under it.');
+      none.innerHTML = '<svg aria-hidden="true"><use href="#i-alert"/></svg>'
+        + 'No answers to choose from';
+      foot.appendChild(none);
+    }
+
     if (broken) {
       li.classList.add('is-broken');
       var bad = el('span', 'fb-bad');
@@ -343,6 +366,7 @@
       FORM.q.forEach(function (x) { if (x.when && x.when.q === q.id) delete x.when; });
       FORM.q = FORM.q.filter(function (x) { return x.id !== q.id; });
       if (picked === q.id) picked = null;
+      changed();
       draw();
     };
     li.appendChild(del);
@@ -505,7 +529,59 @@
     return field;
   }
 
-  function redrawPreview() { paintPreview(); }
+  function redrawPreview() { paintPreview(); echo(); }
+
+  /* The screen says the same thing about this form in three places: the
+     record at the top, the card under the builder, and the builder itself.
+     They were three numbers, and only one of them moved when you changed the
+     form. One is the truth — the form as it now stands — and the other two
+     read it. */
+  var edits = 0;
+  function echo() {
+    var n = FORM.q.length;
+    var req = FORM.q.filter(function (q) { return q.req; }).length;
+
+    var count = document.querySelector('#fbuild .fb-count');
+    if (count) count.textContent = n + ' questions · ' + req + ' required';
+
+    var kv = document.querySelectorAll('#s-form [data-panelid="build"] .kv > div');
+    [].forEach.call(kv, function (d) {
+      var k = (d.querySelector('.k') || {}).textContent;
+      if (k === 'Questions') d.querySelector('.v').textContent = String(n);
+      if (k === 'Required') d.querySelector('.v').textContent = String(req);
+    });
+
+    [].forEach.call(document.querySelectorAll('#pg-form .pgr'), function (r) {
+      var k = r.querySelector('.k span:last-child');
+      if (!k || k.textContent.trim() !== 'Questions') return;
+      r.querySelector('.v').innerHTML = n + ' <span class="chip">' + req + ' required</span>';
+    });
+
+    /* A form on a tablet is the version that was published, not the one being
+       edited. Saying "Published: Yes" while somebody rewrites it is the app
+       telling the field something that is about to stop being true. */
+    if (!edits) return;
+    [].forEach.call(document.querySelectorAll('#s-form .fld'), function (f) {
+      var k = f.querySelector('.fld-k');
+      if (!k || k.textContent.indexOf('Published to the tablet') < 0) return;
+      var v = f.querySelector('.v');
+      if (!v || v.querySelector('.fb-unsent')) return;
+      var note = el('span', 'fb-unsent');
+      note.textContent = ' · ' + edits + (edits === 1 ? ' change' : ' changes')
+        + ' not sent';
+      note.setAttribute('data-tip', 'The tablet still has version 4. What you are '
+        + 'editing reaches the field when you publish.');
+      v.appendChild(note);
+    });
+    var btn = document.querySelector('#s-form [data-modal="fpublish"]');
+    if (btn && !/\d/.test(btn.textContent)) {
+      btn.appendChild(el('span', 'n', String(edits)));
+    } else if (btn) {
+      var n2 = btn.querySelector('.n');
+      if (n2) n2.textContent = String(edits);
+    }
+  }
+  function changed() { edits++; echo(); }
 
   function select(id) {
     if (picked === id || !host) return;
@@ -527,6 +603,10 @@
     host.appendChild(canvas());
     host.appendChild(preview());
     paintPreview();
+    /* At load as well as after a change: the card and the record were written
+       for a thirty-question form and the builder holds ten, so the screen was
+       wrong before anybody touched it. */
+    echo();
     if (window.SugiraMenu) window.SugiraMenu.enhance(host);
   }
 
