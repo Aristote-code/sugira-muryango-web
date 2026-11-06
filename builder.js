@@ -165,18 +165,36 @@
       var g = host.querySelector('[data-q="' + q.id + '"] .fb-grip');
       if (g) g.focus();
     };
+    /* Dropping used to put the card before the one you dropped on, which is a
+       fine rule and an invisible one: you let go on question 3 and it landed
+       at 2. The line says where it is going while you can still change your
+       mind, and which side of the card you are on decides it. */
+    function side(e) {
+      var r = li.getBoundingClientRect();
+      return (e.clientY - r.top) < r.height / 2 ? 'before' : 'after';
+    }
     li.ondragover = function (e) {
-      if ([].indexOf.call(e.dataTransfer.types, 'text/x-q') > -1) e.preventDefault();
+      if ([].indexOf.call(e.dataTransfer.types, 'text/x-q') < 0) return;
+      e.preventDefault();
+      var s = side(e);
+      li.classList.toggle('is-over-top', s === 'before');
+      li.classList.toggle('is-over-bottom', s === 'after');
+    };
+    li.ondragleave = function () {
+      li.classList.remove('is-over-top', 'is-over-bottom');
     };
     li.ondrop = function (e) {
       e.preventDefault();
+      li.classList.remove('is-over-top', 'is-over-bottom');
       var from = e.dataTransfer.getData('text/x-q');
       if (!from || from === q.id) return;
+      var s = side(e);
       var moved = at(from);
       FORM.q = FORM.q.filter(function (x) { return x.id !== from; });
-      var k = FORM.q.indexOf(q);
+      var k = FORM.q.indexOf(q) + (s === 'after' ? 1 : 0);
       FORM.q.splice(k, 0, moved);
       picked = from;
+      changed();
       draw();
     };
     li.appendChild(grip);
@@ -460,6 +478,20 @@
       var box = el('div', 'fb-dq' + (picked === q.id ? ' on' : '')
         + (q.when ? ' is-when' : ''));
       box.setAttribute('data-q', q.id);
+      /* The preview is the column you scan, so it is where you notice the
+         thing that is wrong. Noticing it and being unable to touch it makes
+         you hunt for the same question in the other column. */
+      box.setAttribute('role', 'button');
+      box.tabIndex = 0;
+      /* No aria-label: it would replace the question with "Work on question
+         4", and the question is the thing somebody is here to read. The
+         content is the name. */
+      box.onclick = function () { select(q.id, true); };
+      box.onkeydown = function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        select(q.id, true);
+      };
       var label = el('p', 'fb-dq-l');
       label.textContent = (i + 1) + '. ' + (lang === 'rw' ? (q.rw || q.en) : q.en);
       if (q.req) {
@@ -583,17 +615,26 @@
   }
   function changed() { edits++; echo(); }
 
-  function select(id) {
-    if (picked === id || !host) return;
+  /* `toCard` is set when the choosing happened in the preview, so the scroll
+     goes the other way: there, you are pointing at something you want to
+     change, and the card is what changes it. */
+  function select(id, toCard) {
+    if (!host) return;
     picked = id;
     [].forEach.call(host.querySelectorAll('.fb-f'), function (c) {
-      c.classList.toggle('on', c.getAttribute('data-q') === id);
+      var on = c.getAttribute('data-q') === id;
+      c.classList.toggle('on', on);
+      if (on && toCard && c.scrollIntoView) c.scrollIntoView({ block: 'nearest' });
     });
     [].forEach.call(host.querySelectorAll('.fb-dq'), function (d) {
       var on = d.getAttribute('data-q') === id;
       d.classList.toggle('on', on);
-      if (on && d.scrollIntoView) d.scrollIntoView({ block: 'nearest' });
+      if (on && !toCard && d.scrollIntoView) d.scrollIntoView({ block: 'nearest' });
     });
+    if (toCard) {
+      var q = host.querySelector('.fb-f.on .fb-q');
+      if (q) q.focus();
+    }
   }
 
   function draw() {

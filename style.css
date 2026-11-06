@@ -1599,6 +1599,13 @@ svg use{pointer-events:none}
   background:var(--color-bg-surface);box-shadow:var(--x-clickup-elevation-border-1)}
 .fb-f.on{box-shadow:0 0 0 1px var(--color-bg-primary-default)}
 .fb-f.dragging{opacity:.5}
+/* Where it will land, while you can still change your mind. */
+.fb-f.is-over-top,.fb-f.is-over-bottom{position:relative}
+.fb-f.is-over-top::before,.fb-f.is-over-bottom::after{content:"";position:absolute;
+  left:0;right:0;height:2px;border-radius:var(--radius-full);
+  background:var(--color-bg-primary-default)}
+.fb-f.is-over-top::before{top:calc(var(--space-1) * -1.25)}
+.fb-f.is-over-bottom::after{bottom:calc(var(--space-1) * -1.25)}
 .fb-grip{display:flex;align-items:center;justify-content:center;
   width:var(--space-4);height:var(--space-6);flex:none;cursor:grab;
   color:var(--color-content-tertiary);border-radius:var(--x-clickup-radii-2)}
@@ -1675,7 +1682,10 @@ svg use{pointer-events:none}
   color:var(--color-content-primary)}
 .fb-dq{display:flex;flex-direction:column;gap:var(--space-1);
   padding:var(--space-2);border-radius:var(--radius-md);
-  background:var(--color-bg-surface)}
+  background:var(--color-bg-surface);cursor:pointer;text-align:left;
+  border:0;font-family:var(--ui);width:100%}
+.fb-dq:hover{background:var(--color-bg-hover)}
+.fb-dq:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
 .fb-dq.on{box-shadow:0 0 0 1px var(--color-bg-primary-default)}
 .fb-dq.is-when{border-left:2px solid var(--color-border-strong)}
 .fb-dq-l{font-size:12px;line-height:16px;font-weight:500;
