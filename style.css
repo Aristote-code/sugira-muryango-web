@@ -368,12 +368,18 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .relrow-i{display:flex;align-items:center;justify-content:center;width:16px;height:16px;
   flex:none;color:var(--color-content-tertiary)}
 .relrow-i svg{width:16px;height:16px;fill:none}
-.relrow-m{display:flex;flex-direction:column;min-width:0;flex:1}
+/* The middle used to take every spare pixel, which put the note hard against
+   the right edge of a panel that can be two thousand wide — "Supervisor /
+   C. Uwimana" at one end of the row and "Sector lead who reviews this
+   household's cases" at the other, with nothing between them to carry the eye
+   across. The middle is a column of its own width now, so the note sits
+   beside what it describes and every note starts on the same line. */
+.relrow-m{display:flex;flex-direction:column;min-width:0;flex:0 1 400px}
 .relrow-k{font-size:12px;line-height:16px;color:var(--color-content-secondary)}
 .relrow-n{font-size:14px;line-height:16px;font-weight:500;color:var(--color-content-primary);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .relrow-w{font-size:12px;line-height:16px;color:var(--color-content-secondary);
-  text-align:right;max-width:40ch;flex:none}
+  flex:1 1 auto;min-width:0;max-width:48ch;padding-left:16px}
 @media (max-width:880px){.relrow-w{display:none}}
 /* ---------------- help: the icon, and what it says ---------------- */
 .ihelp{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
