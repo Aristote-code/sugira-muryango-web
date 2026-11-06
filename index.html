@@ -128,8 +128,13 @@
               <button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export CSV</button>
               <button class="btn" type="button" data-modal="enrol"><svg aria-hidden="true"><use href="#i-plus"/></svg>Enrol household</button></div>
         <div class="acts" data-for="visits" hidden><button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export CSV</button></div>
+        <!-- No "Build a report" here any more. "Maybe what we can do here is
+             to remove that section of building a report here. They will be
+             built in project, then someone who has access opens it and views
+             the report they need right here." So this screen reads; a project
+             makes. What is left is the way back to where they are made. -->
         <div class="acts" data-for="reports" hidden>
-<button class="btn" type="button" data-modal="report"><svg aria-hidden="true"><use href="#i-plus"/></svg>Build a report</button></div>
+<button class="btn sec" type="button" data-go="programme"><svg aria-hidden="true"><use href="#i-building"/></svg>Build one in a project</button></div>
         <div class="acts" data-for="programme" hidden>
               <button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button>
               <button class="btn" type="button" data-modal="form" data-forpanel="forms" hidden><svg aria-hidden="true"><use href="#i-plus"/></svg>New form</button>
@@ -861,20 +866,20 @@
         <div class="pad">
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Report</th><th>Built on</th><th>Covers</th><th>Owner</th><th class="num">Last run</th><th>Schedule</th></tr></thead>
+              <thead><tr><th>Report</th><th>Built on</th><th>Owner</th><th class="num">Last run</th><th>Schedule</th><th class="gap"></th></tr></thead>
               <tbody>
-                <tr data-tags="sched"><td class="nm">Male caregiver attendance by district</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">All districts &middot; Cohort 1</td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td><span class="chip ok"><i></i>Weekly &rarr; <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></span></td></tr>
-                <tr data-tags="sched"><td class="nm">Risk of harm &mdash; type and victim</td><td><button class="rel" type="button" data-go="form" data-tip="Risk of Harm management &mdash; intake"><svg aria-hidden="true"><use href="#i-reports"/></svg>Risk of Harm management &mdash; intake</button></td><td class="mut">All districts &middot; 12 months</td><td class="mut">C. Uwimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td></tr>
-                <tr data-tags="manual"><td class="nm">Household needs breakdown</td><td><button class="rel" type="button" data-go="form" data-tip="Family Enrollment and Composition Form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Family Enrollment and Composition Form</button></td><td class="mut">Ngoma, Nyanza</td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td><span class="chip">Manual</span></td></tr>
-                <tr data-tags="sched"><td class="nm"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> status and supervision</td><td><button class="rel" type="button" data-go="form" data-tip="IZU Telephone Supervision &mdash; weekly call"><svg aria-hidden="true"><use href="#i-reports"/></svg>IZU Telephone Supervision &mdash; weekly call</button></td><td class="mut">All districts</td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">27 Oct</td><td><span class="chip ok"><i></i>Weekly</span></td></tr>
-                <tr data-tags="sched"><td class="nm">Average minutes per module</td><td><button class="rel" type="button" data-go="form" data-tip="Flash weekly report on every module"><svg aria-hidden="true"><use href="#i-reports"/></svg>Flash weekly report on every module</button></td><td class="mut">All districts</td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td><span class="chip warn"><i></i>Needs validation</span></td></tr>
-                <tr data-tags="manual"><td class="nm">Reasons <abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> Telephone Supervision missed</td><td><button class="rel" type="button" data-go="form" data-tip="IZU Telephone Supervision &mdash; missed call"><svg aria-hidden="true"><use href="#i-reports"/></svg>IZU Telephone Supervision &mdash; missed call</button></td><td class="mut">All districts &middot; Quarter</td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">14 Oct</td><td><span class="chip">Manual</span></td></tr>
-                <tr data-tags="sched"><td class="nm">Activities completed, by session</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">All districts</td><td class="mut">A. Gahimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td></tr>
-                <tr data-tags="manual"><td class="nm">Minutes per visit, by home visitor</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">Ngoma &middot; Cohort 1</td><td class="mut">C. Uwimana</td><td class="num mut">30 Oct</td><td><span class="chip">Manual</span></td></tr>
-                <tr data-tags="manual"><td class="nm">Households flagged at session 6</td><td><button class="rel" type="button" data-go="form" data-tip="Visit record"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">All districts</td><td class="mut">C. Uwimana</td><td class="num mut">2 Nov</td><td><span class="chip">Manual</span></td></tr>
+                <tr data-tags="sched"><td class="nm">Male caregiver attendance by district</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the Visit record form"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button></td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td><span class="chip ok"><i></i>Weekly &rarr; <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></span></td><td class="gap"></td></tr>
+                <tr data-tags="sched"><td class="nm">Risk of harm &mdash; type and victim</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the Risk of Harm management — intake form"><svg aria-hidden="true"><use href="#i-building"/></svg>Risk of Harm management</button></td><td class="mut">C. Uwimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td><td class="gap"></td></tr>
+                <tr data-tags="manual"><td class="nm">Household needs breakdown</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the Family Enrollment and Composition Form form"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button></td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td><span class="chip">Manual</span></td><td class="gap"></td></tr>
+                <tr data-tags="sched"><td class="nm"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> status and supervision</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the IZU Telephone Supervision — weekly call form"><svg aria-hidden="true"><use href="#i-building"/></svg>IZU Cell Coordinator Telephone Supervision</button></td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">27 Oct</td><td><span class="chip ok"><i></i>Weekly</span></td><td class="gap"></td></tr>
+                <tr data-tags="sched"><td class="nm">Average minutes per module</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the Flash weekly report on every module form"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button></td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td><span class="chip warn"><i></i>Needs validation</span></td><td class="gap"></td></tr>
+                <tr data-tags="manual"><td class="nm">Reasons <abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> Telephone Supervision missed</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the IZU Telephone Supervision — missed call form"><svg aria-hidden="true"><use href="#i-building"/></svg>IZU Cell Coordinator Telephone Supervision</button></td><td class="mut"><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> team</td><td class="num mut">14 Oct</td><td><span class="chip">Manual</span></td><td class="gap"></td></tr>
+                <tr data-tags="sched"><td class="nm">Activities completed, by session</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the Visit record form"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button></td><td class="mut">A. Gahimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td><td class="gap"></td></tr>
+                <tr data-tags="manual"><td class="nm">Minutes per visit, by home visitor</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the Visit record form"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button></td><td class="mut">C. Uwimana</td><td class="num mut">30 Oct</td><td><span class="chip">Manual</span></td><td class="gap"></td></tr>
+                <tr data-tags="manual"><td class="nm">Households flagged at session 6</td><td><button class="rel" type="button" data-go="project" data-tip="Built on the Visit record form"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button></td><td class="mut">C. Uwimana</td><td class="num mut">2 Nov</td><td><span class="chip">Manual</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>9 saved reports &middot; 5 run on a schedule &middot; every one is built on a form</span></div>
+            <div class="tfoot"><span>9 saved reports &middot; 5 run on a schedule &middot; built in a project, on one of its forms</span></div>
           </div>
         </div>
       </section>
@@ -986,6 +991,7 @@
           <button class="tab on" type="button" data-panel="modules">Modules</button>
           <button class="tab" type="button" data-panel="forms">Forms</button>
           <button class="tab" type="button" data-panel="cohorts">Cohorts</button>
+          <button class="tab" type="button" data-panel="preports">Reports <span class="chip" style="margin-left:8px">6</span></button>
           <button class="tab" type="button" data-panel="archive">Archived forms <span class="chip" style="margin-left:8px">9</span></button>
         </div>
         <div class="pad" data-panelid="modules">
@@ -1052,6 +1058,35 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>2&#8239;210 households across two running cohorts &middot; two cohorts hold no districts</span></div>
+          </div>
+        </div>
+
+        <!-- Reports are built here, on the project, because that is where the
+             client put them: "where do we build the report? Shouldn't we go to
+             the project?" and then "they will be built in project, then someone
+             who has access opens it and views the report they need right here."
+             The Reports screen is the reading surface; this is the making one. -->
+        <div class="pad" data-panelid="preports" hidden>
+          <div class="filters">
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
+              <input type="text" placeholder="Search this project&rsquo;s reports" aria-label="Search reports in this project"></div>
+            <span class="side" style="margin-left:auto;display:flex;gap:8px">
+              <button class="rel" type="button" data-go="reports"><svg aria-hidden="true"><use href="#i-reports"/></svg>All 9 reports</button>
+              <button class="btn sm" type="button" data-modal="report" data-report-project="Household Module Tracking"><svg aria-hidden="true"><use href="#i-plus"/></svg>New report</button></span>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Report</th><th>Built on</th><th>Owner</th><th class="num">Last run</th><th>Schedule</th><th class="gap"></th></tr></thead>
+              <tbody>
+                <tr data-go="reports"><td class="nm">Male caregiver attendance by district</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td><span class="chip ok"><i></i>Weekly &rarr; <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></span></td><td class="gap"></td></tr>
+                <tr data-go="reports"><td class="nm">Household needs breakdown</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Family Enrollment and Composition Form</button></td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td><span class="chip">Manual</span></td><td class="gap"></td></tr>
+                <tr data-go="reports"><td class="nm">Average minutes per module</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Flash weekly report on every module</button></td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td><span class="chip warn"><i></i>Needs validation</span></td><td class="gap"></td></tr>
+                <tr data-go="reports"><td class="nm">Activities completed, by session</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">A. Gahimana</td><td class="num mut">1 Nov</td><td><span class="chip ok"><i></i>Monthly</span></td><td class="gap"></td></tr>
+                <tr data-go="reports"><td class="nm">Minutes per visit, by home visitor</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">C. Uwimana</td><td class="num mut">30 Oct</td><td><span class="chip">Manual</span></td><td class="gap"></td></tr>
+                <tr data-go="reports"><td class="nm">Households flagged at session 6</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td class="mut">C. Uwimana</td><td class="num mut">2 Nov</td><td><span class="chip">Manual</span></td><td class="gap"></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>6 of the 9 saved reports are built on this project&rsquo;s forms</span></div>
           </div>
         </div>
               <div class="pad" data-panelid="archive" hidden>

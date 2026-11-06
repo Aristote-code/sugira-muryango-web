@@ -448,7 +448,7 @@
           + '<div><label for="f-sch">Send it</label><select id="f-sch">'
           + '<option>Don’t send, just show me</option><option>Weekly, Monday 06:00</option>'
           + '<option>Monthly, 1st at 06:00</option></select></div>',
-      init: function (body) {
+      init: function (body, from) {
         var proj = body.querySelector('#f-proj'), form = body.querySelector('#f-form');
         var measure = body.querySelector('#f-measure'), group = body.querySelector('#f-group');
         var where = body.querySelector('#f-sc'), name = body.querySelector('#f-rn');
@@ -492,6 +492,14 @@
         name.addEventListener('input', function () { typed = true; });
 
         fill(proj, live.map(function (p) { return p.name; }));
+        /* Opened from a project, the project is already answered. The field
+           stays — you can still see which one you are in, and change it —
+           but nobody has to pick what they just clicked out of. */
+        var here = from && from.getAttribute('data-report-project');
+        if (here && live.some(function (p) { return p.name === here; })) {
+          proj.value = here;
+          proj.dispatchEvent(new Event('change', { bubbles: true }));
+        }
         fill(where, ['All of Rwanda']
           .concat(places ? places.provinces : [])
           .concat(places ? places.districts.map(function (d) { return d + ' district'; }) : []));
@@ -923,7 +931,7 @@
     var toast = e.target.closest('[data-toast]');
     if (toast) { say(toast.getAttribute('data-toast')); return; }
     var m = e.target.closest('[data-modal]');
-    if (m) { openModal(m.getAttribute('data-modal')); }
+    if (m) { openModal(m.getAttribute('data-modal'), m); }
   });
 
   // ---- a relationship row with more than three links expands in place ----
@@ -1060,7 +1068,10 @@
   var scrim = $('#scrim'), mTitle = $('#mTitle'), mBody = $('#mBody'), mOk = $('#mOk');
   var lastFocus = null, pending = null;
 
-  function openModal(key) {
+  /* `from` is whatever was clicked. A dialog opened from inside a record can
+     read its own context off it — a report built from a project should not
+     ask which project you are in. */
+  function openModal(key, from) {
     var def = MODALS[key];
     if (!def) return;
     pending = def;
@@ -1076,7 +1087,7 @@
     if (window.SugiraMenu) window.SugiraMenu.enhance(mBody);
     /* A modal whose choices come from the app's own data fills them here,
        after the triggers exist, so refilling one list updates its trigger. */
-    if (def.init) def.init(mBody);
+    if (def.init) def.init(mBody, from);
     var first = mBody.querySelector('textarea, input:not([type="hidden"]), .cselect');
     // A confirm with no fields focuses Cancel, never the button that does the thing.
     if (first) first.focus(); else $('#mCancel').focus();
