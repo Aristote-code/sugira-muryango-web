@@ -1605,6 +1605,16 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
    header. */
 .rec-reach-n{margin-left:4px;font-weight:500;color:var(--color-content-primary);
   white-space:nowrap;cursor:help}
+/* When it was last touched: plain text, not a chip — it is not a thing you
+   open, it is the date beside the thing you do open. */
+.rec-when{color:var(--color-content-secondary);white-space:nowrap;margin-right:4px}
+
+/* .rel caps at 136px, which is right where a relation chip is a side
+   reference among several in a cell. On the activity log the thing touched is
+   the subject of the row — "National NCDA Government Official" truncated to
+   "National NCDA Goverr" makes the log unreadable — so this column gets the
+   room, and the spacer at the end of the row keeps it from taking more. */
+#s-activity .tbl td:nth-child(4) .rel{max-width:320px}
 .rec-held-v,.rec-reach-v{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
 /* .chip is normally a span; as a button it arrives with the browser's own
    border and font, neither of which belongs on a pill. */

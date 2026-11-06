@@ -97,6 +97,7 @@
         <li><button class="si" type="button" data-go="people"><span class="tx">People</span><span class="ct">539</span></button></li>
         <li><button class="si" type="button" data-go="permissions"><span class="tx">Roles &amp; access</span><span class="ct">8</span></button></li>
         <li><button class="si" type="button" data-go="places"><span class="tx">Places</span></button></li>
+        <li><button class="si" type="button" data-go="activity"><span class="tx">Activity</span></button></li>
         <li><button class="si" type="button" data-go="system"><span class="tx">System</span><span class="ct sig">1</span></button></li>
       </ul>
     </div>
@@ -1365,9 +1366,9 @@
                  say 77% while 180 of the 193 people using it read an English
                  interface. The count is measured off the running app by
                  rip/uistrings.mjs, and that probe fails if this drifts. -->
-            <div class="st" data-tile="ui"><div class="l" data-tip="Every label, button, column head, status and tooltip in the app, counted off the running screens. 674 of them are what you act on; 131 are the explanations behind the info marks, and those carry more words than the rest of the interface put together.">The interface</div>
-              <div class="vrow"><div class="v">0 <small>of 805</small></div><span class="delta down">not started</span></div>
-              <div class="d">674 labels and buttons, 131 explanations</div><div class="trk warn"><i style="width:0%"></i></div></div>
+            <div class="st" data-tile="ui"><div class="l" data-tip="Every label, button, column head, status and tooltip in the app, counted off the running screens. 688 of them are what you act on; 131 are the explanations behind the info marks, and those carry more words than the rest of the interface put together.">The interface</div>
+              <div class="vrow"><div class="v">0 <small>of 819</small></div><span class="delta down">not started</span></div>
+              <div class="d">688 labels and buttons, 131 explanations</div><div class="trk warn"><i style="width:0%"></i></div></div>
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
@@ -1805,6 +1806,57 @@
       </section>
 
       <!-- ============ SYSTEM ============ -->
+      <!-- ============ ACTIVITY ============
+           The system already recorded configuration changes — "A. Gahimana
+           changed a role" sat on a card on the System screen — and offered
+           "See all" as a link to nowhere. Everything hardened on Roles &
+           access this week is dangerous precisely because its use left no
+           trace: a tick on National NCDA lands on thirty-four people, and
+           "Change what people can do" lets whoever holds it give themselves
+           the rest of the screen.
+
+           The tabs are the point. What someone did to a record is routine and
+           there is a lot of it; what someone changed about what other people
+           can do is rare and worth reading every line of. One undifferentiated
+           feed buries the second in the first. -->
+      <section class="screen" id="s-activity">
+        <div class="tabs">
+          <button class="tab on" type="button" data-tab="all">Everything<span class="chip" style="margin-left:8px">13</span></button>
+          <button class="tab" type="button" data-tab="access">Access<span class="chip" style="margin-left:8px">5</span></button>
+          <button class="tab" type="button" data-tab="out">Data out<span class="chip" style="margin-left:8px">2</span></button>
+          <button class="tab" type="button" data-tab="refused">Refused<span class="chip" style="margin-left:8px">2</span></button>
+        </div>
+        <div class="pad">
+          <div class="filters">
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
+              <input type="text" placeholder="Search by person or what they touched" aria-label="Search activity"></div>
+            <button class="fl" type="button"><span class="k">Period</span><b>This week</b><span class="cv">&#9660;</span></button>
+            <button class="fl" type="button"><span class="k">Place</span><b>Rwanda</b><span class="cv">&#9660;</span></button>
+          </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>When</th><th>Who</th><th>What they did</th><th>What it touched</th><th>How far it went</th><th class="gap"></th></tr></thead>
+              <tbody>
+                <tr data-tags="access"><td class="mut">Today 09:12</td><td>A. Gahimana</td><td class="nm">Changed what a position can do</td><td><button class="rel" type="button" data-go="position" data-pos-id="NCDA"><svg aria-hidden="true"><use href="#i-hierarchy"/></svg>National NCDA Government Official</button></td><td><span class="chip warn"><i></i>34 people</span></td><td class="gap"></td></tr>
+                <tr data-tags="all"><td class="mut">Today 08:41</td><td>C. Uwimana</td><td class="nm">Opened a risk-of-harm case</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="all"><td class="mut">Today 08:38</td><td>C. Uwimana</td><td class="nm">Recorded a supervisor review</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0041</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="all"><td class="mut">Today 07:55</td><td>M. Dusabe</td><td class="nm">Recorded a visit</td><td><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>HH-1007 Mukamana</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="access"><td class="mut">Yesterday 16:40</td><td>A. Gahimana</td><td class="nm">Changed what a position can do</td><td><button class="rel" type="button" data-go="position" data-pos-id="SLA"><svg aria-hidden="true"><use href="#i-hierarchy"/></svg>Sugira Muryango Sector lead (<abbr data-tip="SLA &mdash; Sugira Muryango Sector lead">SLA</abbr>)</button></td><td>11 people</td><td class="gap"></td></tr>
+                <tr data-tags="out"><td class="mut">Yesterday 16:02</td><td>C. Uwimana</td><td class="nm">Exported a report</td><td><button class="rel" type="button" data-go="reports"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visits by village</button></td><td>184 households</td><td class="gap"></td></tr>
+                <tr data-tags="all"><td class="mut">Yesterday 11:20</td><td>C. Uwimana</td><td class="nm">Changed a household&rsquo;s cohort</td><td><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>HH-1007 Mukamana</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="access"><td class="mut">3 Nov 14:05</td><td>A. Gahimana</td><td class="nm">Gave someone a role</td><td><button class="rel" type="button" data-go="rolecard" data-role-id="translator"><svg aria-hidden="true"><use href="#i-reports"/></svg>Form translator &rarr; C. Uwimana</button></td><td>1 person</td><td class="gap"></td></tr>
+                <tr data-tags="refused"><td class="mut">2 Nov 09:14</td><td>C. Uwimana</td><td class="nm">Was refused a case outside their sector</td><td><span class="mut">RH-0045 &middot; Rubavu</span></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="access"><td class="mut">2 Nov 08:30</td><td>P. Habimana</td><td class="nm">Invited someone</td><td><button class="rel" type="button" data-go="person"><svg aria-hidden="true"><use href="#i-admin"/></svg>T. Mukamana &middot; IZU at Village</button></td><td>1 person</td><td class="gap"></td></tr>
+                <tr data-tags="out"><td class="mut">1 Nov 10:18</td><td>A. Gahimana</td><td class="nm">Exported a report</td><td><button class="rel" type="button" data-go="reports"><svg aria-hidden="true"><use href="#i-reports"/></svg>Male caregiver attendance by district</button></td><td><span class="chip warn"><i></i>2 210 households</span></td><td class="gap"></td></tr>
+                <tr data-tags="refused"><td class="mut">31 Oct 15:47</td><td>M. Dusabe</td><td class="nm">Was refused an export</td><td><span class="mut">Visit record &middot; 986 responses</span></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="access"><td class="mut">14 Oct 11:02</td><td>A. Gahimana</td><td class="nm">Published a form to the mobile app</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td><span class="chip warn"><i></i>193 villages</span></td><td class="gap"></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>Refused attempts are recorded too &mdash; the entry that answers &ldquo;who tried&rdquo;</span></div>
+          </div>
+        </div>
+      </section>
+
       <section class="screen" id="s-system">
         <div class="pad">
           <div class="al">
@@ -1821,7 +1873,7 @@
           </div>
           <div class="cols c2">
             <div class="card">
-              <div class="card-h"><h3>Activity</h3><span class="side"><a>See all</a></span></div>
+              <div class="card-h"><h3>Activity</h3><span class="side"><button class="rel" type="button" data-go="activity">See all</button></span></div>
               <div class="lr"><span class="t">C. Uwimana recorded a review</span><span class="s">RH-0044</span><span class="c">09:41</span></div>
               <div class="lr"><span class="t">A. Gahimana changed a role</span><span class="s">Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</span><span class="c">08:12</span></div>
               <div class="lr"><span class="t">T. Mukamana was invited</span><span class="s">Sake &middot; Ngoma</span><span class="c">yesterday</span></div>

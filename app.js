@@ -18,6 +18,7 @@
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
     person:       { crumbs: [['People', 'people'], ['C. Uwimana', null]],                 nav: 'people' },
     permissions:  { crumbs: [['Roles & access', null]],                                   nav: 'permissions' },
+    activity:     { crumbs: [['Activity', null]],                                         nav: 'activity' },
     position:     { crumbs: [['Roles & access', 'permissions'], ['Position', null]],      nav: 'permissions' },
     rolecard:     { crumbs: [['Roles & access', 'permissions'], ['Role', null]],          nav: 'permissions' },
     places:       { crumbs: [['Places', null]],                                           nav: 'places' },

@@ -326,6 +326,14 @@
   };
   var WIDTH = ['own', 'village', 'cell', 'sector', 'district', 'national'];
 
+  /* The two positions the Activity screen records a change against. Kept
+     beside the reach rather than inside the renderer, so the drawer and that
+     screen cannot drift apart without one of them being obviously wrong. */
+  var CHANGED = {
+    NCDA: 'Today 09:12 by A. Gahimana',
+    SLA: 'Yesterday 16:40 by A. Gahimana'
+  };
+
   /* What one grant on one position actually reaches: the position's own
      reach, unless that grant is named as going somewhere else. */
   function reachOf(p, permId) {
@@ -683,6 +691,23 @@
       dv.appendChild(tot);
       dw.appendChild(dv);
       rec.appendChild(dw);
+    }
+
+    /* When it was last touched and by whom, where the question gets asked.
+       Knowing a change here lands on thirty-four people is half of it; the
+       other half is whether somebody already made one. */
+    if (CHANGED[p.id]) {
+      var lw = el('div', 'rec-reach');
+      lw.appendChild(el('span', 'rec-reach-k', 'Last changed'));
+      var lv = el('span', 'rec-reach-v');
+      lv.appendChild(el('span', 'rec-when', CHANGED[p.id]));
+      var seeAll = el('button', 'rel');
+      seeAll.type = 'button';
+      seeAll.setAttribute('data-go', 'activity');
+      seeAll.textContent = 'Activity';
+      lv.appendChild(seeAll);
+      lw.appendChild(lv);
+      rec.appendChild(lw);
     }
     root.appendChild(rec);
 
