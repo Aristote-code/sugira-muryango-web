@@ -369,8 +369,33 @@
           + 'Coordinator holds in the two other projects this form is in '
           + 'moves, because each pairing is settled on its own.</p></div>',
       done: 'Settled — the pairing reads as settled from both ends',
+      /* The answer has to land somewhere, or the dialog is a form that throws
+         away what you tell it: before this, you could settle a conflict and
+         the row went on saying "1 conflict open". It lands in two places,
+         because an access change is two facts — what is true now, on the
+         record, and who made it so, in the log. */
+      onOk: function (body) {
+        var row = this.row, proj = this.proj;
+        if (!row) return;
+        var choice = (body.querySelector('#f-stc select') || {}).value || 'Decided later';
+        var cell = row.closest('td');
+        if (/^Leave it open/.test(choice)) {
+          this.done = 'Left open — the pairing still has a conflict to settle';
+          return;
+        }
+        var chip = document.createElement('span');
+        chip.className = 'chip ok';
+        chip.setAttribute('data-tip', 'Settled today by A. Gahimana — '
+          + choice.toLowerCase() + '. The IZU Cell Coordinator keeps Data access here.');
+        chip.innerHTML = '<i></i>Settled';
+        if (cell) { cell.innerHTML = ''; cell.appendChild(chip); }
+        logAccess('Settled a conflict on a form', proj, '1 position');
+        this.done = 'Settled — the pairing reads as settled from both ends';
+      },
       init: function (body, from) {
         var proj = (from && from.getAttribute('data-settle')) || 'this project';
+        this.row = from;
+        this.proj = proj;
         body.querySelector('#f-stw').textContent =
           'Left open on 14 October by A. Gahimana, when this form was added to '
           + proj + '.';
@@ -390,7 +415,7 @@
         what.textContent = 'has Report access in Risk of Harm management, and Data access only here';
         var pick = document.createElement('select');
         pick.setAttribute('aria-label', 'What the IZU Cell Coordinator gets in ' + proj);
-        ['Keep what this project gives', 'Take what the form carries', 'Leave it open']
+        ['Keep what this project gives', 'Take what the form carries', 'Leave it open for now']
           .forEach(function (o) {
             var op = document.createElement('option');
             op.textContent = o;
@@ -1262,6 +1287,24 @@
   var scrim = $('#scrim'), mTitle = $('#mTitle'), mBody = $('#mBody'), mOk = $('#mOk');
   var lastFocus = null, pending = null;
 
+  /* An access change that nobody recorded is the thing the activity log exists
+     to stop. A dialog that changes who can reach what writes its own entry,
+     at the top, where the newest one goes. */
+  function logAccess(what, touched, reach) {
+    var body = document.querySelector('#s-activity table.tbl tbody');
+    if (!body) return;
+    var tr = document.createElement('tr');
+    tr.setAttribute('data-tags', 'access');
+    tr.innerHTML = '<td class="mut">Today ' + new Date().toTimeString().slice(0, 5)
+      + '</td><td>A. Gahimana</td><td class="nm">' + what
+      + '</td><td><button class="rel" type="button" data-go="project">'
+      + '<svg aria-hidden="true"><use href="#i-building"/></svg>' + touched
+      + '</button></td><td><span class="chip warn"><i></i>' + reach
+      + '</span></td><td class="gap"></td>';
+    body.insertBefore(tr, body.firstChild);
+    if (window.SugiraWho) window.SugiraWho.run(tr.parentNode.parentNode);
+  }
+
   /* `from` is whatever was clicked. A dialog opened from inside a record can
      read its own context off it — a report built from a project should not
      ask which project you are in. */
@@ -1296,10 +1339,12 @@
   scrim.addEventListener('click', function (e) { if (e.target === scrim) closeModal(); });
   mOk.addEventListener('click', function () {
     var def = pending;
-    var msg = def ? def.done : 'Saved';
     /* A dialog that was asked for rather than looked up answers its caller
-       before it closes, while its fields still exist. */
+       before it closes, while its fields still exist — and what it reports is
+       read afterwards, because what happened can depend on what was chosen.
+       Settling a conflict and leaving it open are not the same outcome. */
     if (def && def.onOk && def.onOk(mBody) === false) return;
+    var msg = def ? def.done : 'Saved';
     closeModal();
     if (msg) say(msg);
   });
