@@ -76,7 +76,11 @@
     district: { all: 'All',         options: DISTRICTS },
     cohort:   { all: 'All',         options: ['1', '2', '3', '4'] },
     period:   { all: 'This cohort', options: ['This week', 'This month', 'This cohort', 'All time'] },
-    date:     { all: 'All',         options: ['Today', 'This week', 'This month', 'This year', 'Date range…'] },
+    /* "switching between today, this week, this month… there would also be a
+       place where you can put a range of time", and "even to all the pages,
+       they would all look like that". One dimension, one word, every list that
+       has a moment in it. */
+    when:     { all: 'Any time', fixed: true, options: ['Today', 'This week', 'This month', 'This year', 'Date range…'] },
     form:     { all: 'Any',         options: ['Visit record', 'Caregiver obs.', 'Supervisor spot-check'] },
     status:   { all: 'Any',         options: ['Active', 'Behind', 'Complete', 'Overdue', 'Invited'] },
     module:   { all: 'Any',         options: SESSIONS },
@@ -240,10 +244,45 @@
     return rows;
   }
 
+  /* "Date range…" is the only option that cannot answer itself, so it asks.
+     Two dates, and the chip then reads the span rather than the word — a
+     filter that says "Date range…" afterwards has told you nothing. */
+  function askRange(btn) {
+    var cur = valueOf(btn);
+    var pair = cur.split('–');
+    var iso = function (d) {
+      return d ? d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2)
+        + '-' + ('0' + d.getDate()).slice(-2) : '';
+    };
+    var a = readDate(pair[0]) || new Date(2026, 9, 1);
+    var b = readDate(pair[1] || '') || TODAY;
+    window.SugiraModal.ask({
+      title: 'A range of time',
+      ok: 'Show that range',
+      body: '<div><label for="f-wa">From</label><input id="f-wa" type="date" value="' + iso(a) + '"></div>' +
+            '<div><label for="f-wb">To</label><input id="f-wb" type="date" value="' + iso(b) + '"></div>',
+      onOk: function (body) {
+        var from = body.querySelector('#f-wa').value;
+        var to = body.querySelector('#f-wb').value;
+        if (!from || !to) return;
+        var show = function (s) {
+          var d = new Date(s + 'T00:00:00');
+          return d.getDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+            'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getFullYear();
+        };
+        setValue(btn, show(from) + ' – ' + show(to));
+        apply(btn);
+      }
+    });
+  }
+
   function listItems(btn, dim) {
     var cur = valueOf(btn);
     var pick = function (v) {
-      return function () { setValue(btn, v); window.SugiraMenu.close(); apply(btn); };
+      return function () {
+        if (/^Date range/.test(v)) { window.SugiraMenu.close(); askRange(btn); return; }
+        setValue(btn, v); window.SugiraMenu.close(); apply(btn);
+      };
     };
     var opts = optionsFor(btn, keyOf(btn), dim);
     var rows = [{ label: dim.all, selected: cur === dim.all, onPick: pick(dim.all) }];
@@ -284,8 +323,73 @@
     project:  ['project', 'projects'],
     level:    ['level'],
     form:     ['form', 'survey'],
-    izu:      ['izu', 'visitor']
+    izu:      ['izu', 'visitor'],
+    /* Every heading in this app that holds a moment. They are worth listing
+       rather than guessing at, because a column called Waiting holds days and
+       a column called Minutes holds neither. */
+    when:     ['when', 'date', 'last visit', 'last run', 'last active',
+               'last sync', 'last edited', 'added', 'sent', 'updated',
+               'archived', 'review due', 'posted', 'opened']
   };
+
+  /* ---- reading the dates this app writes ----------------------------------
+     "Today 09:12", "Yesterday 16:40", "2 days ago", "31 Oct", "23 Jun 2025",
+     "now", "6 days". One vocabulary, written six ways across thirty screens,
+     so it is read in one place.
+
+     A cell with no moment in it — "—", "Not scheduled" — is not in any range,
+     which is the honest answer: it has no date, so no date filter claims it. */
+  var TODAY = new Date(2026, 10, 6);          // the day this prototype is on
+  var MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
+                'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+  function days(d) { return Math.round(d.getTime() / 86400000); }
+
+  function readDate(text) {
+    var t = (text || '').toLowerCase().trim();
+    if (!t || t === '—' || t === '-') return null;
+    if (/^now\b/.test(t) || /^today\b/.test(t)) return TODAY;
+    if (/^yesterday\b/.test(t)) return new Date(2026, 10, 5);
+
+    var ago = t.match(/^(\d+)\s*(minute|hour|day|week|month)/);
+    if (ago) {
+      var n = +ago[1], unit = ago[2];
+      var back = unit === 'minute' || unit === 'hour' ? 0
+        : unit === 'day' ? n : unit === 'week' ? n * 7 : n * 30;
+      return new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - back);
+    }
+
+    /* "23 Jun 2025", "31 Oct", "14 Aug 2026" */
+    var dm = t.match(/(\d{1,2})\s+([a-z]{3})[a-z]*\.?(?:\s+(\d{4}))?/);
+    if (dm) {
+      var mi = MONTHS.indexOf(dm[2]);
+      if (mi < 0) return null;
+      var y = dm[3] ? +dm[3] : TODAY.getFullYear();
+      var d = new Date(y, mi, +dm[1]);
+      /* A day and a month with no year is the most recent one that has
+         happened, not one in the future. */
+      if (!dm[3] && d > TODAY) d = new Date(y - 1, mi, +dm[1]);
+      return d;
+    }
+    return null;
+  }
+
+  /* A value from the menu, or "12 Jan 2026 – 11 May 2026" from the range
+     dialog, as a pair of day numbers. */
+  function window_(value) {
+    var v = (value || '').toLowerCase();
+    var t = days(TODAY);
+    if (v === 'today') return [t, t];
+    if (v === 'this week') return [t - 6, t];
+    if (v === 'this month') return [t - 29, t];
+    if (v === 'this year') return [days(new Date(TODAY.getFullYear(), 0, 1)), t];
+    var pair = (value || '').split('–');
+    if (pair.length === 2) {
+      var a = readDate(pair[0]), b = readDate(pair[1]);
+      if (a && b) return [days(a), days(b)];
+    }
+    return null;
+  }
 
   function headerIndex(table, key) {
     var aliases = COLUMN_FOR[key] || [];
@@ -321,6 +425,10 @@
      a hierarchy rather than a column, and period, which is not in the data. */
   function optionsFor(btn, key, dim) {
     if (dim.tree) return dim.options;
+    /* A period is worked out, not collected. Offering the column's own values
+       would put "Today 09:12" and "3 Nov 14:05" in the menu — every row its
+       own filter, which is a list of the data, not a way through it. */
+    if (dim.fixed) return dim.options;
     var screen = btn.closest('.screen');
     if (!screen) return dim.options;
     var seen = [];
@@ -342,10 +450,19 @@
     return seen.length > 1 ? seen.sort() : dim.options;
   }
 
-  function cellMatches(row, idx, value) {
+  function cellMatches(row, idx, value, key) {
     var cells = row.children;
     if (idx < 0 || idx >= cells.length) return false;
     var t = visibleText(cells[idx]).toLowerCase();
+    /* A moment is compared as a moment. "2 days ago" is inside this week and
+       "31 Oct" is not inside today, neither of which string matching can say. */
+    if (key === 'when') {
+      var win = window_(value);
+      if (!win) return true;
+      var d = readDate(t);
+      if (!d) return false;
+      return days(d) >= win[0] && days(d) <= win[1];
+    }
     var v = value.toLowerCase();
     return t === v || (v.length >= 3 && t.indexOf(v) > -1);
   }
@@ -376,7 +493,7 @@
       var rows = $$('tbody tr', table).filter(function (r) { return !r.classList.contains('t-out'); });
       total += rows.length;
       rows.forEach(function (row) {
-        var keep = cols.every(function (c) { return cellMatches(row, c.i, c.f.value); });
+        var keep = cols.every(function (c) { return cellMatches(row, c.i, c.f.value, c.f.key); });
         if (keep && q) keep = (row.innerText || '').toLowerCase().indexOf(q) > -1;
         row.classList.toggle('f-out', !keep);
         if (keep) shown += 1;
@@ -462,7 +579,56 @@
 
   /* ---- wiring ---- */
 
-  $$('.filters .fl').forEach(function (btn) {
+  /* "even to all the pages, they would all look like that."
+
+     Not every page: every page with a moment on it. A chip the table cannot
+     answer is worse than none — it reads as a control and does nothing — so a
+     list gets one only when one of its columns holds a date, and it is added
+     here rather than written into thirty filter rows by hand. */
+  function whenChip() {
+    var btn = document.createElement('button');
+    btn.className = 'fl';
+    btn.type = 'button';
+    btn.innerHTML = '<span class="k">When</span><b></b><span class="cv">▼</span>';
+    return btn;
+  }
+
+  function mountWhen() {
+    $$('.screen').forEach(function (screen) {
+      if ($$('.fl', screen).some(function (b) { return keyOf(b) === 'when'; })) return;
+      var dated = $$('.tbl', screen).filter(function (t) {
+        return headerIndex(t, 'when') > -1;
+      });
+      if (!dated.length) return;
+
+      var bar = screen.querySelector('.filters');
+      if (bar) {
+        /* After the search, before the controls that act on the result: a
+           period is what you are looking at, not a view setting. */
+        var btn = whenChip();
+        var search = bar.querySelector('.search');
+        if (search) search.parentNode.insertBefore(btn, search.nextSibling);
+        else bar.insertBefore(btn, bar.firstChild);
+        wire(btn);
+        return;
+      }
+      /* A record screen — a household, a module, a person — has no filter row
+         of its own, because a row floating above its tabs would belong to
+         whichever table happened to be open. Its tables each carry a toolbar
+         instead, so the chip goes in there, at the front of the one table on
+         that tab that has dates in it. */
+      dated.forEach(function (t) {
+        var host = t.closest('.card') || t.closest('.tblwrap');
+        var tq = host && host.parentNode.querySelector('.tq');
+        if (!tq || $$('.fl', tq).some(function (b) { return keyOf(b) === 'when'; })) return;
+        var b2 = whenChip();
+        tq.insertBefore(b2, tq.firstChild);
+        wire(b2);
+      });
+    });
+  }
+
+  function wire(btn) {
     var dim = DIMENSIONS[keyOf(btn)];
     if (!dim) return;
     // Every screen opens on the whole country and narrows from there, so a
@@ -476,7 +642,14 @@
       window.SugiraMenu.show(btn, dim.tree ? placeItems(btn) : listItems(btn, dim),
                              { width: dim.tree ? 220 : 200 });
     });
-  });
+  }
+
+  $$('.filters .fl').forEach(wire);
+
+  /* The generated toolbars carry the Columns button a table is read through,
+     and they land on the same row, so the When chip waits for them. */
+  if (window.SugiraTablesReady) mountWhen();
+  else document.addEventListener('tables:ready', mountWhen);
 
   $$('.filters .search input').forEach(function (inp) {
     var t = null;

@@ -1112,10 +1112,24 @@
   $('#mCancel').addEventListener('click', closeModal);
   scrim.addEventListener('click', function (e) { if (e.target === scrim) closeModal(); });
   mOk.addEventListener('click', function () {
-    var msg = pending ? pending.done : 'Saved';
+    var def = pending;
+    var msg = def ? def.done : 'Saved';
+    /* A dialog that was asked for rather than looked up answers its caller
+       before it closes, while its fields still exist. */
+    if (def && def.onOk && def.onOk(mBody) === false) return;
     closeModal();
-    say(msg);
+    if (msg) say(msg);
   });
+
+  /* One dialog in the app, so a module that needs to ask something borrows it
+     rather than drawing a second one with its own idea of a button. */
+  window.SugiraModal = {
+    ask: function (def) {
+      MODALS.__ask = { title: def.title, ok: def.ok, body: def.body,
+        onOk: def.onOk, done: def.done || '' };
+      openModal('__ask');
+    }
+  };
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && scrim.hidden && !dw.hidden) { popDrawer(); return; }
     if (e.key === 'Tab' && scrim.hidden && !dw.hidden) {
