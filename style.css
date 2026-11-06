@@ -150,14 +150,26 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
    already mean something here — Active, Needs validation, Overdue, Refused —
    and a person must never look like a status. Grey is out too: grey is how
    this app says nobody. Seven remain, not eight: ClickUp's teal and mint are
-   four degrees apart, and two people side by side in them look like one. */
-.h1{--av:#5a43d6}  /* purple     6.5:1 */
-.h2{--av:#3451b2}  /* neon blue  7.1:1 */
-.h3{--av:#0b68cb}  /* azure      5.4:1 */
-.h4{--av:#067a6f}  /* teal       5.2:1 */
-.h5{--av:#cb1d63}  /* pink       5.4:1 */
-.h6{--av:#9c2bad}  /* violet     6.2:1 */
-.h7{--av:#7d5e54}  /* brown      5.8:1 */
+   four degrees apart, and two people side by side in them look like one.
+
+   The seven are named once here and used twice: filled behind a person's
+   initials, and as the ink of the mark that stands for a kind of thing. */
+:root{
+  --hue-purple:#5a43d6;  /* 6.5:1 on white */
+  --hue-blue:#3451b2;    /* 7.1:1 */
+  --hue-azure:#0b68cb;   /* 5.4:1 */
+  --hue-teal:#067a6f;    /* 5.2:1 */
+  --hue-pink:#cb1d63;    /* 5.4:1 */
+  --hue-violet:#9c2bad;  /* 6.2:1 */
+  --hue-brown:#7d5e54;   /* 5.8:1 */
+}
+.h1{--av:var(--hue-purple)}
+.h2{--av:var(--hue-blue)}
+.h3{--av:var(--hue-azure)}
+.h4{--av:var(--hue-teal)}
+.h5{--av:var(--hue-pink)}
+.h6{--av:var(--hue-violet)}
+.h7{--av:var(--hue-brown)}
 .av{width:20px;height:20px;border-radius:50%;background:var(--av,var(--color-bg-primary-default));color:var(--color-content-on-primary);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex:none}
 .av[data-i]::before{content:attr(data-i)}
 /* In a table cell the avatar leads the name and the two read as one thing. */
@@ -624,8 +636,28 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .tbl tbody tr:last-child td{border-bottom:0}
 .tbl .num{font-variant-numeric:tabular-nums;text-align:right}
 .tbl .nm{font-weight:500;color:var(--color-content-primary)}
+/* A mark that stands for a kind of thing takes that kind's colour, so a
+   household is the same green wherever you meet one and a row of twelve forms
+   does not read as twelve grey smudges. The rule is the point: a KIND is
+   coloured, an ACTION is not. Download, Edit, Delete, the carets and the
+   chevrons stay in the text colour, because colouring those would be the
+   decoration the chrome is supposed to be free of.
+
+   The pictograms themselves are ClickUp's, drawn in currentColor for exactly
+   this — the colour is applied where the icon is used, not baked into it. */
 .cellmark{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px;color:var(--color-content-tertiary)}
-.cellmark svg{width:16px;height:16px;fill:none}
+.cellmark svg{width:16px;height:16px;fill:none;color:var(--kind,inherit)}
+.cellmark:has(use[href="#i-households"]),.rel:has(use[href="#i-households"]){--kind:var(--hue-teal)}
+.cellmark:has(use[href="#i-visits"]),.rel:has(use[href="#i-visits"]){--kind:var(--hue-azure)}
+.cellmark:has(use[href="#i-programme"]),.rel:has(use[href="#i-programme"]){--kind:var(--hue-purple)}
+.cellmark:has(use[href="#i-building"]),.rel:has(use[href="#i-building"]){--kind:var(--hue-purple)}
+.cellmark:has(use[href="#i-reports"]),.rel:has(use[href="#i-reports"]){--kind:var(--hue-blue)}
+.cellmark:has(use[href="#i-admin"]),.rel:has(use[href="#i-admin"]){--kind:var(--hue-violet)}
+.cellmark:has(use[href="#i-safeguarding"]),.rel:has(use[href="#i-safeguarding"]){--kind:var(--hue-pink)}
+.cellmark:has(use[href="#i-location"]),.rel:has(use[href="#i-location"]){--kind:var(--hue-brown)}
+.cellmark:has(use[href="#i-message"]),.rel:has(use[href="#i-message"]){--kind:var(--hue-azure)}
+.cellmark:has(use[href="#i-clock"]),.rel:has(use[href="#i-clock"]){--kind:var(--hue-brown)}
+.cellmark:has(use[href="#i-support"]),.rel:has(use[href="#i-support"]){--kind:var(--hue-blue)}
 .tbl .mut{color:var(--color-content-secondary)}
 /* The column names stay put while rows scroll, as they do on ClickUp.
    Sticky alone does nothing here: overflow-x makes this element the scroll
@@ -1260,7 +1292,7 @@ svg use{pointer-events:none}
 .rel:hover{border-color:var(--x-clickup-color-border-primary-low-contrast);color:var(--x-clickup-color-background-primary-pressed);background:var(--color-bg-primary-subtle)}
 .rel:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
 .rel svg{width:11px;height:11px;flex:none;fill:none;vertical-align:-2px;margin-right:4px;
-  color:var(--x-clickup-color-content-placeholder)}
+  color:var(--kind,var(--x-clickup-color-content-placeholder))}
 .rel:hover svg{color:var(--color-bg-primary-default)}
 .rel.more{color:var(--color-content-secondary);border-style:dashed}
 .pgr .v .rel{max-width:min(100%,340px)}
