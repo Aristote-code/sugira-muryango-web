@@ -433,6 +433,41 @@ abbr[data-tip]:hover{text-decoration-color:var(--color-content-secondary)}
 @media (min-width:1500px){.stats{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
 @media (min-width:820px){.cols.c3{grid-template-columns:repeat(3,1fr)}}
 .wide{grid-column:1/-1}
+
+/* ---- the tablet, as a card ----------------------------------------------
+   One question at the width it is actually read at. The Preview tab drew it
+   with a style attribute carrying three tokens that do not exist — --r-lg,
+   --lift-overlay and --ink-3 — so it had no radius, no lift, and its header
+   line came out near-black instead of grey. The Translate tab needs the same
+   card beside the strings, so it is a class now and both draw the same one. */
+.tdev{max-width:380px;padding:20px;border-radius:var(--radius-lg);
+  background:var(--color-bg-surface);box-shadow:var(--elevation-raised)}
+.tdev-k{margin:0;font-size:12px;line-height:16px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--color-content-tertiary)}
+.tdev-q{margin:8px 0 16px;font-size:16px;line-height:24px;font-weight:600;
+  color:var(--color-content-primary)}
+.tdev-f{display:flex;gap:8px;margin-top:16px}
+
+/* The other language, under the card. Translating is comparing, so the one
+   you are not previewing stays on the screen rather than behind the toggle. */
+.tr-alt{margin:12px 0 0;max-width:380px;font-size:13px;line-height:20px;
+  color:var(--color-content-secondary)}
+.tr-alt b{font-weight:500;color:var(--color-content-tertiary);
+  text-transform:uppercase;font-size:11px;letter-spacing:.06em;margin-right:6px}
+/* The row being previewed, marked the way an open row is marked elsewhere. */
+#s-form [data-panelid="translate"] .tbl tbody tr{cursor:pointer}
+#s-form [data-panelid="translate"] .tbl tbody tr.is-open>td{background:var(--color-bg-hover)}
+/* The preview needs the tablet's 380 and its padding, and nothing more; the
+   strings need everything else, or the Kinyarwanda and the status beside it
+   have nowhere to go. c2's 1.5fr/1fr gave the card half as much again as it
+   can use and cut the status column off. */
+@media (min-width:1000px){
+  #s-form [data-panelid="translate"] .cols.c2{grid-template-columns:minmax(0,1fr) 400px}
+}
+/* The heading and the language toggle do not both fit across a card that
+   wide, so the toggle drops under the heading rather than breaking it in two. */
+#trPrev .card-h{flex-wrap:wrap;row-gap:8px}
+#trPrev .card-h h3{white-space:nowrap}
 .callout{background:var(--color-bg-surface);border-left:3px solid var(--color-bg-primary-default);border-radius:var(--radius-lg);padding:16px 20px;box-shadow:var(--elevation-raised)}
 .callout .ch{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--color-bg-primary-hover);margin-bottom:8px}
 .callout .ch svg{width:14px;height:14px;fill:none}

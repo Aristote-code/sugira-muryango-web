@@ -1212,13 +1212,13 @@
           <div class="cols c2">
             <div class="card">
               <div class="card-h"><h3>As the home visitor sees it</h3><span class="side"><span class="seg"><button type="button" class="on">Kinyarwanda</button><button type="button">English</button></span></span></div>
-              <div style="max-width:380px;border-radius:var(--r-lg);box-shadow:var(--lift-overlay);padding:20px;background:var(--surface)">
-                <p style="font-size:.75rem;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase">Icyiciro 6 &middot; Ikibazo 3 muri 30</p>
-                <p style="font-size:16px;font-weight:600;margin:8px 0 16px">Umubyeyi w&rsquo;umugabo yari ahari?</p>
+              <div class="tdev">
+                <p class="tdev-k">Icyiciro 6 &middot; Ikibazo 3 muri 30</p>
+                <p class="tdev-q">Umubyeyi w&rsquo;umugabo yari ahari?</p>
                 <div class="lr click"><span class="t">Yego</span></div>
                 <div class="lr click"><span class="t">Oya</span></div>
                 <div class="lr click"><span class="t">Nta mubyeyi w&rsquo;umugabo mu rugo</span></div>
-                <div style="display:flex;gap:8px;margin-top:16px"><button data-toast="Previous question" class="btn sec sm" type="button">Subira inyuma</button><button data-toast="Next question" class="btn sm" type="button">Komeza</button></div>
+                <div class="tdev-f"><button data-toast="Previous question" class="btn sec sm" type="button">Subira inyuma</button><button data-toast="Next question" class="btn sm" type="button">Komeza</button></div>
               </div>
             </div>
             <div class="card">
@@ -1243,8 +1243,13 @@
               <div class="vrow"><div class="v">14 <small>Oct</small></div></div>
               <div class="d">C. Uwimana</div></div>
           </div>
+          <div class="cols c2">
+          <!-- app.js puts the table's Filter/Columns/Export bar in front of the
+               card, so the card needs a column of its own to be put in front
+               of; without this the bar becomes a third child of the grid. -->
+          <div>
           <div class="card flush plainsurface">
-            <div class="tblwrap"><table class="tbl">
+            <div class="tblwrap"><table class="tbl" id="trTable">
               <thead><tr><th style="width:3rem">#</th><th>English</th><th>Kinyarwanda</th><th>Status</th></tr></thead>
               <tbody>
                 <tr><td class="mut">1</td><td>Date of visit</td><td><span class="v" data-ftype="text">Itariki y&rsquo;urugendo</span></td><td><span class="chip ok"><i></i>Reviewed</span></td></tr>
@@ -1256,6 +1261,13 @@
             </table></div>
             <div class="tfoot"><span>Showing 5 of 30 &middot; the route keeps the project and module, so Back works</span>
               <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
+          </div>
+          </div>
+          <div class="card" id="trPrev">
+            <div class="card-h"><h3>As the home visitor sees it</h3><span class="side"><span class="seg" id="trLang"><button type="button" class="on">Kinyarwanda</button><button type="button">English</button></span></span></div>
+            <div class="tdev" id="trDev"></div>
+            <p class="tr-alt" id="trAlt"></p>
+          </div>
           </div>
         </div>
 
@@ -2136,6 +2148,7 @@
 <script src="group.js" defer></script>
 <script src="access.js" defer></script>
 <script src="roles.js" defer></script>
+<script src="translate.js" defer></script>
 <script src="actions.js" defer></script>
 </body>
 </html>

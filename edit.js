@@ -90,10 +90,16 @@
   }
 
   function commit(cell, next, was) {
-    if (next === was) return;
+    /* The cell comes back out of its field whatever happened to the value.
+       This used to return before that when the value had not changed, so
+       opening a cell and clicking away left the input sitting in it with
+       `editing` already taken off — which meant the next click put a second
+       field inside the first, and three could be open across a table at once
+       with nothing saying which one was live. */
     cell.innerHTML = '';
     cell.appendChild(document.createTextNode(next));
-    cell.classList.remove('empty');
+    cell.classList.toggle('empty', blank(next));
+    if (next === was) return;
     var label = labelOf(cell);
     say((label ? label.charAt(0).toUpperCase() + label.slice(1) : 'Value')
       + ' is now ' + next, function () {
