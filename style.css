@@ -1530,6 +1530,9 @@ svg use{pointer-events:none}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .blast li .w b{color:var(--color-content-secondary);font-weight:600}
 .m-lead{margin:0;font-size:13px;line-height:18px;color:var(--color-content-secondary)}
+/* The unit after a figure — "42m" — reads as part of the number, not as
+   another number, so it is smaller and quieter but on the same baseline. */
+.unit{font-size:13px;color:var(--color-content-secondary)}
 .m-note{display:flex;gap:8px;align-items:flex-start;margin:0;padding:8px 10px;
   font-size:12px;line-height:16px;color:var(--color-content-warning);background:var(--color-bg-warning-subtle);
   border:1px solid var(--x-clickup-color-border-warning);border-radius:8px}

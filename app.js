@@ -69,20 +69,20 @@
       ok: 'Change it',
       body: '<div><label for="f-si">Interval</label><select id="f-si"><option>Two weeks</option><option>Three weeks</option><option>Four weeks</option></select></div>' +
             '<div><label for="f-sw">Apply to</label><select id="f-sw"><option>Sessions not yet delivered</option><option>Cohort 2 only</option></select></div>' +
-            '<p style="font-size:13px;color:var(--ink-2);line-height:1.6">This reschedules 994 households in Cohort 2. Cohort 1 is past session 6, so only its remaining sessions move.</p>',
+            '<p class="m-lead">This reschedules 994 households in Cohort 2. Cohort 1 is past session 6, so only its remaining sessions move.</p>',
       done: 'Interval changed — 994 households rescheduled'
     },
     setroh: {
       title: 'Change the review window',
       ok: 'Change it',
       body: '<div><label for="f-sr">A supervisor review is due within</label><select id="f-sr"><option>72 hours</option><option>48 hours</option><option>24 hours</option></select></div>' +
-            '<p style="font-size:13px;color:var(--ink-2);line-height:1.6">Two cases are open and both are already past 72 hours. Shortening the window does not reopen closed cases, but it will mark more of them late.</p>',
+            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Two cases are open and both are already past 72 hours. Shortening the window does not reopen closed cases, but it will mark more of them late.</span></p>',
       done: 'Review window changed'
     },
     cleanup: {
       title: 'Clean up training data',
       ok: 'Upload and preview',
-      body: '<p style="font-size:14px;color:var(--ink-2);line-height:1.6">Upload a CSV of the accounts used in training. Nothing is removed until you have seen the preview and confirmed it.</p>' +
+      body: '<p class="m-lead">Upload a CSV of the accounts used in training. Nothing is removed until you have seen the preview and confirmed it.</p>' +
             '<div><label for="f-cu">CSV file</label><input id="f-cu" type="file"></div>' +
             '<div><label for="f-cc">Match on</label><select id="f-cc"><option>Email</option><option>Phone number</option></select></div>',
       done: 'Uploaded — review the preview before anything is removed'
@@ -102,13 +102,13 @@
       body: '<div><label for="f-p0">Current password</label><input id="f-p0" type="password" placeholder="Your current password"></div>' +
             '<div><label for="f-p1">New password</label><input id="f-p1" type="password" placeholder="At least 12 characters"></div>' +
             '<div><label for="f-p2">New password again</label><input id="f-p2" type="password"></div>' +
-            '<p style="font-size:13px;color:var(--ink-2)">Changing it signs you out everywhere except here.</p>',
+            '<p class="mhint">Changing it signs you out everywhere except here.</p>',
       done: 'Password changed — other devices have been signed out'
     },
     signoutall: {
       title: 'Sign out everywhere else',
       ok: 'Sign out everywhere else',
-      body: '<p style="font-size:14px;color:var(--ink-2);line-height:1.6">Two other devices are signed in as you: a tablet in Ngoma and a browser in Kigali. Both will be signed out. This browser stays signed in.</p>',
+      body: '<p class="m-lead">Two other devices are signed in as you: a tablet in Ngoma and a browser in Kigali. Both will be signed out. This browser stays signed in.</p>',
       done: 'Signed out on 2 other devices'
     },
     furule: {
@@ -138,7 +138,7 @@
     archive: {
       title: 'Archive this form',
       ok: 'Archive',
-      body: '<p style="font-size:14px;color:var(--ink-2);line-height:1.6">Archiving takes the form off the tablet at the next sync. Responses already collected stay where they are and keep appearing in reports &mdash; nothing is deleted.</p>' +
+      body: '<p class="m-lead">Archiving takes the form off the tablet at the next sync. Responses already collected stay where they are and keep appearing in reports &mdash; nothing is deleted.</p>' +
             '<div><label for="f-arw">Why</label><select id="f-arw"><option>Replaced by a newer version</option><option>No longer part of the programme</option><option>Created in error</option></select></div>',
       done: 'Archived — it leaves the tablet at the next sync'
     },
@@ -218,7 +218,7 @@
       ok: 'Create form',
       body: '<div><label for="f-fn">Form name</label><input id="f-fn" type="text" placeholder="e.g. Caregiver observation"></div>' +
             '<div><label for="f-fw">Filled in by</label><select id="f-fw"><option>IZU at Village</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option></select></div>' +
-            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">Created in this session, not imported from a global library.</p>',
+            '<p class="mhint">Created in this session, not imported from a global library.</p>',
       done: 'Form created in Session 6'
     },
     /* "Cohort 1 2026 ... it won't just be numbers, it will be what happened in
@@ -488,7 +488,7 @@
       title: 'Delete this item?',
       ok: 'Delete',
       danger: true,
-      body: '<p>It is removed from every tablet at the next sync. Anyone part-way through watching it loses their place.</p>' +
+      body: '<p class="m-lead">It is removed from every tablet at the next sync. Anyone part-way through watching it loses their place.</p>' +
             '<p class="mhint">Deleted items are recoverable for 30 days from System \u203A Data maintenance. After that they are gone.</p>' +
             '<div><label for="f-dw">Why it is being removed</label><input id="f-dw" type="text" placeholder="Recorded against your name in the activity log"></div>',
       done: 'Deleted \u2014 recoverable for 30 days'
@@ -503,7 +503,7 @@
             '<div><label for="f-ac">Cell</label><select id="f-ac"><option>All cells in the sector</option><option>Kabare</option><option>Rukira</option><option>Zaza</option></select></div>' +
             '<div><label for="f-av">Village</label><select id="f-av"><option>All villages in the cell</option><option>Nyarutovu</option><option>Gituku</option></select></div>' +
             '<div><label for="f-an">Notified by email</label><select id="f-an"><option>Yes</option><option>No</option></select></div>' +
-            '<p style="font-size:13px;color:var(--ink-3);margin:0;max-width:52ch">The position decides what they can do. The place decides whose records they can do it to. Leave a level unset to cover everything under the one above it.</p>',
+            '<p class="mhint">The position decides what they can do. The place decides whose records they can do it to. Leave a level unset to cover everything under the one above it.</p>',
       done: 'Access changed \u2014 it takes effect the next time they sign in'
     },
     exception: {
@@ -512,7 +512,7 @@
       body: '<div><label for="f-xw">The one thing they get</label><select id="f-xw"><option>Change \u2014 Programme</option><option>Add \u2014 Programme</option><option>Change \u2014 Reports</option><option>Archive \u2014 Reports</option><option>See \u2014 People &amp; access</option><option>See \u2014 Maintenance</option><option>Change \u2014 Maintenance</option><option>Archive \u2014 Households</option><option>Change \u2014 Field support</option></select></div>' +
             '<div><label for="f-xu">Until</label><input id="f-xu" type="date" value="2026-12-31"></div>' +
             '<div><label for="f-xr">Why</label><textarea id="f-xr" placeholder="Required. This is what an auditor reads."></textarea></div>' +
-            '<p style="font-size:13px;color:var(--ink-3);margin:0;max-width:52ch">One person, one thing, with an end date. The list holds only what their position does not already give them. If a second person needs the same thing, it belongs on the position \u2014 or on a rung above it.</p>',
+            '<p class="mhint">One person, one thing, with an end date. The list holds only what their position does not already give them. If a second person needs the same thing, it belongs on the position \u2014 or on a rung above it.</p>',
       done: 'Exception granted \u2014 it appears on the record and expires on its own'
     },
     invite: {
@@ -521,7 +521,7 @@
       body: '<div><label for="f-ie">Email</label><input id="f-ie" type="email" placeholder="name@fxbrwanda.org"></div>' +
             '<div><label for="f-ir">Role</label><select id="f-ir"><option>IZU at Village</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option><option>Sugira Muryango District lead (DTL)</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>HQ officer</option></select></div>' +
             '<div><label for="f-ip">Where</label><select id="f-ip"><option>Kibungo \u00b7 Ngoma</option><option>Jarama \u00b7 Ngoma</option><option>Sake \u00b7 Ngoma</option><option>Kigoma \u00b7 Nyanza</option></select></div>' +
-            '<p style="font-size:.82rem;color:var(--ink-3);margin:0">They set their own password from the invitation. No one else sees it.</p>',
+            '<p class="mhint">They set their own password from the invitation. No one else sees it.</p>',
       done: 'Invitation sent \u2014 they appear under Invited until they accept'
     },
     msettings: {
