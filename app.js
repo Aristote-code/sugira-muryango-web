@@ -417,12 +417,85 @@
           + '<p class="m-lead">Which sector or district someone covers is set when the position is given to them, not here. The same position runs in every sector.</p>',
       done: 'Position created \u2014 it already has everything the one it starts from has'
     },
+    /* The client called this one "very challenging", and the reason was in the
+       first field: Question was a closed list of five, so a builder titled
+       "Build a report" could only hand back a report somebody had already
+       written. The nine saved reports read as a measure and a grouping —
+       "Average minutes per module", "Minutes per visit, by home visitor",
+       "Activities completed, by session" — so that is what it asks for now,
+       and thirty-six combinations replace the five.
+
+       It also asks what the report is built on, which it never did, though the
+       table has carried a "Built on" column all along and the client said
+       plainly that reports are built on their projects. Project narrows the
+       forms, so choosing one does something. Both lists, and the places, are
+       read from the app's own data rather than typed here. */
     report: {
       title: 'Build a report',
       ok: 'Run report',
-      body: '<div><label for="f-q">Question</label><select id="f-q"><option>Male caregiver attendance</option><option>Risk of harm by type</option><option>Household needs</option><option>Visits per module</option><option>Average minutes per module</option></select></div>' +
-            '<div><label for="f-sc">Scope</label><select id="f-sc"><option>All of Rwanda</option><option>Southern province</option><option>Ngoma district</option></select></div>' +
-            '<div><label for="f-sch">Send it</label><select id="f-sch"><option>Don’t send, just show me</option><option>Weekly, Monday 06:00</option><option>Monthly, 1st at 06:00</option></select></div>',
+      body: '<div><label for="f-proj">Project</label><select id="f-proj"></select></div>'
+          + '<div><label for="f-form">Built on</label><select id="f-form"></select></div>'
+          + '<div><label for="f-measure">Count</label><select id="f-measure">'
+          + '<option>Responses</option><option>Visits completed</option>'
+          + '<option>Households reached</option><option>Minutes per visit</option>'
+          + '<option>Risk-of-harm cases</option><option>Referrals made</option></select></div>'
+          + '<div><label for="f-group">Grouped by</label><select id="f-group">'
+          + '<option>District</option><option>Sector</option><option>Session</option>'
+          + '<option>Home visitor</option><option>Cohort</option><option>Month</option></select></div>'
+          + '<div><label for="f-sc">Where</label><select id="f-sc"></select></div>'
+          + '<div><label for="f-rn">Name</label><input id="f-rn" type="text"></div>'
+          + '<div><label for="f-sch">Send it</label><select id="f-sch">'
+          + '<option>Don’t send, just show me</option><option>Weekly, Monday 06:00</option>'
+          + '<option>Monthly, 1st at 06:00</option></select></div>',
+      init: function (body) {
+        var proj = body.querySelector('#f-proj'), form = body.querySelector('#f-form');
+        var measure = body.querySelector('#f-measure'), group = body.querySelector('#f-group');
+        var where = body.querySelector('#f-sc'), name = body.querySelector('#f-rn');
+        var prog = window.SUGIRA_PROGRAMME, places = window.SUGIRA_PLACES;
+        var typed = false;
+
+        function fill(sel, items) {
+          sel.innerHTML = '';
+          items.forEach(function (t) {
+            var o = document.createElement('option');
+            o.textContent = t;
+            sel.appendChild(o);
+          });
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        /* Only projects with a form still in use: a report cannot be built on
+           an archived one, and offering it would be a dead end. */
+        var live = (prog ? prog.projects : []).filter(function (p) {
+          return p.forms.some(function (f) { return f.status === 'Active'; });
+        });
+
+        function formsOf(pname) {
+          var p = live.filter(function (x) { return x.name === pname; })[0];
+          if (!p) return [];
+          return p.forms.filter(function (f) { return f.status === 'Active'; })
+            .map(function (f) { return f.name + ' — ' + f.responses + ' responses'; });
+        }
+
+        /* The name the nine saved reports are written in, so what comes out of
+           here sits in the table beside them without looking foreign. It stops
+           following the fields the moment anyone types their own. */
+        function rename() {
+          if (typed) return;
+          name.value = measure.value + ', by ' + group.value.toLowerCase();
+        }
+
+        proj.addEventListener('change', function () { fill(form, formsOf(proj.value)); });
+        measure.addEventListener('change', rename);
+        group.addEventListener('change', rename);
+        name.addEventListener('input', function () { typed = true; });
+
+        fill(proj, live.map(function (p) { return p.name; }));
+        fill(where, ['All of Rwanda']
+          .concat(places ? places.provinces : [])
+          .concat(places ? places.districts.map(function (d) { return d + ' district'; }) : []));
+        rename();
+      },
       done: 'Report saved and queued'
     },
   };
@@ -1000,6 +1073,9 @@
     // now visually hidden behind its own trigger, so focusing the first
     // "input, select" put the caret on something nobody can see.
     if (window.SugiraMenu) window.SugiraMenu.enhance(mBody);
+    /* A modal whose choices come from the app's own data fills them here,
+       after the triggers exist, so refilling one list updates its trigger. */
+    if (def.init) def.init(mBody);
     var first = mBody.querySelector('textarea, input:not([type="hidden"]), .cselect');
     // A confirm with no fields focuses Cancel, never the button that does the thing.
     if (first) first.focus(); else $('#mCancel').focus();

@@ -222,6 +222,12 @@
 
     function sync() { text.textContent = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : ''; }
     sync();
+    /* The trigger is the only part anyone sees, so it has to follow the select
+       wherever the change came from. Picking from the menu below calls sync
+       itself; a select refilled by something else — one list narrowing another
+       — reaches it this way, and without it the trigger keeps showing an
+       option that is no longer in the list. */
+    sel.addEventListener('change', sync);
 
     trigger.addEventListener('click', function (e) {
       e.stopPropagation();

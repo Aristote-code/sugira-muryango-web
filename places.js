@@ -173,6 +173,15 @@
   }
   window.SugiraTree = { guides: guides };
 
+  /* The four provinces and five districts, for anything that has to offer a
+     place without keeping its own copy of the country. The report builder
+     scopes by these; DISTRICTS above stays the one place they are written. */
+  window.SUGIRA_PLACES = {
+    provinces: DISTRICTS.map(function (d) { return d[0]; })
+      .filter(function (n, i, a) { return a.indexOf(n) === i; }),
+    districts: DISTRICTS.map(function (d) { return d[1]; })
+  };
+
   function row(node, depth, open, onToggle) {
     var kids = node.children && node.children.length;
     var r = el(kids ? 'button' : 'div', 'plr' + (kids ? '' : ' leaf'));
