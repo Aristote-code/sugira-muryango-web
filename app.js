@@ -1458,7 +1458,9 @@
        so keep the original text and swap it while filtering. */
     var foot = host.querySelector('.tfoot');
     var footLabel = foot && foot.querySelector('span:not(.pg)');
-    var footText = footLabel ? footLabel.textContent : null;
+    /* The footer as it was written, kept whole: it may hold a bold count or a
+       link to somewhere, and restoring it from a string would lose both. */
+    var footText = footLabel ? footLabel.cloneNode(true) : null;
     var pager = foot && foot.querySelector('.pg');
     var state = { sort: null, rules: [], match: 'and', openCol: null };
 
@@ -1880,9 +1882,19 @@
       count.textContent = shown === rows.length ? (rows.length + ' rows') : (shown + ' of ' + rows.length);
       if (footLabel) {
         var filtered = shown !== rows.length;
-        footLabel.textContent = filtered
-          ? (shown === 0 ? 'No rows match' : 'Showing ' + shown + ' matching row' + (shown === 1 ? '' : 's'))
-          : footText;
+        /* Putting the footer back meant writing textContent, which flattens it:
+           every "3 open cases" lost its bold on the first paint, and a footer
+           carrying a link lost the link. The original is kept as nodes and put
+           back as nodes, so a footer can say more than a sentence. */
+        if (filtered) {
+          footLabel.textContent = shown === 0 ? 'No rows match'
+            : 'Showing ' + shown + ' matching row' + (shown === 1 ? '' : 's');
+        } else if (footLabel.textContent !== footText.textContent) {
+          footLabel.innerHTML = '';
+          [].forEach.call(footText.childNodes, function (n) {
+            footLabel.appendChild(n.cloneNode(true));
+          });
+        }
         if (pager) pager.hidden = filtered;
       }
       if (!empty) {
