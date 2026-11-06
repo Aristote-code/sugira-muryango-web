@@ -682,7 +682,7 @@
                 <tr data-go="case" data-open="full" data-tags="closed"><td class="nm"><span class="r-open">RH-0035</span><span class="r-shut">Case&nbsp;5</span></td><td><span class="r-open">HH-1133 Habimana</span><span class="r-shut"><span class="rd">household withheld</span></span></td><td><span class="r-open">Neglect</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td><span class="r-open">Child under 5</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td><span class="r-open">E. Mutesi</span><span class="r-shut"><span class="rd">&mdash;</span></span></td><td class="num">18 Oct &middot; not substantiated</td><td><span class="chip ok"><i></i>Stabilised</span></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span><b>3 open cases</b> in Ngoma &middot; two past the 72-hour review window</span><span class="mut" data-when="count">Counts are visible to every role and are not a permission.</span></div>
+            <div class="tfoot"><span><b>3 open cases</b> in Ngoma &middot; two past the 72-hour review window &middot; <button class="rel" type="button" data-go="field" data-tip="A case raised on a tablet is not a case here until the tablet syncs, and the 72-hour clock starts when it arrives. One is sitting on a device in Kibungo, six days old."><svg aria-hidden="true"><use href="#i-alert"/></svg>1 more held on a device</button></span><span class="mut" data-when="count">Counts are visible to every role and are not a permission.</span></div>
           </div>
         </div>
       </section>
@@ -838,16 +838,19 @@
             <div class="st"><div class="l">Longest silence</div>
               <div class="vrow"><div class="v">6 <small>days</small></div></div>
               <div class="d">E. Mutesi &middot; Ngoma</div></div>
+            <div class="st"><div class="l" data-tip="Records finished on a tablet and not yet sent. A device holds them for 30 days offline; after that they are gone.">Held on devices</div>
+              <div class="vrow"><div class="v">214</div><span class="delta down">1 case</span></div>
+              <div class="d">Across 19 silent devices &middot; oldest 6 days</div></div>
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th data-person><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</th><th>Place</th><th class="num">Households</th><th class="num">Last sync</th><th>Status</th></tr></thead>
+              <thead><tr><th data-person><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</th><th>Place</th><th class="num">Households</th><th class="num">Last sync</th><th>Held on the device</th><th>Status</th><th class="gap"></th></tr></thead>
               <tbody>
-                <tr><td class="nm">E. Mutesi</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">31</td><td class="num">6 days</td><td><span class="chip bad"><i></i>Not reporting</span></td></tr>
-                <tr><td class="nm">M. Dusabe</td><td class="mut">Jarama &middot; Ngoma</td><td class="num">28</td><td class="num">2 days</td><td><span class="chip warn"><i></i>Delayed</span></td></tr>
-                <tr><td class="nm">J. Kamanzi</td><td class="mut">Kigoma &middot; Nyanza</td><td class="num">26</td><td class="num">3 days</td><td><span class="chip warn"><i></i>Delayed</span></td></tr>
-                <tr><td class="nm">A. Nyirahabimana</td><td class="mut">Busoro &middot; Nyanza</td><td class="num">30</td><td class="num">2 hours</td><td><span class="chip ok"><i></i>Reporting</span></td></tr>
-                <tr><td class="nm">P. Hakizimana</td><td class="mut">Sake &middot; Ngoma</td><td class="num">24</td><td class="num">40 minutes</td><td><span class="chip ok"><i></i>Reporting</span></td></tr>
+                <tr><td class="nm">E. Mutesi</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">31</td><td class="num">6 days</td><td>14 records<span class="chip bad" data-tip="1 of them a risk-of-harm case, raised 6 days ago and not yet seen here" style="margin-left:8px"><i></i>1 case</span></td><td><span class="chip bad"><i></i>Not reporting</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">M. Dusabe</td><td class="mut">Jarama &middot; Ngoma</td><td class="num">28</td><td class="num">2 days</td><td class="mut">5 records</td><td><span class="chip warn"><i></i>Delayed</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">J. Kamanzi</td><td class="mut">Kigoma &middot; Nyanza</td><td class="num">26</td><td class="num">3 days</td><td class="mut">7 records</td><td><span class="chip warn"><i></i>Delayed</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">A. Nyirahabimana</td><td class="mut">Busoro &middot; Nyanza</td><td class="num">30</td><td class="num">2 hours</td><td><span class="rd">Nothing waiting</span></td><td><span class="chip ok"><i></i>Reporting</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">P. Hakizimana</td><td class="mut">Sake &middot; Ngoma</td><td class="num">24</td><td class="num">40 minutes</td><td><span class="rd">Nothing waiting</span></td><td><span class="chip ok"><i></i>Reporting</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
           </div>
