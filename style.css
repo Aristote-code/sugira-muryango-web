@@ -1268,6 +1268,55 @@ svg use{pointer-events:none}
   width:max-content;min-width:240px;max-width:min(360px,calc(100vw - 32px));
   max-height:min(70vh,520px);overflow:hidden auto}
 .qpop.narrow{width:min(280px,calc(100vw - 2rem));padding:8px;border-radius:8px}
+
+/* ---- field, condition, value -------------------------------------------
+   The client asked for this three times in four minutes, and ClickUp had
+   already measured it: QueryPanels.tsx FilterRow is 32 high with a 4 gap,
+   field 143, condition 104, value taking the rest, clear 32; the triggers
+   are 28 at r7; the rows sit together in one box on bg.hover. The panel is
+   640 there and narrower here, because our widest column name is "Risk-of-
+   harm cases" rather than a custom field with a sentence for a title. */
+.qpop.wide{width:min(560px,calc(100vw - 32px));max-width:none}
+.qbox{display:flex;flex-direction:column;gap:4px;padding:8px;
+  border-radius:8px;background:var(--color-bg-hover)}
+.qrow{display:flex;align-items:center;gap:4px;height:32px}
+.qrow .cselect.qf{height:28px;border:1px solid var(--color-border-strong);
+  border-radius:7px;background:var(--color-bg-surface);padding:0 7px;gap:4px;
+  font-size:14px;line-height:16px}
+.qrow .cselect.qf:hover{border-color:var(--x-clickup-color-border-hover)}
+.qrow .qf-col{width:143px;flex:none}
+.qrow .qf-op{width:104px;flex:none}
+.qrow .qf-val{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:4px}
+.qrow .qf-val .cselect.qf{width:100%;min-width:0}
+.qrow .qf-in{height:28px;min-width:0;flex:1;border:1px solid var(--color-border-strong);
+  border-radius:7px;background:var(--color-bg-surface);padding:0 7px;
+  font-family:var(--ui);font-size:14px;line-height:16px;color:var(--color-content-primary)}
+.qrow .qf-in:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:-1px}
+.qrow .qf-num{flex:1 1 0}
+/* "is empty" compares against nothing, so the column stays but says so. */
+.qrow .qf-na{color:var(--x-clickup-color-content-placeholder);padding-left:7px}
+.qrow .qf-x{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;
+  flex:none;border:0;border-radius:8px;background:none;cursor:pointer;
+  color:var(--color-content-tertiary)}
+.qrow .qf-x:hover{background:var(--color-bg-danger-subtle);color:var(--color-content-danger)}
+.qrow .qf-x svg{width:14px;height:14px;fill:none}
+/* Only drawn once there are two rows to join. */
+.qmatch{display:flex;align-items:center;gap:4px;height:24px;
+  font-size:12px;line-height:16px;font-weight:500;color:var(--color-content-secondary)}
+.qmatch-b{height:24px;padding:0 8px;border-radius:6px;cursor:pointer;
+  border:1px solid var(--color-border-default);background:none;
+  font-family:var(--ui);font-size:12px;line-height:16px;
+  color:var(--color-content-tertiary)}
+.qmatch-b.on{border-color:var(--color-border-focus);color:var(--color-content-primary)}
+.qnone{margin:0;padding:4px 2px;font-size:13px;line-height:20px;
+  color:var(--color-content-secondary)}
+.qadd{display:inline-flex;align-items:center;gap:4px;height:32px;margin-top:8px;
+  padding:0 10px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--color-border-default);background:var(--color-bg-surface);
+  font-family:var(--ui);font-size:13px;line-height:16px;font-weight:500;
+  color:var(--color-content-primary)}
+.qadd:hover{background:var(--color-bg-hover)}
+.qadd svg{width:14px;height:14px;fill:none}
 .qpop[hidden]{display:none!important}
 .qpop-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .qpop-h h4{flex:1;min-width:0;font-size:14px;line-height:16px;font-weight:500;color:var(--color-content-primary)}
@@ -1484,7 +1533,7 @@ tr.shut .nm{color:var(--color-content-secondary);font-weight:500}
   font-size:12px;cursor:pointer;text-decoration:underline;padding:4px 4px}
 .flclear:hover{color:var(--color-content-primary)}
 /* filtering and paging each own a flag, so neither can reveal what the other hid */
-tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
+tr.f-out,tr.p-out,tr.t-out,tr.q-out,.tr.f-out{display:none}
 .pg button[hidden]{display:none}
 .pg button:disabled{opacity:.4;cursor:default}
 .usermenu{position:fixed;z-index:var(--z-pop);min-width:12rem;background:var(--color-bg-surface);

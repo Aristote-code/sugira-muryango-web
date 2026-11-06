@@ -1241,7 +1241,7 @@
     var footLabel = foot && foot.querySelector('span:not(.pg)');
     var footText = footLabel ? footLabel.textContent : null;
     var pager = foot && foot.querySelector('.pg');
-    var state = { sort: null, facets: {}, find: {}, openCol: null };
+    var state = { sort: null, rules: [], match: 'and', openCol: null };
 
     /* ---- toolbar ---- */
     var bar = document.createElement('div');
@@ -1281,10 +1281,14 @@
     var filterBtn = bar.querySelector('[data-q="filter"]');
     var colsBtn = bar.querySelector('[data-q="cols"]');
     var count = bar.querySelector('.tq-count');
-    if (owned) {
-      filterBtn.hidden = true;
-      bar.querySelector('[data-q="export"]').hidden = true;
-    }
+    /* The duplicate Export still goes: two buttons doing one thing is a
+       choice nobody wants to make. The Filter stays. It used to go for the
+       same reason, but that reasoning only held while this was a facet list
+       — a second way to say "Kirehe" when a chip already said it. Field,
+       condition, value is not a second way to do the same thing: the chips
+       are the common cases, this is everything else, and the client asked
+       for it "on all the lists that we have". They narrow together. */
+    if (owned) bar.querySelector('[data-q="export"]').hidden = true;
 
     /* ---- popovers ---- */
     function popover(cls) {
@@ -1294,7 +1298,9 @@
       document.body.appendChild(p);
       return p;
     }
-    var fPop = popover(), cPop = popover('narrow');
+    /* The filter panel carries three controls across, so it is the wide one;
+       the column picker is a list of names and stays narrow. */
+    var fPop = popover('wide'), cPop = popover('narrow');
 
     function place(pop, btn) {
       /* One popover at a time, across every table. A screen can carry four
@@ -1320,31 +1326,54 @@
 
     /* ---- filters ----
 
-       Deliberately not a query builder. ClickUp's field / operator / value
-       rows with an And / Or match were the wrong shape for this data: nobody
-       reading a visit register wants to say "Outcome is not empty". They want
-       to say Kirehe, not completed, Module 5 — so the popover lists the
-       table's own columns, and each column its own values with a count of
-       what is left if you pick it. Within a column the values are
-       alternatives, across columns they narrow together, and there is no
-       operator to learn. A column with too many values to list takes a search
-       box instead, and a number column a from / to pair. */
-    /* A column is worth listing as values only when those values repeat —
-       eight households across eight rows is not a facet, it is the table
-       again. "Module 5" and "31 Oct" both parse as numbers, so numeric is
-       asked last, and only once a column is too varied to list. */
-    function chosen(c) {
-      return (state.facets[c.i] || []).length;
+       Field, condition, value. The client asked for exactly this, three
+       times over four minutes (gp2 01:41-06:04): "he can take a column, then
+       he says where this column is this, it has this and this value", and
+       "that is what I am expecting on all the lists that we have".
+
+       What was here before was a facet list, with a comment explaining that
+       a query builder was the wrong shape for this data. It was not; the
+       reason given — "nobody wants to say Outcome is not empty" — is beside
+       the point they were making, which is that a search box that looks in
+       every column at once cannot tell age from a first name:
+
+         "if that person puts 'Harerimana' I wouldn't know if it's age or
+          first name or last name. And you are on 1,000, 10,000 people."
+
+       The geometry is ClickUp's, measured (QueryPanels.tsx FilterRow):
+       32-high rows with a 4 gap, field 143, condition 104, value flex,
+       clear 32; triggers 28 high at r7; rows inside one group box.
+
+       Ours rather than theirs: the value. ClickUp types into a box. Our
+       columns know their own values, so "is" and "is not" offer them as a
+       list — the one good thing about the facets, kept. */
+
+    /* Which conditions a column can take. A column whose values nearly all
+       parse as numbers gets "is between" and loses "contains"; everything
+       else is text. Dates read as numbers here ("31 Oct" -> 31), which is
+       wrong for ordering but right for offering a range, so they land in the
+       same place either way. */
+    function colKind(c) { return c && c.numeric ? 'number' : 'text'; }
+    var OPS = {
+      text:   [['is', 'is'], ['not', 'is not'], ['has', 'contains'], ['empty', 'is empty']],
+      number: [['is', 'is'], ['not', 'is not'], ['btw', 'is between'], ['empty', 'is empty']]
+    };
+    function opLabel(kind, op) {
+      var hit = OPS[kind].filter(function (o) { return o[0] === op; })[0];
+      return hit ? hit[1] : op;
     }
-    function summary(c) {
-      var sel = state.facets[c.i] || [];
-      if (!sel.length) return '';
-      return sel.length === 1 ? sel[0] : sel.length + ' chosen';
-    }
+
     function activeCount() {
-      var n = 0;
-      cols.forEach(function (c) { if (chosen(c)) n++; });
-      return n;
+      return state.rules.filter(function (r) { return ruleReady(r); }).length;
+    }
+    /* A half-built row filters nothing rather than everything: you pick a
+       column before you have said what to compare it to, and the table
+       should not empty while you are still deciding. */
+    function ruleReady(r) {
+      if (r.i == null) return false;
+      if (r.op === 'empty') return true;
+      if (r.op === 'btw') return r.v !== '' || r.v2 !== '';
+      return r.v !== '' && r.v != null;
     }
 
     function drawFilters() {
@@ -1356,105 +1385,164 @@
       clear.type = 'button';
       clear.className = 'qclear';
       clear.textContent = 'Clear all';
-      clear.hidden = !activeCount();
+      clear.hidden = !state.rules.length;
       clear.onclick = function (e) {
         e.stopPropagation();
-        state.facets = {}; state.find = {};
-        drawFilters(); apply();
+        state.rules = []; state.match = 'and';
+        apply(); drawFilters();
       };
-      var x = document.createElement('button');
-      x.type = 'button';
-      x.className = 'x';
-      x.setAttribute('aria-label', 'Close');
-      x.innerHTML = ICON.x;
-      x.onclick = shut;
       head.appendChild(clear);
-      head.appendChild(x);
       fPop.appendChild(head);
 
-      var list = document.createElement('div');
-      list.className = 'qfacets';
-      fPop.appendChild(list);
+      var box = document.createElement('div');
+      box.className = 'qbox';
 
-      cols.forEach(function (c) {
-        if (c.options.length < 2) return;
-        var open = chosen(c) > 0 || c.i === state.openCol;
-
-        var sec = document.createElement('section');
-        sec.className = 'qf';
-        var h = document.createElement('button');
-        h.type = 'button';
-        h.className = 'qf-h';
-        h.setAttribute('aria-expanded', String(open));
-        h.innerHTML = '<span class="qf-n"></span><span class="qf-s"></span>' +
-          '<svg class="qf-cv" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" ' +
-          'stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        h.querySelector('.qf-n').textContent = c.label;
-        h.querySelector('.qf-s').textContent = summary(c);
-        h.onclick = function (e) { e.stopPropagation(); state.openCol = open ? null : c.i; drawFilters(); };
-        sec.appendChild(h);
-
-        var bd = document.createElement('div');
-        bd.className = 'qf-b';
-        bd.hidden = !open;
-
-        function refresh() {
-          h.querySelector('.qf-s').textContent = summary(c);
-          clear.hidden = !activeCount();
-        }
-
-        var sel = state.facets[c.i] || [];
-        var find = (state.find[c.i] || '').trim().toLowerCase();
-
-        /* A long list gets a box to find a value in it. That is still
-           picking: the box narrows which of the real values are shown, it is
-           never itself the thing filtered on, so a typo can only fail to find
-           something rather than quietly empty the table. */
-        if (c.options.length > 10) {
-          var fx = document.createElement('input');
-          fx.type = 'text';
-          fx.className = 'qf-q';
-          fx.placeholder = 'Find in ' + c.label.toLowerCase() + '\u2026';
-          fx.setAttribute('aria-label', 'Find a value in ' + c.label);
-          fx.value = state.find[c.i] || '';
-          fx.oninput = function (e) {
-            e.stopPropagation();
-            state.find[c.i] = this.value;
-            var q = this.value.trim().toLowerCase();
-            bd.querySelectorAll('.qf-v').forEach(function (n) {
-              n.hidden = !!q && n.querySelector('.qf-t').textContent.toLowerCase().indexOf(q) < 0;
-            });
-          };
-          bd.appendChild(fx);
-        }
-
-        c.options.forEach(function (v) {
-          var left = 0;
-          rows.forEach(function (r) {
-            if (cellText(r.cells[c.i]) === v && passes(r, c.i)) left++;
-          });
+      /* Across rows: all of them, or any. One control, only once there are
+         two rows to join — with one row it is a question about nothing. */
+      if (state.rules.length > 1) {
+        var m = document.createElement('div');
+        m.className = 'qmatch';
+        m.appendChild(document.createTextNode('Match'));
+        [['and', 'All'], ['or', 'Any']].forEach(function (o) {
           var b = document.createElement('button');
           b.type = 'button';
-          b.className = 'qf-v' + (sel.indexOf(v) >= 0 ? ' on' : '') + (left ? '' : ' none');
-          b.hidden = !!find && v.toLowerCase().indexOf(find) < 0;
-          b.innerHTML = '<span class="bx">' + ICON.tick + '</span><span class="qf-t"></span><em></em>';
-          b.querySelector('.qf-t').textContent = v;
-          b.querySelector('em').textContent = left;
+          b.className = 'qmatch-b' + (state.match === o[0] ? ' on' : '');
+          b.setAttribute('aria-pressed', String(state.match === o[0]));
+          b.textContent = o[1];
           b.onclick = function (e) {
             e.stopPropagation();
-            var cur = state.facets[c.i] || [];
-            var at = cur.indexOf(v);
-            if (at >= 0) cur.splice(at, 1); else cur.push(v);
-            state.facets[c.i] = cur;
-            state.openCol = c.i;
-            drawFilters(); apply();
+            state.match = o[0];
+            apply(); drawFilters();
           };
-          bd.appendChild(b);
+          m.appendChild(b);
         });
-        sec.appendChild(bd);
-        list.appendChild(sec);
-      });
+        box.appendChild(m);
+      }
+
+      state.rules.forEach(function (r, n) { box.appendChild(ruleRow(r, n)); });
+      if (!state.rules.length) {
+        var none = document.createElement('p');
+        none.className = 'qnone';
+        none.textContent = 'Nothing filtered.';
+        box.appendChild(none);
+      }
+      fPop.appendChild(box);
+
+      var add = document.createElement('button');
+      add.type = 'button';
+      add.className = 'qadd';
+      add.innerHTML = ICON.plus || '';
+      add.appendChild(document.createTextNode('Add filter'));
+      add.onclick = function (e) {
+        e.stopPropagation();
+        var first = cols.filter(function (c) { return c.shown; })[0] || cols[0];
+        state.rules.push({ i: first ? first.i : null, op: 'is', v: '', v2: '' });
+        drawFilters();
+      };
+      fPop.appendChild(add);
     }
+
+    /* One condition: column, what to ask of it, what to compare against. */
+    function ruleRow(r, n) {
+      var row = document.createElement('div');
+      row.className = 'qrow';
+      row.setAttribute('role', 'group');
+      row.setAttribute('aria-label', 'Filter condition');
+
+      var col = cols.filter(function (c) { return c.i === r.i; })[0];
+      var kind = col ? colKind(col) : 'text';
+
+      /* the column */
+      row.appendChild(pick('qf-col', col ? col.label : 'Column',
+        cols.map(function (c) { return { v: String(c.i), t: c.label }; }),
+        String(r.i), function (v) {
+          r.i = +v;
+          var k = colKind(cols.filter(function (c) { return c.i === r.i; })[0]);
+          if (!OPS[k].some(function (o) { return o[0] === r.op; })) r.op = 'is';
+          r.v = ''; r.v2 = '';
+          apply(); drawFilters();
+        }));
+
+      /* the condition */
+      row.appendChild(pick('qf-op', opLabel(kind, r.op),
+        OPS[kind].map(function (o) { return { v: o[0], t: o[1] }; }),
+        r.op, function (v) {
+          r.op = v; r.v = ''; r.v2 = '';
+          apply(); drawFilters();
+        }));
+
+      /* the value — a list of what the column holds where that makes sense,
+         a box where it does not, nothing at all for "is empty" */
+      var val = document.createElement('div');
+      val.className = 'qf-val';
+      if (r.op === 'empty') {
+        val.innerHTML = '<span class="qf-na">—</span>';
+      } else if (r.op === 'btw') {
+        val.appendChild(num(r.v, 'from', function (v) { r.v = v; apply(); }));
+        val.appendChild(num(r.v2, 'to', function (v) { r.v2 = v; apply(); }));
+      } else if (r.op === 'has' || !col) {
+        val.appendChild(text(r.v, 'Value', function (v) { r.v = v; apply(); }));
+      } else {
+        val.appendChild(pick('qf-pick', r.v || 'Value',
+          col.options.map(function (v) { return { v: v, t: v }; }),
+          r.v, function (v) { r.v = v; apply(); drawFilters(); }));
+      }
+      row.appendChild(val);
+
+      var kill = document.createElement('button');
+      kill.type = 'button';
+      kill.className = 'qf-x';
+      kill.setAttribute('aria-label', 'Remove this condition');
+      kill.innerHTML = ICON.x || '×';
+      kill.onclick = function (e) {
+        e.stopPropagation();
+        state.rules.splice(n, 1);
+        if (state.rules.length < 2) state.match = 'and';
+        apply(); drawFilters();
+      };
+      row.appendChild(kill);
+      return row;
+    }
+
+    /* A trigger that opens the app's own menu, so these read as every other
+       select on the screen rather than as a second kind of control. */
+    function pick(cls, label, items, now, onPick) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'cselect qf ' + cls;
+      b.setAttribute('aria-haspopup', 'menu');
+      var t = document.createElement('span');
+      t.className = 'cselect-t';
+      t.textContent = label;
+      b.appendChild(t);
+      var c = document.createElement('span');
+      c.className = 'cselect-c';
+      c.setAttribute('aria-hidden', 'true');
+      c.textContent = '▾';
+      b.appendChild(c);
+      b.onclick = function (e) {
+        e.stopPropagation();
+        if (!window.SugiraMenu) return;
+        window.SugiraMenu.show(b, items.map(function (it) {
+          return { label: it.t, selected: it.v === now, onPick: function () { onPick(it.v); } };
+        }), { width: Math.max(160, b.offsetWidth) });
+      };
+      return b;
+    }
+    function text(v, ph, onIn) {
+      var i = document.createElement('input');
+      i.type = 'text'; i.className = 'qf-in'; i.value = v || ''; i.placeholder = ph;
+      i.oninput = function () { onIn(this.value); };
+      i.onclick = function (e) { e.stopPropagation(); };
+      return i;
+    }
+    function num(v, ph, onIn) {
+      var i = text(v, ph, onIn);
+      i.classList.add('qf-num');
+      i.inputMode = 'decimal';
+      return i;
+    }
+
     function drawCols() {
       cPop.innerHTML = '<div class="qcols"></div>';
       var w = cPop.querySelector('.qcols');
@@ -1487,23 +1575,46 @@
     });
 
     /* ---- apply ---- */
-    function passes(row, skip) {
-      for (var n = 0; n < cols.length; n++) {
-        var c = cols[n];
-        if (c.i === skip) continue;
-        var sel = state.facets[c.i];
-        if (sel && sel.length && sel.indexOf(cellText(row.cells[c.i])) < 0) return false;
+    /* One condition against one row. A half-built row is not a condition
+       yet, so it is skipped rather than failing everything. */
+    function holds(row, r) {
+      if (!ruleReady(r)) return true;
+      var cell = cellText(row.cells[r.i]);
+      if (r.op === 'empty') return !cell;
+      if (r.op === 'btw') {
+        var n = magnitude(cell);
+        if (n === null) return false;
+        var lo = r.v === '' ? null : magnitude(r.v), hi = r.v2 === '' ? null : magnitude(r.v2);
+        if (lo !== null && n < lo) return false;
+        if (hi !== null && n > hi) return false;
+        return true;
       }
-      return true;
+      if (r.op === 'has') return cell.toLowerCase().indexOf(String(r.v).toLowerCase()) > -1;
+      if (r.op === 'not') return cell !== r.v;
+      return cell === r.v;
+    }
+    /* Across conditions: all of them, or any — "Match" in the panel. With
+       nothing set, every row passes. */
+    function passes(row) {
+      var live = state.rules.filter(ruleReady);
+      if (!live.length) return true;
+      return state.match === 'or'
+        ? live.some(function (r) { return holds(row, r); })
+        : live.every(function (r) { return holds(row, r); });
     }
     var empty = null;
     function apply() {
       var shown = 0;
       rows.forEach(function (r) {
         var ok = passes(r);
-        r.hidden = !ok;
-        r.style.display = ok ? '' : 'none';
-        if (ok) shown++;
+        /* A class, not an inline display. The place and status chips on
+           Households and Follow-ups hide rows with `f-out`, which is a class
+           rule — an inline `display` here would have overridden it and shown
+           rows the domain filter had excluded. As classes the two compose:
+           a row is out if either says so, which is what someone narrowing by
+           place and then by a condition expects. */
+        r.classList.toggle('q-out', !ok);
+        if (ok && !r.classList.contains('f-out')) shown++;
       });
       if (state.sort) {
         var c = cols[state.sort.col], sign = state.sort.dir === 'asc' ? 1 : -1;
