@@ -1623,6 +1623,18 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
 /* Same weight as a position's "14 of 26", so the two tabs read as two kinds
    of fact rather than one card shouting louder than the other. */
 .rolec-c b{font-size:14px;font-weight:600;color:var(--color-content-primary)}
+/* A role that gains its holders nothing. Amber rather than red: it is not
+   dangerous, it is pointless, and pointless is what you fix next. */
+.rolec-c.is-dead b{color:var(--color-content-warning)}
+/* roles.js's svg() returns a span wrapping the icon, so both want sizing —
+   the span alone leaves the <svg> inside at its natural size, which is how
+   this first rendered as a 200px warning triangle across two cards. */
+.rolec-dead{display:flex;align-items:center;width:14px;height:14px;flex:none;
+  margin-left:-4px;color:var(--color-content-warning)}
+.rolec-dead svg{width:14px;height:14px;fill:none}
+/* What one position gains, on the chip that names it. */
+.chip-n{margin-left:6px;font-weight:400;color:var(--color-content-tertiary)}
+.chip.is-dead .chip-n{color:var(--color-content-warning)}
 /* The one that makes a new role says what the check is for before you click. */
 .rolec.new{border:1px dashed var(--color-border-default);box-shadow:none;
   background:none;color:var(--color-content-secondary)}

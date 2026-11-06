@@ -142,6 +142,40 @@
     return (p.short || p.name).replace(/^the /, '');
   }
 
+  /* ---- what a role actually does for the person holding it --------------
+
+     A role grants a fixed set; what a holder gains is that set minus what
+     their position already gave them, and the two are not the same number.
+     An HQ officer given Report builder gains nothing — all three are already
+     theirs — and the card still said "+3 permissions".
+
+     Worse, Form publisher grants two things that both of its holders already
+     have, so it does nothing at all for anyone. That is the failure the
+     original audit found in the live system, where twenty-one roles covered
+     ten jobs, reproduced here in the replacement. A role that adds nothing is
+     not a small inaccuracy on a card; it is a role that should not exist, and
+     the screen is where that has to become visible. */
+  function addsTo(r, pos) {
+    if (!perms() || !pos) return r.grants.length;
+    var already = perms().held(pos);
+    return r.grants.filter(function (id) { return !already[id]; }).length;
+  }
+
+  /* Every position it sits on, with what it gains — so the card can say when
+     the headline number is not what anyone actually gets. */
+  function effect(r) {
+    var rows = heldIn(r).map(function (p) {
+      return { pos: p, adds: addsTo(r, p) };
+    });
+    var nums = rows.map(function (x) { return x.adds; });
+    return {
+      rows: rows,
+      dead: rows.filter(function (x) { return !x.adds; }),
+      min: nums.length ? Math.min.apply(null, nums) : r.grants.length,
+      max: nums.length ? Math.max.apply(null, nums) : r.grants.length
+    };
+  }
+
   function spread(r) {
     var n = heldIn(r).length;
     var who = r.people + (r.people === 1 ? ' person' : ' people');
@@ -172,13 +206,37 @@
     /* The plus is the whole difference between this tab and the one beside
        it. A position card shows a share of everything — "14 of 26", with a
        meter. A role never has a share; it only ever adds to whatever the
-       position already gave. One character says that, from across a room. */
+       position already gave. One character says that, from across a room.
+
+       What follows the plus is what a holder gains, not what the role
+       grants. Where that differs by position it is a range, because one
+       number would have to be wrong for somebody. */
     var foot = el('div', 'rolec-f');
-    var n = r.grants.length;
-    var cnt = el('span', 'rolec-c');
-    cnt.appendChild(el('b', null, '+' + n));
-    cnt.appendChild(el('span', null, n === 1 ? ' permission' : ' permissions'));
+    var e = effect(r);
+    var cnt = el('span', 'rolec-c' + (e.max ? '' : ' is-dead'));
+    if (!e.max) {
+      cnt.appendChild(el('b', null, 'Adds nothing'));
+      cnt.setAttribute('data-tip', 'Every permission this grants is already held by '
+        + 'both positions it sits on, so nobody gains anything by being given it. '
+        + 'A role that adds nothing is a role to retire.');
+    } else {
+      cnt.appendChild(el('b', null, e.min === e.max ? '+' + e.max : '+' + e.min + '–' + e.max));
+      cnt.appendChild(el('span', null, e.max === 1 ? ' permission' : ' permissions'));
+      if (e.dead.length) {
+        cnt.setAttribute('data-tip', 'It grants ' + r.grants.length + ', but '
+          + e.dead.map(function (x) { return chipName(x.pos); }).join(' and ')
+          + (e.dead.length === 1 ? ' already holds' : ' already hold')
+          + ' all of them and gains nothing.');
+      }
+    }
     foot.appendChild(cnt);
+    /* Only where the role itself is the problem. A role that gains one of its
+       holders nothing is a question about that assignment, and the range says
+       so on its own — the "+0" is the warning. A role that gains nobody
+       anything is a different thing: it should not exist, and that is worth a
+       mark of its own rather than the fifth identical triangle on a tab where
+       four cards would otherwise carry one. */
+    if (!e.max) foot.appendChild(svg('i-alert', 'rolec-dead'));
     foot.appendChild(el('span', 'rolec-p', spread(r)));
     a.appendChild(foot);
     return a;
@@ -308,11 +366,16 @@
       held.appendChild(el('span', 'rec-held-k', 'Held in'));
       var chips = el('span', 'rec-held-v');
       inPos.forEach(function (p) {
-        var c = el('button', 'chip');
+        var gains = addsTo(r, p);
+        var c = el('button', 'chip' + (gains ? '' : ' is-dead'));
         c.type = 'button';
         c.setAttribute('data-go', 'position');
         c.setAttribute('data-pos-id', p.id);
-        c.textContent = chipName(p);
+        c.appendChild(document.createTextNode(chipName(p)));
+        /* What this position gains, beside the position — the card can only
+           carry a range, and the range is useless for deciding whether one
+           particular person should be given the role. */
+        c.appendChild(el('span', 'chip-n', gains ? '+' + gains : 'gains nothing'));
         chips.appendChild(c);
       });
       held.appendChild(chips);
