@@ -442,16 +442,6 @@
             '<p class="mhint">Only question 5 does this today. A second one would send two cases to the same supervisor for one visit.</p>',
       done: 'Question saved \u2014 the tablet gets it when the form is published'
     },
-    qadd: {
-      title: 'Add a question',
-      ok: 'Add it',
-      body: '<div><label for="f-at">Answer type</label><select id="f-at"><option>Yes / No</option><option>Single choice</option><option>Multi-select</option><option>Checklist</option><option>Number</option><option>Date</option><option>Short text</option><option>Long text</option></select></div>' +
-            '<div><label for="f-ae">Question, in English</label><input id="f-ae" type="text" placeholder="e.g. Did the caregiver attend the growth check?"></div>' +
-            '<div><label for="f-ak">Question, in Kinyarwanda</label><input id="f-ak" type="text" placeholder="Leave empty and it shows on the Translate tab"></div>' +
-            '<div><label for="f-ap">Position</label><select id="f-ap"><option>At the end, question 31</option><option>After question 5</option><option>After question 12</option></select></div>' +
-            '<p class="mhint">Adding a question does not change the 986 responses already collected. They read as unanswered for the new question.</p>',
-      done: 'Question added as number 31 \u2014 publish the form to send it to the tablet'
-    },
     cmanage: {
       title: 'Manage Cohort 1 · 2026',
       ok: 'Save the cohort',

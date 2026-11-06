@@ -1217,19 +1217,9 @@
         </div>
 
         <div class="pad" data-panelid="build">
-          <div class="cols c2">
-            <div class="card">
-              <div class="card-h"><h3>Questions</h3><span class="side"><a data-modal="qadd">Add question</a></span></div>
-              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">1</span><span class="t">Date of visit</span><span class="chip">Date</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">2</span><span class="t">Who was present?</span><span class="chip">Multi-select</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">3</span><span class="t">Was the male caregiver present?</span><span class="chip">Yes / No</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">4</span><span class="t">Which activities were completed?</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">5</span><span class="t">Any sign of harm or neglect?</span><span class="chip bad"><i></i>Triggers a case</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">6</span><span class="t">Household needs identified</span><span class="chip">Checklist</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr click" data-modal="qedit"><span class="s" style="width:1.4rem">7</span><span class="t">Notes for the next visit</span><span class="chip">Long text</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="s" style="width:1.4rem"></span><span class="t mut">23 more questions</span><span class="ch">&rsaquo;</span></div>
-            </div>
-            <div style="display:grid;gap:16px;align-content:start">
+          <div class="fb" id="fbuild"></div>
+          <div class="cols c2" style="margin-top:var(--space-4)">
+
               <div class="card">
                 <div class="card-h"><h3>This form</h3></div>
                 <div class="kv">
@@ -1246,9 +1236,7 @@
                 <div class="lr"><span class="t">Still open</span><span class="c">2</span></div>
               </div>
             </div>
-          </div>
         </div>
-
         <div class="pad" data-panelid="preview" hidden>
           <div class="cols c2">
             <div class="card">
@@ -2265,5 +2253,6 @@
 <script src="translate.js" defer></script>
 <script src="actions.js" defer></script>
 <script src="who.js" defer></script>
+<script src="builder.js" defer></script>
 </body>
 </html>
