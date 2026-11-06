@@ -317,14 +317,22 @@
      itself is still set when the position is given rather than on the
      position. */
   var REACH = {
-    own:      { chip: 'their own only', line: 'only what they recorded themselves' },
+    /* "their own only" is not here. It read as the narrowest rung of six and
+       was held by nobody, because in this programme it cannot narrow anything:
+       there is one home visitor to a village, so the records a visitor made
+       and the records in their village are the same set. A rung that can never
+       tell two things apart is a promise the screen cannot keep — and the one
+       most likely to be ticked by someone trying to be careful.
+
+       If a village ever has two visitors, it comes back, and then it will mean
+       something. */
     village:  { chip: 'their village',  line: 'their village' },
     cell:     { chip: 'their cell',     line: 'their cell and the villages in it' },
     sector:   { chip: 'their sector',   line: 'their sector and everything in it' },
     district: { chip: 'their district', line: 'their district and everything in it' },
     national: { chip: 'everywhere',     line: 'everywhere, with no place limit' }
   };
-  var WIDTH = ['own', 'village', 'cell', 'sector', 'district', 'national'];
+  var WIDTH = ['village', 'cell', 'sector', 'district', 'national'];
 
   /* The two positions the Activity screen records a change against. Kept
      beside the reach rather than inside the renderer, so the drawer and that
