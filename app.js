@@ -1943,6 +1943,20 @@
       t.dataset.enhanced = '1';
       try { enhance(t); } catch (err) { /* one bad table must not stop the rest */ }
     });
+    /* The pinned first column draws its seam only once there is something
+       behind it, so the wrapper says whether it has been scrolled sideways.
+       A table that fits never gets the class and never grows a line it does
+       not need. */
+    [].forEach.call(document.querySelectorAll('.tblwrap'), function (w) {
+      if (w.dataset.sideways) return;
+      w.dataset.sideways = '1';
+      var paint = function () {
+        w.classList.toggle('is-scrolled', w.scrollLeft > 0);
+      };
+      w.addEventListener('scroll', paint, { passive: true });
+      paint();
+    });
+
     /* Read by anything that must not touch a toolbar before it exists, for
        the case where that module loads after this has already run. */
     window.SugiraTablesReady = true;
