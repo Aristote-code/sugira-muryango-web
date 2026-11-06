@@ -253,45 +253,109 @@
   var SEED = [
     { id: 'IZU', name: 'IZU at Village', short: 'IZU at Village', base: null, people: 146,
       what: 'The home visitor, one per village. Everything they do happens in a household, on a tablet.',
+      reach: 'village',
+      /* The one grant that does not stop where the position does, and the
+         reason this column had to exist: roh-see cannot be scoped today, so a
+         home visitor in one village can see that cases exist in all 193. The
+         risk note on roh-open has said so all along; until now there was
+         nowhere on the screen for it to show. */
+      reaches: { 'roh-see': 'national' },
       adds: ['hh-see', 'hh-enrol', 'hh-change', 'visit-see', 'visit-record', 'roh-see',
              'roh-raise', 'fs-see'] },
 
     { id: 'SLA', name: 'Sugira Muryango Sector lead (SLA)', short: 'the Sector lead', base: 'IZU', people: 11,
       what: 'Runs the programme in one sector and supervises the home visitors in it.',
+      reach: 'sector',
       adds: ['visit-change', 'roh-open', 'roh-close', 'prog-see', 'rep-see',
              'rep-build'] },
 
     { id: 'NCDA', name: 'National NCDA Government Official', short: 'National NCDA', base: null, people: 2,
       what: 'Government oversight. Reads the numbers, never the names behind them.',
+      reach: 'national',
       adds: ['rep-see', 'roh-see'] },
 
     { id: 'CPWO', name: 'District NCDA Child protection and Welfare Officer (CPWO)', short: 'the district CPWO', base: 'NCDA', people: 2,
       what: 'Takes the referral when a case leaves the programme. Works on cases, not on households.',
+      reach: 'district',
       adds: ['roh-open', 'roh-close'] },
 
     { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 21,
       what: 'Sits in on visits in one cell and scores how they were delivered.',
+      reach: 'cell',
       adds: ['hh-see', 'visit-see', 'visit-record', 'fs-see'] },
 
     { id: 'DTL', name: 'Sugira Muryango District lead (DTL)', short: 'the District lead', base: 'NCDA', people: 5,
       what: 'Reads across a whole district. Reports on it rather than working in it.',
+      reach: 'district',
       adds: ['hh-see', 'visit-see', 'prog-see', 'rep-build', 'fs-see'] },
 
     { id: 'HQ', name: 'HQ officer', short: 'the HQ officer', base: 'DTL', people: 4,
       what: 'FXB Rwanda head office. Builds the programme everyone else delivers.',
+      reach: 'national',
       adds: ['hh-enrol', 'hh-change', 'visit-change', 'prog-change', 'prog-archive',
              'prog-translate', 'prog-cohorts', 'rep-export', 'fs-change',
              'fs-community', 'ppl-see', 'maint-restore'] },
 
     { id: 'Admin', name: 'admin', short: 'admin', base: 'HQ', people: 2,
       what: 'Everything, including this screen. Two people hold it.',
+      reach: 'national',
       adds: ['hh-remove', 'visit-record', 'roh-open', 'roh-raise', 'roh-close',
              'ppl-add', 'ppl-access'] }
   ];
 
+  /* ---- how far a grant goes --------------------------------------------
+
+     Golden Plaza 5, at length: "data visibility", "we are not district… what
+     a province", "you must have a location… province… village", and —
+     twice, seventy seconds apart and from different speakers — "as dynamic
+     as possible".
+
+     What they were describing is the axis this screen did not have. A grant
+     was a yes or a no. The Sector lead has "See households" ticked, but they
+     see their sector's 184, not all 2 210; that limit lives on the person's
+     assignment, two screens away, and nothing here said it. So a position
+     states its reach once, and a grant says so only where it goes further or
+     less far than the position does — which keeps the exceptions loud and
+     stops every row repeating the same phrase.
+
+     This is also their "position, national" taken apart: the position says
+     what the job may do, the reach says how far it carries, and the place
+     itself is still set when the position is given rather than on the
+     position. */
+  var REACH = {
+    own:      { chip: 'their own only', line: 'only what they recorded themselves' },
+    village:  { chip: 'their village',  line: 'their village' },
+    cell:     { chip: 'their cell',     line: 'their cell and the villages in it' },
+    sector:   { chip: 'their sector',   line: 'their sector and everything in it' },
+    district: { chip: 'their district', line: 'their district and everything in it' },
+    national: { chip: 'everywhere',     line: 'everywhere, with no place limit' }
+  };
+  var WIDTH = ['own', 'village', 'cell', 'sector', 'district', 'national'];
+
+  /* What one grant on one position actually reaches: the position's own
+     reach, unless that grant is named as going somewhere else. */
+  function reachOf(p, permId) {
+    if (!p) return null;
+    /* An exception belongs to the grant, not to the rung it was written on,
+       so it carries up the chain: roh-see cannot be scoped for the home
+       visitor, and it cannot be scoped for the Sector lead who inherits it
+       either. Everything else stops where the holder is posted. */
+    var steps = chain(p);
+    for (var i = 0; i < steps.length; i++) {
+      var named = (steps[i].reaches || {})[permId];
+      if (named) return named;
+    }
+    return p.reach || null;
+  }
+  function widerThan(a, b) { return WIDTH.indexOf(a) > WIDTH.indexOf(b); }
+
   function freshPositions() {
     return SEED.map(function (p) {
       return { id: p.id, name: p.name, short: p.short, base: p.base, people: p.people, what: p.what,
+               reach: p.reach || null,
+               reaches: Object.keys(p.reaches || {}).reduce(function (a, k) {
+                 a[k] = p.reaches[k]; return a;
+               }, {}),
                adds: p.adds.slice() };
     });
   }
@@ -455,6 +519,18 @@
 
 
 
+      /* Only where a grant goes somewhere other than the position does. The
+         position says its reach once, above; a chip on every row would say
+         the same five words eight times and bury the one that differs. */
+      reach: function (id) {
+        var r = reachOf(p, id);
+        if (!r || r === p.reach) return null;
+        return {
+          chip: REACH[r] ? REACH[r].chip : r,
+          wider: widerThan(r, p.reach)
+        };
+      },
+
       redraw: function () { window.SugiraAccess.render(host, model); }
     };
     model.redraw();
@@ -538,6 +614,22 @@
 
     rec.appendChild(rtop);
     rec.appendChild(el('h1', null, p.name));
+
+    /* How far everything below carries, said once under the name. The place
+       itself still comes from the assignment — this is the level it reaches
+       to, not the sector it is in. */
+    if (p.reach && REACH[p.reach]) {
+      var rw = el('div', 'rec-reach');
+      rw.appendChild(el('span', 'rec-reach-k', 'Reaches'));
+      var rv = el('span', 'rec-reach-v');
+      var rc = el('span', 'chip', REACH[p.reach].line);
+      rc.setAttribute('data-tip', 'Where the holder is posted decides the place; this is '
+        + 'how far from it they can open records. A grant that goes somewhere else says so '
+        + 'on its own row.');
+      rv.appendChild(rc);
+      rw.appendChild(rv);
+      rec.appendChild(rw);
+    }
     root.appendChild(rec);
 
     root.appendChild(addsList(p));

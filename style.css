@@ -1593,17 +1593,28 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   font-size:12px;line-height:16px;color:var(--color-content-secondary);
   font-variant-numeric:tabular-nums}
 .rolec-p{margin-left:auto}
-/* The positions a role reaches, under its name. A label narrow enough to
-   leave the chips a full line, and the chips wrap rather than scroll. */
-.rec-held{display:flex;align-items:baseline;gap:8px;margin-top:12px;
+/* One line under a record's name, carrying chips: the positions a role is
+   held in, or how far a position reaches. Two different facts, so two class
+   names — one class meaning both is how a check for "a position has no Held
+   in row" started passing on a position that had one. */
+.rec-held,.rec-reach{display:flex;align-items:baseline;gap:8px;margin-top:12px;
   font-size:12px;line-height:16px}
-.rec-held-k{flex:none;color:var(--color-content-secondary)}
-.rec-held-v{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
+.rec-held-k,.rec-reach-k{flex:none;color:var(--color-content-secondary)}
+.rec-held-v,.rec-reach-v{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
 /* .chip is normally a span; as a button it arrives with the browser's own
    border and font, neither of which belongs on a pill. */
 .rec-held-v .chip{border:0;font-family:inherit;cursor:pointer}
 .rec-held-v .chip:hover{background:var(--color-bg-hover);
   color:var(--color-content-primary)}
+/* How far one grant goes, when that is not how far the position goes. A
+   grant that reaches further than its position is the thing worth finding on
+   this screen, so that one is amber and the narrower ones stay quiet. */
+.acc-preach{margin-left:8px;flex:none;font-size:11px;line-height:16px;font-weight:500;
+  padding:0 6px;border-radius:var(--status-pill-radius);
+  background:var(--x-clickup-color-background-on-main-hover);
+  color:var(--color-content-secondary);white-space:nowrap}
+.acc-preach.is-wider{background:var(--color-bg-warning-subtle);
+  color:var(--color-content-warning)}
 /* Same weight as a position's "14 of 26", so the two tabs read as two kinds
    of fact rather than one card shouting louder than the other. */
 .rolec-c b{font-size:14px;font-weight:600;color:var(--color-content-primary)}

@@ -91,11 +91,26 @@
     btn.appendChild(el('span', 'acc-pn', p.label));
     if (p.risk) btn.appendChild(svg('i-alert', 'acc-prisk'));
 
+    /* Where this one grant goes, but only when that is not where the record
+       above it already said everything goes. A grant that reaches further
+       than its position is the thing worth seeing on this screen, so it is
+       the one that gets a mark. */
+    var far = model.reach ? model.reach(p.id) : null;
+    if (far && c && c.on) {
+      var chip = el('span', 'acc-preach' + (far.wider ? ' is-wider' : ''), far.chip);
+      btn.appendChild(chip);
+    }
+
     /* The whole row carries the explanation, so hovering anywhere gives it:
        what the permission does, where it arrives from, and — because the
        complaint was that nobody could find where a stored name went — which
        of the old 112 it replaces. */
     var tip = p.what;
+    if (far && c && c.on) {
+      tip += far.wider
+        ? ' This one reaches ' + far.chip + ', further than the rest of the position.'
+        : ' This one reaches ' + far.chip + ' only, less far than the rest of the position.';
+    }
     if (c && c.from) tip += ' Comes from ' + c.from + ', so it cannot be removed here.';
     if (p.risk) tip += ' ' + p.risk;
     if (p.replaces.length) {
