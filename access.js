@@ -140,7 +140,19 @@
     row.setAttribute('aria-expanded', String(open));
     row.appendChild(svg('i-caret', 'acc-gc'));
     row.appendChild(svg(g.icon, 'acc-gi'));
-    row.appendChild(el('span', 'acc-gn', g.name));
+    var gn = el('span', 'acc-gn', g.name);
+    /* The model has marked this group guarded since the audit and nothing
+       read the flag, which is how every one of the 193 people on the system
+       came to hold "See that cases exist" with nothing saying how far it
+       went. The word carries the reason now, and every grant inside states
+       its reach rather than leaving it to be inferred. */
+    if (g.guarded) {
+      gn.classList.add('is-guarded');
+      gn.setAttribute('data-tip', g.blurb
+        + ' Every grant in this group says how far it reaches, even where that '
+        + 'is no further than the rest of the position.');
+    }
+    row.appendChild(gn);
     var c = el('span', 'acc-gcount' + (t.on ? '' : ' none'));
     c.appendChild(el('b', null, String(t.on)));
     c.appendChild(document.createTextNode(' of ' + t.n));

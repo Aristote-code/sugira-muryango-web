@@ -254,12 +254,6 @@
     { id: 'IZU', name: 'IZU at Village', short: 'IZU at Village', base: null, people: 146,
       what: 'The home visitor, one per village. Everything they do happens in a household, on a tablet.',
       reach: 'village',
-      /* The one grant that does not stop where the position does, and the
-         reason this column had to exist: roh-see cannot be scoped today, so a
-         home visitor in one village can see that cases exist in all 193. The
-         risk note on roh-open has said so all along; until now there was
-         nowhere on the screen for it to show. */
-      reaches: { 'roh-see': 'national' },
       adds: ['hh-see', 'hh-enrol', 'hh-change', 'visit-see', 'visit-record', 'roh-see',
              'roh-raise', 'fs-see'] },
 
@@ -519,12 +513,25 @@
 
 
 
-      /* Only where a grant goes somewhere other than the position does. The
-         position says its reach once, above; a chip on every row would say
-         the same five words eight times and bury the one that differs. */
+      /* Normally only where a grant goes somewhere other than the position
+         does: the position says its reach once above, and a chip on every row
+         would say the same five words eight times and bury the one that
+         differs.
+
+         A guarded group is the exception to that exception. Risk-of-harm is
+         the one group carrying children who may be in danger, and the audit
+         found every one of the 193 people on the system holding "See that
+         cases exist" with nothing anywhere saying how far it went. Where the
+         stakes are that, the default is restated rather than inferred — you
+         should never have to work out where someone can see a child at risk
+         by remembering what the heading said. */
       reach: function (id) {
         var r = reachOf(p, id);
-        if (!r || r === p.reach) return null;
+        if (!r) return null;
+        var perm = BY_ID[id];
+        var grp = perm ? groupByKey(perm.group) : null;
+        var guarded = !!(grp && grp.guarded);
+        if (r === p.reach && !guarded) return null;
         return {
           chip: REACH[r] ? REACH[r].chip : r,
           wider: widerThan(r, p.reach)

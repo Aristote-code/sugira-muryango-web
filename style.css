@@ -1615,6 +1615,11 @@ tr.f-out,tr.p-out,tr.t-out,.tr.f-out{display:none}
   color:var(--color-content-secondary);white-space:nowrap}
 .acc-preach.is-wider{background:var(--color-bg-warning-subtle);
   color:var(--color-content-warning)}
+/* The one group the model calls guarded. Marked the way an abbreviation is,
+   because it is the same offer: there is a reason behind this word. */
+.acc-gn.is-guarded{text-decoration:underline dotted;text-underline-offset:3px;
+  text-decoration-color:var(--color-content-tertiary);cursor:help}
+.acc-gn.is-guarded:hover{text-decoration-color:var(--color-content-secondary)}
 /* Same weight as a position's "14 of 26", so the two tabs read as two kinds
    of fact rather than one card shouting louder than the other. */
 .rolec-c b{font-size:14px;font-weight:600;color:var(--color-content-primary)}
