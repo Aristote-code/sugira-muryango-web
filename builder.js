@@ -86,6 +86,244 @@
     s.innerHTML = '<svg aria-hidden="true"><use href="#' + id + '"/></svg>';
     return s;
   }
+  /* ---- conditions -------------------------------------------------------
+     "Give them flexibility of building a form, including conditions that are
+     somehow heavy." One clause reading "is" is not heavy; it is the easiest
+     case of the thing he asked for.
+
+     The app already has a grammar for a rule over answers — the list filter,
+     field then condition then value, joined by all or any, built from the
+     same recording. A condition on a question is the same idea applied to an
+     answer instead of a column, so it is the same grammar, the same words
+     and the same row geometry. Learning it once should be enough.
+
+     Which conditions are offered depends on what is being asked about: you
+     can ask whether a number is more than something, and you cannot ask that
+     of a checklist. */
+  var OPS = {
+    choice: [['is', 'is'], ['not', 'is not']],
+    number: [['is', 'is'], ['not', 'is not'], ['gt', 'is more than'], ['lt', 'is less than']],
+    text:   [['is', 'is'], ['not', 'is not'], ['has', 'contains'], ['empty', 'is empty']],
+    date:   [['is', 'is'], ['not', 'is not']]
+  };
+  function opsFor(q) {
+    if (!q) return OPS.text;
+    if (q.kind === 'number') return OPS.number;
+    if (q.kind === 'date') return OPS.date;
+    if (q.opts) return OPS.choice;
+    return OPS.text;
+  }
+  function opLabel(q, op) {
+    var found = opsFor(q).filter(function (o) { return o[0] === op; })[0];
+    return found ? found[1] : 'is';
+  }
+
+  /* The old shape was { q, is }. Read it as one clause so a form written
+     before this still means what it meant. */
+  function rules(q) {
+    if (!q.when) return [];
+    if (q.when.rules) return q.when.rules;
+    return [{ q: q.when.q, op: 'is', v: q.when.is }];
+  }
+  /* A clause with nothing in its value governs nothing — the same rule the
+     list filter follows, so a half-written condition does not start hiding
+     questions while somebody is still typing it. */
+  function ready(r) { return r.op === 'empty' || (r.v !== '' && r.v != null); }
+  function live(q) { return rules(q).filter(ready); }
+  function match(q) { return (q.when && q.when.match) || 'all'; }
+  function setWhen(q, rs, m) {
+    if (!rs.length) delete q.when;
+    else q.when = { match: m || match(q), rules: rs };
+  }
+
+  /* What the card and the tablet both say, in one sentence. */
+  /* `building` adds what only the person building needs to know. The tablet
+     column shows what the visitor will see, and a visitor never sees a count
+     of clauses somebody has not finished writing. */
+  function whenText(q, prefix, building) {
+    var rs = live(q);
+    var waiting = building ? rules(q).length - rs.length : 0;
+    var tail = waiting ? ' · ' + waiting + ' unfinished' : '';
+    if (!rs.length) return 'Always asked' + tail;
+    var join = ' ' + (match(q) === 'any' ? 'or' : 'and') + ' ';
+    return prefix + rs.map(function (r) {
+      var on = at(r.q);
+      var n = FORM.q.indexOf(on) + 1;
+      if (r.op === 'empty') return n + ' is empty';
+      return n + ' ' + opLabel(on, r.op) + ' ' + (r.v || '…');
+    }).join(join) + tail;
+  }
+
+  /* A clause that points at a question asked later can never be true. */
+  function tooLate(q, i) {
+    return live(q).filter(function (r) {
+      return FORM.q.indexOf(at(r.q)) >= i;
+    });
+  }
+
+  /* The panel, in the filter's own clothes: a head saying what it governs,
+     all/any when there is more than one clause, then the rows — question,
+     condition, value — and a way to add another. */
+  function whenPanel(pop, q, i) {
+    function redraw() { pop.innerHTML = ''; body(); }
+    function body() {
+      var head = el('div', 'qpop-h');
+      head.appendChild(el('span', null, 'Ask question ' + (i + 1) + ' when'));
+      pop.appendChild(head);
+
+      var rs = rules(q).slice();
+      var earlier = FORM.q.slice(0, i);
+
+      if (!earlier.length) {
+        pop.appendChild(el('p', 'mhint', 'Nothing is asked before this one, so '
+          + 'there is no answer to depend on.'));
+        return;
+      }
+
+      if (rs.length > 1) {
+        var m = el('div', 'qmatch');
+        [['all', 'All of these'], ['any', 'Any of these']].forEach(function (o) {
+          var bn = el('button', 'qmatch-b' + (match(q) === o[0] ? ' on' : ''), o[1]);
+          bn.type = 'button';
+          bn.onclick = function () { setWhen(q, rs, o[0]); changed(); redraw(); echoCard(); };
+          m.appendChild(bn);
+        });
+        pop.appendChild(m);
+      }
+
+      rs.forEach(function (r, ri) {
+        var row = el('div', 'qrow');
+
+        var qs = el('select', 'qf-col');
+        qs.setAttribute('aria-label', 'Which question');
+        earlier.forEach(function (other, oi) {
+          var o = el('option', null, (oi + 1) + '. ' + other.en);
+          o.value = other.id;
+          if (other.id === r.q) o.selected = true;
+          qs.appendChild(o);
+        });
+        qs.onchange = function () {
+          r.q = qs.value;
+          r.v = '';
+          setWhen(q, rs);
+          changed();
+          redraw();
+          echoCard();
+        };
+        row.appendChild(qs);
+
+        var on = at(r.q);
+        var os = el('select', 'qf-op');
+        os.setAttribute('aria-label', 'Condition');
+        opsFor(on).forEach(function (pair) {
+          var o = el('option', null, pair[1]);
+          o.value = pair[0];
+          if (pair[0] === r.op) o.selected = true;
+          os.appendChild(o);
+        });
+        os.onchange = function () {
+          r.op = os.value;
+          setWhen(q, rs);
+          changed();
+          redraw();
+          echoCard();
+        };
+        row.appendChild(os);
+
+        var val = el('span', 'qf-val');
+        if (r.op !== 'empty') {
+          var input;
+          if (on && on.opts) {
+            input = el('select');
+            on.opts.forEach(function (v) {
+              var o = el('option', null, v);
+              if (v === r.v) o.selected = true;
+              input.appendChild(o);
+            });
+            if (!r.v) r.v = on.opts[0];
+          } else {
+            input = el('input');
+            input.type = on && on.kind === 'number' ? 'number' : 'text';
+            input.value = r.v || '';
+          }
+          input.setAttribute('aria-label', 'Answer');
+          input.onchange = function () {
+            r.v = input.value;
+            setWhen(q, rs);
+            changed();
+            echoCard();
+          };
+          val.appendChild(input);
+        }
+        row.appendChild(val);
+
+        var x = el('button', 'qf-x');
+        x.type = 'button';
+        x.setAttribute('aria-label', 'Remove this condition');
+        x.innerHTML = '<svg aria-hidden="true"><use href="#i-cross"/></svg>';
+        x.onclick = function () {
+          rs.splice(ri, 1);
+          setWhen(q, rs);
+          changed();
+          redraw();
+          echoCard();
+        };
+        row.appendChild(x);
+        pop.appendChild(row);
+      });
+
+      var add = el('button', 'qadd');
+      add.type = 'button';
+      add.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>'
+        + (rs.length ? 'And another' : 'Only ask it sometimes');
+      add.onclick = function () {
+        /* Default to a question this rule is not already about. "7 is Yego
+           and 7 is Yego" is a clause that says nothing, and it is what you
+           get every time if the default is simply the nearest one. */
+        var used = rs.map(function (r) { return r.q; });
+        var free = earlier.filter(function (o) { return used.indexOf(o.id) < 0; });
+        var first = (free.length ? free : earlier)[(free.length ? free : earlier).length - 1];
+        rs.push({ q: first.id, op: 'is', v: first.opts ? first.opts[0] : '' });
+        setWhen(q, rs);
+        changed();
+        redraw();
+        echoCard();
+      };
+      pop.appendChild(add);
+
+      if (rs.length) {
+        var clear = el('button', 'qf-clear');
+        clear.type = 'button';
+        clear.textContent = 'Always ask it';
+        clear.onclick = function () {
+          setWhen(q, []);
+          changed();
+          redraw();
+          echoCard();
+        };
+        pop.appendChild(clear);
+      }
+      if (window.SugiraMenu) window.SugiraMenu.enhance(pop);
+    }
+
+    /* The card and the tablet follow while the panel stays open, so you can
+       see the sentence change as you build it. */
+    function echoCard() {
+      var card = host.querySelector('.fb-f[data-q="' + q.id + '"]');
+      if (card) {
+        var link = card.querySelector('.fb-link');
+        var late = tooLate(q, FORM.q.indexOf(q));
+        link.textContent = whenText(q, 'Shows when ', true);
+        link.classList.toggle('on', !!q.when && !late.length);
+        link.classList.toggle('is-broken', late.length > 0);
+        card.classList.toggle('is-broken', late.length > 0 || card.querySelector('.fb-bad'));
+      }
+      paintPreview();
+    }
+
+    body();
+  }
+
   function rwLabel(q) {
     if (!q.rw) return 'No Kinyarwanda yet';
     return q.stale ? 'Kinyarwanda is behind' : 'Kinyarwanda ready';
@@ -290,40 +528,19 @@
 
     /* The two things this programme does with a question that ClickUp's form
        has no equivalent for: ask it only sometimes, and open a case. */
-    var on = q.when ? FORM.q.indexOf(at(q.when.q)) : -1;
-    var broken = q.when && on >= i;
+    var late = tooLate(q, i);
+    var broken = late.length > 0;
     var cond = el('button', 'fb-link');
     cond.type = 'button';
-    cond.textContent = q.when ? 'Shows when ' + (on + 1) + ' is ' + q.when.is : 'Always asked';
+    cond.setAttribute('aria-haspopup', 'dialog');
+    cond.setAttribute('aria-expanded', 'false');
+    cond.textContent = whenText(q, 'Shows when ', true);
     cond.classList.toggle('on', !!q.when && !broken);
-    cond.classList.toggle('is-broken', !!broken);
+    cond.classList.toggle('is-broken', broken);
     cond.onclick = function (e) {
       e.stopPropagation();
-      var rows = [{ label: 'Always asked', selected: !q.when, onPick: function () {
-        delete q.when; window.SugiraMenu.close(); draw();
-      } }];
-      /* Only the questions asked before this one. The tablet asks one at a
-         time, in order, so a condition on a later answer is a condition that
-         can never be true — and offering it is offering a dead end. */
-      FORM.q.slice(0, i).forEach(function (other, oi) {
-        if (!other.opts) return;
-        other.opts.forEach(function (v) {
-          rows.push({
-            label: 'When ' + (oi + 1) + ' is ' + v,
-            selected: !!(q.when && q.when.q === other.id && q.when.is === v),
-            onPick: function () {
-              q.when = { q: other.id, is: v };
-              window.SugiraMenu.close();
-              draw();
-            }
-          });
-        });
-      });
-      if (rows.length === 1) {
-        rows.push({ separator: true });
-        rows.push({ label: 'Nothing is asked before this one', disabled: true });
-      }
-      window.SugiraMenu.show(cond, rows, { width: 260 });
+      window.SugiraPop.open(cond, function (pop) { whenPanel(pop, q, i); },
+        { cls: 'wide', label: 'When question ' + (i + 1) + ' is asked' });
     };
     foot.appendChild(cond);
 
@@ -342,14 +559,16 @@
 
     if (broken) {
       li.classList.add('is-broken');
+      var ns = late.map(function (r) { return FORM.q.indexOf(at(r.q)) + 1; });
       var bad = el('span', 'fb-bad');
       bad.setAttribute('data-tip', 'The tablet asks one question at a time, in '
-        + 'order. This one is asked at ' + (i + 1) + ', before ' + (on + 1)
-        + ' has been answered, so the condition can never be true and the '
-        + 'question would never appear. Move it below ' + (on + 1) + ', or '
-        + 'point it at something asked earlier.');
+        + 'order. This one is asked at ' + (i + 1) + ', before ' + ns.join(' and ')
+        + ' ' + (ns.length > 1 ? 'have' : 'has')
+        + ' been answered, so the condition can never be true and the question '
+        + 'would never appear. Move it below ' + Math.max.apply(null, ns)
+        + ', or point it at something asked earlier.');
       bad.innerHTML = '<svg aria-hidden="true"><use href="#i-alert"/></svg>'
-        + 'Asked before ' + (on + 1);
+        + 'Asked before ' + ns.join(' and ');
       foot.appendChild(bad);
     }
 
@@ -381,7 +600,11 @@
       e.stopPropagation();
       /* A question other questions depend on cannot quietly take them with
          it; the ones that asked about it are told to stand on their own. */
-      FORM.q.forEach(function (x) { if (x.when && x.when.q === q.id) delete x.when; });
+      FORM.q.forEach(function (x) {
+        if (!x.when) return;
+        var keep = rules(x).filter(function (r) { return r.q !== q.id; });
+        setWhen(x, keep);
+      });
       FORM.q = FORM.q.filter(function (x) { return x.id !== q.id; });
       if (picked === q.id) picked = null;
       changed();
@@ -476,7 +699,7 @@
 
     FORM.q.forEach(function (q, i) {
       var box = el('div', 'fb-dq' + (picked === q.id ? ' on' : '')
-        + (q.when ? ' is-when' : ''));
+        + (live(q).length ? ' is-when' : ''));
       box.setAttribute('data-q', q.id);
       /* The preview is the column you scan, so it is where you notice the
          thing that is wrong. Noticing it and being unable to touch it makes
@@ -502,14 +725,16 @@
       }
       box.appendChild(label);
 
-      if (q.when) {
-        var on = FORM.q.indexOf(at(q.when.q));
-        var w = el('p', 'fb-dq-w' + (on >= i ? ' is-broken' : ''));
-        w.textContent = on >= i
-          ? 'Never asked — ' + (on + 1) + ' has not been answered yet'
-          : 'Only asked when ' + (on + 1) + ' is “' + q.when.is + '”';
+      if (live(q).length) {
+        var late = tooLate(q, i);
+        var w = el('p', 'fb-dq-w' + (late.length ? ' is-broken' : ''));
+        w.textContent = late.length
+          ? 'Never asked — ' + late.map(function (r) {
+            return FORM.q.indexOf(at(r.q)) + 1;
+          }).join(' and ') + ' not answered yet'
+          : whenText(q, 'Only asked when ');
         box.appendChild(w);
-        if (on >= i) box.classList.add('is-broken');
+        if (late.length) box.classList.add('is-broken');
       }
       /* Showing the Kinyarwanda is showing what the field will read. If the
          English has moved on, this is the sentence they will actually get,

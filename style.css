@@ -1423,6 +1423,12 @@ svg use{pointer-events:none}
   font-family:var(--ui);font-size:13px;line-height:16px;font-weight:500;
   color:var(--color-content-primary)}
 .qadd:hover{background:var(--color-bg-hover)}
+/* The way back out of a rule, next to the way to add to it. */
+.qf-clear{display:inline-flex;align-items:center;height:var(--space-8);
+  margin-top:var(--space-2);margin-left:var(--space-2);border:0;background:none;
+  padding:0 var(--space-2);border-radius:var(--radius-md);cursor:pointer;
+  font-family:var(--ui);font-size:13px;color:var(--color-content-secondary)}
+.qf-clear:hover{background:var(--color-bg-hover);color:var(--color-content-primary)}
 .qadd svg{width:14px;height:14px;fill:none}
 .qpop[hidden]{display:none!important}
 .qpop-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}

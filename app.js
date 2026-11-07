@@ -1277,6 +1277,71 @@
   var scrim = $('#scrim'), mTitle = $('#mTitle'), mBody = $('#mBody'), mOk = $('#mOk');
   var lastFocus = null, pending = null;
 
+  /* ---- one popover ----
+     A panel hung off the control that opened it: the filter's, the column
+     picker's, and anything else that needs more room than a menu and less
+     ceremony than a dialog. There is one at a time across the whole app,
+     Escape shuts it, and clicking away shuts it — which is the part that was
+     being written again each time it was needed.
+
+     The filter still carries its own copy, inside the closure that owns a
+     table's toolbar. This one is where the rest of them come to. */
+  var livePop = null, liveAnchor = null;
+  window.SugiraPop = {
+    open: function (anchor, fill, opts) {
+      opts = opts || {};
+      window.SugiraPop.close();
+      var pop = document.createElement('div');
+      pop.className = 'qpop' + (opts.cls ? ' ' + opts.cls : '');
+      pop.setAttribute('role', 'dialog');
+      if (opts.label) pop.setAttribute('aria-label', opts.label);
+      document.body.appendChild(pop);
+      fill(pop, function () { window.SugiraPop.close(); });
+
+      var r = anchor.getBoundingClientRect();
+      var w = pop.offsetWidth;
+      var left = Math.min(r.left + window.scrollX,
+        window.scrollX + document.documentElement.clientWidth - w - 16);
+      pop.style.left = Math.max(window.scrollX + 8, left) + 'px';
+      /* Below the control, unless that would run off the bottom. */
+      var top = r.bottom + window.scrollY + 6;
+      if (r.bottom + pop.offsetHeight + 24 > window.innerHeight) {
+        top = Math.max(window.scrollY + 8, r.top + window.scrollY - pop.offsetHeight - 6);
+      }
+      pop.style.top = top + 'px';
+
+      livePop = pop;
+      liveAnchor = anchor;
+      anchor.setAttribute('aria-expanded', 'true');
+      var first = pop.querySelector('button, input, select, .cselect, [tabindex]');
+      if (first) first.focus();
+      return pop;
+    },
+    close: function () {
+      if (!livePop) return;
+      livePop.remove();
+      livePop = null;
+      if (liveAnchor) {
+        liveAnchor.setAttribute('aria-expanded', 'false');
+        liveAnchor = null;
+      }
+    },
+    isOpen: function () { return !!livePop; }
+  };
+  document.addEventListener('mousedown', function (e) {
+    if (!livePop) return;
+    if (livePop.contains(e.target) || (liveAnchor && liveAnchor.contains(e.target))) return;
+    if (e.target.closest && e.target.closest('.cmenu')) return;
+    window.SugiraPop.close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && livePop) {
+      var a = liveAnchor;
+      window.SugiraPop.close();
+      if (a && a.focus) a.focus();
+    }
+  });
+
   /* An access change that nobody recorded is the thing the activity log exists
      to stop. A dialog that changes who can reach what writes its own entry,
      at the top, where the newest one goes. */
