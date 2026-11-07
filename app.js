@@ -1425,7 +1425,7 @@
   window.SugiraModal = {
     ask: function (def) {
       MODALS.__ask = { title: def.title, ok: def.ok, body: def.body,
-        onOk: def.onOk, done: def.done || '' };
+        onOk: def.onOk, done: def.done || '', danger: def.danger };
       openModal('__ask');
     }
   };
@@ -1452,13 +1452,34 @@
   });
 
   // ---- toast ----
+  /* The stylesheet has carried .toast-undo since the ClickUp pass — "the
+     toast action is a real button, not underlined text" — and nothing has
+     ever put one there. A toast that only reports needs 2.6 seconds; one
+     that offers a way back has to outlast reading it, so it gets seven. */
   var toast = $('#toast'), toastTimer = null;
-  function say(msg) {
-    toast.textContent = msg;
+  function say(msg, action) {
+    toast.textContent = '';
+    toast.appendChild(document.createTextNode(msg));
+    if (action) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'toast-undo';
+      b.textContent = action.label || 'Undo';
+      b.onclick = function () {
+        toast.hidden = true;
+        clearTimeout(toastTimer);
+        action.onClick();
+      };
+      toast.appendChild(b);
+    }
     toast.hidden = false;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toast.hidden = true; }, 2600);
+    toastTimer = setTimeout(function () {
+      toast.hidden = true;
+      if (action && action.onLapse) action.onLapse();
+    }, action ? 7000 : 2600);
   }
+  window.SugiraToast = { say: say };
 
   // ---- table rows route ----
   $$('.tbl tbody tr[data-go]').forEach(function (tr) {

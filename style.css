@@ -1561,6 +1561,10 @@ svg use{pointer-events:none}
 .blast li .w{font-size:12px;line-height:14px;color:var(--color-content-secondary);min-width:0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .blast li .w b{color:var(--color-content-secondary);font-weight:600}
+/* In the other blast lists the long part of a line is the label on a .rel
+   button, which already truncates. Here it is a question somebody typed,
+   so it is the one that has to give. */
+.blast li .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* ---------------- the form builder ----------------
    Three columns: what you can add, what is in the form, what the visitor will
    see. The middle one is the work; the outer two serve it, so they are fixed

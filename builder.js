@@ -328,6 +328,13 @@
     if (!q.rw) return 'No Kinyarwanda yet';
     return q.stale ? 'Kinyarwanda is behind' : 'Kinyarwanda ready';
   }
+  /* A question's name is typed by somebody and ends up inside a dialog's
+     markup, so it goes through here on the way. */
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
   function at(id) {
     for (var i = 0; i < FORM.q.length; i++) if (FORM.q[i].id === id) return FORM.q[i];
     return null;
@@ -598,17 +605,7 @@
     del.innerHTML = '<svg aria-hidden="true"><use href="#i-cross"/></svg>';
     del.onclick = function (e) {
       e.stopPropagation();
-      /* A question other questions depend on cannot quietly take them with
-         it; the ones that asked about it are told to stand on their own. */
-      FORM.q.forEach(function (x) {
-        if (!x.when) return;
-        var keep = rules(x).filter(function (r) { return r.q !== q.id; });
-        setWhen(x, keep);
-      });
-      FORM.q = FORM.q.filter(function (x) { return x.id !== q.id; });
-      if (picked === q.id) picked = null;
-      changed();
-      draw();
+      remove(q);
     };
     li.appendChild(del);
     return li;
@@ -817,24 +814,28 @@
     /* A form on a tablet is the version that was published, not the one being
        edited. Saying "Published: Yes" while somebody rewrites it is the app
        telling the field something that is about to stop being true. */
-    if (!edits) return;
+    /* This used to stop here when the count was zero, which was fine while
+       the only way to move it was up. An undo moves it back down, and a
+       screen still saying "1 change not sent" about a change that no longer
+       exists is the thing this whole function was written to prevent. */
     [].forEach.call(document.querySelectorAll('#s-form .fld'), function (f) {
       var k = f.querySelector('.fld-k');
       if (!k || k.textContent.indexOf('Published to the tablet') < 0) return;
       var v = f.querySelector('.v');
-      if (!v || v.querySelector('.fb-unsent')) return;
-      var note = el('span', 'fb-unsent');
+      if (!v) return;
+      var note = v.querySelector('.fb-unsent');
+      if (!edits) { if (note) v.removeChild(note); return; }
+      if (!note) { note = el('span', 'fb-unsent'); v.appendChild(note); }
       note.textContent = ' · ' + edits + (edits === 1 ? ' change' : ' changes')
         + ' not sent';
       note.setAttribute('data-tip', tabletsHave());
-      v.appendChild(note);
     });
     var btn = document.querySelector('#s-form [data-modal="fpublish"]');
-    if (btn && !/\d/.test(btn.textContent)) {
-      btn.appendChild(el('span', 'n', String(edits)));
-    } else if (btn) {
+    if (btn) {
       var n2 = btn.querySelector('.n');
-      if (n2) n2.textContent = String(edits);
+      if (!edits) { if (n2) btn.removeChild(n2); }
+      else if (n2) n2.textContent = String(edits);
+      else btn.appendChild(el('span', 'n', String(edits)));
     }
   }
 
@@ -858,6 +859,84 @@
       + 'next syncs.';
   }
   function changed() { edits++; echo(); }
+
+  /* ---- removing one ----
+
+     Removing a question is the only thing in the builder that cannot be
+     looked at afterwards, and it never took only itself. Every condition
+     pointing at it went too, and those conditions belong to other
+     questions: delete 3 and "Why was he not present?" stops being asked
+     only when he was away and starts being asked of everyone. That is a
+     change to what a visitor is made to read, made silently, by a click on
+     a different card.
+
+     So it is said before, when there is anything to say, and it can be
+     taken back either way. */
+  function dependents(q) {
+    return FORM.q.filter(function (x) {
+      return x !== q && rules(x).some(function (r) { return r.q === q.id; });
+    });
+  }
+  function becomes(x, q) {
+    var left = rules(x).filter(function (r) { return r.q !== q.id; });
+    if (!left.length) return 'asked of everyone';
+    return left.length + (left.length === 1 ? ' condition' : ' conditions') + ' left';
+  }
+
+  function remove(q) {
+    var dep = dependents(q);
+    if (!dep.length) return cut(q);
+    window.SugiraModal.ask({
+      title: 'Remove question ' + (FORM.q.indexOf(q) + 1) + '?',
+      ok: 'Remove it',
+      danger: true,
+      body: '<p class="m-lead">' + esc(q.en) + ' is what '
+        + (dep.length === 1 ? 'another question asks about. Removing it changes '
+          + 'when that question is asked.' : dep.length + ' other questions ask '
+          + 'about. Removing it changes when they are asked.') + '</p>'
+        + '<ul class="blast">' + dep.map(function (x) {
+          return '<li><span class="nm"><b>' + (FORM.q.indexOf(x) + 1) + '.</b> ' + esc(x.en)
+            + '</span><span class="w">' + becomes(x, q) + '</span></li>';
+        }).join('') + '</ul>',
+      onOk: function () { cut(q); }
+    });
+  }
+
+  function cut(q) {
+    var snap = JSON.parse(JSON.stringify(FORM.q)), was = edits;
+    FORM.q.forEach(function (x) {
+      if (!x.when) return;
+      setWhen(x, rules(x).filter(function (r) { return r.q !== q.id; }));
+    });
+    FORM.q = FORM.q.filter(function (x) { return x.id !== q.id; });
+    if (picked === q.id) picked = null;
+    changed();
+    draw();
+    undo = function () {
+      FORM.q = snap; edits = was; picked = q.id;
+      undo = null; draw();
+    };
+    if (window.SugiraToast) {
+      window.SugiraToast.say('Removed \u201c' + q.en + '\u201d', {
+        label: 'Undo',
+        onClick: function () { if (undo) undo(); },
+        onLapse: function () { undo = null; }
+      });
+    }
+  }
+
+  /* The key people actually press. Not while they are typing in a question,
+     where it belongs to the text they are typing. */
+  var undo = null;
+  document.addEventListener('keydown', function (e) {
+    if (!undo || e.shiftKey) return;
+    if (!(e.metaKey || e.ctrlKey) || String(e.key).toLowerCase() !== 'z') return;
+    var a = document.activeElement, t = a && a.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA' || (a && a.isContentEditable)) return;
+    e.preventDefault();
+    undo();
+    if (window.SugiraToast) window.SugiraToast.say('Put back');
+  });
 
   /* `toCard` is set when the choosing happened in the preview, so the scroll
      goes the other way: there, you are pointing at something you want to
