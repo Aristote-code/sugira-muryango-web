@@ -44,35 +44,36 @@
 
   var MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
 
-  /* A mark per kind, after ClickUp's colored icons: those are duotone — one
-     path at full strength over a second at a third of it (folderColor.svg) —
-     so a result's type reads before its name does. Here the plate is the
-     hue's 400 step and the glyph its 1000, both off ClickUp's own ramp, which
-     keeps dark-on-light contrast without anybody choosing a colour by eye. */
+  /* A mark per kind, so a result's type reads before its name does. The
+     colour is not here: the stylesheet gives every kind one, keyed on the
+     icon, and the table rows and relation pills read the same rule. This map
+     used to carry a `hue` of its own and the bar drew a tinted plate from it,
+     which is how a household came to be azure-blue in a table and a pale blue
+     tile in here. Two places holding one fact is two places to drift. */
   var KIND = {
-    page:      { label: 'Page',         icon: 'hierarchy',   hue: 'grey' },
-    household: { label: 'Household',    icon: 'households',  hue: 'azure-blue' },
-    person:    { label: 'Person',       icon: 'person',       hue: 'teal' },
+    page:      { label: 'Page',         icon: 'hierarchy' },
+    household: { label: 'Household',    icon: 'households' },
+    person:    { label: 'Person',       icon: 'person' },
     /* "Case", not "Risk of harm", which is what this said until the column
        clipped it to "Risk of ha…". The safeguarding table's own header is
        Case, and reading the app's word off the table rather than inventing
        one is the rule the rest of this file follows. The red shield carries
        what kind of case it is. */
-    'case':    { label: 'Case',         icon: 'safeguarding', hue: 'red' },
-    visit:     { label: 'Visit',        icon: 'visits',      hue: 'cyan' },
-    project:   { label: 'Project',      icon: 'project' ,    hue: 'azure-blue' },
-    module:    { label: 'Module',       icon: 'programme',   hue: 'violet' },
-    form:      { label: 'Form',         icon: 'edit',        hue: 'bright-purple' },
-    report:    { label: 'Report',       icon: 'reports',     hue: 'orange' },
-    followup:  { label: 'Follow-up',    icon: 'clock',       hue: 'yellow' },
-    guidance:  { label: 'Guidance',     icon: 'support',     hue: 'mint' },
-    role:      { label: 'Role',         icon: 'role',       hue: 'brown' },
-    permission: { label: 'Permission',  icon: 'settings',    hue: 'brown' },
-    action:    { label: 'Action',       icon: 'check',       hue: 'green' },
-    cohort:    { label: 'Cohort',       icon: 'households',  hue: 'teal' },
-    post:      { label: 'Post',         icon: 'message',     hue: 'pink' },
-    activity:  { label: 'Activity',     icon: 'monitor',     hue: 'grey' },
-    command:   { label: 'Command',      icon: 'command',     hue: 'purple' }
+    'case':    { label: 'Case',         icon: 'safeguarding' },
+    visit:     { label: 'Visit',        icon: 'visits' },
+    project:   { label: 'Project',      icon: 'project'  },
+    module:    { label: 'Module',       icon: 'programme' },
+    form:      { label: 'Form',         icon: 'edit' },
+    report:    { label: 'Report',       icon: 'reports' },
+    followup:  { label: 'Follow-up',    icon: 'clock' },
+    guidance:  { label: 'Guidance',     icon: 'support' },
+    role:      { label: 'Role',         icon: 'role' },
+    permission: { label: 'Permission',  icon: 'settings' },
+    action:    { label: 'Action',       icon: 'check' },
+    cohort:    { label: 'Cohort',       icon: 'households' },
+    post:      { label: 'Post',         icon: 'message' },
+    activity:  { label: 'Activity',     icon: 'monitor' },
+    command:   { label: 'Command',      icon: 'command' }
   };
 
   /* What a row is, is not a property of the screen it sits on — the project
@@ -385,7 +386,6 @@
   function glyph(kind) {
     var k = KIND[kind] || KIND.page;
     var s = el('span', 'kb-i');
-    s.setAttribute('data-hue', k.hue);
     s.innerHTML = '<svg aria-hidden="true"><use href="#i-' + k.icon + '"/></svg>';
     return s;
   }
