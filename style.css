@@ -2030,3 +2030,194 @@ svg:has(> use[href="#i-caret"]){fill:currentColor;stroke:none}
 #permsBody .tbl th:nth-child(3),#permsBody .tbl td:nth-child(3){width:40%}
 #permsBody .pm-what{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #permsBody .tbl tr[hidden]{display:none}
+
+/* ---------------------------------------------------------------------------
+   ⌘K — find anything (block.command-bar)
+
+   Measured at 800×540 from probe.command-bar-leaves.light.800; see command.js
+   for the table of parts and for the three pieces of ClickUp's bar that are
+   deliberately not here. Every number below was already a token in
+   tokens.css — the whole --command-bar-* family was imported and used
+   nowhere, which is the same story the measurement audit told.
+
+   One thing is deliberately not ClickUp's. The spec puts the location, the
+   kind, the section label, the counts and the placeholder in
+   content.placeholder (#8d8d8d) and content.tertiary (#838383), and at 12 to
+   16 px those measure 2.91, 3.32 and 3.79 against their own backgrounds.
+   ClickUp's command bar does not pass AA on its own greys. This app has held
+   zero contrast failures since the ClickUp pass and is read off tablets in
+   daylight, so every one of those takes content.secondary instead: 5.74 on
+   the surface and 4.82 on the highlighted row. Sizes, spacing and layout are
+   the measurement; the greys are the app's.
+--------------------------------------------------------------------------- */
+.kb{position:fixed;inset:0;z-index:var(--z-modal)}
+.kb[hidden]{display:none}
+.kb-scrim{position:absolute;inset:0;background:var(--modal-overlay-bg);
+  animation:kb-fade 120ms ease-out}
+@keyframes kb-fade{from{opacity:0}to{opacity:1}}
+.kb-win{position:absolute;top:var(--layout-command-bar-top);left:50%;
+  transform:translateX(-50%);
+  width:var(--command-bar-width);max-width:calc(100vw - var(--layout-viewport-gutter));
+  /* 540 is ClickUp's height because its bar is an operating-system window,
+     which cannot be any other size. This one is a dialog over a page, and a
+     dialog that keeps 540px for one result leaves 350 of them blank. So 540
+     is the ceiling rather than the height, and the bar is as tall as what it
+     found — which is also how it says, before you read anything, that it
+     found one thing and not fifty. */
+  height:auto;
+  max-height:min(var(--command-bar-height),
+    calc(100vh - var(--layout-command-bar-top) - var(--space-8)));
+  display:flex;flex-direction:column;overflow:hidden;
+  border-radius:var(--menu-surface-radius);background:var(--menu-surface-bg);
+  box-shadow:var(--x-clickup-elevation-border-5);
+  font-size:var(--command-bar-font-size-2);line-height:var(--command-bar-line-height);
+  color:var(--color-content-primary);
+  animation:kb-rise 140ms cubic-bezier(.2,.8,.3,1)}
+@keyframes kb-rise{from{opacity:0;transform:translateX(-50%) translateY(-6px)}
+  to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* header 40 high, padding 8 8 2; the input 28 high, 16/20 500 */
+.kb-h{display:flex;flex:none;align-items:center;gap:var(--space-2);height:var(--space-10);
+  padding:var(--space-2) var(--space-2) var(--dimension-2)}
+.kb-h-i{flex:none;width:var(--space-4);height:var(--space-4);margin-left:var(--dimension-6);
+  fill:none;stroke:currentColor;stroke-width:1.5;color:var(--color-content-secondary)}
+.kb-in{flex:1;min-width:0;height:var(--space-7);padding:0 var(--space-2);
+  border:0;background:none;outline:none;font:inherit;
+  font-size:var(--command-bar-font-size-3);line-height:20px;font-weight:500;
+  color:var(--color-content-primary)}
+.kb-in::placeholder{color:var(--color-content-secondary);font-weight:400}
+
+/* chips 24 high, r12, 1px border.default, padding 3 6, gap 2 */
+.kb-chips{display:flex;flex:none;align-items:center;gap:var(--space-1);
+  height:var(--space-10);padding:0 var(--space-2);overflow-x:auto;
+  border-bottom:1px solid var(--color-border-default);scrollbar-width:none}
+.kb-chips[hidden]{display:none}
+.kb-chips::-webkit-scrollbar{display:none}
+.kb-chip{display:inline-flex;flex:none;align-items:center;gap:var(--dimension-2);
+  height:var(--space-6);padding:var(--dimension-3) var(--dimension-6);
+  border:1px solid var(--color-border-default);border-radius:var(--radius-lg);
+  background:var(--menu-surface-bg);font:inherit;cursor:pointer}
+.kb-chip:hover{background:var(--x-clickup-color-background-on-main)}
+.kb-chip:focus-visible{outline:2px solid var(--x-clickup-color-border-primary-hover);
+  outline-offset:-2px}
+.kb-chip.on{border-color:var(--x-clickup-color-border-primary-hover);
+  background:var(--color-bg-primary-subtle)}
+.kb-chip-t{font-size:var(--command-bar-font-size);line-height:16px;font-weight:500;
+  color:var(--color-content-secondary)}
+.kb-chip.on .kb-chip-t{color:var(--color-content-link)}
+.kb-chip-n{font-size:var(--command-bar-font-size);line-height:16px;
+  color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
+
+/* the mark: ClickUp's colored icons are duotone, so this is a plate at the
+   hue's 400 and the glyph at its 1000 */
+.kb-i{display:inline-flex;flex:none;align-items:center;justify-content:center;
+  width:var(--space-5);height:var(--space-5);border-radius:var(--x-clickup-radii-3);
+  background:var(--kb-plate,var(--color-primitive-grey-400));
+  color:var(--kb-ink,var(--color-primitive-grey-1000))}
+.kb-i svg{width:var(--dimension-13);height:var(--dimension-13);
+  fill:none;stroke:currentColor;stroke-width:1.5}
+.kb-chip .kb-i{width:var(--space-4);height:var(--space-4);border-radius:var(--x-clickup-radii-2)}
+.kb-chip .kb-i svg{width:var(--dimension-11);height:var(--dimension-11)}
+.kb-i[data-hue="grey"]{--kb-plate:var(--color-primitive-grey-400);--kb-ink:var(--color-primitive-grey-1000)}
+.kb-i[data-hue="azure-blue"]{--kb-plate:var(--color-primitive-azure-blue-400);--kb-ink:var(--color-primitive-azure-blue-1000)}
+.kb-i[data-hue="teal"]{--kb-plate:var(--color-primitive-teal-400);--kb-ink:var(--color-primitive-teal-1000)}
+.kb-i[data-hue="red"]{--kb-plate:var(--color-primitive-red-400);--kb-ink:var(--color-primitive-red-1000)}
+.kb-i[data-hue="cyan"]{--kb-plate:var(--color-primitive-cyan-400);--kb-ink:var(--color-primitive-cyan-1000)}
+.kb-i[data-hue="violet"]{--kb-plate:var(--color-primitive-violet-400);--kb-ink:var(--color-primitive-violet-1000)}
+.kb-i[data-hue="bright-purple"]{--kb-plate:var(--color-primitive-bright-purple-400);--kb-ink:var(--color-primitive-bright-purple-1000)}
+.kb-i[data-hue="orange"]{--kb-plate:var(--color-primitive-orange-400);--kb-ink:var(--color-primitive-orange-1000)}
+.kb-i[data-hue="yellow"]{--kb-plate:var(--color-primitive-yellow-400);--kb-ink:var(--color-primitive-yellow-1000)}
+.kb-i[data-hue="mint"]{--kb-plate:var(--color-primitive-mint-400);--kb-ink:var(--color-primitive-mint-1000)}
+.kb-i[data-hue="brown"]{--kb-plate:var(--color-primitive-brown-400);--kb-ink:var(--color-primitive-brown-1000)}
+.kb-i[data-hue="green"]{--kb-plate:var(--color-primitive-green-400);--kb-ink:var(--color-primitive-green-1000)}
+.kb-i[data-hue="pink"]{--kb-plate:var(--color-primitive-pink-400);--kb-ink:var(--color-primitive-pink-1000)}
+.kb-i[data-hue="purple"]{--kb-plate:var(--color-primitive-purple-400);--kb-ink:var(--color-primitive-purple-1000)}
+
+/* the list */
+.kb-list{flex:1;min-height:0;overflow-y:auto;padding-bottom:var(--space-2)}
+.kb-sect{padding:var(--space-1) var(--space-4) var(--space-2);
+  font-size:var(--command-bar-font-size);line-height:16px;font-weight:500;
+  color:var(--color-content-secondary)}
+
+/* row 34 high, inset 8, r10, padding 0 8, gap 12 */
+.kb-r{display:flex;align-items:center;gap:var(--space-3);
+  height:var(--command-bar-height-4);margin:0 var(--space-2);
+  padding:0 var(--space-2);border-radius:var(--command-bar-radius-2);
+  background:var(--menu-surface-bg);cursor:pointer}
+.kb-r.on{background:var(--color-border-subtle)}
+.kb-m{display:flex;flex:1;min-width:0;align-items:baseline;gap:var(--space-1);
+  font-size:var(--command-bar-font-size-4);line-height:var(--command-bar-line-height-3)}
+/* The title is the thing that was searched for and the location is context,
+   so when the row runs out of width the location gives way first — ten times
+   faster. With the location refusing to shrink at all, which is where this
+   started, a phone-width row showed "S." in Household Module Tracking. */
+.kb-t{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;color:var(--color-content-primary)}
+.kb-t b{font-weight:600;color:inherit}
+.kb-w{flex:0 10 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;color:var(--color-content-secondary)}
+.kb-kind{flex:none;width:var(--command-bar-command-time-width);text-align:right;
+  font-size:var(--command-bar-command-time-font-size);
+  line-height:var(--command-bar-command-time-line-height);
+  color:var(--color-content-secondary);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* the key cap on the highlighted row, 26×28 r7, on the primary fill */
+.kb-k{display:inline-flex;flex:none;align-items:center;justify-content:center;
+  width:var(--command-bar-width-2);height:var(--space-7);
+  border-radius:var(--command-bar-radius);background:var(--color-bg-primary-default);
+  font:inherit;font-size:var(--command-bar-font-size);
+  color:var(--color-content-on-primary)}
+
+.kb-none{padding:var(--space-8) var(--space-4);text-align:center;
+  font-size:var(--command-bar-font-size-4);color:var(--color-content-secondary)}
+.kb-none p{margin:0}
+
+/* footer 36 high, 13 tertiary, top border */
+.kb-f{display:flex;flex:none;align-items:center;justify-content:space-between;
+  gap:var(--space-3);height:var(--space-9);padding:0 var(--space-4);
+  border-top:1px solid var(--color-border-subtle);
+  font-size:var(--command-bar-font-size-2);color:var(--color-content-secondary)}
+.kb-count{font-variant-numeric:tabular-nums}
+.kb-keys{display:flex;align-items:center;gap:var(--dimension-6)}
+.kb-keys .kb-key-m{display:flex;align-items:center;gap:var(--dimension-6)}
+.kb-f.bare .kb-key-m{display:none}
+.kb-f kbd{display:inline-flex;align-items:center;justify-content:center;
+  min-width:var(--space-5);height:var(--space-5);padding:0 var(--dimension-3);
+  border:1px solid var(--color-border-strong);border-radius:var(--command-bar-radius-3);
+  font:inherit;font-size:var(--command-bar-font-size);
+  color:var(--color-content-secondary)}
+
+/* the pill in the top bar, which is where somebody looks for search before
+   they know there is a key for it */
+.kb-pill{display:inline-flex;align-items:center;gap:var(--space-2);
+  height:var(--size-control-sm);padding:0 var(--dimension-6) 0 var(--space-2);
+  border:1px solid var(--color-border-default);border-radius:var(--radius-md);
+  background:var(--color-bg-surface);font:inherit;cursor:pointer}
+.kb-pill:hover{background:var(--x-clickup-color-background-on-main);
+  border-color:var(--x-clickup-color-border-hover)}
+.kb-pill:focus-visible{outline:2px solid var(--x-clickup-color-border-primary-hover);
+  outline-offset:-2px}
+.kb-pill svg{width:var(--dimension-14);height:var(--dimension-14);
+  fill:none;stroke:currentColor;stroke-width:1.5;color:var(--color-content-secondary)}
+.kb-pill-t{font-size:13px;line-height:16px;color:var(--color-content-secondary)}
+.kb-pill kbd{font:inherit;font-size:11px;line-height:16px;
+  padding:0 var(--dimension-3);border-radius:var(--x-clickup-radii-2);
+  background:var(--x-clickup-color-background-on-main);
+  color:var(--color-content-secondary);font-variant-numeric:tabular-nums}
+
+/* On a narrow screen three columns do not fit, and the first thing to go is
+   the one the coloured mark already says. The pill goes too: the top bar is
+   tight there, and ⌘K is not a phone gesture — the bar still opens from
+   anywhere that calls it. */
+@media (max-width: 640px) {
+  .kb-kind{display:none}
+  .kb-pill .kb-pill-t,.kb-pill kbd{display:none}
+  .kb-pill{padding:0 var(--dimension-6)}
+  .kb-f .kb-keys{display:none}
+}
+
+/* the row you were sent to, named for long enough to find with your eye */
+tr.kb-hit > td{background:var(--color-bg-primary-subtle);
+  animation:kb-hit 1800ms ease-out}
+@keyframes kb-hit{0%,55%{background:var(--color-bg-primary-subtle)}
+  100%{background:transparent}}

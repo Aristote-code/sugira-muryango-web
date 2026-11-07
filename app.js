@@ -37,6 +37,11 @@
     cohorts:      { crumbs: [['Programme', 'programme'], ['Cohorts', null]],              nav: 'cohorts' },
     translations: { crumbs: [['Programme', 'programme'], ['Translations', null]],         nav: 'translations' }
   };
+  /* The crumbs are already this app's own answer to "where am I", so anything
+     that has to name a screen — the ⌘K bar saying where a result lives —
+     reads them rather than keeping a second list of screen names that would
+     drift from this one. */
+  window.SugiraScreens = SCREENS;
 
   /* What each screen is, for the info mark beside its breadcrumb. These
      used to be a paragraph at the top of every screen, which the crumb
@@ -1133,6 +1138,19 @@
       }
     });
   });
+
+  /* Going to a screen, as the one click on a [data-go] control does it: some
+     screens are drawers and some replace the page, and which is which is
+     settled here. Anything that has to navigate without a control to click —
+     the ⌘K bar sending you to a record that sits in a table — asks for it by
+     name rather than deciding again. */
+  function route(key) {
+    if (!SCREENS[key] && !DRAWERABLE[key]) return false;
+    if (!scrim.hidden) closeModal();
+    if (DRAWERABLE[key]) { navFrom = null; openDrawer(key); } else go(key);
+    return true;
+  }
+  window.SugiraGo = route;
 
   // ---- anything carrying data-go routes ----
   document.addEventListener('click', function (e) {
