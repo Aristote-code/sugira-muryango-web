@@ -53,7 +53,12 @@
     page:      { label: 'Page',         icon: 'hierarchy',   hue: 'grey' },
     household: { label: 'Household',    icon: 'households',  hue: 'azure-blue' },
     person:    { label: 'Person',       icon: 'admin',       hue: 'teal' },
-    'case':    { label: 'Risk of harm', icon: 'safeguarding', hue: 'red' },
+    /* "Case", not "Risk of harm", which is what this said until the column
+       clipped it to "Risk of ha…". The safeguarding table's own header is
+       Case, and reading the app's word off the table rather than inventing
+       one is the rule the rest of this file follows. The red shield carries
+       what kind of case it is. */
+    'case':    { label: 'Case',         icon: 'safeguarding', hue: 'red' },
     visit:     { label: 'Visit',        icon: 'visits',      hue: 'cyan' },
     project:   { label: 'Project',      icon: 'building',    hue: 'azure-blue' },
     module:    { label: 'Module',       icon: 'programme',   hue: 'violet' },
@@ -65,7 +70,6 @@
     permission: { label: 'Permission',  icon: 'settings',    hue: 'brown' },
     action:    { label: 'Action',       icon: 'check',       hue: 'green' },
     cohort:    { label: 'Cohort',       icon: 'households',  hue: 'teal' },
-    device:    { label: 'Device',       icon: 'fieldstatus', hue: 'green' },
     post:      { label: 'Post',         icon: 'message',     hue: 'pink' },
     activity:  { label: 'Activity',     icon: 'monitor',     hue: 'grey' },
     command:   { label: 'Command',      icon: 'sparkle',     hue: 'purple' }
