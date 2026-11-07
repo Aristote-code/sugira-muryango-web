@@ -126,7 +126,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 @media (max-width:880px){.main{overflow:visible}}
 /* 40px on ClickUp, and no background of its own: it reads as part of the frame
    rather than a white band stuck to the top of it. */
-.topbar{display:flex;align-items:center;gap:var(--space-2);height:var(--layout-topbar-height);padding:0 var(--space-6);border-bottom:1px solid var(--color-border-default);flex:none;background:transparent}
+.topbar{position:relative;display:flex;align-items:center;gap:var(--space-2);height:var(--layout-topbar-height);padding:0 var(--space-6);border-bottom:1px solid var(--color-border-default);flex:none;background:transparent}
 .crumbs{display:flex;align-items:center;gap:var(--dimension-2);font-size:14px;line-height:var(--lh-16);color:var(--color-content-secondary);min-width:0;white-space:nowrap;overflow:hidden}
 .crumbs a,.crumbs b{display:inline-flex;align-items:center;height:var(--space-6);padding:0 var(--space-1);border-radius:var(--button-sm-radius);text-decoration:none}
 .crumbs a{color:var(--color-content-secondary);cursor:pointer}
@@ -619,17 +619,23 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
    this — the colour is applied where the icon is used, not baked into it. */
 .cellmark{display:inline-flex;align-items:center;justify-content:center;width:var(--space-4);height:var(--space-4);margin-right:var(--space-2);vertical-align:-3px;color:var(--color-content-tertiary)}
 .cellmark svg{width:var(--space-4);height:var(--space-4);color:var(--kind,inherit)}
-.cellmark:has(use[href="#i-households"]),.rel:has(use[href="#i-households"]){--kind:var(--hue-teal)}
-.cellmark:has(use[href="#i-visits"]),.rel:has(use[href="#i-visits"]){--kind:var(--hue-azure)}
-.cellmark:has(use[href="#i-programme"]),.rel:has(use[href="#i-programme"]){--kind:var(--hue-purple)}
-.cellmark:has(use[href="#i-building"]),.rel:has(use[href="#i-building"]){--kind:var(--hue-purple)}
-.cellmark:has(use[href="#i-reports"]),.rel:has(use[href="#i-reports"]){--kind:var(--hue-blue)}
-.cellmark:has(use[href="#i-admin"]),.rel:has(use[href="#i-admin"]){--kind:var(--hue-violet)}
-.cellmark:has(use[href="#i-safeguarding"]),.rel:has(use[href="#i-safeguarding"]){--kind:var(--hue-pink)}
-.cellmark:has(use[href="#i-location"]),.rel:has(use[href="#i-location"]){--kind:var(--hue-brown)}
-.cellmark:has(use[href="#i-message"]),.rel:has(use[href="#i-message"]){--kind:var(--hue-azure)}
-.cellmark:has(use[href="#i-clock"]),.rel:has(use[href="#i-clock"]){--kind:var(--hue-brown)}
-.cellmark:has(use[href="#i-support"]),.rel:has(use[href="#i-support"]){--kind:var(--hue-blue)}
+.cellmark:has(use[href="#i-households"]),.rel:has(use[href="#i-households"]){--kind:var(--x-clickup-component-view-type-9)}  /* azure-blue-800, 3.23:1 */
+.cellmark:has(use[href="#i-visits"]),.rel:has(use[href="#i-visits"]){--kind:var(--x-clickup-component-view-type-23)}  /* green-800, 3.16:1 */
+.cellmark:has(use[href="#i-project"]),.rel:has(use[href="#i-project"]){--kind:var(--x-clickup-component-view-type-2)}  /* neon-blue-800, 5.21:1 */
+.cellmark:has(use[href="#i-programme"]),.rel:has(use[href="#i-programme"]){--kind:var(--x-clickup-component-view-type-3)}  /* violet-800, 4.75:1 */
+.cellmark:has(use[href="#i-edit"]),.rel:has(use[href="#i-edit"]){--kind:var(--x-clickup-component-view-type-29)}  /* violet-800, 4.75:1 */
+.cellmark:has(use[href="#i-reports"]),.rel:has(use[href="#i-reports"]){--kind:var(--x-clickup-component-view-type-5)}  /* orange-800, 3.03:1 */
+.cellmark:has(use[href="#i-clock"]),.rel:has(use[href="#i-clock"]){--kind:var(--x-clickup-component-view-type-16)}  /* orange-800, 3.03:1 */
+.cellmark:has(use[href="#i-person"]),.rel:has(use[href="#i-person"]){--kind:var(--x-clickup-component-view-type-15)}  /* purple-800, 5.76:1 */
+.cellmark:has(use[href="#i-role"]),.rel:has(use[href="#i-role"]){--kind:var(--x-clickup-component-view-type-8)}  /* purple-900, 6.95:1 */
+.cellmark:has(use[href="#i-admin"]),.rel:has(use[href="#i-admin"]){--kind:var(--x-clickup-component-view-type-8)}  /* purple-900, 6.95:1 */
+.cellmark:has(use[href="#i-safeguarding"]),.rel:has(use[href="#i-safeguarding"]){--kind:var(--x-clickup-component-view-type-7)}  /* red-800, 3.91:1 */
+.cellmark:has(use[href="#i-location"]),.rel:has(use[href="#i-location"]){--kind:var(--x-clickup-component-view-type-1)}  /* grey-900, 4.23:1 */
+.cellmark:has(use[href="#i-message"]),.rel:has(use[href="#i-message"]){--kind:var(--x-clickup-component-view-type-42)}  /* pink-800, 3.85:1 */
+.cellmark:has(use[href="#i-support"]),.rel:has(use[href="#i-support"]){--kind:var(--x-clickup-component-view-type-40)}  /* green-800, 3.16:1 */
+.cellmark:has(use[href="#i-check"]),.rel:has(use[href="#i-check"]){--kind:var(--x-clickup-component-view-type-23)}  /* green-800, 3.16:1 */
+.cellmark:has(use[href="#i-monitor"]),.rel:has(use[href="#i-monitor"]){--kind:var(--x-clickup-component-view-type-28)}  /* grey-900, 4.23:1 */
+.cellmark:has(use[href="#i-hierarchy"]),.rel:has(use[href="#i-hierarchy"]){--kind:var(--x-clickup-component-view-type-1)}  /* grey-900, 4.23:1 */
 .tbl .mut{color:var(--color-content-secondary)}
 /* The column names stay put while rows scroll, as they do on ClickUp.
    Sticky alone does nothing here: overflow-x makes this element the scroll
@@ -2213,12 +2219,27 @@ svg:has(> use[href^="#i-"]){fill:currentColor;stroke:none;flex:none}
 
 /* the pill in the top bar, which is where somebody looks for search before
    they know there is a key for it */
-.kb-pill{display:inline-flex;align-items:center;gap:var(--space-2);
-  height:var(--size-control-sm);padding:0 var(--dimension-6) 0 var(--space-2);
-  border:1px solid var(--color-border-default);border-radius:var(--radius-md);
-  background:var(--color-bg-surface);font:inherit;cursor:pointer}
-.kb-pill:hover{background:var(--x-clickup-color-background-on-main);
-  border-color:var(--x-clickup-color-border-hover)}
+/* ClickUp puts the search in the middle of the top bar: 286 x 28, fully
+   round, on a ring and elevation-1, where it reads as a field you could type
+   in. This was 112px wedged between the last tool and the account chip, where
+   it reads as one more icon button — which is why it was not being found.
+   --search-pill-width has held the measured 286 since the token import.
+
+   It is taken out of the flow rather than given a middle column, because the
+   breadcrumb on one side and the account chip on the other are different
+   widths on every screen, and a flex middle would drift with them. ClickUp's
+   does not drift: it is 286 wide at the same place whatever the page says. */
+.kb-pill{position:absolute;left:50%;transform:translateX(-50%);
+  display:inline-flex;align-items:center;gap:var(--dimension-4);
+  width:var(--search-pill-width);
+  height:var(--size-control-sm);padding:0 var(--dimension-7);
+  border:0;border-radius:var(--radius-full);
+  background:var(--color-bg-surface);box-shadow:var(--x-clickup-elevation-border-1);
+  font:inherit;cursor:pointer}
+/* The key cap sits at the far end the way the AI button does in ClickUp's,
+   so the width reads as a field rather than as a button with air in it. */
+.kb-pill kbd{margin-left:auto}
+.kb-pill:hover{background:var(--x-clickup-color-background-on-main)}
 .kb-pill:focus-visible{outline:2px solid var(--x-clickup-color-border-primary-hover);
   outline-offset:-2px}
 .kb-pill svg{width:var(--space-4);height:var(--space-4);
@@ -2233,6 +2254,16 @@ svg:has(> use[href^="#i-"]){fill:currentColor;stroke:none;flex:none}
    the one the coloured mark already says. The pill goes too: the top bar is
    tight there, and ⌘K is not a phone gesture — the bar still opens from
    anywhere that calls it. */
+/* Pinned to the middle, the pill stops caring how wide the breadcrumb is —
+   so below the width where 286px still clears both sides it goes back into
+   the row and shrinks to its label. Measured on the deepest breadcrumb in the
+   app: 20px of clearance at 1100, and 18px of overlap at 1024. */
+@media (max-width: 1100px) {
+  .kb-pill{position:static;transform:none;width:auto;
+    padding:0 var(--dimension-6) 0 var(--space-2)}
+  .kb-pill kbd{margin-left:0}
+}
+
 @media (max-width: 640px) {
   .kb-kind{display:none}
   /* The kind label gives the row its width back on a phone, and the two
