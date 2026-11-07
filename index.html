@@ -380,10 +380,10 @@
       <!-- ============ HOUSEHOLDS ============ -->
       <section class="screen" id="s-households">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:8px">2&#8239;210</span></button>
-          <button class="tab" type="button" data-tab="behind">Behind schedule<span class="chip" style="margin-left:8px">148</span></button>
+          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:var(--space-2)">2&#8239;210</span></button>
+          <button class="tab" type="button" data-tab="behind">Behind schedule<span class="chip" style="margin-left:var(--space-2)">148</span></button>
           <button class="tab" type="button" data-tab="stale">No visit in 30 days</button>
-          <button class="tab" type="button" data-tab="risk">Open risk of harm<span class="chip" style="margin-left:8px">2</span></button>
+          <button class="tab" type="button" data-tab="risk">Open risk of harm<span class="chip" style="margin-left:var(--space-2)">2</span></button>
           </div>
         <div class="pad">
           <div class="filters">
@@ -452,7 +452,7 @@
         <div class="tabs">
           <button class="tab on" type="button" data-panel="overview">Overview</button>
           <button class="tab" type="button" data-panel="visits">Visits</button>
-          <button class="tab" type="button" data-panel="children">Members<span class="chip" style="margin-left:8px">4</span></button>
+          <button class="tab" type="button" data-panel="children">Members<span class="chip" style="margin-left:var(--space-2)">4</span></button>
           <button class="tab" type="button" data-panel="risk">Risk of harm</button>
           <button class="tab" type="button" data-panel="referrals">Referrals</button>
         </div>
@@ -476,7 +476,7 @@
               </div>
             </div>
 
-            <div style="display:grid;gap:16px;align-content:start">
+            <div style="display:grid;gap:var(--space-4);align-content:start">
               <div class="card">
                 <div class="card-h"><h3>Session progress</h3><span class="side"><span class="chip warn">4 weeks behind</span></span></div>
                 <div class="mods">
@@ -591,8 +591,8 @@
       <!-- ============ VISITS ============ -->
       <section class="screen" id="s-visits">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="today">Today<span class="chip" style="margin-left:8px">31</span></button>
-          <button class="tab" type="button" data-tab="all">This week<span class="chip" style="margin-left:8px">147</span></button>
+          <button class="tab on" type="button" data-tab="today">Today<span class="chip" style="margin-left:var(--space-2)">31</span></button>
+          <button class="tab" type="button" data-tab="all">This week<span class="chip" style="margin-left:var(--space-2)">147</span></button>
           <button class="tab" type="button" data-tab="done">Completed</button>
           <button class="tab" type="button" data-tab="missed">Not completed</button>
           <button class="tab" type="button" data-tab="risk">Risk flagged</button>
@@ -655,8 +655,8 @@
           <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by household, case ID or type" aria-label="Search cases"></div>
         </div>
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="open">Open<span class="chip" style="margin-left:8px">3</span></button>
-          <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:8px">2</span></button>
+          <button class="tab on" type="button" data-tab="open">Open<span class="chip" style="margin-left:var(--space-2)">3</span></button>
+          <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:var(--space-2)">2</span></button>
           </div>
         <div class="pad">
           <div class="rnote" data-when="full">
@@ -716,7 +716,7 @@
           <button class="tab on" type="button" data-panel="case">Case</button>
           <button class="tab" type="button" data-panel="actions">Actions</button>
           <button class="tab" type="button" data-panel="referrals">Referrals</button>
-          <button class="tab" type="button" data-panel="audit">Audit trail <span class="chip" style="margin-left:8px">9</span></button>
+          <button class="tab" type="button" data-panel="audit">Audit trail <span class="chip" style="margin-left:var(--space-2)">9</span></button>
         </div>
         <div class="lockwrap" data-open="full own">
           <div class="rlock">
@@ -746,7 +746,7 @@
             <div class="card">
               <div class="card-h"><h3>What was reported</h3></div>
               <p class="mhint">During the Module 6 visit the home visitor recorded that the youngest child, aged 2, showed signs of inadequate feeding and had not attended the health post for a scheduled growth check. The caregiver reported losing the household health insurance card in August.</p>
-              <div class="card-h" style="margin-top:20px"><h3>Case timeline</h3></div>
+              <div class="card-h" style="margin-top:var(--space-5)"><h3>Case timeline</h3></div>
               <div class="tl">
                 <div class="te"><span class="ic warn"><svg aria-hidden="true"><use href="#i-alert"/></svg></span>
                   <div><h4>Flag raised at visit</h4><p>Module 6 &middot; M. Dusabe</p></div><span class="when">28 Oct</span></div>
@@ -756,7 +756,7 @@
                   <div><h4>Review window closed</h4><p>No review recorded within 72 hours</p></div><span class="when">30 Oct</span></div>
               </div>
             </div>
-            <div style="display:grid;gap:16px;align-content:start">
+            <div style="display:grid;gap:var(--space-4);align-content:start">
               <div class="card">
                 <div class="card-h"><h3>Who was notified</h3></div>
                 <div class="lr"><span class="t">C. Uwimana</span><span class="s">Sector lead &middot; Ngoma</span><span class="c"><span class="chip ok"><i></i>28 Oct</span></span></div>
@@ -794,9 +794,9 @@
           <div class="card">
             <div class="card-h"><h3>No referral has been made<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The protocol requires a referral to the district child-protection officer when a flag is substantiated. Substantiation happens at the supervisor review, which has not been recorded — so the referral cannot be raised yet, and the case is stuck behind a step that is two days late."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
             
-            <div class="lr" style="margin-top:16px"><span class="t">District <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr> Child Protection &amp; Welfare Officer</span><span class="s">Ngoma &middot; would receive this case</span></div>
+            <div class="lr" style="margin-top:var(--space-4)"><span class="t">District <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr> Child Protection &amp; Welfare Officer</span><span class="s">Ngoma &middot; would receive this case</span></div>
             <div class="lr"><span class="t">Sector social worker</span><span class="s">Kibungo &middot; copied on referral</span></div>
-            <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+            <div style="margin-top:var(--space-4);display:flex;gap:var(--space-2);flex-wrap:wrap">
               <button class="btn" type="button" data-modal="review">Record the review first</button>
               <button class="btn sec" type="button" disabled>Refer &mdash; needs a review</button>
             </div>
@@ -846,7 +846,7 @@
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th data-person><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</th><th>Place</th><th class="num">Households</th><th class="num"><abbr data-tip="The last time the device reached the server, in either direction: sending finished records up, and pulling the current version of a form down.">Last sync</abbr></th><th>Held on the device</th><th>Status</th><th class="gap"></th></tr></thead>
               <tbody>
-                <tr><td class="nm">E. Mutesi</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">31</td><td class="num">6 days</td><td>14 records<span class="chip bad" data-tip="1 of them a risk-of-harm case, raised 6 days ago and not yet seen here" style="margin-left:8px"><i></i>1 case</span></td><td><span class="chip bad"><i></i>Not reporting</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">E. Mutesi</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">31</td><td class="num">6 days</td><td>14 records<span class="chip bad" data-tip="1 of them a risk-of-harm case, raised 6 days ago and not yet seen here" style="margin-left:var(--space-2)"><i></i>1 case</span></td><td><span class="chip bad"><i></i>Not reporting</span></td><td class="gap"></td></tr>
                 <tr><td class="nm">M. Dusabe</td><td class="mut">Jarama &middot; Ngoma</td><td class="num">28</td><td class="num">2 days</td><td class="mut">5 records</td><td><span class="chip warn"><i></i>Delayed</span></td><td class="gap"></td></tr>
                 <tr><td class="nm">J. Kamanzi</td><td class="mut">Kigoma &middot; Nyanza</td><td class="num">26</td><td class="num">3 days</td><td class="mut">7 records</td><td><span class="chip warn"><i></i>Delayed</span></td><td class="gap"></td></tr>
                 <tr><td class="nm">A. Nyirahabimana</td><td class="mut">Busoro &middot; Nyanza</td><td class="num">30</td><td class="num">2 hours</td><td><span class="rd">Nothing waiting</span></td><td><span class="chip ok"><i></i>Reporting</span></td><td class="gap"></td></tr>
@@ -864,9 +864,9 @@
           <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by report name" aria-label="Search reports"></div>
         </div>
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:8px">9</span></button>
-          <button class="tab" type="button" data-tab="sched">Scheduled<span class="chip" style="margin-left:8px">5</span></button>
-          <button class="tab" type="button" data-tab="manual">Run by hand<span class="chip" style="margin-left:8px">4</span></button>
+          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:var(--space-2)">9</span></button>
+          <button class="tab" type="button" data-tab="sched">Scheduled<span class="chip" style="margin-left:var(--space-2)">5</span></button>
+          <button class="tab" type="button" data-tab="manual">Run by hand<span class="chip" style="margin-left:var(--space-2)">4</span></button>
           </div>
         <div class="pad">
           <div class="card flush plainsurface">
@@ -892,11 +892,11 @@
       <!-- ============ PROGRAMME · PROJECTS ============ -->
       <section class="screen" id="s-programme">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all" data-panel="list">All<span class="chip" style="margin-left:8px">19</span></button>
-          <button class="tab" type="button" data-tab="tablet" data-panel="list">Visible on App<span class="chip" style="margin-left:8px">11</span></button>
-          <button class="tab" type="button" data-tab="notablet" data-panel="list">Not visible on App<span class="chip" style="margin-left:8px">8</span></button>
-          <button class="tab" type="button" data-panel="forms">Forms<span class="chip" id="formCount" style="margin-left:8px">—</span></button>
-          <button class="tab" type="button" data-panel="archived">Archived<span class="chip" style="margin-left:8px">6</span></button>
+          <button class="tab on" type="button" data-tab="all" data-panel="list">All<span class="chip" style="margin-left:var(--space-2)">19</span></button>
+          <button class="tab" type="button" data-tab="tablet" data-panel="list">Visible on App<span class="chip" style="margin-left:var(--space-2)">11</span></button>
+          <button class="tab" type="button" data-tab="notablet" data-panel="list">Not visible on App<span class="chip" style="margin-left:var(--space-2)">8</span></button>
+          <button class="tab" type="button" data-panel="forms">Forms<span class="chip" id="formCount" style="margin-left:var(--space-2)">—</span></button>
+          <button class="tab" type="button" data-panel="archived">Archived<span class="chip" style="margin-left:var(--space-2)">6</span></button>
           <button class="tab" type="button" data-panel="filter">Filter data by project</button>
         </div>
         <div class="pad" data-panelid="forms" hidden>
@@ -996,8 +996,8 @@
           <button class="tab on" type="button" data-panel="modules">Modules</button>
           <button class="tab" type="button" data-panel="forms">Forms</button>
           <button class="tab" type="button" data-panel="cohorts">Cohorts</button>
-          <button class="tab" type="button" data-panel="preports">Reports <span class="chip" style="margin-left:8px">6</span></button>
-          <button class="tab" type="button" data-panel="archive">Archived forms <span class="chip" style="margin-left:8px">9</span></button>
+          <button class="tab" type="button" data-panel="preports">Reports <span class="chip" style="margin-left:var(--space-2)">6</span></button>
+          <button class="tab" type="button" data-panel="archive">Archived forms <span class="chip" style="margin-left:var(--space-2)">9</span></button>
         </div>
         <div class="pad" data-panelid="modules">
           <div class="card flush plainsurface">
@@ -1075,7 +1075,7 @@
           <div class="filters">
             <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
               <input type="text" placeholder="Search this project&rsquo;s reports" aria-label="Search reports in this project"></div>
-            <span class="side" style="margin-left:auto;display:flex;gap:8px">
+            <span class="side" style="margin-left:auto;display:flex;gap:var(--space-2)">
               <button class="rel" type="button" data-go="reports"><svg aria-hidden="true"><use href="#i-reports"/></svg>All 9 reports</button>
               <button class="btn sm" type="button" data-modal="report" data-report-project="Household Module Tracking"><svg aria-hidden="true"><use href="#i-plus"/></svg>New report</button></span>
           </div>
@@ -1212,9 +1212,9 @@
           <button class="tab on" type="button" data-panel="build">Build</button>
           <button class="tab" type="button" data-panel="preview">Preview</button>
           <button class="tab" type="button" data-panel="translate">Translate</button>
-          <button class="tab" type="button" data-panel="data">Data <span class="chip" style="margin-left:8px">986</span></button>
+          <button class="tab" type="button" data-panel="data">Data <span class="chip" style="margin-left:var(--space-2)">986</span></button>
           <button class="tab" type="button" data-panel="reports">Reports</button>
-          <button class="tab" type="button" data-panel="access">Access<span class="chip" style="margin-left:8px">3</span></button>
+          <button class="tab" type="button" data-panel="access">Access<span class="chip" style="margin-left:var(--space-2)">3</span></button>
         </div>
 
         <div class="pad" data-panelid="build">
@@ -1233,12 +1233,12 @@
               <div class="card">
                 <div class="card-h"><h3>Safeguarding<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Question 5 opens a risk-of-harm case when answered yes. The case goes to the sector supervisor with a 72-hour review window."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
                 
-                <div class="lr" style="margin-top:8px"><span class="t">Cases opened from this form</span><span class="c">14</span></div>
+                <div class="lr" style="margin-top:var(--space-2)"><span class="t">Cases opened from this form</span><span class="c">14</span></div>
                 <div class="lr"><span class="t">Still open</span><span class="c">2</span></div>
               </div>
               <div class="card" id="fb-fleet" data-version="4" data-oldest="6 days">
                 <div class="card-h"><h3>On the tablets<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A form reaches a tablet when that tablet next syncs, not when you publish. Until then it keeps asking the version it last pulled."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="rel" type="button" data-go="field"><svg aria-hidden="true"><use href="#i-fieldstatus"/></svg>Field status</button></span></div>
-                <div class="lr" style="margin-top:8px"><span class="t">Running version 4</span><span class="c" data-fleet="cur">186</span></div>
+                <div class="lr" style="margin-top:var(--space-2)"><span class="t">Running version 4</span><span class="c" data-fleet="cur">186</span></div>
                 <div class="lr"><span class="t">Still on version 3</span><span class="s">oldest synced 6 days ago</span><span class="c"><span class="chip warn" data-fleet="behind"><i></i>7</span></span></div>
                 <div class="lr"><span class="t" data-tip="They pulled version 4 and have sent nothing since. Being quiet about data is not the same as being behind on the form.">Silent but up to date</span><span class="c" data-fleet="silent">12</span></div>
               </div>
@@ -1260,7 +1260,7 @@
             <div class="card">
               <div class="card-h"><h3>Why this is a preview, not a live form<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="In the old system the screen called “preview” was a working, submittable form — anything typed into it entered the real data. This one cannot submit, and says so."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
               
-              <div class="lr" style="margin-top:12px"><span class="t">Submits to the database</span><span class="chip">No</span></div>
+              <div class="lr" style="margin-top:var(--space-3)"><span class="t">Submits to the database</span><span class="chip">No</span></div>
               <div class="lr"><span class="t">Shows conditional logic</span><span class="chip ok"><i></i>Yes</span></div>
               <div class="lr"><span class="t">Shows the tablet layout</span><span class="chip ok"><i></i>Yes</span></div>
             </div>
@@ -1326,8 +1326,8 @@
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 1&ndash;4 of 986</span>
-              <span class="side" style="margin-left:auto;display:flex;gap:8px">
-                <button data-toast="3 responses were deleted and can be restored" class="btn sec sm" type="button">Deleted responses <span class="chip" style="margin-left:4px">3</span></button>
+              <span class="side" style="margin-left:auto;display:flex;gap:var(--space-2)">
+                <button data-toast="3 responses were deleted and can be restored" class="btn sec sm" type="button">Deleted responses <span class="chip" style="margin-left:var(--space-1)">3</span></button>
                 <button class="btn sec sm" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button></span></div>
           </div>
         </div>
@@ -1440,9 +1440,9 @@
       <!-- ============ PEOPLE ============ -->
       <section class="screen" id="s-people">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="active">Active<span class="chip" style="margin-left:8px">532</span></button>
-          <button class="tab" type="button" data-tab="invited">Invited<span class="chip" style="margin-left:8px">3</span></button>
-          <button class="tab" type="button" data-tab="off">Deactivated<span class="chip" style="margin-left:8px">4</span></button>
+          <button class="tab on" type="button" data-tab="active">Active<span class="chip" style="margin-left:var(--space-2)">532</span></button>
+          <button class="tab" type="button" data-tab="invited">Invited<span class="chip" style="margin-left:var(--space-2)">3</span></button>
+          <button class="tab" type="button" data-tab="off">Deactivated<span class="chip" style="margin-left:var(--space-2)">4</span></button>
           </div>
         <div class="pad">
           <div class="filters">
@@ -1733,7 +1733,7 @@
               <div class="lr"><span class="t">This browser</span><span class="s">Kigali &middot; since 08:02 today</span><span class="c"><span class="chip ok"><i></i>Now</span></span></div>
               <div class="lr"><span class="t">Tablet &mdash; SM-T290</span><span class="s">Ngoma &middot; 28 October</span><span class="c"><button class="rel" type="button" data-toast="Signed out on that device">Sign out</button></span></div>
               <div class="lr"><span class="t">Chrome, Windows</span><span class="s">Kigali &middot; 21 October</span><span class="c"><button class="rel" type="button" data-toast="Signed out on that device">Sign out</button></span></div>
-              <div style="margin-top:16px"><button class="btn sec sm" type="button" data-modal="signoutall">Sign out everywhere else</button></div>
+              <div style="margin-top:var(--space-4)"><button class="btn sec sm" type="button" data-modal="signoutall">Sign out everywhere else</button></div>
             </div>
           </div>
           <div class="card">
@@ -1870,10 +1870,10 @@
            feed buries the second in the first. -->
       <section class="screen" id="s-activity">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">Everything<span class="chip" style="margin-left:8px">13</span></button>
-          <button class="tab" type="button" data-tab="access">Access<span class="chip" style="margin-left:8px">5</span></button>
-          <button class="tab" type="button" data-tab="out">Data out<span class="chip" style="margin-left:8px">2</span></button>
-          <button class="tab" type="button" data-tab="refused">Refused<span class="chip" style="margin-left:8px">2</span></button>
+          <button class="tab on" type="button" data-tab="all">Everything<span class="chip" style="margin-left:var(--space-2)">13</span></button>
+          <button class="tab" type="button" data-tab="access">Access<span class="chip" style="margin-left:var(--space-2)">5</span></button>
+          <button class="tab" type="button" data-tab="out">Data out<span class="chip" style="margin-left:var(--space-2)">2</span></button>
+          <button class="tab" type="button" data-tab="refused">Refused<span class="chip" style="margin-left:var(--space-2)">2</span></button>
         </div>
         <div class="pad">
           <div class="filters">
@@ -1942,7 +1942,7 @@
       <section class="screen" id="s-login">
         <div class="signin">
           <div class="signin-card">
-            <span class="mark mk" style="width:40px;height:40px;color:var(--b500)"><svg class="logomark" viewBox="14 9 124 132" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true" focusable="false"><path d="M103.2 14.0357C105.464 13.2883 107.754 12.6344 110.11 12.2263C113.53 11.6338 117.129 11.3931 120.592 11.2957C124.5 11.1858 131.58 11.0298 133.9 14.9116C135.106 16.4878 135.509 18.4655 135.252 20.4105C134.651 24.9699 130.813 28.9536 128.156 32.5901C126.973 34.2135 125.892 35.9095 124.921 37.668C123.185 40.7702 121.52 44.3227 119.927 47.5395C116.96 53.5232 114.038 59.5291 111.162 65.5566C101.523 85.7268 90.5241 106.815 88.8873 129.452C88.6774 132.358 88.5549 136.095 88.8317 138.997C88.5661 138.572 88.1528 137.582 87.9339 137.092C87.3136 135.722 86.7274 134.337 86.1754 132.937C82.2228 123.341 79.9791 113.127 79.5473 102.758C79.4426 100.229 79.4055 97.1188 79.6459 94.5958L79.5821 94.4585C79.3098 94.8251 78.4551 96.8858 78.225 97.4023L75.5858 103.218C72.5093 109.883 69.2982 116.453 66.3292 123.175L62.4541 132.162C61.9023 133.452 61.2791 135.114 60.6663 136.336L60.4331 137.027C60.2651 122.772 56.2457 106.636 51.3924 93.3477C48.7523 86.1193 45.4216 78.4799 42.3146 71.4078C37.7715 61.0546 32.9774 50.8133 27.9365 40.6932C26.6333 38.0952 25.3257 35.4913 23.7783 33.0281C21.6714 29.6747 18.4395 26.6196 17.3306 22.7207C16.5512 21.3717 16.5571 18.7383 16.9419 17.2601C17.406 15.477 18.5831 14.0845 20.167 13.1726C25.1997 10.2752 36.9434 11.4063 42.5305 12.3408C44.9114 12.7631 47.2709 13.2988 49.6007 13.9461L50.7917 14.2004C44.7634 15.3373 33.8595 18.2405 35.2868 26.6232C35.7516 29.3528 37.7014 31.4831 39.7347 33.2495C39.6236 32.3252 39.4448 29.869 39.7636 29.0403C39.8018 27.1708 41.2573 24.4151 42.4213 22.9613C44.4431 20.4667 47.3712 18.8752 50.5641 18.5358C54.4397 18.11 58.2405 19.2576 60.9225 22.1591C62.3811 23.7369 63.6687 26.1987 63.8969 28.3506C64.3779 31.637 63.5273 34.9797 61.5336 37.6363C60.8138 38.584 59.9836 39.4423 59.0604 40.1931C62.0115 41.1553 63.8405 42.4236 66.2097 44.352C65.721 46.3548 65.7569 47.1327 65.98 49.1394C66.0956 49.5828 66.3149 50.5426 66.4788 50.9444C67.4476 53.3209 68.991 54.9896 71.165 56.3017C71.2051 56.3108 71.8878 56.6519 72.0043 56.7017C75.5413 58.2143 79.2735 57.8051 82.4128 55.651C83.0042 55.7313 83.3381 55.7349 83.9405 55.735L84.0808 55.7557L84.1045 55.9073C84.71 55.8785 85.2219 55.1846 85.9187 54.9248C90.4759 51.4163 95.0792 48.0265 99.4487 44.2738C100.108 43.7082 101.019 43.0427 101.602 42.4265C102.126 42.2479 102.729 42.1183 103.237 41.9225C104.718 41.3514 105.879 40.5567 107.104 39.5857C107.216 39.3964 108.643 38.1115 108.919 37.8027C110.344 36.212 111.673 34.3861 112.606 32.4695L112.703 32.4492C112.977 32.2288 113.176 32.0067 113.411 31.7534C117.138 27.716 118.812 22.2111 114.13 18.1193C111.404 15.7377 108.226 15.0444 104.757 14.303C104.209 14.2566 103.737 14.1475 103.2 14.0357Z" fill="#AD21A0"/><path d="M103.2 14.0357C105.464 13.2883 107.754 12.6344 110.11 12.2263C113.53 11.6338 117.129 11.3931 120.592 11.2957C124.5 11.1858 131.58 11.0298 133.9 14.9116C135.106 16.4878 135.509 18.4655 135.252 20.4105C134.651 24.9699 130.813 28.9536 128.156 32.5901C126.973 34.2135 125.892 35.9095 124.921 37.668C123.185 40.7702 121.52 44.3227 119.927 47.5395C116.96 53.5232 114.038 59.5291 111.162 65.5566C101.523 85.7268 90.5242 106.815 88.8873 129.452C88.6774 132.358 88.5549 136.095 88.8317 138.997C88.5661 138.572 88.1528 137.582 87.9339 137.092C87.3136 135.722 86.7274 134.337 86.1754 132.937C82.2229 123.341 79.9791 113.127 79.5473 102.758C79.4426 100.229 79.4056 97.1188 79.646 94.5958C79.5762 94.7435 80.1082 90.3713 80.1394 90.1554C81.1143 83.8041 82.8417 77.5916 85.2858 71.6489C86.0879 69.6759 86.8833 67.5322 88.3093 65.9546C85.2398 67.3472 81.9676 68.4307 78.7956 69.6029C74.7555 71.0959 70.71 72.8463 66.693 74.3392C62.6928 75.8426 58.7027 77.4699 54.658 78.8561C52.5209 79.5885 49.5453 80.7461 47.331 80.9338C47.1951 80.8901 47.1795 80.8619 47.0562 80.781C46.8956 80.358 47.1104 80.0679 47.4149 79.7666C48.4944 78.6973 49.8759 77.7779 51.1131 76.9186C51.4836 76.5832 52.3936 76.0029 52.8294 75.7142C54.176 74.8245 55.5369 73.9572 56.9116 73.112C57.3363 72.8486 58.3585 72.2435 58.7094 71.9445C59.7217 71.3844 60.6523 70.7381 61.6607 70.1927C62.077 70.12 63.2366 69.2577 63.7065 69.014C68.2086 66.6795 72.4722 63.8277 76.7804 61.1533C77.4875 60.7145 78.1375 60.1989 78.8491 59.7711L79.0249 59.6572L79.0056 59.5739C78.973 59.4573 78.9285 59.4071 78.8646 59.2986C79.7491 58.7426 83.3128 56.371 83.9406 55.735L84.0808 55.7557L84.1045 55.9073C84.71 55.8785 85.222 55.1846 85.9187 54.9249C90.4759 51.4163 95.0792 48.0265 99.4487 44.2738C100.108 43.7082 101.02 43.0427 101.602 42.4265C102.126 42.2479 102.729 42.1183 103.237 41.9225C104.718 41.3514 105.879 40.5567 107.105 39.5857C107.216 39.3964 108.643 38.1115 108.919 37.8027C110.344 36.212 111.673 34.3861 112.606 32.4695L112.704 32.4492C112.977 32.2288 113.176 32.0067 113.411 31.7534C117.138 27.716 118.812 22.2111 114.13 18.1193C111.404 15.7377 108.226 15.0444 104.757 14.303C104.209 14.2566 103.737 14.1475 103.2 14.0357Z" fill="#2C49CD"/><path d="M88.3092 65.9546C86.8832 67.5321 86.0878 69.6758 85.2857 71.6488C82.8416 77.5916 81.1142 83.8041 80.1393 90.1553C80.1081 90.3713 79.5761 94.7435 79.6459 94.5958L79.582 94.4585C79.3097 94.8251 78.455 96.8858 78.225 97.4023L75.5857 103.218C72.5092 109.883 69.2982 116.453 66.3291 123.175L62.454 132.162C61.9022 133.452 61.279 135.114 60.6662 136.336C60.6259 135.528 62.3238 129.812 62.6719 128.555C63.6411 125.122 64.5659 121.676 65.4459 118.219C66.6286 113.6 67.5353 108.914 68.1612 104.187C68.9635 99.2151 69.0072 92.8468 68.8721 87.8112C68.759 85.9457 68.6343 83.3848 68.2987 81.5757C68.2667 81.1913 68.1617 80.6221 68.0988 80.2251C67.9064 79.0965 67.6339 77.9203 67.4618 76.8213C67.1779 76.0006 67.0189 75.2267 66.6929 74.3392C70.7099 72.8463 74.7554 71.0959 78.7955 69.6028C81.9675 68.4307 85.2397 67.3471 88.3092 65.9546Z" fill="#AA78E2"/><path d="M78.8646 59.2986C78.9284 59.4071 78.9729 59.4572 79.0056 59.5739L79.0249 59.6571L78.849 59.7711C78.1375 60.1989 77.4875 60.7145 76.7804 61.1533C72.4722 63.8277 68.2085 66.6795 63.7065 69.014C63.2365 69.2577 62.0769 70.12 61.6607 70.1926C61.0345 70.0273 60.487 69.8763 59.8451 69.7714C58.974 69.5209 57.8438 69.2852 56.9444 69.0623C55.1261 68.6083 53.3115 68.1387 51.5011 67.6537C50.3147 67.0687 47.5178 66.7365 46.3506 65.6752C46.3872 65.2316 46.3348 64.5756 46.2018 64.1557C47.621 63.3085 51.0113 63.2292 52.708 63.2242C54.5548 63.084 56.8944 63.1142 58.7854 63.0621C64.2169 62.9124 68.7673 62.7114 74.0478 61.418C75.5487 61.0032 76.537 60.5266 77.9141 59.8573L78.8646 59.2986Z" fill="#D79FF6"/><path d="M46.3505 65.6752C45.6921 65.1418 45.5855 64.7892 46.2017 64.1557C46.3348 64.5756 46.3871 65.2316 46.3505 65.6752Z" fill="#D79FF6"/><path d="M86.4387 33.201L86.3927 33.0744C85.1959 29.7033 85.5394 25.7315 87.0724 22.5177C88.7174 19.07 91.6853 16.4333 95.3032 15.2063C98.6799 14.042 102.381 14.2664 105.593 15.83C108.77 17.3883 111.215 20.123 112.41 23.4541C113.276 25.8895 113.643 30.085 112.606 32.4694C111.673 34.386 110.344 36.212 108.919 37.8027C108.643 38.1115 107.216 39.3963 107.104 39.5856C105.879 40.5567 104.717 41.3513 103.236 41.9224C102.729 42.1183 102.126 42.2479 101.602 42.4264C99.0739 43.0177 95.9331 42.4197 93.6248 41.2924C90.2458 39.6623 87.6585 36.749 86.4387 33.201Z" fill="#2C49CD"/><path d="M69.9206 54.1277C68.9245 53.0947 68.2994 52.4108 67.6967 51.087C66.6146 48.7663 66.5327 46.103 67.4702 43.7201C69.6072 38.1302 76.8308 35.8287 81.6975 39.3852C82.645 40.0776 83.8514 41.2046 84.3263 42.2993C85.5253 43.932 85.8296 46.6971 85.5313 48.6591C85.1514 51.156 83.7839 53.3955 81.7368 54.8736C79.7104 56.3241 77.1921 56.9112 74.7339 56.5059C72.9312 56.2013 71.2577 55.3743 69.9206 54.1277Z" fill="#D79FF6"/></svg></span>
+            <span class="mark mk" style="width:var(--space-10);height:var(--space-10);color:var(--b500)"><svg class="logomark" viewBox="14 9 124 132" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true" focusable="false"><path d="M103.2 14.0357C105.464 13.2883 107.754 12.6344 110.11 12.2263C113.53 11.6338 117.129 11.3931 120.592 11.2957C124.5 11.1858 131.58 11.0298 133.9 14.9116C135.106 16.4878 135.509 18.4655 135.252 20.4105C134.651 24.9699 130.813 28.9536 128.156 32.5901C126.973 34.2135 125.892 35.9095 124.921 37.668C123.185 40.7702 121.52 44.3227 119.927 47.5395C116.96 53.5232 114.038 59.5291 111.162 65.5566C101.523 85.7268 90.5241 106.815 88.8873 129.452C88.6774 132.358 88.5549 136.095 88.8317 138.997C88.5661 138.572 88.1528 137.582 87.9339 137.092C87.3136 135.722 86.7274 134.337 86.1754 132.937C82.2228 123.341 79.9791 113.127 79.5473 102.758C79.4426 100.229 79.4055 97.1188 79.6459 94.5958L79.5821 94.4585C79.3098 94.8251 78.4551 96.8858 78.225 97.4023L75.5858 103.218C72.5093 109.883 69.2982 116.453 66.3292 123.175L62.4541 132.162C61.9023 133.452 61.2791 135.114 60.6663 136.336L60.4331 137.027C60.2651 122.772 56.2457 106.636 51.3924 93.3477C48.7523 86.1193 45.4216 78.4799 42.3146 71.4078C37.7715 61.0546 32.9774 50.8133 27.9365 40.6932C26.6333 38.0952 25.3257 35.4913 23.7783 33.0281C21.6714 29.6747 18.4395 26.6196 17.3306 22.7207C16.5512 21.3717 16.5571 18.7383 16.9419 17.2601C17.406 15.477 18.5831 14.0845 20.167 13.1726C25.1997 10.2752 36.9434 11.4063 42.5305 12.3408C44.9114 12.7631 47.2709 13.2988 49.6007 13.9461L50.7917 14.2004C44.7634 15.3373 33.8595 18.2405 35.2868 26.6232C35.7516 29.3528 37.7014 31.4831 39.7347 33.2495C39.6236 32.3252 39.4448 29.869 39.7636 29.0403C39.8018 27.1708 41.2573 24.4151 42.4213 22.9613C44.4431 20.4667 47.3712 18.8752 50.5641 18.5358C54.4397 18.11 58.2405 19.2576 60.9225 22.1591C62.3811 23.7369 63.6687 26.1987 63.8969 28.3506C64.3779 31.637 63.5273 34.9797 61.5336 37.6363C60.8138 38.584 59.9836 39.4423 59.0604 40.1931C62.0115 41.1553 63.8405 42.4236 66.2097 44.352C65.721 46.3548 65.7569 47.1327 65.98 49.1394C66.0956 49.5828 66.3149 50.5426 66.4788 50.9444C67.4476 53.3209 68.991 54.9896 71.165 56.3017C71.2051 56.3108 71.8878 56.6519 72.0043 56.7017C75.5413 58.2143 79.2735 57.8051 82.4128 55.651C83.0042 55.7313 83.3381 55.7349 83.9405 55.735L84.0808 55.7557L84.1045 55.9073C84.71 55.8785 85.2219 55.1846 85.9187 54.9248C90.4759 51.4163 95.0792 48.0265 99.4487 44.2738C100.108 43.7082 101.019 43.0427 101.602 42.4265C102.126 42.2479 102.729 42.1183 103.237 41.9225C104.718 41.3514 105.879 40.5567 107.104 39.5857C107.216 39.3964 108.643 38.1115 108.919 37.8027C110.344 36.212 111.673 34.3861 112.606 32.4695L112.703 32.4492C112.977 32.2288 113.176 32.0067 113.411 31.7534C117.138 27.716 118.812 22.2111 114.13 18.1193C111.404 15.7377 108.226 15.0444 104.757 14.303C104.209 14.2566 103.737 14.1475 103.2 14.0357Z" fill="#AD21A0"/><path d="M103.2 14.0357C105.464 13.2883 107.754 12.6344 110.11 12.2263C113.53 11.6338 117.129 11.3931 120.592 11.2957C124.5 11.1858 131.58 11.0298 133.9 14.9116C135.106 16.4878 135.509 18.4655 135.252 20.4105C134.651 24.9699 130.813 28.9536 128.156 32.5901C126.973 34.2135 125.892 35.9095 124.921 37.668C123.185 40.7702 121.52 44.3227 119.927 47.5395C116.96 53.5232 114.038 59.5291 111.162 65.5566C101.523 85.7268 90.5242 106.815 88.8873 129.452C88.6774 132.358 88.5549 136.095 88.8317 138.997C88.5661 138.572 88.1528 137.582 87.9339 137.092C87.3136 135.722 86.7274 134.337 86.1754 132.937C82.2229 123.341 79.9791 113.127 79.5473 102.758C79.4426 100.229 79.4056 97.1188 79.646 94.5958C79.5762 94.7435 80.1082 90.3713 80.1394 90.1554C81.1143 83.8041 82.8417 77.5916 85.2858 71.6489C86.0879 69.6759 86.8833 67.5322 88.3093 65.9546C85.2398 67.3472 81.9676 68.4307 78.7956 69.6029C74.7555 71.0959 70.71 72.8463 66.693 74.3392C62.6928 75.8426 58.7027 77.4699 54.658 78.8561C52.5209 79.5885 49.5453 80.7461 47.331 80.9338C47.1951 80.8901 47.1795 80.8619 47.0562 80.781C46.8956 80.358 47.1104 80.0679 47.4149 79.7666C48.4944 78.6973 49.8759 77.7779 51.1131 76.9186C51.4836 76.5832 52.3936 76.0029 52.8294 75.7142C54.176 74.8245 55.5369 73.9572 56.9116 73.112C57.3363 72.8486 58.3585 72.2435 58.7094 71.9445C59.7217 71.3844 60.6523 70.7381 61.6607 70.1927C62.077 70.12 63.2366 69.2577 63.7065 69.014C68.2086 66.6795 72.4722 63.8277 76.7804 61.1533C77.4875 60.7145 78.1375 60.1989 78.8491 59.7711L79.0249 59.6572L79.0056 59.5739C78.973 59.4573 78.9285 59.4071 78.8646 59.2986C79.7491 58.7426 83.3128 56.371 83.9406 55.735L84.0808 55.7557L84.1045 55.9073C84.71 55.8785 85.222 55.1846 85.9187 54.9249C90.4759 51.4163 95.0792 48.0265 99.4487 44.2738C100.108 43.7082 101.02 43.0427 101.602 42.4265C102.126 42.2479 102.729 42.1183 103.237 41.9225C104.718 41.3514 105.879 40.5567 107.105 39.5857C107.216 39.3964 108.643 38.1115 108.919 37.8027C110.344 36.212 111.673 34.3861 112.606 32.4695L112.704 32.4492C112.977 32.2288 113.176 32.0067 113.411 31.7534C117.138 27.716 118.812 22.2111 114.13 18.1193C111.404 15.7377 108.226 15.0444 104.757 14.303C104.209 14.2566 103.737 14.1475 103.2 14.0357Z" fill="#2C49CD"/><path d="M88.3092 65.9546C86.8832 67.5321 86.0878 69.6758 85.2857 71.6488C82.8416 77.5916 81.1142 83.8041 80.1393 90.1553C80.1081 90.3713 79.5761 94.7435 79.6459 94.5958L79.582 94.4585C79.3097 94.8251 78.455 96.8858 78.225 97.4023L75.5857 103.218C72.5092 109.883 69.2982 116.453 66.3291 123.175L62.454 132.162C61.9022 133.452 61.279 135.114 60.6662 136.336C60.6259 135.528 62.3238 129.812 62.6719 128.555C63.6411 125.122 64.5659 121.676 65.4459 118.219C66.6286 113.6 67.5353 108.914 68.1612 104.187C68.9635 99.2151 69.0072 92.8468 68.8721 87.8112C68.759 85.9457 68.6343 83.3848 68.2987 81.5757C68.2667 81.1913 68.1617 80.6221 68.0988 80.2251C67.9064 79.0965 67.6339 77.9203 67.4618 76.8213C67.1779 76.0006 67.0189 75.2267 66.6929 74.3392C70.7099 72.8463 74.7554 71.0959 78.7955 69.6028C81.9675 68.4307 85.2397 67.3471 88.3092 65.9546Z" fill="#AA78E2"/><path d="M78.8646 59.2986C78.9284 59.4071 78.9729 59.4572 79.0056 59.5739L79.0249 59.6571L78.849 59.7711C78.1375 60.1989 77.4875 60.7145 76.7804 61.1533C72.4722 63.8277 68.2085 66.6795 63.7065 69.014C63.2365 69.2577 62.0769 70.12 61.6607 70.1926C61.0345 70.0273 60.487 69.8763 59.8451 69.7714C58.974 69.5209 57.8438 69.2852 56.9444 69.0623C55.1261 68.6083 53.3115 68.1387 51.5011 67.6537C50.3147 67.0687 47.5178 66.7365 46.3506 65.6752C46.3872 65.2316 46.3348 64.5756 46.2018 64.1557C47.621 63.3085 51.0113 63.2292 52.708 63.2242C54.5548 63.084 56.8944 63.1142 58.7854 63.0621C64.2169 62.9124 68.7673 62.7114 74.0478 61.418C75.5487 61.0032 76.537 60.5266 77.9141 59.8573L78.8646 59.2986Z" fill="#D79FF6"/><path d="M46.3505 65.6752C45.6921 65.1418 45.5855 64.7892 46.2017 64.1557C46.3348 64.5756 46.3871 65.2316 46.3505 65.6752Z" fill="#D79FF6"/><path d="M86.4387 33.201L86.3927 33.0744C85.1959 29.7033 85.5394 25.7315 87.0724 22.5177C88.7174 19.07 91.6853 16.4333 95.3032 15.2063C98.6799 14.042 102.381 14.2664 105.593 15.83C108.77 17.3883 111.215 20.123 112.41 23.4541C113.276 25.8895 113.643 30.085 112.606 32.4694C111.673 34.386 110.344 36.212 108.919 37.8027C108.643 38.1115 107.216 39.3963 107.104 39.5856C105.879 40.5567 104.717 41.3513 103.236 41.9224C102.729 42.1183 102.126 42.2479 101.602 42.4264C99.0739 43.0177 95.9331 42.4197 93.6248 41.2924C90.2458 39.6623 87.6585 36.749 86.4387 33.201Z" fill="#2C49CD"/><path d="M69.9206 54.1277C68.9245 53.0947 68.2994 52.4108 67.6967 51.087C66.6146 48.7663 66.5327 46.103 67.4702 43.7201C69.6072 38.1302 76.8308 35.8287 81.6975 39.3852C82.645 40.0776 83.8514 41.2046 84.3263 42.2993C85.5253 43.932 85.8296 46.6971 85.5313 48.6591C85.1514 51.156 83.7839 53.3955 81.7368 54.8736C79.7104 56.3241 77.1921 56.9112 74.7339 56.5059C72.9312 56.2013 71.2577 55.3743 69.9206 54.1277Z" fill="#D79FF6"/></svg></span>
             <h1>Sign in</h1>
             <p class="s">SUGIRA Muryango &middot; FXB Rwanda</p>
             <label for="li-email">Email</label>
@@ -1960,10 +1960,10 @@
       <!-- ============ FOLLOW-UPS ============ -->
       <section class="screen" id="s-followups">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">Open<span class="chip" style="margin-left:8px">24</span></button>
-          <button class="tab" type="button" data-tab="late">Overdue<span class="chip bad" style="margin-left:8px">6</span></button>
+          <button class="tab on" type="button" data-tab="all">Open<span class="chip" style="margin-left:var(--space-2)">24</span></button>
+          <button class="tab" type="button" data-tab="late">Overdue<span class="chip bad" style="margin-left:var(--space-2)">6</span></button>
           <button class="tab" type="button" data-tab="done">Closed</button>
-          <button class="tab" type="button" data-panel="rules">Rules<span class="chip" style="margin-left:8px">9</span></button>
+          <button class="tab" type="button" data-panel="rules">Rules<span class="chip" style="margin-left:var(--space-2)">9</span></button>
         </div>
         <div class="pad" data-panelid="list">
           <div class="filters">
@@ -2014,8 +2014,8 @@
       <!-- ============ COMMUNITY ============ -->
       <section class="screen" id="s-community">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">All posts<span class="chip" style="margin-left:8px">412</span></button>
-          <button class="tab" type="button" data-tab="flag">Reported<span class="chip bad" style="margin-left:8px">3</span></button>
+          <button class="tab on" type="button" data-tab="all">All posts<span class="chip" style="margin-left:var(--space-2)">412</span></button>
+          <button class="tab" type="button" data-tab="flag">Reported<span class="chip bad" style="margin-left:var(--space-2)">3</span></button>
           <button class="tab" type="button" data-tab="hidden">Hidden</button>
         </div>
         <div class="pad">
@@ -2047,8 +2047,8 @@
       <!-- ============ IZU PERFORMANCE ============ -->
       <section class="screen" id="s-izu">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:8px">344</span></button>
-          <button class="tab" type="button" data-tab="low">Needs support<span class="chip warn" style="margin-left:8px">2</span></button>
+          <button class="tab on" type="button" data-tab="all">All<span class="chip" style="margin-left:var(--space-2)">344</span></button>
+          <button class="tab" type="button" data-tab="low">Needs support<span class="chip warn" style="margin-left:var(--space-2)">2</span></button>
           <button class="tab" type="button" data-tab="high">Strong</button>
         </div>
         <div class="pad">
@@ -2116,11 +2116,11 @@
           <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search guidance, videos and documents" aria-label="Search field support"></div>
         </div>
         <div class="tabs">
-          <button class="tab on" type="button" data-panel="videos">Videos <span class="chip" style="margin-left:8px">24</span></button>
-          <button class="tab" type="button" data-panel="docs">Documents <span class="chip" style="margin-left:8px">41</span></button>
+          <button class="tab on" type="button" data-panel="videos">Videos <span class="chip" style="margin-left:var(--space-2)">24</span></button>
+          <button class="tab" type="button" data-panel="docs">Documents <span class="chip" style="margin-left:var(--space-2)">41</span></button>
           <button class="tab" type="button" data-panel="faqs">FAQs</button>
-          <button class="tab" type="button" data-panel="feedback">Feedback <span class="chip warn" style="margin-left:8px">7</span></button>
-          <button class="tab" type="button" data-panel="guidance">Instructions<span class="chip" style="margin-left:8px">8</span></button>
+          <button class="tab" type="button" data-panel="feedback">Feedback <span class="chip warn" style="margin-left:var(--space-2)">7</span></button>
+          <button class="tab" type="button" data-panel="guidance">Instructions<span class="chip" style="margin-left:var(--space-2)">8</span></button>
         </div>
 
         <div class="pad" data-panelid="videos">
@@ -2139,7 +2139,7 @@
         </div>
 
         <div class="pad" data-panelid="docs" hidden>
-          <div class="filters"><button class="fl" type="button"><span class="k">Type</span><b>All</b><span class="cv">&#9660;</span></button><span class="side" style="margin-left:auto;display:flex;gap:8px"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg>New type</button><button class="btn sm" type="button" data-modal="publish"><svg aria-hidden="true"><use href="#i-plus"/></svg>Upload a document</button></span></div><div class="card flush plainsurface">
+          <div class="filters"><button class="fl" type="button"><span class="k">Type</span><b>All</b><span class="cv">&#9660;</span></button><span class="side" style="margin-left:auto;display:flex;gap:var(--space-2)"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg>New type</button><button class="btn sm" type="button" data-modal="publish"><svg aria-hidden="true"><use href="#i-plus"/></svg>Upload a document</button></span></div><div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Document</th><th>Type</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th><th class="ract">Actions</th></tr></thead>
               <tbody>

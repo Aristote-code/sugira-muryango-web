@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that every font size and radius lands on the ClickUp token scale.
+"""Check that every measurement lands on a ClickUp token.
 
 Usage:  audit-tokens.py [style.css]
 
@@ -20,6 +20,16 @@ OK_FS = {"11px", "12px", "13px", "13.3333px", "14px", "16px", "18px", "20px", "2
 OK_R = {"2px", "4px", "5px", "6px", "7px", "8px", "10px", "12px", "16px", "20px", "666px", "50%", "100%", "0", "0px"}
 RAIL = re.compile(r"^\Z")  # nothing is exempt by selector any more
 
+# Padding, margin and gap answer to two scales ClickUp publishes and tokens.css
+# imports: --space-1..12 on the 4px grid, and --dimension-N for the measured
+# half-steps its own components use (Button's 7, IconButton's 3, TaskRow's 10).
+# Every one of the app's 556 spacing values landed on one of them already; they
+# were written as numbers, which is how a scale stops being a scale. The check
+# is on the spelling, because the numbers were never the problem.
+SPACING = re.compile(r"^(?:margin|padding|gap|row-gap|column-gap|inset)"
+                     r"(?:-(?:top|right|bottom|left|block|inline)(?:-(?:start|end))?)?$")
+PX = re.compile(r"(?<![\w.-])-?\d*\.?\d+px\b")
+
 
 def as_px(v):
     m = re.fullmatch(r"([\d.]+)rem", v)
@@ -33,6 +43,17 @@ def main():
         sel = " ".join(sel.split())
         if sel.startswith("@") or ":root" in sel or RAIL.search(sel):
             continue
+        for decl in body.split(";"):
+            if ":" not in decl:
+                continue
+            prop, _, raw = decl.partition(":")
+            if not SPACING.fullmatch(prop.strip().lower()):
+                continue
+            outside = re.sub(r"var\([^()]*\)", "", raw)
+            for lit in PX.findall(outside):
+                bad["spacing " + prop.strip() + ":" + raw.strip()[:40]].append(sel)
+                break
+
         for prop, ok in (("font-size", OK_FS), ("border-radius", OK_R)):
             for m in re.finditer(prop + r":\s*([^;}]+)", body):
                 raw = m.group(1).strip()
@@ -49,9 +70,10 @@ def main():
                         bad[prop + " " + raw].append(sel)
                         break
     if not bad:
-        print("  tokens: every font-size and radius is on the ClickUp scale")
+        print("  tokens: every size, radius and measurement is a token")
         return 0
-    print("  tokens: %d declarations have drifted off the scale" % sum(len(v) for v in bad.values()))
+    print("  tokens: %d declarations are written as numbers, not tokens"
+          % sum(len(v) for v in bad.values()))
     for k, sels in sorted(bad.items(), key=lambda kv: -len(kv[1])):
         print("    %-26s x%-3d %s" % (k, len(sels), "; ".join(sels[:4])[:120]))
     return 1
