@@ -2004,6 +2004,8 @@ tr.f-out,tr.p-out,tr.t-out,tr.q-out,.tr.f-out{display:none}
    what the <use> points at, so it holds wherever they are used next. */
 svg:has(> use[href="#i-hierarchy"]),
 svg:has(> use[href="#i-relation"]),
+svg:has(> use[href="#i-openEntity"]),
+svg:has(> use[href="#i-link"]),
 svg:has(> use[href="#i-caret"]){fill:currentColor;stroke:none}
 
 /* How many hold it, beside the record's type. It is a fact about the record,
@@ -2170,6 +2172,19 @@ svg:has(> use[href="#i-caret"]){fill:currentColor;stroke:none}
   border-radius:var(--command-bar-radius);background:var(--color-bg-primary-default);
   font:inherit;font-size:var(--command-bar-font-size);
   color:var(--color-content-on-primary)}
+/* What the highlighted row can do, where the kind label sits on the others —
+   which is where ClickUp puts it too, in place of its time column. The one
+   size the spec gives for this cluster is the key cap's 26×28 r7, so the
+   buttons beside it are that size rather than a second one. */
+.kb-acts{display:inline-flex;flex:none;align-items:center;gap:var(--space-1)}
+.kb-act{display:inline-flex;align-items:center;justify-content:center;
+  width:var(--command-bar-width-2);height:var(--space-7);
+  padding:0;border:0;background:none;
+  border-radius:var(--command-bar-radius);
+  color:var(--color-content-secondary);cursor:pointer}
+.kb-act:hover{background:var(--x-clickup-color-background-on-main);
+  color:var(--color-content-primary)}
+.kb-act svg{width:var(--space-4);height:var(--space-4)}
 
 .kb-none{padding:var(--space-8) var(--space-4);text-align:center;
   font-size:var(--command-bar-font-size-4);color:var(--color-content-secondary)}
@@ -2214,6 +2229,11 @@ svg:has(> use[href="#i-caret"]){fill:currentColor;stroke:none}
    anywhere that calls it. */
 @media (max-width: 640px) {
   .kb-kind{display:none}
+  /* The kind label gives the row its width back on a phone, and the two
+     actions would spend it again — 86px of a 342px row, which cut "Family
+     Enrollment and Composition Form" short. On a phone the row is the name,
+     and the ↵ stays because it is what the row does. */
+  .kb-act{display:none}
   .kb-pill .kb-pill-t,.kb-pill kbd{display:none}
   .kb-pill{padding:0 var(--dimension-6)}
   .kb-f .kb-keys{display:none}

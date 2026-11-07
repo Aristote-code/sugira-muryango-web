@@ -291,6 +291,81 @@
     return out.map(function (r) { return r.i; });
   }
 
+  /* ---- the address of a result ---- */
+
+  /* The app has written the screen into the hash since long before this bar
+     existed, so a page has had a real address all along and the link is just
+     that address. A record has not: it lives in a row of a table on a screen,
+     and there is nothing in the URL that can name a row.
+
+     What the bar can do is hand back the search that found it. It already
+     knows how to find anything by name and put the reader in front of it —
+     that is the whole of run() — so the link carries the kind and the name,
+     and opening it replays exactly that. It is a working address for all 349
+     things rather than a working one for the 34 that are pages.
+
+     The hash is not the place to put it. app.js owns the hash, and on load it
+     rewrites anything it does not recognise to the screen it fell back to —
+     which it has already done by the time this file runs, because both scripts
+     are deferred and it is first. So a record's address goes in the query,
+     which nothing else writes, and survives the rewrite. */
+  function address(it) {
+    var go = it.el && it.el.getAttribute && it.el.getAttribute('data-go');
+    if (it.kind === 'page' && go) return '#' + go;
+    return '?find=' + encodeURIComponent(it.kind + ':' + it.title);
+  }
+
+  /* Built from the path, never from the address bar as it stands: this page's
+     own query may already carry the find= that opened it, and a link copied
+     from here would then point at whatever somebody else was looking at. */
+  function link(it) {
+    return location.origin + location.pathname + address(it);
+  }
+
+  function openTab(it) {
+    window.open(link(it), '_blank', 'noopener');
+  }
+
+  function copyLink(it) {
+    var url = link(it);
+    function said() {
+      if (window.SugiraToast) window.SugiraToast.say('Link copied');
+    }
+    /* The clipboard API needs a secure context and a permission that can be
+       refused, and this app is also opened from a file on a tablet. */
+    function byHand() {
+      var t = document.createElement('textarea');
+      t.value = url;
+      t.setAttribute('readonly', '');
+      t.style.cssText = 'position:fixed;top:-100px;opacity:0';
+      document.body.appendChild(t);
+      t.select();
+      try { document.execCommand('copy'); said(); } catch (e) { /* nothing to offer */ }
+      document.body.removeChild(t);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(said, byHand);
+    } else byHand();
+  }
+
+  /* Someone has opened one of those links. */
+  var came = false;
+  function fromLink() {
+    if (came) return;
+    came = true;
+    var m = /[?&]find=([^&]*)/.exec(location.search || '');
+    if (!m) return;
+    var want = decodeURIComponent(m[1].replace(/\+/g, ' '));
+    var at = want.indexOf(':');
+    var kind = at < 0 ? '' : want.slice(0, at);
+    var title = at < 0 ? want : want.slice(at + 1);
+    named = null;
+    var hit = index().filter(function (i) {
+      return i.title === title && (!kind || i.kind === kind);
+    })[0];
+    if (hit) run(hit);
+  }
+
   /* ---- drawing ---- */
 
   var bar = null, input = null, list = null, foot = null;
@@ -313,6 +388,39 @@
     s.setAttribute('data-hue', k.hue);
     s.innerHTML = '<svg aria-hidden="true"><use href="#i-' + k.icon + '"/></svg>';
     return s;
+  }
+
+  /* The right-hand end of a row: what it is, or — on the one row the keys are
+     pointed at — what can be done with it.
+
+     ClickUp's cluster is Ask AI, open in a new window, copy link and ↵. There
+     is no assistant here to ask, so that one is not drawn rather than drawn
+     dead; the other three are real. */
+  function tail(it, on) {
+    if (!on) return el('span', 'kb-kind', (KIND[it.kind] || {}).label || it.kind);
+    var wrap = el('span', 'kb-acts');
+    wrap.appendChild(act('openEntity', 'Open in a new tab', MAC ? '⌘↵' : 'Ctrl+↵',
+      function () { openTab(it); }));
+    wrap.appendChild(act('link', 'Copy link', MAC ? '⌘C' : 'Ctrl+C',
+      function () { copyLink(it); }));
+    wrap.appendChild(el('kbd', 'kb-k', '↵'));
+    return wrap;
+  }
+
+  function act(icon, label, key, onPick) {
+    var b = el('button', 'kb-act');
+    b.type = 'button';
+    b.title = label + '  ' + key;
+    /* The row is a listbox option, and an option with buttons inside it has
+       stopped being one: a reader would be told about controls that the
+       arrow keys driving this list cannot reach. So these stay out of the
+       tab order and out of the tree, and each one's work is also on a key
+       that does it from the field — which is where the focus is anyway. */
+    b.tabIndex = -1;
+    b.setAttribute('aria-hidden', 'true');
+    b.innerHTML = '<svg aria-hidden="true"><use href="#i-' + icon + '"/></svg>';
+    b.onclick = function (e) { e.stopPropagation(); onPick(); };
+    return b;
   }
 
   function drawChips() {
@@ -396,12 +504,7 @@
       }
       r.appendChild(mid);
 
-      if (i === active) {
-        var key = el('kbd', 'kb-k', '↵');
-        r.appendChild(key);
-      } else {
-        r.appendChild(el('span', 'kb-kind', (KIND[it.kind] || {}).label || it.kind));
-      }
+      r.appendChild(tail(it, i === active));
 
       r.onmouseenter = function () {
         if (active === i) return;
@@ -429,10 +532,9 @@
       if (r.classList.contains('on') === on) return;
       r.classList.toggle('on', on);
       r.setAttribute('aria-selected', String(on));
-      var tail = r.lastChild;
-      if (tail) r.removeChild(tail);
-      if (on) r.appendChild(el('kbd', 'kb-k', '↵'));
-      else r.appendChild(el('span', 'kb-kind', (KIND[rows[i].kind] || {}).label || rows[i].kind));
+      var end = r.lastChild;
+      if (end) r.removeChild(end);
+      r.appendChild(tail(rows[i], on));
     });
     var cur = list.querySelector('.kb-r.on');
     if (cur) cur.scrollIntoView({ block: 'nearest' });
@@ -542,7 +644,17 @@
         paint();
       } else if (e.key === 'Enter') {
         e.preventDefault();
-        if (rows[active]) run(rows[active]);
+        if (!rows[active]) return;
+        /* Cmd-Enter is a new tab everywhere a link is, so it is one here. */
+        if (e.metaKey || e.ctrlKey) openTab(rows[active]); else run(rows[active]);
+      } else if (String(e.key).toLowerCase() === 'c'
+                 && (e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey) {
+        /* Copy means copy the link — unless there is something selected in
+           the field, where copy already means something and has to win. */
+        if (input.selectionStart !== input.selectionEnd) return;
+        if (!rows[active]) return;
+        e.preventDefault();
+        copyLink(rows[active]);
       } else if (e.key === 'Escape') {
         e.preventDefault();
         e.stopPropagation();
@@ -628,6 +740,11 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pill);
   else pill();
+
+  /* The index reads the tables, so a link cannot be resolved until they have
+     been built. */
+  document.addEventListener('tables:ready', fromLink);
+  if (window.SugiraTablesReady) fromLink();
 
   window.SugiraFind = { open: open, close: close, index: index };
 })();
