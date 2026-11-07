@@ -563,8 +563,24 @@
             '<li><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Session 6</button><span class="w"><b>986</b> responses already recorded</span></li>' +
             '<li><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Session 9</button><span class="w"><b>412</b> responses already recorded</span></li>' +
             '</ul>' +
-            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Question 5 opens safeguarding cases. 2 are still open against the current wording.</span></p>',
-      done: 'Published \u2014 live in Session 6 and Session 9'
+            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Question 5 opens safeguarding cases. 2 are still open against the current wording.</span></p>' +
+            /* Where it reaches is half the answer. In a system built for
+               villages with no signal, when it reaches them is the other
+               half, and the old wording — "live" — skipped it. */
+            '<p class="m-note"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-reach>A tablet gets version 5 when it next syncs.</span></p>',
+      init: function (body) {
+        var card = document.getElementById('fb-fleet');
+        var slot = body.querySelector('[data-reach]');
+        if (!card || !slot) return;
+        var behind = card.querySelector('[data-fleet="behind"]');
+        var n = behind ? behind.textContent.replace(/\D/g, '') : '';
+        var v = Number(card.getAttribute('data-version') || 4);
+        if (!n) return;
+        slot.textContent = 'A tablet gets version ' + (v + 1) + ' when it next syncs. '
+          + n + ' are still on version ' + (v - 1) + ' \u2014 the oldest has not synced for '
+          + (card.getAttribute('data-oldest') || '6 days') + '.';
+      },
+      done: 'Published to Session 6 and Session 9 \u2014 tablets take version 5 as they sync'
     },
     rsave: {
       title: 'Save Sugira Muryango Sector lead (SLA)',

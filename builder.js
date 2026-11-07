@@ -826,8 +826,7 @@
       var note = el('span', 'fb-unsent');
       note.textContent = ' · ' + edits + (edits === 1 ? ' change' : ' changes')
         + ' not sent';
-      note.setAttribute('data-tip', 'The tablet still has version 4. What you are '
-        + 'editing reaches the field when you publish.');
+      note.setAttribute('data-tip', tabletsHave());
       v.appendChild(note);
     });
     var btn = document.querySelector('#s-form [data-modal="fpublish"]');
@@ -837,6 +836,26 @@
       var n2 = btn.querySelector('.n');
       if (n2) n2.textContent = String(edits);
     }
+  }
+
+  /* The version the field is on is not a constant to be typed into a
+     tooltip: it is what the tablets card says, and that card is the one
+     place the fleet is described. A second copy of "version 4" is a second
+     thing to forget. */
+  function tabletsHave() {
+    var card = document.getElementById('fb-fleet');
+    var v = card ? Number(card.getAttribute('data-version') || 0) : 0;
+    var num = function (k) {
+      var e = card && card.querySelector('[data-fleet="' + k + '"]');
+      return e ? e.textContent.replace(/\D/g, '') : '';
+    };
+    var cur = num('cur'), behind = num('behind');
+    if (!v) return 'What you are editing reaches a tablet when you publish and '
+      + 'that tablet syncs.';
+    return (cur ? cur + ' tablets are on version ' + v : 'Tablets are on version ' + v)
+      + (behind ? ' and ' + behind + ' on version ' + (v - 1) : '')
+      + '. What you are editing reaches each of them when you publish and it '
+      + 'next syncs.';
   }
   function changed() { edits++; echo(); }
 

@@ -844,7 +844,7 @@
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th data-person><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</th><th>Place</th><th class="num">Households</th><th class="num">Last sync</th><th>Held on the device</th><th>Status</th><th class="gap"></th></tr></thead>
+              <thead><tr><th data-person><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</th><th>Place</th><th class="num">Households</th><th class="num"><abbr data-tip="The last time the device reached the server, in either direction: sending finished records up, and pulling the current version of a form down.">Last sync</abbr></th><th>Held on the device</th><th>Status</th><th class="gap"></th></tr></thead>
               <tbody>
                 <tr><td class="nm">E. Mutesi</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">31</td><td class="num">6 days</td><td>14 records<span class="chip bad" data-tip="1 of them a risk-of-harm case, raised 6 days ago and not yet seen here" style="margin-left:8px"><i></i>1 case</span></td><td><span class="chip bad"><i></i>Not reporting</span></td><td class="gap"></td></tr>
                 <tr><td class="nm">M. Dusabe</td><td class="mut">Jarama &middot; Ngoma</td><td class="num">28</td><td class="num">2 days</td><td class="mut">5 records</td><td><span class="chip warn"><i></i>Delayed</span></td><td class="gap"></td></tr>
@@ -853,6 +853,7 @@
                 <tr><td class="nm">P. Hakizimana</td><td class="mut">Sake &middot; Ngoma</td><td class="num">24</td><td class="num">40 minutes</td><td><span class="rd">Nothing waiting</span></td><td><span class="chip ok"><i></i>Reporting</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
+            <div class="tfoot"><span>The 5 longest silent of <b>193</b> home visitors &middot; the 19 silent over 48 hours hold <b>214</b> records between them</span></div>
           </div>
         </div>
       </section>
@@ -1218,7 +1219,7 @@
 
         <div class="pad" data-panelid="build">
           <div class="fb" id="fbuild"></div>
-          <div class="cols c2" style="margin-top:var(--space-4)">
+          <div class="cols c3" style="margin-top:var(--space-4)">
 
               <div class="card">
                 <div class="card-h"><h3>This form</h3></div>
@@ -1234,6 +1235,12 @@
                 
                 <div class="lr" style="margin-top:8px"><span class="t">Cases opened from this form</span><span class="c">14</span></div>
                 <div class="lr"><span class="t">Still open</span><span class="c">2</span></div>
+              </div>
+              <div class="card" id="fb-fleet" data-version="4" data-oldest="6 days">
+                <div class="card-h"><h3>On the tablets<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A form reaches a tablet when that tablet next syncs, not when you publish. Until then it keeps asking the version it last pulled."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="rel" type="button" data-go="field"><svg aria-hidden="true"><use href="#i-fieldstatus"/></svg>Field status</button></span></div>
+                <div class="lr" style="margin-top:8px"><span class="t">Running version 4</span><span class="c" data-fleet="cur">186</span></div>
+                <div class="lr"><span class="t">Still on version 3</span><span class="s">oldest synced 6 days ago</span><span class="c"><span class="chip warn" data-fleet="behind"><i></i>7</span></span></div>
+                <div class="lr"><span class="t" data-tip="They pulled version 4 and have sent nothing since. Being quiet about data is not the same as being behind on the form.">Silent but up to date</span><span class="c" data-fleet="silent">12</span></div>
               </div>
             </div>
         </div>
