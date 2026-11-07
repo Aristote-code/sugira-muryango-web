@@ -231,14 +231,47 @@
 
   /* ---- searching ---- */
 
+  /* What the bar shows before anybody types.
+
+     ClickUp shows recent items. This app records nothing about what anyone
+     opened, so there is no recency to read, and stamping a "3w" against a row
+     to fill ClickUp's time column would be a number somebody could act on.
+
+     What it does know is two things. Where the reader is standing — ClickUp's
+     own empty state leads with the current List — and what kinds of thing it
+     holds. So the screen you are on comes first, then one of each kind in
+     turn. That puts a household, a person, a form and a project in the first
+     screenful, which is what the app is, instead of thirty-four pages, which
+     is only how you get around it. */
+  function sample(all) {
+    var sc = document.querySelector('.screen.live');
+    var lead = [], pool = [];
+    all.forEach(function (i) {
+      if (i.kind !== 'page' && sc && i.el && sc.contains(i.el) && lead.length < 5) lead.push(i);
+      else pool.push(i);
+    });
+    var by = {}, kinds = [];
+    pool.forEach(function (i) {
+      if (!by[i.kind]) { by[i.kind] = []; kinds.push(i.kind); }
+      by[i.kind].push(i);
+    });
+    /* Round-robin, so the variety lands in the rows somebody can see rather
+       than three hundred rows down. */
+    var out = lead, n = 0, more = true;
+    while (more) {
+      more = false;
+      for (var k = 0; k < kinds.length; k++) {
+        var q = by[kinds[k]];
+        if (n < q.length) { out.push(q[n]); more = true; }
+      }
+      n++;
+    }
+    return out;
+  }
+
   function hits(all, q) {
     q = q.trim().toLowerCase();
-    if (!q) {
-      /* With nothing typed, the bar offers the way in rather than a sample of
-         2 210 households: the pages, which is what it is for before you know
-         what you are looking for. */
-      return all.filter(function (i) { return i.kind === 'page'; });
-    }
+    if (!q) return sample(all);
     var out = [];
     all.forEach(function (i) {
       var t = i.title.toLowerCase();
@@ -308,9 +341,8 @@
       };
       wrap.appendChild(b);
     });
-    /* One chip is not a filter. With nothing typed every result is a page, and
-       a row offering to narrow 34 pages to the same 34 pages is a control that
-       cannot do anything. */
+    /* One chip is not a filter: a control offering to narrow a list of one
+       kind to the same list cannot do anything. */
     wrap.hidden = kinds.length < 2;
   }
 
@@ -338,7 +370,7 @@
     }
     foot.classList.remove('bare');
 
-    var label = el('div', 'kb-sect', q.trim() ? 'Results' : 'Go to');
+    var label = el('div', 'kb-sect', 'Results');
     list.appendChild(label);
 
     /* 2 210 households is 2 210 rows of DOM nobody will scroll to the end of.

@@ -2050,31 +2050,34 @@ svg:has(> use[href="#i-caret"]){fill:currentColor;stroke:none}
    the surface and 4.82 on the highlighted row. Sizes, spacing and layout are
    the measurement; the greys are the app's.
 --------------------------------------------------------------------------- */
-.kb{position:fixed;inset:0;z-index:var(--z-modal)}
+/* The bar is centred by the layer it sits in rather than hung off a fixed
+   top, so a bar holding three results sits where a bar holding thirty does
+   instead of floating up under the topbar. */
+.kb{position:fixed;inset:0;z-index:var(--z-modal);
+  display:flex;align-items:center;justify-content:center;
+  padding:var(--space-8) var(--space-4)
+          calc(var(--space-8) + var(--layout-command-bar-below))}
 .kb[hidden]{display:none}
 .kb-scrim{position:absolute;inset:0;background:var(--modal-overlay-bg);
   animation:kb-fade 120ms ease-out}
 @keyframes kb-fade{from{opacity:0}to{opacity:1}}
-.kb-win{position:absolute;top:var(--layout-command-bar-top);left:50%;
-  transform:translateX(-50%);
-  width:var(--command-bar-width);max-width:calc(100vw - var(--layout-viewport-gutter));
-  /* 540 is ClickUp's height because its bar is an operating-system window,
-     which cannot be any other size. This one is a dialog over a page, and a
-     dialog that keeps 540px for one result leaves 350 of them blank. So 540
-     is the ceiling rather than the height, and the bar is as tall as what it
-     found — which is also how it says, before you read anything, that it
-     found one thing and not fifty. */
+.kb-win{position:relative;
+  width:var(--layout-command-bar-width);max-width:100%;
+  /* The height is a ceiling, not a height: ClickUp's 540 is fixed because its
+     bar is an operating-system window, and a dialog that keeps its full
+     height for one result leaves the rest blank. So the bar is as tall as
+     what it found — which is also how it says, before you read anything,
+     that it found one thing and not fifty. */
   height:auto;
-  max-height:min(var(--command-bar-height),
-    calc(100vh - var(--layout-command-bar-top) - var(--space-8)));
+  max-height:min(var(--layout-command-bar-height), 100%);
   display:flex;flex-direction:column;overflow:hidden;
   border-radius:var(--menu-surface-radius);background:var(--menu-surface-bg);
   box-shadow:var(--x-clickup-elevation-border-5);
   font-size:var(--command-bar-font-size-2);line-height:var(--command-bar-line-height);
   color:var(--color-content-primary);
   animation:kb-rise 140ms cubic-bezier(.2,.8,.3,1)}
-@keyframes kb-rise{from{opacity:0;transform:translateX(-50%) translateY(-6px)}
-  to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes kb-rise{from{opacity:0;transform:translateY(-6px)}
+  to{opacity:1;transform:translateY(0)}}
 
 /* header 40 high, padding 8 8 2; the input 28 high, 16/20 500 */
 .kb-h{display:flex;flex:none;align-items:center;gap:var(--space-2);height:var(--space-10);

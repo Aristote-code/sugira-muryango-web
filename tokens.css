@@ -179,7 +179,19 @@
   --layout-panel-create-modal-width: 640px;
   --layout-panel-task-field-width: 275px;
   --layout-dialog-max-height: 90vh;
-  --layout-command-bar-top: 12vh;
+  /* ClickUp's own bar is 800x540 because the desktop app draws it as an
+     operating-system window. Ours is bigger by one step on both axes, asked
+     for after the client saw it at 800: everything inside stays at ClickUp's
+     measured size, so this is a larger surface holding more rows, not larger
+     type. */
+  --layout-command-bar-width: var(--dimension-880);
+  --layout-command-bar-height: var(--dimension-640);
+  /* It is also not centred. Measured off the client's screenshot at 1075
+     high, ClickUp leaves 176 above and 359 below: a third of the free space
+     above, two thirds below. Padding the bottom of the centring box by this
+     much more than the top reproduces that ratio at any viewport height, and
+     holds it when the bar is short — which a fixed top does not. */
+  --layout-command-bar-below: 17vh;
   --layout-viewport-gutter: 32px;
   --z-base: 0;
   --z-sticky: 20;
