@@ -52,7 +52,7 @@
   var KIND = {
     page:      { label: 'Page',         icon: 'hierarchy',   hue: 'grey' },
     household: { label: 'Household',    icon: 'households',  hue: 'azure-blue' },
-    person:    { label: 'Person',       icon: 'admin',       hue: 'teal' },
+    person:    { label: 'Person',       icon: 'person',       hue: 'teal' },
     /* "Case", not "Risk of harm", which is what this said until the column
        clipped it to "Risk of ha…". The safeguarding table's own header is
        Case, and reading the app's word off the table rather than inventing
@@ -60,19 +60,19 @@
        what kind of case it is. */
     'case':    { label: 'Case',         icon: 'safeguarding', hue: 'red' },
     visit:     { label: 'Visit',        icon: 'visits',      hue: 'cyan' },
-    project:   { label: 'Project',      icon: 'building',    hue: 'azure-blue' },
+    project:   { label: 'Project',      icon: 'project' ,    hue: 'azure-blue' },
     module:    { label: 'Module',       icon: 'programme',   hue: 'violet' },
     form:      { label: 'Form',         icon: 'edit',        hue: 'bright-purple' },
     report:    { label: 'Report',       icon: 'reports',     hue: 'orange' },
     followup:  { label: 'Follow-up',    icon: 'clock',       hue: 'yellow' },
     guidance:  { label: 'Guidance',     icon: 'support',     hue: 'mint' },
-    role:      { label: 'Role',         icon: 'admin',       hue: 'brown' },
+    role:      { label: 'Role',         icon: 'role',       hue: 'brown' },
     permission: { label: 'Permission',  icon: 'settings',    hue: 'brown' },
     action:    { label: 'Action',       icon: 'check',       hue: 'green' },
     cohort:    { label: 'Cohort',       icon: 'households',  hue: 'teal' },
     post:      { label: 'Post',         icon: 'message',     hue: 'pink' },
     activity:  { label: 'Activity',     icon: 'monitor',     hue: 'grey' },
-    command:   { label: 'Command',      icon: 'sparkle',     hue: 'purple' }
+    command:   { label: 'Command',      icon: 'command',     hue: 'purple' }
   };
 
   /* What a row is, is not a property of the screen it sits on — the project

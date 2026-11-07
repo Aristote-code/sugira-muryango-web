@@ -551,11 +551,11 @@
             '<div><label for="f-sd">Duration</label><input id="f-sd" type="text" value="42 minutes"></div>' +
             '<p class="m-lead">Five projects run this session. Saving changes it in all of them \u2014 open one to check before you do.</p>' +
             '<ul class="blast">' +
-            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button><span class="w"><b>2 210</b> households</span></li>' +
-            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>FCG participation</button><span class="w"><b>410</b> households</span></li>' +
-            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Risk of Harm management</button><span class="w"><b>188</b> households</span></li>' +
-            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>IZU Telephone Supervision</button><span class="w">supervision only</span></li>' +
-            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Sector Telephone Supervision</button><span class="w">supervision only</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button><span class="w"><b>2 210</b> households</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>FCG participation</button><span class="w"><b>410</b> households</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Risk of Harm management</button><span class="w"><b>188</b> households</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>IZU Telephone Supervision</button><span class="w">supervision only</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Sector Telephone Supervision</button><span class="w">supervision only</span></li>' +
             '</ul>' +
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Three of these are not yours to change. Ask the project owner first.</span></p>',
       done: 'Saved \u2014 The Importance of Good Health changed in all 5 projects'
@@ -593,8 +593,8 @@
       body: '<p class="m-lead">A role is not held in one place. Saving it changes what every holder can reach, in every project it covers.</p>' +
             '<ul class="blast">' +
             '<li><button class="rel" type="button" data-go="people"><svg aria-hidden="true"><use href="#i-admin"/></svg>17 people</button><span class="w">hold this role today</span></li>' +
-            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>Household Module Tracking</button><span class="w">sector level</span></li>' +
-            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-building"/></svg>FCG participation</button><span class="w">sector level</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button><span class="w">sector level</span></li>' +
+            '<li><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>FCG participation</button><span class="w">sector level</span></li>' +
             '</ul>' +
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>This role can open risk-of-harm detail. Narrowing it hides open cases from the people working them.</span></p>',
       done: 'Role saved \u2014 17 people are affected'
@@ -1404,7 +1404,7 @@
     tr.innerHTML = '<td class="mut">Today ' + new Date().toTimeString().slice(0, 5)
       + '</td><td>A. Gahimana</td><td class="nm">' + what
       + '</td><td><button class="rel" type="button" data-go="project">'
-      + '<svg aria-hidden="true"><use href="#i-building"/></svg>' + touched
+      + '<svg aria-hidden="true"><use href="#i-project"/></svg>' + touched
       + '</button></td><td><span class="chip warn"><i></i>' + reach
       + '</span></td><td class="gap"></td>';
     body.insertBefore(tr, body.firstChild);

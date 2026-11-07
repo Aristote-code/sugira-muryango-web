@@ -113,9 +113,8 @@
 
   var ICON = {
     Province: 'i-hierarchy', District: 'i-location', Sector: 'i-location',
-    Cell: 'i-building', Village: 'i-households'
+    Cell: 'i-location', Village: 'i-households'
   };
-  var FILLED = { 'i-hierarchy': 1 };
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -201,7 +200,7 @@
     if (kids) caret.innerHTML = '<svg aria-hidden="true"><use href="#i-caret"/></svg>';
     r.appendChild(caret);
 
-    var ico = el('span', 'plr-i' + (FILLED[ICON[node.level]] ? ' fill' : ''));
+    var ico = el('span', 'plr-i');
     ico.innerHTML = '<svg aria-hidden="true"><use href="#' + ICON[node.level] + '"/></svg>';
     r.appendChild(ico);
 
