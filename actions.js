@@ -274,42 +274,27 @@
   if (chip) {
     chip.setAttribute('aria-haspopup', 'menu');
     chip.setAttribute('aria-expanded', 'false');
+    /* This had its own panel, which meant it had its own idea of Escape — it
+       did not have one — and its own idea of focus, which was to leave it on
+       the chip. A menu of three rows is still a menu. */
     chip.addEventListener('click', function (e) {
       e.stopPropagation();
-      var open = $('.usermenu');
-      if (open) { open.remove(); chip.setAttribute('aria-expanded', 'false'); return; }
-      var m = document.createElement('div');
-      m.className = 'usermenu';
-      m.setAttribute('role', 'menu');
       /* A row that goes somewhere carries data-go and lets the router handle
          it, rather than this menu keeping its own idea of how to navigate. */
-      [
+      window.SugiraMenu.show(chip, [
         ['Your profile', 'profile', null],
         ['Switch role…', null, function () { say('A person holds one role per place'); }],
         ['Sign out', 'login', null]
-      ].forEach(function (row) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'usermenu-i';
-        b.setAttribute('role', 'menuitem');
-        b.textContent = row[0];
-        if (row[1]) b.setAttribute('data-go', row[1]);
-        b.addEventListener('click', function () {
-          m.remove();
-          chip.setAttribute('aria-expanded', 'false');
-          if (row[2]) row[2]();
-        });
-        m.appendChild(b);
-      });
-      document.body.appendChild(m);
-      var r = chip.getBoundingClientRect();
-      m.style.top = (r.bottom + 6) + 'px';
-      m.style.right = Math.max(12, window.innerWidth - r.right) + 'px';
-      chip.setAttribute('aria-expanded', 'true');
-    });
-    document.addEventListener('click', function () {
-      var m = $('.usermenu');
-      if (m) { m.remove(); chip.setAttribute('aria-expanded', 'false'); }
+      ].map(function (row) {
+        return {
+          label: row[0],
+          go: row[1],
+          onPick: function () {
+            window.SugiraMenu.close();
+            if (row[2]) row[2]();
+          }
+        };
+      }));
     });
   }
 

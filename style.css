@@ -332,27 +332,10 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   font-size:14px;line-height:1;cursor:pointer}
 .recmore:hover{background:var(--x-clickup-color-background-on-main);
   color:var(--color-content-primary)}
-.recmenu{position:absolute;z-index:var(--menu-surface-z,var(--z-pop));min-width:var(--dimension-240);
-  padding:var(--space-2) 0;border-radius:var(--menu-surface-radius);background:var(--menu-surface-bg);
-  box-shadow:var(--menu-surface-shadow)}
-.recmenu-pair{display:flex;margin:0 var(--space-2) var(--space-2);padding-bottom:var(--space-2);
-  border-bottom:1px solid var(--color-border-default)}
-.recmenu-pair > *{border-radius:0}
-.recmenu-pair{--r:var(--x-clickup-radii-3)}
-.recmenu-pb{flex:1;height:var(--dimension-33);padding:0 var(--space-3);border:1px solid var(--color-border-default);
-  background:var(--color-bg-surface);font:inherit;font-size:13px;line-height:16px;
-  color:var(--color-content-primary);cursor:pointer}
-.recmenu-pb:first-child{border-start-start-radius:var(--x-clickup-radii-3);
-  border-end-start-radius:var(--x-clickup-radii-3);border-right-width:0}
-.recmenu-pb:last-child{border-start-end-radius:var(--x-clickup-radii-3);
-  border-end-end-radius:var(--x-clickup-radii-3)}
-.recmenu-pb:hover{background:var(--x-clickup-color-background-on-main)}
-.recmenu-i{display:flex;align-items:center;width:calc(100% - var(--space-4));margin:var(--dimension-2) var(--space-2) 0;
-  min-height:var(--menu-item-height);padding:var(--dimension-6) var(--space-2);border:0;background:none;
-  border-radius:var(--menu-radius);font:inherit;font-size:var(--menu-font-size-2);
-  line-height:var(--menu-line-height-2);
-  color:var(--color-content-primary);text-align:left;cursor:pointer}
-.recmenu-i:hover,.recmenu-i:focus-visible{background:var(--menu-item-bg-highlighted);outline:none}
+/* The record menu's own surface and rows used to live here, declaring the same
+   tokens as .cmenu in the same order, because it was written out again rather
+   than used. The one thing that really was its own is the button pair, which
+   the menu now takes as a row. */
 /* ---------------- editing in place ---------------- */
 /* A property value is the picker's trigger, so it has to look like something
    you can press before you press it: the system's cell hover, nothing more
@@ -366,21 +349,10 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
   border:1px solid var(--x-clickup-color-border-primary-focus);
   border-radius:var(--radius-sm);outline:none;
   box-shadow:0 0 0 3px var(--x-clickup-color-effect-primary)}
-/* The menu is the system's: 28 rows, inset 8, r7, on the overlay elevation. */
-.pgmenu{position:absolute;z-index:var(--menu-surface-z,var(--z-pop));min-width:var(--dimension-200);
-  max-height:320px;overflow:auto;padding:var(--space-2) 0;border-radius:var(--menu-surface-radius);
-  background:var(--menu-surface-bg);box-shadow:var(--menu-surface-shadow)}
-.pgmenu-i{display:flex;align-items:center;gap:var(--space-2);width:calc(100% - var(--space-4));margin:var(--dimension-2) var(--space-2) 0;
-  min-height:var(--menu-item-height);padding:var(--dimension-6) var(--space-2);border:0;background:none;
-  border-radius:var(--menu-radius);font:inherit;font-size:var(--menu-font-size-2);
-  line-height:var(--menu-line-height-2);
-  color:var(--color-content-primary);text-align:left;cursor:pointer}
-.pgmenu-i:first-child{margin-top:0}
-.pgmenu-i:hover,.pgmenu-i:focus-visible{background:var(--menu-item-bg-highlighted);outline:none}
-.pgmenu-i.on{font-weight:500}
-.pgmenu-i.on::after{content:"";margin-left:auto;width:var(--dimension-14);height:var(--dimension-14);flex:none;
-  background:currentColor;-webkit-mask:var(--i-check) center/14px no-repeat;
-  mask:var(--i-check) center/14px no-repeat}
+/* The picker that opens on a cell is the menu the whole app uses. This file
+   used to carry a second copy of it under another name — the same 28 rows,
+   the same inset 8, the same r7 — which is how two menus end up slightly
+   apart without anybody deciding they should be. */
 /* A title and a description edit where they sit. */
 .rec h1[data-inplace],.rec-desc[data-inplace]{border-radius:var(--radius-sm);
   margin-inline:calc(var(--dimension-6) * -1);padding-inline:var(--dimension-6);cursor:text}
@@ -1808,14 +1780,10 @@ tr.shut .nm{color:var(--color-content-secondary);font-weight:500}
 tr.f-out,tr.p-out,tr.t-out,tr.q-out,.tr.f-out{display:none}
 .pg button[hidden]{display:none}
 .pg button:disabled{opacity:.4;cursor:default}
-.usermenu{position:fixed;z-index:var(--z-pop);min-width:12rem;background:var(--color-bg-surface);
-  border:1px solid var(--color-border-default);border-radius:var(--radius-lg);padding:var(--space-1);
-  box-shadow:var(--elevation-overlay);
-  display:flex;flex-direction:column;gap:var(--dimension-1)}
-.usermenu-i{border:0;background:transparent;text-align:left;border-radius:var(--radius-md);
-  padding:var(--space-2) var(--space-2);font-family:var(--ui);font-size:13px;color:var(--color-content-secondary);cursor:pointer}
-.usermenu-i:hover{background:var(--color-primitive-grey-100);color:var(--color-content-primary)}
-.usermenu-i:focus-visible{outline:2px solid var(--x-clickup-color-border-primary-hover);outline-offset:-2px}
+/* The account menu was the one that had drifted furthest: a hairline border
+   none of the other menus draw, --radius-lg against their --menu-surface-
+   radius, 13px grey rows against 14px primary. Three rows of its own CSS,
+   under the user's own name in the corner. It is the menu now. */
 .more-extra{margin-right:var(--space-1)}
 /* which build is on screen, so "I'm not seeing the changes" is checkable */
 .buildstamp{margin:var(--space-4) var(--space-2) 0;padding-top:var(--space-3);border-top:1px solid rgba(255,255,255,.12);
@@ -1862,6 +1830,20 @@ tr.f-out,tr.p-out,tr.t-out,tr.q-out,.tr.f-out{display:none}
 .cmenu-h{font-size:12px;line-height:16px;font-weight:500;color:var(--color-content-secondary);
   padding:var(--dimension-6) var(--space-5) var(--dimension-6) var(--space-4)}
 .cmenu-sep{height:var(--dimension-1);background:var(--color-border-default);margin:var(--space-2) 0}
+/* MenuButtonGroup as measured: two bordered buttons sharing an edge, 33 tall,
+   outer corners r6, 13px. A row that is a pair of controls rather than a
+   choice — Copy link | Copy ID at the top of the record menu. */
+.cmenu-pair{display:flex;margin:0 var(--space-2) var(--space-2);padding-bottom:var(--space-2);
+  border-bottom:1px solid var(--color-border-default)}
+.cmenu-pb{flex:1;height:var(--dimension-33);padding:0 var(--space-3);border:1px solid var(--color-border-default);
+  background:var(--color-bg-surface);font:inherit;font-size:13px;line-height:16px;
+  color:var(--color-content-primary);cursor:pointer}
+.cmenu-pb:first-child{border-start-start-radius:var(--x-clickup-radii-3);
+  border-end-start-radius:var(--x-clickup-radii-3);border-right-width:0}
+.cmenu-pb:last-child{border-start-end-radius:var(--x-clickup-radii-3);
+  border-end-end-radius:var(--x-clickup-radii-3)}
+.cmenu-pb:hover{background:var(--x-clickup-color-background-on-main)}
+.cmenu-pb:focus-visible{outline:2px solid var(--x-clickup-color-border-primary-hover);outline-offset:-2px}
 .cmenu-s{margin:0 var(--space-2) var(--dimension-6);padding:var(--dimension-6) var(--space-2);border:1px solid var(--color-border-default);border-radius:7px;
   font-family:var(--ui);font-size:14px;color:var(--color-content-primary);background:var(--color-bg-surface);
   width:calc(100% - var(--space-4))}

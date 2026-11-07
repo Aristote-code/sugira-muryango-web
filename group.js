@@ -120,38 +120,29 @@
       chip.classList.toggle('on', on);
     }
 
-    var menu = null;
-    function shutMenu() { if (menu) { menu.remove(); menu = null; } }
-
+    /* This used to build its own panel, and so did the cell editor, the record
+       menu and the account chip — four of them, each closing only its own, so
+       two could stand open at once. It is the menu the rest of the app uses,
+       which also means arrow keys and a chip that says whether it is open. */
+    chip.setAttribute('aria-expanded', 'false');
     chip.onclick = function (e) {
       e.stopPropagation();
-      if (menu) { shutMenu(); return; }
-      menu = document.createElement('div');
-      menu.className = 'pgmenu';
-      menu.setAttribute('role', 'menu');
-      [{ i: null, name: 'None' }].concat(cols).forEach(function (c) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'pgmenu-i' + (c.i === state.col ? ' on' : '');
-        b.setAttribute('role', 'menuitemradio');
-        b.setAttribute('aria-checked', String(c.i === state.col));
-        b.textContent = c.name;
-        b.onclick = function (ev) {
-          ev.stopPropagation();
-          shutMenu();
-          state.col = c.i;
-          state.shut = {};
-          paintChip();
-          draw();
-        };
-        menu.appendChild(b);
-      });
-      document.body.appendChild(menu);
-      var r = chip.getBoundingClientRect();
-      var w = menu.offsetWidth, pad = 12;
-      menu.style.left = Math.max(pad, Math.min(r.left,
-        document.documentElement.clientWidth - w - pad)) + window.scrollX + 'px';
-      menu.style.top = (r.bottom + 4) + window.scrollY + 'px';
+      window.SugiraMenu.show(chip, [{ i: null, name: 'None' }].concat(cols)
+        .map(function (c) {
+          return {
+            label: c.name,
+            radio: true,
+            selected: c.i === state.col,
+            onPick: function () {
+              window.SugiraMenu.close();
+              chip.focus();
+              state.col = c.i;
+              state.shut = {};
+              paintChip();
+              draw();
+            }
+          };
+        }));
     };
 
     function clear() {
@@ -221,8 +212,10 @@
       drawing = false;
     }
 
-    document.addEventListener('click', shutMenu);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shutMenu(); });
+    /* The two document listeners that used to live here were registered once
+       per table, so a screen with four tables carried four copies of the same
+       Escape handler, each shutting only its own menu. The menu brings its
+       own, once. */
     table.addEventListener('table:applied', function () { if (state.col !== null) draw(); });
   }
 

@@ -546,6 +546,9 @@
     cond.classList.toggle('is-broken', broken);
     cond.onclick = function (e) {
       e.stopPropagation();
+      /* Pressing the control that opened it shuts it, the way the filter and
+         the column picker do. Without this it reopened onto itself. */
+      if (window.SugiraPop.isOpen(cond)) { window.SugiraPop.close(); return; }
       window.SugiraPop.open(cond, function (pop) { whenPanel(pop, q, i); },
         { cls: 'wide', label: 'When question ' + (i + 1) + ' is asked' });
     };

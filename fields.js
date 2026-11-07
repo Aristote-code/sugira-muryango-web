@@ -139,13 +139,7 @@
 
   /* ---- the record menu: Copy link | Copy ID, then the rest ---- */
 
-  var open = null;
-
-  function shut() {
-    if (!open) return;
-    open.remove();
-    open = null;
-  }
+  function shut() { if (window.SugiraMenu) window.SugiraMenu.close(); }
 
   function copy(text, said) {
     function done() {
@@ -163,44 +157,34 @@
     }
   }
 
-  function menuFor(btn, id) {
-    shut();
-    var m = el('div', 'recmenu');
-    m.setAttribute('role', 'menu');
-
-    /* MenuButtonGroup as measured: two bordered buttons sharing an edge,
-       33 tall, outer corners r6, 13px. */
-    var grp = el('div', 'recmenu-pair');
+  /* The pair at the top is a MenuButtonGroup as measured: two bordered buttons
+     sharing an edge, 33 tall, outer corners r6, 13px. It is the only reason
+     this menu was ever written by hand; the menu takes an element for a row
+     now, so the rest of it — placement, Escape, arrow keys, closing when
+     something else opens — stops being this file's problem. */
+  function pair(id) {
+    var grp = el('div', 'cmenu-pair');
     [['Copy link', location.origin + location.pathname + '#' + id,
       'Link copied'],
      ['Copy ID', id, 'ID copied: ' + id]].forEach(function (p) {
-      var b = el('button', 'recmenu-pb', p[0]);
+      var b = el('button', 'cmenu-pb', p[0]);
       b.type = 'button';
       b.onclick = function (e) { e.stopPropagation(); shut(); copy(p[1], p[2]); };
       grp.appendChild(b);
     });
-    m.appendChild(grp);
+    return grp;
+  }
 
-    [['Open as a full page', function () {
-      var x = document.querySelector('[data-dw="expand"]');
-      if (x) x.click();
-    }], ['Print this record', function () { window.print(); }]].forEach(function (p) {
-      var b = el('button', 'recmenu-i', p[0]);
-      b.type = 'button';
-      b.setAttribute('role', 'menuitem');
-      b.onclick = function (e) { e.stopPropagation(); shut(); p[1](); };
-      m.appendChild(b);
-    });
-
-    document.body.appendChild(m);
-    open = m;
-    var r = btn.getBoundingClientRect();
-    var w = m.offsetWidth, pad = 12;
-    m.style.left = Math.max(pad, Math.min(r.right - w,
-      document.documentElement.clientWidth - w - pad)) + window.scrollX + 'px';
-    m.style.top = (r.bottom + 4) + window.scrollY + 'px';
-    var f = m.querySelector('button');
-    if (f) f.focus();
+  function menuFor(btn, id) {
+    window.SugiraMenu.show(btn, [
+      { node: pair(id) },
+      { label: 'Open as a full page', onPick: function () {
+        shut();
+        var x = document.querySelector('[data-dw="expand"]');
+        if (x) x.click();
+      } },
+      { label: 'Print this record', onPick: function () { shut(); window.print(); } }
+    ], { width: 240 });
   }
 
   function addMenu(sc) {
@@ -216,9 +200,9 @@
     b.innerHTML = '<svg aria-hidden="true"><use href="#i-expand"/></svg>';
     b.textContent = '';
     b.innerHTML = '⋯';
+    b.setAttribute('aria-expanded', 'false');
     b.onclick = function (e) {
       e.stopPropagation();
-      if (open) { shut(); return; }
       menuFor(b, id);
     };
     acts.insertBefore(b, acts.firstChild);
@@ -230,12 +214,8 @@
     document.dispatchEvent(new Event('fields:ready'));
   }
 
-  document.addEventListener('click', function (e) {
-    if (open && !open.contains(e.target)) shut();
-  });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
-  window.addEventListener('scroll', shut, true);
-  window.addEventListener('resize', shut);
+  /* Closing on a click away, on Escape, on a scroll and on a resize was
+     written here, and three more times elsewhere. It is the menu's job. */
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
   else mount();

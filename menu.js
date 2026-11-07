@@ -41,6 +41,18 @@
     }
   }
 
+  /* Escape is a way back, so it has to put you back. Closing while the focus
+     is inside the panel and leaving it there drops the focus onto the body:
+     the next Tab starts from the top of the document, which for anyone on a
+     keyboard is worse than the menu still being open. */
+  function dismiss() {
+    var a = root;
+    var inside = a && document.activeElement
+      && open.some(function (p) { return p.panel.contains(document.activeElement); });
+    closeAll();
+    if (inside && a.focus) a.focus();
+  }
+
   /* Close every panel deeper than `depth`, so moving back up the trail folds
      the flyouts away rather than leaving them stacked. */
   function closeBelow(depth) {
@@ -74,7 +86,18 @@
   }
 
   /* items: [{label, hint, selected, disabled, submenu: fn -> items, onPick,
-              heading: true, separator: true, back: true}] */
+              heading: true, separator: true, back: true, radio: true,
+              node: <element>}]
+
+     `radio` is for a menu that holds a value rather than a list of errands:
+     grouping by a column, a cell whose answer is one of a set. The row is the
+     control, so it says so — menuitemradio, and aria-checked on every row, not
+     a tick on one of them.
+
+     `node` is an escape hatch for the one row that is not a row: the record
+     menu's pair of copy buttons, which the design system draws as a
+     MenuButtonGroup. Without it that menu had to be written again from
+     scratch, which is how the app ended up with four of these. */
   function panelFor(items, depth, width) {
     var panel = el('div', 'cmenu');
     panel.setAttribute('role', depth ? 'menu' : 'menu');
@@ -97,10 +120,22 @@
     items.forEach(function (it) {
       if (it.separator) { list.appendChild(el('div', 'cmenu-sep')); return; }
       if (it.heading) { list.appendChild(el('div', 'cmenu-h', it.label)); return; }
+      if (it.node) {
+        list.appendChild(it.node);
+        Array.prototype.forEach.call(it.node.querySelectorAll('button'), function (n) {
+          rows.push(n);
+        });
+        return;
+      }
 
       var b = el('button', 'cmenu-i' + (it.selected ? ' sel' : '') + (it.back ? ' back' : ''));
       b.type = 'button';
-      b.setAttribute('role', 'menuitem');
+      if (it.radio) {
+        b.setAttribute('role', 'menuitemradio');
+        b.setAttribute('aria-checked', String(!!it.selected));
+      } else {
+        b.setAttribute('role', 'menuitem');
+      }
       if (it.disabled) b.disabled = true;
 
       var lab = el('span', 'cmenu-t', it.label);
@@ -130,8 +165,14 @@
         sub.focusFirst();
       }
 
+      /* A row that goes somewhere says so and lets the router read it off the
+         button, the way every other link in the app works. Which means this
+         one click has to reach the router, so it is the only kind that does
+         not stop here. */
+      if (it.go) b.setAttribute('data-go', it.go);
+
       b.addEventListener('click', function (e) {
-        e.stopPropagation();
+        if (!it.go) e.stopPropagation();
         if (it.submenu) { openSub(); return; }
         if (it.onPick) it.onPick();
       });
@@ -148,7 +189,9 @@
       search.addEventListener('input', function () {
         var q = search.value.toLowerCase();
         rows.forEach(function (r) {
-          r.hidden = q && r.querySelector('.cmenu-t').textContent.toLowerCase().indexOf(q) === -1;
+          var t = r.querySelector('.cmenu-t');
+          if (!t) return;
+          r.hidden = q && t.textContent.toLowerCase().indexOf(q) === -1;
         });
       });
     }
@@ -160,7 +203,10 @@
       else if (e.key === 'ArrowUp') { e.preventDefault(); (live[i - 1] || live[live.length - 1]).focus(); }
       else if (e.key === 'ArrowRight' && live[i] && live[i].getAttribute('aria-haspopup')) { e.preventDefault(); live[i].click(); }
       else if (e.key === 'ArrowLeft' && depth > 0) { e.preventDefault(); closeBelow(depth - 1); }
-      else if (e.key === 'Escape') { e.preventDefault(); closeAll(); }
+      /* Escape stops here. A menu opened from inside a filter panel is the
+         layer on top; letting the key carry on down takes the panel away in
+         the same keystroke, and the panel is what somebody was filling in. */
+      else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); dismiss(); }
     });
 
     return {
@@ -177,6 +223,15 @@
     opts = opts || {};
     var already = root === anchor;
     closeAll();
+    /* One layer at a time, and the two kinds of layer have to know about each
+       other or they do not have it. A menu and a filter panel could stand open
+       together because each only ever closed its own kind.
+
+       Unless the menu belongs to the panel. Every field and operator in the
+       filter is a select, and a select is one of these — so closing the panel
+       whenever a menu opens would close it the instant anyone tried to use
+       it. A layer opened from inside another is on top of it, not instead. */
+    if (window.SugiraPop && !window.SugiraPop.holds(anchor)) window.SugiraPop.close();
     if (already) return;
     root = anchor;
     anchor.setAttribute('aria-expanded', 'true');
@@ -190,8 +245,18 @@
     if (open.length && !e.target.closest('.cmenu')) closeAll();
   });
   window.addEventListener('resize', closeAll);
+  /* A fixed panel does not scroll with the control it belongs to, so scrolling
+     leaves it pointing at nothing. Closing is the honest answer — the control
+     is where the reader's attention went. */
+  window.addEventListener('scroll', function (e) {
+    if (!open.length) return;
+    /* A long menu scrolls its own list. That is the menu working, not the page
+       moving out from under it. */
+    if (e.target && e.target.closest && e.target.closest('.cmenu')) return;
+    closeAll();
+  }, true);
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && open.length) closeAll();
+    if (e.key === 'Escape' && open.length) dismiss();
   });
 
   /* ---- native <select> is the thing that reads as unfinished ----
@@ -270,5 +335,10 @@
     });
   }).observe(document.body, { childList: true, subtree: true });
 
-  window.SugiraMenu = { show: show, close: closeAll, enhance: enhanceAll };
+  window.SugiraMenu = {
+    show: show,
+    close: closeAll,
+    enhance: enhanceAll,
+    isOpen: function (anchor) { return anchor ? root === anchor : !!open.length; }
+  };
 })();

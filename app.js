@@ -1300,13 +1300,18 @@
      Escape shuts it, and clicking away shuts it — which is the part that was
      being written again each time it was needed.
 
-     The filter still carries its own copy, inside the closure that owns a
-     table's toolbar. This one is where the rest of them come to. */
+     A list of choices is not this. That is SugiraMenu, which knows about
+     arrow keys, about a submenu, about searching itself once it is longer
+     than nine. This is for a panel — the filter's three columns, the
+     builder's condition — where there is no list to walk. The two close each
+     other, because "one at a time" is not a property either of them can have
+     on its own. */
   var livePop = null, liveAnchor = null;
   window.SugiraPop = {
     open: function (anchor, fill, opts) {
       opts = opts || {};
       window.SugiraPop.close();
+      if (window.SugiraMenu) window.SugiraMenu.close();
       var pop = document.createElement('div');
       pop.className = 'qpop' + (opts.cls ? ' ' + opts.cls : '');
       pop.setAttribute('role', 'dialog');
@@ -1329,7 +1334,13 @@
       livePop = pop;
       liveAnchor = anchor;
       anchor.setAttribute('aria-expanded', 'true');
-      var first = pop.querySelector('button, input, select, .cselect, [tabindex]');
+      /* The first thing in a panel with a header is the ✕ that shuts it, and
+         landing on the way out is not an opening. Take the first control that
+         does the panel's actual work, and the ✕ only if there is none. */
+      var able = pop.querySelectorAll('button, input, select, .cselect, [tabindex]');
+      var first = Array.prototype.filter.call(able, function (n) {
+        return !n.closest('.qpop-h');
+      })[0] || able[0];
       if (first) first.focus();
       return pop;
     },
@@ -1342,7 +1353,10 @@
         liveAnchor = null;
       }
     },
-    isOpen: function () { return !!livePop; }
+    isOpen: function (anchor) { return anchor ? liveAnchor === anchor : !!livePop; },
+    /* Is this control inside the panel that is open? A select in the filter
+       is; the account chip is not. */
+    holds: function (node) { return !!(livePop && node && livePop.contains(node)); }
   };
   document.addEventListener('mousedown', function (e) {
     if (!livePop) return;
@@ -1351,11 +1365,14 @@
     window.SugiraPop.close();
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && livePop) {
-      var a = liveAnchor;
-      window.SugiraPop.close();
-      if (a && a.focus) a.focus();
-    }
+    if (e.key !== 'Escape' || !livePop) return;
+    /* A menu opened from inside the panel is the layer on top, so Escape
+       belongs to it first. Dismissing both at once would take away the panel
+       somebody was halfway through filling in. */
+    if (window.SugiraMenu && window.SugiraMenu.isOpen()) return;
+    var a = liveAnchor;
+    window.SugiraPop.close();
+    if (a && a.focus) a.focus();
   });
 
   /* An access change that nobody recorded is the thing the activity log exists
@@ -1648,39 +1665,21 @@
        for it "on all the lists that we have". They narrow together. */
     if (owned) bar.querySelector('[data-q="export"]').hidden = true;
 
-    /* ---- popovers ---- */
-    function popover(cls) {
-      var p = document.createElement('div');
-      p.className = 'qpop' + (cls ? ' ' + cls : '');
-      p.hidden = true;
-      document.body.appendChild(p);
-      return p;
-    }
-    /* The filter panel carries three controls across, so it is the wide one;
-       the column picker is a list of names and stays narrow. */
-    var fPop = popover('wide'), cPop = popover('narrow');
+    /* ---- popovers ----
+       The filter panel carries three controls across, so it is the wide one;
+       the column picker is a list of names and stays narrow.
 
-    function place(pop, btn) {
-      /* One popover at a time, across every table. A screen can carry four
-         toolbars, and each only ever shut its own pair, so two column pickers
-         could stand open at once over different tables. */
-      Array.prototype.forEach.call(document.querySelectorAll('.qpop'), function (p) {
-        if (p !== pop) p.hidden = true;
-      });
-      Array.prototype.forEach.call(document.querySelectorAll('.tq-btn[aria-expanded="true"]'), function (b) {
-        if (b !== btn) b.setAttribute('aria-expanded', 'false');
-      });
-      var r = btn.getBoundingClientRect();
-      pop.hidden = false;
-      var w = pop.offsetWidth;
-      var left = Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - w - 16);
-      pop.style.left = Math.max(window.scrollX + 8, left) + 'px';
-      pop.style.top = (r.bottom + window.scrollY + 6) + 'px';
-    }
-    function shut() {
-      [fPop, cPop].forEach(function (p) { p.hidden = true; });
-      [filterBtn, colsBtn].forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
-    }
+       Both of these used to be built, placed and closed right here: a third
+       copy of the same forty lines, and the copy that never learned to open
+       upwards when it would fall off the bottom of the window. It also kept
+       its own register of what was open, which is why it had to walk every
+       .qpop on the page to shut the others — a screen carries four toolbars,
+       and each only ever shut its own pair. SugiraPop keeps that register for
+       the whole app now, so what is left here is what is particular to a
+       toolbar. */
+    var fPop = null, cPop = null;
+    function live(p) { return p && p.isConnected; }
+    function shut() { window.SugiraPop.close(); }
 
     /* ---- filters ----
 
@@ -1735,6 +1734,10 @@
     }
 
     function drawFilters() {
+      /* Every control inside the panel redraws the panel. Once the panel is
+         gone there is nothing to redraw, and a closed popover is a real state
+         now rather than a hidden div that was always there. */
+      if (!live(fPop)) return;
       fPop.innerHTML = '';
       var head = document.createElement('div');
       head.className = 'qpop-h';
@@ -1902,6 +1905,7 @@
     }
 
     function drawCols() {
+      if (!live(cPop)) return;
       cPop.innerHTML = '<div class="qcols"></div>';
       var w = cPop.querySelector('.qcols');
       cols.forEach(function (c) {
@@ -2068,20 +2072,22 @@
 
     filterBtn.onclick = function (e) {
       e.stopPropagation();
-      var open = fPop.hidden;
-      shut();
-      if (open) { drawFilters(); place(fPop, filterBtn); filterBtn.setAttribute('aria-expanded', 'true'); }
+      if (window.SugiraPop.isOpen(filterBtn)) { shut(); return; }
+      window.SugiraPop.open(filterBtn, function (pop) {
+        fPop = pop;
+        drawFilters();
+      }, { cls: 'wide', label: 'Filters' });
     };
     colsBtn.onclick = function (e) {
       e.stopPropagation();
-      var open = cPop.hidden;
-      shut();
-      if (open) { drawCols(); place(cPop, colsBtn); colsBtn.setAttribute('aria-expanded', 'true'); }
+      if (window.SugiraPop.isOpen(colsBtn)) { shut(); return; }
+      window.SugiraPop.open(colsBtn, function (pop) {
+        cPop = pop;
+        drawCols();
+      }, { cls: 'narrow', label: 'Columns' });
     };
-    document.addEventListener('click', function (e) {
-      if (!fPop.contains(e.target) && !cPop.contains(e.target) && !bar.contains(e.target)) shut();
-    });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
+    /* The click-away and the Escape that used to be here were registered once
+       per toolbar, and a screen carries four. SugiraPop has one of each. */
 
     apply();
   }

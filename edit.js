@@ -144,48 +144,36 @@
     input.onblur = function () { done(true); };
   }
 
-  /* ---- a menu, where the value is one of a set ---- */
+  /* ---- a menu, where the value is one of a set ----
+     A set of statuses is a list of choices, which is the menu the rest of the
+     app uses. Writing a second one here cost arrow keys, and a search box once
+     a field has more than nine answers. */
 
-  var openMenu = null;
-
-  function shutMenu() {
-    if (!openMenu) return;
-    openMenu.remove();
-    openMenu = null;
+  /* A cell says more than its value: "Session 6" is followed by "4 weeks
+     behind", a cohort by its year, a consent by the date it was given. The
+     menu was comparing each option against all of that, so for four of the
+     nine fields it opened with nothing marked — a list of answers that would
+     not say which one was already the answer. Match on what the cell starts
+     with, longest first, so "Session 12" is not read as "Session 1". */
+  function current(cell, options) {
+    var t = plain(cell);
+    return options.slice().sort(function (a, b) { return b.length - a.length; })
+      .filter(function (o) { return t.indexOf(o) === 0; })[0] || null;
   }
 
   function pick(cell, options) {
-    shutMenu();
-    var was = plain(cell);
-    var m = document.createElement('div');
-    m.className = 'pgmenu';
-    m.setAttribute('role', 'menu');
-    options.forEach(function (o) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'pgmenu-i' + (o === was ? ' on' : '');
-      b.setAttribute('role', 'menuitemradio');
-      b.setAttribute('aria-checked', String(o === was));
-      b.textContent = o;
-      b.onclick = function (e) {
-        e.stopPropagation();
-        shutMenu();
-        commit(cell, o, was);
+    var was = plain(cell), now = current(cell, options);
+    window.SugiraMenu.show(cell, options.map(function (o) {
+      return {
+        label: o,
+        radio: true,
+        selected: o === now,
+        onPick: function () {
+          window.SugiraMenu.close();
+          commit(cell, o, was);
+        }
       };
-      m.appendChild(b);
-    });
-    document.body.appendChild(m);
-    openMenu = m;
-
-    var r = cell.getBoundingClientRect();
-    var w = m.offsetWidth, h = m.offsetHeight, pad = 12;
-    var left = Math.min(r.left, document.documentElement.clientWidth - w - pad);
-    var top = r.bottom + 4;
-    if (top + h > window.innerHeight - pad) top = Math.max(pad, r.top - h - 4);
-    m.style.left = Math.max(pad, left) + window.scrollX + 'px';
-    m.style.top = top + window.scrollY + 'px';
-    var first = m.querySelector('.on') || m.firstChild;
-    if (first) first.focus();
+    }), { width: Math.max(200, cell.offsetWidth) });
   }
 
   /* ---- wiring ---- */
@@ -207,17 +195,15 @@
   }
 
   document.addEventListener('click', function (e) {
-    if (openMenu && !openMenu.contains(e.target)) shutMenu();
     var cell = e.target.closest ? e.target.closest('.pgr .v, .fld .v, td .v[data-ftype]') : null;
     /* a link or chip inside the value keeps its own job */
     if (!cell || cell.classList.contains('editing')) return;
-    if (e.target.closest('.rel, button:not(.pgmenu-i), a')) return;
+    if (e.target.closest('.rel, button:not(.cmenu-i), a')) return;
     e.stopPropagation();
     start(cell);
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') shutMenu();
     if (e.key !== 'Enter' && e.key !== ' ') return;
     var cell = document.activeElement;
     if (!cell || !cell.classList || !cell.classList.contains('v')) return;
@@ -279,6 +265,6 @@
   /* the fields section is built after this file runs, so it says when its
      rows exist and they pick up the same keyboard handling */
   document.addEventListener('fields:ready', mount);
-  window.addEventListener('resize', shutMenu);
-  window.addEventListener('scroll', shutMenu, true);
+  /* Closing on a scroll or a resize belongs to the menu, which does it for
+     every menu rather than for this one. */
 })();
