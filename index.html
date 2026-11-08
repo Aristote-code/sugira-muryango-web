@@ -1750,6 +1750,17 @@
 
 
       <!-- ============ SETTINGS ============ -->
+      <!-- A record with no screen of its own. Filled from the row that was
+           clicked and handed to the drawer, so a permission, a post or an
+           activity entry opens the same way a household does. -->
+      <section class="screen" id="s-record">
+        <div class="rec">
+          <div class="rec-top" id="rec-top"></div>
+          <h1 id="rec-h1"></h1>
+          <div class="pg" id="pg-record"></div>
+        </div>
+        <div id="rec-extra"></div>
+      </section>
       <section class="screen" id="s-settings">
         <div class="tabs">
           <button class="tab on" type="button" data-panel="sprog">Programme</button>
@@ -2128,10 +2139,10 @@
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Video</th><th>For</th><th>Languages</th><th>Visible to</th><th class="num">Opened</th><th class="ract">Actions</th></tr></thead>
               <tbody>
-                <tr><td class="nm">Playing with everyday objects</td><td class="mut">Session 3 &middot; Building Early Communication Skills</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">1 844</td><td class="rowacts"><a data-modal="preview">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm">Feeding a child who refuses</td><td class="mut">Session 5 &middot; The Importance of Good Nutrition</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">1 602</td><td class="rowacts"><a data-modal="preview">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm">Talking with fathers</td><td class="mut">Session 9 &middot; The Important Role Everyone Plays</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">388</td><td class="rowacts"><a data-modal="preview">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm">Recognising signs of harm</td><td class="mut">Safeguarding protocol</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip bad"><i></i>Supervisors and above</span></td><td class="num">214</td><td class="rowacts"><a data-modal="preview">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Playing with everyday objects</td><td class="mut">Session 3 &middot; Building Early Communication Skills</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">1 844</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Feeding a child who refuses</td><td class="mut">Session 5 &middot; The Importance of Good Nutrition</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">1 602</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Talking with fathers</td><td class="mut">Session 9 &middot; The Important Role Everyone Plays</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level, one per village">IZU</abbr> at Village</td><td class="num">388</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Recognising signs of harm</td><td class="mut">Safeguarding protocol</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip bad"><i></i>Supervisors and above</span></td><td class="num">214</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 4 of 24 &middot; all play on the tablet offline once downloaded</span></div>

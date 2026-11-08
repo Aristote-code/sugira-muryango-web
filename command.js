@@ -101,7 +101,9 @@
   };
   /* The profile's table is a grid of what you may do, not a list of records;
      its six rows would be six nouns with nowhere to go. */
-  var NOT_RECORDS = { profile: 1 };
+  /* s-record has no content of its own — the drawer fills it from whichever
+   row was clicked — so indexing it would index whatever was open last. */
+  var NOT_RECORDS = { profile: 1, record: 1 };
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);

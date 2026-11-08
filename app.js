@@ -4,6 +4,9 @@
   var SCREENS = {
     dashboard:    { crumbs: [['Dashboard', null]],                                        nav: 'dashboard' },
     households:   { crumbs: [['Households', null]],                                       nav: 'households' },
+    /* The record drawer has no fixed name: its crumbs are rewritten from
+       whichever row opened it, just before it is handed over. */
+    record:       { crumbs: [['Record', null]],                                          nav: null },
     household:    { crumbs: [['Households', 'households'], ['HH-1007 Mukamana', null]],   nav: 'households' },
     visits:       { crumbs: [['Visits', null]],                                           nav: 'visits' },
     safeguarding: { crumbs: [['Safeguarding', null]],                                     nav: 'safeguarding' },
@@ -155,33 +158,6 @@
             '<div><label for="f-tell">Who is told</label><select id="f-tell" disabled><option>The sector lead, and the home visitor who raised the flag</option></select></div>',
       done: 'Request sent to C. Uwimana — recorded in the audit trail'
     },
-    /* ---- a row, read back as a dialog ---- */
-
-    /* Every table in here already says what its columns mean, in its own
-       <thead>, and every row already holds the answers. So a row does not
-       need a dialog written for it — it needs its own table read back to it.
-       This is the derivation the command bar does, for the same reason: the
-       app's words rather than a second set of mine, and a table that gains a
-       column gains it here too without anybody remembering to.
-
-       It replaces vprev, which was one hard-coded dialog titled "Playing with
-       everyday objects" — every video in the app opened it and read the same
-       four facts about a different one. */
-    row: {
-      title: 'Details', ok: '', icon: null,
-      body: '<div class="prev-kv"></div>',
-      init: function (body, from) { fromRow(body, from); }
-    },
-
-    /* The same, for something you look at rather than read. ClickUp's dialog
-       is 448 x 720; a 16:9 frame inside 520 is a thumbnail, so this one is the
-       next size up and the frame is the first thing in it. */
-    preview: {
-      title: 'Preview', ok: '', wide: true, icon: null,
-      body: '<div class="prev sk"></div><div class="prev-kv"></div>',
-      init: function (body, from) { fromRow(body, from); }
-    },
-
     upd: {
       title: 'Add an update',
       ok: 'Save update',
@@ -926,7 +902,7 @@
   // ---- drawer: a record opens over the list it came from ----
   // Records open in the drawer; the screens that *list* them stay pages.
   var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1,
-                     position: 1, rolecard: 1 };
+                     position: 1, rolecard: 1, record: 1 };
   var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
   var dwStack = [], dwHeld = null, dwReturn = null;
 
@@ -1456,76 +1432,6 @@
     });
   }
 
-  /* Fill a dialog from the row that opened it: the title is the row's name
-     cell, the mark is whatever that cell already draws, and the other columns
-     become the fields — minus the ones holding controls rather than facts,
-     because "Details · Edit · Archive" is not a fact about anything. */
-  function fromRow(body, from) {
-    var tr = from && from.closest ? from.closest('tr') : null;
-    var grid = body.querySelector('.prev-kv');
-    if (!tr || !grid) return;
-    var tbl = tr.closest('table');
-    var heads = [].map.call(tbl ? tbl.querySelectorAll('thead th') : [], saidIn);
-    var cells = [].slice.call(tr.children);
-    var nameAt = 0;
-    for (var i = 0; i < cells.length; i++) {
-      if (cells[i].querySelector('.nm')) { nameAt = i; break; }
-    }
-
-    mTitle.textContent = saidIn(cells[nameAt]) || 'Details';
-    var use = cells[nameAt].querySelector('use[href^="#i-"]');
-    var mark = mTitle.parentNode.querySelector('.cellmark');
-    if (mark) mark.remove();
-    if (use) {
-      var sp = document.createElement('span');
-      sp.className = 'cellmark';
-      sp.innerHTML = '<svg aria-hidden="true"><use href="' + use.getAttribute('href') + '"/></svg>';
-      mTitle.parentNode.insertBefore(sp, mTitle);
-    }
-
-    var pairs = [];
-    cells.forEach(function (td, i) {
-      if (i === nameAt) return;
-      var k = heads[i] || '';
-      if (!k || /^actions?$/i.test(k)) return;
-      var said = saidIn(td);
-      if (td.querySelector('button, a') && !said) return;
-      pairs.push([k, said || '—']);
-    });
-
-    /* The skeleton is the shape of the answer, so it is built from the same
-       columns the answer will use rather than from three grey bars that
-       happen to fit. */
-    function draw(loading) {
-      grid.innerHTML = pairs.map(function (kv) {
-        return '<div><div class="k">' + esc(kv[0]) + '</div><div class="v'
-          + (loading ? ' sk">&nbsp;' : '">' + esc(kv[1])) + '</div></div>';
-      }).join('');
-    }
-    draw(true);
-
-    var frame = body.querySelector('.prev');
-    var isVideo = /video/i.test(heads[nameAt] || '');
-    /* Nothing here is fetched. The wait is the one the real thing will have,
-       and showing the shape of it is the whole point of a skeleton. */
-    setTimeout(function () {
-      if (!grid.isConnected) return;
-      draw(false);
-      if (!frame) return;
-      frame.classList.remove('sk');
-      frame.innerHTML = isVideo
-        ? '<span class="prev-play"><svg aria-hidden="true" viewBox="0 0 24 24">'
-          + '<path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg></span>'
-        : '<span class="prev-doc"><svg aria-hidden="true"><use href="#i-programme"/></svg>'
-          + '<span>' + esc(mTitle.textContent) + '</span></span>';
-      var len = pairs.filter(function (kv) {
-        return /length|size|duration|minutes/i.test(kv[0]);
-      })[0];
-      if (len) frame.insertAdjacentHTML('beforeend',
-        '<span class="prev-t">' + esc(len[1]) + '</span>');
-    }, 380);
-  }
-
   function openModal(key, from) {
     var def = MODALS[key];
     if (!def) return;
@@ -1583,6 +1489,136 @@
     if (msg) say(msg);
   });
 
+  /* A field's mark comes from what the field is, not from what the record is.
+     The first cut handed every row the record's own icon, so a permission
+     opened with four identical cogs down the left. The real records in here
+     never do that: a case has a shield on Status, a pin on Place, a person on
+     Raised by. */
+  var FIELD = [
+    [/status|state/i, 'check'],
+    [/place|where|sector|village|district|cell|location/i, 'location'],
+    [/when|date|posted|updated|raised|due|last|sent|built|archived|runs/i, 'clock'],
+    [/who|owner|by$|^by |raised by|filled in by|granted by|posted by|caregiver|izu/i, 'person'],
+    [/household/i, 'households'],
+    [/form|session|module|instruction/i, 'programme'],
+    [/project|programme/i, 'project'],
+    [/role|position/i, 'role'],
+    [/permission|group|you can|access/i, 'settings'],
+    [/visible|shown|see$/i, 'admin'],
+    [/language|kinyarwanda|english|translat/i, 'message'],
+    [/response|opened|comment|like|count|size|minutes|rows|^#$|number|total/i, 'reports'],
+    [/report/i, 'reports'],
+    [/post|note|means|why|what|descri/i, 'message'],
+    [/visit/i, 'visits'],
+    [/risk|harm|case|safeguard/i, 'safeguarding']
+  ];
+  function fieldIcon(label, fallback) {
+    for (var i = 0; i < FIELD.length; i++) {
+      if (FIELD[i][0].test(label)) return '#i-' + FIELD[i][1];
+    }
+    return fallback;
+  }
+
+  /* ---- a row, opened the way a record opens ----
+
+     The drawer is what this app calls a record: a breadcrumb back to the list,
+     the type and the id, the title, the fields, and the layout toggles. Eleven
+     of the thirty-seven tables had no such screen, so their rows opened
+     nothing — and a small dialog is not the same thing, as this one has been
+     told. So the drawer gets a screen with no content of its own, and the row
+     fills it.
+
+     Everything in it is read off the table: the title from the name cell, the
+     mark and the type from what that cell already draws, the fields from the
+     other columns against their own <thead>. Nothing is written per table. */
+  function recordFromRow(tr) {
+    var top = $('#rec-top'), h1 = $('#rec-h1'), pg = $('#pg-record'), extra = $('#rec-extra');
+    if (!tr || !top) return false;
+    var tbl = tr.closest('table');
+    var heads = [].map.call(tbl ? tbl.querySelectorAll('thead th') : [], saidIn);
+    var cells = [].slice.call(tr.children);
+    var nameAt = 0;
+    for (var i = 0; i < cells.length; i++) {
+      if (cells[i].querySelector('.nm')) { nameAt = i; break; }
+    }
+    var title = saidIn(cells[nameAt]) || 'Record';
+    var kind = (heads[nameAt] || 'Record')
+      .replace(/,? exactly as (it is|they are) stored$/i, '').replace(/\s*\d+$/, '');
+    /* The column header is the more reliable statement of what a row is than
+       whatever its name cell happens to draw: every video in Field support
+       carries the screen's question mark, so the first cut opened a video
+       labelled Video under a question mark. */
+    var use = cells[nameAt].querySelector('use[href^="#i-"]');
+    var icon = MARK[kind.toLowerCase()] ? '#i-' + MARK[kind.toLowerCase()]
+      : (use ? use.getAttribute('href') : '#i-hierarchy');
+
+    var pairs = [];
+    cells.forEach(function (td, i) {
+      if (i === nameAt) return;
+      var k = heads[i] || '';
+      if (!k || /^actions?$/i.test(k)) return;
+      var said = saidIn(td);
+      if (td.querySelector('button, a') && !said) return;
+      pairs.push([k, said || '—', td]);
+    });
+
+    /* An id-looking first value belongs beside the type, the way RH-0044 does
+       on a case, rather than in the field list under its column name. */
+    var idish = pairs.filter(function (kv) { return /^[A-Z]{1,4}-\d+$/.test(kv[1]); })[0];
+
+    top.innerHTML = '<span class="rec-type"><svg aria-hidden="true"><use href="'
+      + icon + '"/></svg> ' + esc(kind) + '</span>'
+      + (idish ? '<span class="rec-id">' + esc(idish[1]) + '</span>' : '');
+    h1.textContent = title;
+
+    function rows(loading) {
+      pg.innerHTML = pairs.map(function (kv) {
+        return '<div class="pgr"><span class="k"><svg aria-hidden="true"><use href="'
+          + fieldIcon(kv[0], icon) + '"/></svg><span>' + esc(kv[0]) + '</span></span>'
+          + '<span class="v' + (loading ? ' sk">&nbsp;' : '">' + esc(kv[1])) + '</span></div>';
+      }).join('');
+    }
+    rows(true);
+
+    /* A video or a document is the thing you came to look at, so the frame
+       goes under the fields at the width the drawer gives it. */
+    var media = /^(video|document)/i.test(heads[nameAt] || '');
+    extra.innerHTML = media ? '<div class="prev sk"></div>' : '';
+    var frame = extra.querySelector('.prev');
+    var isVideo = /^video/i.test(heads[nameAt] || '');
+
+    setTimeout(function () {
+      if (!pg.isConnected) return;
+      rows(false);
+      if (!frame) return;
+      frame.classList.remove('sk');
+      frame.innerHTML = isVideo
+        ? '<span class="prev-play"><svg aria-hidden="true" viewBox="0 0 24 24">'
+          + '<path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg></span>'
+        : '<span class="prev-doc"><svg aria-hidden="true"><use href="#i-programme"/></svg>'
+          + '<span>' + esc(title) + '</span></span>';
+      var len = pairs.filter(function (kv) {
+        return /length|size|duration|minutes/i.test(kv[0]);
+      })[0];
+      if (len) frame.insertAdjacentHTML('beforeend',
+        '<span class="prev-t">' + esc(len[1]) + '</span>');
+    }, 380);
+
+    /* The crumbs are the list it came from and the thing itself. */
+    var sc = tr.closest('.screen');
+    var from = sc ? sc.id.replace(/^s-/, '') : '';
+    var fromName = SCREENS[from] && SCREENS[from].crumbs.length
+      ? SCREENS[from].crumbs[SCREENS[from].crumbs.length - 1][0] : kind;
+    SCREENS.record.crumbs = [[fromName, from || null], [title, null]];
+    return true;
+  }
+
+  function openRecord(tr) {
+    if (!recordFromRow(tr)) return;
+    navFrom = null;
+    openDrawer('record');
+  }
+  window.SugiraRecord = openRecord;
 
   /* ---- every row opens something ----
 
@@ -1619,6 +1655,7 @@
     'posted by': 'person', 'filled in by': 'person', who: 'person',
     permission: 'settings', 'you can': 'settings', role: 'role',
     from: 'message', household: 'households', place: 'location',
+    video: 'monitor', document: 'programme', instruction: 'support',
     report: 'reports', 'follow-up': 'clock', form: 'programme',
     project: 'project', cohort: 'households', 'case': 'safeguarding'
   };
@@ -1663,7 +1700,7 @@
            dialog — the click handler takes the innermost [data-modal], so the
            Edit and Delete beside it still do their own jobs. */
         if (!media && tr.querySelector('[data-go], [data-modal]')) return;
-        tr.setAttribute('data-modal', media ? 'preview' : 'row');
+        tr.setAttribute('data-rec', '1');
         /* A row that opens something is a control, so it answers the keyboard
            and says so to a reader. */
         if (!tr.hasAttribute('tabindex')) tr.tabIndex = 0;
@@ -1672,12 +1709,22 @@
     });
   }
 
+  document.addEventListener('click', function (e) {
+    var tr = e.target.closest ? e.target.closest('tr[data-rec]') : null;
+    if (!tr) return;
+    /* A control inside the row belongs to the control. */
+    /* A control inside the row belongs to the control — except the one that
+       says Preview, which is asking for exactly what the row opens. */
+    var ctl = e.target.closest('[data-modal], [data-go], button, a');
+    if (ctl && !ctl.hasAttribute('data-rec')) return;
+    openRecord(tr);
+  });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    var tr = e.target.closest && e.target.closest('tr[data-modal][role="button"]');
+    var tr = e.target.closest && e.target.closest('tr[data-rec][role="button"]');
     if (!tr || e.target !== tr) return;
     e.preventDefault();
-    openModal(tr.getAttribute('data-modal'), tr);
+    openRecord(tr);
   });
 
   function enhanceRows() { markRows(); openableRows(); }

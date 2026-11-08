@@ -930,6 +930,9 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
    28/35 600, property rows 32 with a 120px label (16px icon + 14/16 tertiary, gap 6)
    and a value padded 2/8 at r6 that tints on hover. Two columns above 1360, one below. */
 .rec{padding:var(--space-5) var(--space-6) 0}
+/* What a generated record shows under its fields — a player, a document —
+   sits inside the same column the fields do, not bled to the panel edge. */
+#rec-extra{padding:var(--space-4) var(--space-6) var(--space-6)}
 .rec-top{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-4)}
 .rec-type{display:inline-flex;align-items:center;gap:var(--space-2);height:var(--space-7);padding:0 var(--dimension-10);border-radius:7px;
   border:1px solid var(--color-border-default);font-size:13px;font-weight:500;color:var(--color-content-secondary);background:var(--color-bg-surface)}
