@@ -1003,6 +1003,62 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .modal .mh button{background:none;border:0;cursor:pointer;color:var(--color-content-secondary);width:var(--size-control-xs);height:var(--size-control-xs);align-items:center;justify-content:center;border-radius:var(--menu-item-radius);display:flex}
 .modal .mh button:hover{background:var(--x-clickup-color-background-on-main-hover);color:var(--color-content-primary)}
 .modal .mh svg{width:var(--space-4);height:var(--space-4)}
+/* A dialog big enough to look at something in. ClickUp's own is 448 x 720
+   (cu3-modal size-small); this is the next size on the same scale, which is
+   what a 16:9 preview needs before it stops being a thumbnail. */
+.modal.wide{width:min(var(--dimension-720),100%)}
+.modal.wide .mb{gap:var(--space-3)}
+
+/* ClickUp's loading state, measured: shimmer blocks in alpha-grey-100 at r4.
+   The block is that colour and the sweep is two steps up the same alpha ramp,
+   because a highlight at the block's own value is no highlight. It stops for
+   anyone who has asked for less motion — the block stays, so the shape of
+   what is coming is still legible. */
+.sk{background:var(--color-primitive-alpha-grey-100);
+  border-radius:var(--x-clickup-radii-2);position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,
+    var(--color-primitive-alpha-grey-300),transparent);
+  animation:sk 1.1s linear infinite}
+@keyframes sk{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@media (prefers-reduced-motion:reduce){.sk::after{animation:none}}
+
+/* What is being previewed, before and after it arrives. 16:9, because that is
+   what every video in here is, and a document page sits inside the same frame
+   rather than giving the dialog a second shape to be. */
+/* A video frame has to read as a surface you are looking at, not as a hole
+   in the dialog. --color-bg-main is white here, so the first cut put a purple
+   play button in the middle of nothing. A player is dark; a document is paper
+   on a tint, so the two take different grounds. */
+.prev{aspect-ratio:16/9;width:100%;border-radius:var(--radius-md);
+  background:var(--color-primitive-grey-200);display:flex;align-items:center;
+  justify-content:center;overflow:hidden;position:relative}
+.prev:has(.prev-play){background:var(--color-primitive-grey-1100)}
+.prev.sk{border-radius:var(--radius-md)}
+.prev-play{display:flex;align-items:center;justify-content:center;
+  width:var(--space-12);height:var(--space-12);border-radius:var(--radius-full);
+  background:var(--color-bg-primary-default);color:var(--color-content-on-primary)}
+.prev:has(.prev-play) .prev-t{background:var(--color-primitive-alpha-grey-700)}
+.prev-play svg{width:var(--space-6);height:var(--space-6)}
+.prev-doc{display:flex;flex-direction:column;align-items:center;
+  gap:var(--space-2);color:var(--color-content-secondary)}
+.prev-doc svg{width:var(--space-10);height:var(--space-10)}
+.prev-t{position:absolute;right:var(--space-2);bottom:var(--space-2);
+  padding:0 var(--dimension-6);border-radius:var(--x-clickup-radii-2);
+  background:var(--color-primitive-alpha-grey-1000);
+  color:var(--color-content-inverse);
+  font-size:12px;line-height:20px;font-variant-numeric:tabular-nums}
+/* The facts under it, read off the row's own table. */
+.prev-kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--space-3) var(--space-4)}
+.prev-kv .k{font-size:12px;line-height:var(--lh-16);font-weight:500;
+  color:var(--color-content-secondary)}
+.prev-kv .v{font-size:14px;line-height:var(--lh-20);color:var(--color-content-primary)}
+.prev-kv .sk{height:var(--space-4);width:70%}
+/* The type mark in the dialog's own header, taking its colour from the one
+   rule the tables and the command bar read. */
+.modal .mh .cellmark{margin-right:0}
+
 .modal .mb{padding:var(--space-3) var(--inset) var(--space-4);display:grid;gap:var(--space-4)}
 .padnote{font-size:13px;line-height:20px;color:var(--color-content-secondary);max-width:78ch}
 .padnote .rel{margin-inline:var(--dimension-2);vertical-align:-4px}

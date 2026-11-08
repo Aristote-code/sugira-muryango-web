@@ -155,16 +155,33 @@
             '<div><label for="f-tell">Who is told</label><select id="f-tell" disabled><option>The sector lead, and the home visitor who raised the flag</option></select></div>',
       done: 'Request sent to C. Uwimana — recorded in the audit trail'
     },
-    vprev: {
-      title: 'Playing with everyday objects',
-      ok: 'Open the full video',
-      body: '<div class="vprev"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg><span>4 min 12 s</span></div>' +
-            '<div class="kv"><div><div class="k">For</div><div class="v" style="font-size:14px">Session 3 \u2014 Building Early Communication Skills</div></div>' +
-            '<div><div class="k">Languages</div><div class="v" style="font-size:14px">EN \u00b7 RW</div></div>' +
-            '<div><div class="k">Visible to</div><div class="v" style="font-size:14px">Everyone</div></div>' +
-            '<div><div class="k">Opened</div><div class="v" style="font-size:14px">1 204 times</div></div></div>',
-      done: 'Opening the full video'
+    /* ---- a row, read back as a dialog ---- */
+
+    /* Every table in here already says what its columns mean, in its own
+       <thead>, and every row already holds the answers. So a row does not
+       need a dialog written for it — it needs its own table read back to it.
+       This is the derivation the command bar does, for the same reason: the
+       app's words rather than a second set of mine, and a table that gains a
+       column gains it here too without anybody remembering to.
+
+       It replaces vprev, which was one hard-coded dialog titled "Playing with
+       everyday objects" — every video in the app opened it and read the same
+       four facts about a different one. */
+    row: {
+      title: 'Details', ok: '', icon: null,
+      body: '<div class="prev-kv"></div>',
+      init: function (body, from) { fromRow(body, from); }
     },
+
+    /* The same, for something you look at rather than read. ClickUp's dialog
+       is 448 x 720; a 16:9 frame inside 520 is a thumbnail, so this one is the
+       next size up and the frame is the first thing in it. */
+    preview: {
+      title: 'Preview', ok: '', wide: true, icon: null,
+      body: '<div class="prev sk"></div><div class="prev-kv"></div>',
+      init: function (body, from) { fromRow(body, from); }
+    },
+
     upd: {
       title: 'Add an update',
       ok: 'Save update',
@@ -1309,6 +1326,7 @@
 
   // ---- modal ----
   var scrim = $('#scrim'), mTitle = $('#mTitle'), mBody = $('#mBody'), mOk = $('#mOk');
+  var modalEl = scrim.querySelector('.modal'), mFoot = scrim.querySelector('.mf');
   var lastFocus = null, pending = null;
 
   /* ---- one popover ----
@@ -1414,6 +1432,100 @@
   /* `from` is whatever was clicked. A dialog opened from inside a record can
      read its own context off it — a report built from a project should not
      ask which project you are in. */
+
+  /* ---- reading a row back ---- */
+
+  /* What a cell says on screen, which is not always what it holds: a row
+     carries alternates that are switched off — a redacted twin of a name, a
+     count standing in for a person — and putting those in a dialog would show
+     somebody what the table is deliberately not showing them. */
+  function saidIn(el) {
+    var out = '';
+    [].forEach.call(el.childNodes, function (n) {
+      if (n.nodeType === 3) { out += n.nodeValue; return; }
+      if (n.nodeType !== 1 || n.hidden) return;
+      if (getComputedStyle(n).display === 'none') return;
+      out += saidIn(n);
+    });
+    return out.replace(/\s+/g, ' ').trim();
+  }
+
+  function esc(t) {
+    return String(t).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  /* Fill a dialog from the row that opened it: the title is the row's name
+     cell, the mark is whatever that cell already draws, and the other columns
+     become the fields — minus the ones holding controls rather than facts,
+     because "Details · Edit · Archive" is not a fact about anything. */
+  function fromRow(body, from) {
+    var tr = from && from.closest ? from.closest('tr') : null;
+    var grid = body.querySelector('.prev-kv');
+    if (!tr || !grid) return;
+    var tbl = tr.closest('table');
+    var heads = [].map.call(tbl ? tbl.querySelectorAll('thead th') : [], saidIn);
+    var cells = [].slice.call(tr.children);
+    var nameAt = 0;
+    for (var i = 0; i < cells.length; i++) {
+      if (cells[i].querySelector('.nm')) { nameAt = i; break; }
+    }
+
+    mTitle.textContent = saidIn(cells[nameAt]) || 'Details';
+    var use = cells[nameAt].querySelector('use[href^="#i-"]');
+    var mark = mTitle.parentNode.querySelector('.cellmark');
+    if (mark) mark.remove();
+    if (use) {
+      var sp = document.createElement('span');
+      sp.className = 'cellmark';
+      sp.innerHTML = '<svg aria-hidden="true"><use href="' + use.getAttribute('href') + '"/></svg>';
+      mTitle.parentNode.insertBefore(sp, mTitle);
+    }
+
+    var pairs = [];
+    cells.forEach(function (td, i) {
+      if (i === nameAt) return;
+      var k = heads[i] || '';
+      if (!k || /^actions?$/i.test(k)) return;
+      var said = saidIn(td);
+      if (td.querySelector('button, a') && !said) return;
+      pairs.push([k, said || '—']);
+    });
+
+    /* The skeleton is the shape of the answer, so it is built from the same
+       columns the answer will use rather than from three grey bars that
+       happen to fit. */
+    function draw(loading) {
+      grid.innerHTML = pairs.map(function (kv) {
+        return '<div><div class="k">' + esc(kv[0]) + '</div><div class="v'
+          + (loading ? ' sk">&nbsp;' : '">' + esc(kv[1])) + '</div></div>';
+      }).join('');
+    }
+    draw(true);
+
+    var frame = body.querySelector('.prev');
+    var isVideo = /video/i.test(heads[nameAt] || '');
+    /* Nothing here is fetched. The wait is the one the real thing will have,
+       and showing the shape of it is the whole point of a skeleton. */
+    setTimeout(function () {
+      if (!grid.isConnected) return;
+      draw(false);
+      if (!frame) return;
+      frame.classList.remove('sk');
+      frame.innerHTML = isVideo
+        ? '<span class="prev-play"><svg aria-hidden="true" viewBox="0 0 24 24">'
+          + '<path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg></span>'
+        : '<span class="prev-doc"><svg aria-hidden="true"><use href="#i-programme"/></svg>'
+          + '<span>' + esc(mTitle.textContent) + '</span></span>';
+      var len = pairs.filter(function (kv) {
+        return /length|size|duration|minutes/i.test(kv[0]);
+      })[0];
+      if (len) frame.insertAdjacentHTML('beforeend',
+        '<span class="prev-t">' + esc(len[1]) + '</span>');
+    }, 380);
+  }
+
   function openModal(key, from) {
     var def = MODALS[key];
     if (!def) return;
@@ -1423,6 +1535,22 @@
     mBody.innerHTML = def.body;
     mOk.textContent = def.ok;
     mOk.classList.toggle('danger', !!def.danger);
+    /* One dialog, two sizes. A form is 520 because that is as wide as a
+       column of fields wants to be; something you look at rather than fill in
+       needs the room its content has a shape of. */
+    modalEl.classList.toggle('wide', !!def.wide);
+    /* The mark belongs to the thing, so it goes in the title bar with it and
+       takes its colour from the same rule the tables read. */
+    var mark = mTitle.parentNode.querySelector('.cellmark');
+    if (mark) mark.remove();
+    if (def.icon) {
+      var sp = document.createElement('span');
+      sp.className = 'cellmark';
+      sp.innerHTML = '<svg aria-hidden="true"><use href="#i-' + def.icon + '"/></svg>';
+      mTitle.parentNode.insertBefore(sp, mTitle);
+    }
+    /* A footer with nothing to confirm is a footer in the way. */
+    mFoot.hidden = !def.ok;
     scrim.hidden = false;
     // Build the custom controls before choosing what to focus. A <select> is
     // now visually hidden behind its own trigger, so focusing the first
@@ -1454,6 +1582,107 @@
     closeModal();
     if (msg) say(msg);
   });
+
+
+  /* ---- every row opens something ----
+
+     Eleven of the app's thirty-seven tables did nothing when you clicked a
+     row: the permissions list, the IZU lists, the community posts, the
+     guidance instructions, the answers that trigger a follow-up. The rest
+     opened a drawer or a dialog, so the ones that did nothing read as broken
+     rather than as different.
+
+     This is done here rather than in the markup because the markup already
+     has 2 266 lines of it, and because a table added next week gets it
+     without anybody remembering. Rows that already go somewhere are left
+     alone: a drawer is the detail view for a record that has its own page,
+     and replacing those with a dialog would take away the back button, the
+     tabs and the address.
+
+     A row whose first column is a Video or a Document gets the preview
+     dialog instead — same reading of the same row, bigger, with the frame
+     at the top. */
+
+  /* What a table's rows are, taken from the word the table itself uses for
+     its first column. Eleven of the thirty-seven had no mark at all — the
+     permissions list, the people, the posts, the activity log — so those
+     tables were the plain ones and the rest were the coloured ones, for no
+     reason a reader could see.
+
+     command.js carries a larger map of the same shape, but it answers a
+     different question: what kind of thing is this row, for searching. This
+     one answers what to draw. Where they overlap they agree, and neither can
+     quietly become the other's source without making the wrong one win. */
+  var MARK = {
+    date: 'visits', when: 'monitor', visit: 'visits',
+    person: 'person', izu: 'person', 'izu at village': 'person',
+    'posted by': 'person', 'filled in by': 'person', who: 'person',
+    permission: 'settings', 'you can': 'settings', role: 'role',
+    from: 'message', household: 'households', place: 'location',
+    report: 'reports', 'follow-up': 'clock', form: 'programme',
+    project: 'project', cohort: 'households', 'case': 'safeguarding'
+  };
+
+  function markRows(root) {
+    [].forEach.call((root || document).querySelectorAll('table.tbl'), function (tbl) {
+      var th = tbl.querySelector('thead th');
+      if (!th) return;
+      var k = th.textContent.trim().toLowerCase()
+        .replace(/,? exactly as (it is|they are) stored$/, '').replace(/\s*\d+$/, '');
+      var icon = MARK[k];
+      if (!icon) return;
+      [].forEach.call(tbl.querySelectorAll('tbody tr'), function (tr) {
+        if (tr.classList.contains('grp')) return;
+        var nm = tr.querySelector('.nm');
+        /* A row that already draws its own mark keeps it: several tables name
+           the thing more precisely than their column header does. */
+        if (!nm || nm.querySelector('use[href^="#i-"]')) return;
+        var sp = document.createElement('span');
+        sp.className = 'cellmark';
+        sp.innerHTML = '<svg aria-hidden="true"><use href="#i-' + icon + '"/></svg>';
+        nm.insertBefore(sp, nm.firstChild);
+      });
+    });
+  }
+
+  function openableRows(root) {
+    [].forEach.call((root || document).querySelectorAll('table.tbl'), function (tbl) {
+      var head = tbl.querySelector('thead th');
+      var what = head ? head.textContent.trim().toLowerCase() : '';
+      var media = /^(video|document)/.test(what);
+      [].forEach.call(tbl.querySelectorAll('tbody tr'), function (tr) {
+        if (tr.classList.contains('grp') || tr.classList.contains('shut')) return;
+        /* A row whose name cell is a link to somewhere already goes there.
+           Checking only the <tr>'s own attribute missed those — the reports,
+           the roles and the project lists all carry data-go on the button
+           inside the name cell, and they lost their drawers for it. */
+        if (tr.hasAttribute('data-go') || tr.hasAttribute('data-modal')) return;
+        if (!tr.querySelector('.nm')) return;
+        /* A video or a document is the thing you came to look at, so the whole
+           row opens it. The Preview link inside stays and opens the same
+           dialog — the click handler takes the innermost [data-modal], so the
+           Edit and Delete beside it still do their own jobs. */
+        if (!media && tr.querySelector('[data-go], [data-modal]')) return;
+        tr.setAttribute('data-modal', media ? 'preview' : 'row');
+        /* A row that opens something is a control, so it answers the keyboard
+           and says so to a reader. */
+        if (!tr.hasAttribute('tabindex')) tr.tabIndex = 0;
+        tr.setAttribute('role', 'button');
+      });
+    });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var tr = e.target.closest && e.target.closest('tr[data-modal][role="button"]');
+    if (!tr || e.target !== tr) return;
+    e.preventDefault();
+    openModal(tr.getAttribute('data-modal'), tr);
+  });
+
+  function enhanceRows() { markRows(); openableRows(); }
+  if (window.SugiraTablesReady) enhanceRows();
+  else document.addEventListener('tables:ready', enhanceRows);
 
   /* One dialog in the app, so a module that needs to ask something borrows it
      rather than drawing a second one with its own idea of a button. */
