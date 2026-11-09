@@ -91,6 +91,20 @@
      fighting. */
   var PAGE = 5;
 
+  /* 2 210, the way every other figure in the app is written. */
+  function group(n) {
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u202f');
+  }
+
+  /* Only the filter bar narrows the set. A tab narrows it too, but a tab
+     carries its own count — "Behind schedule 148" — so switching to one
+     changes which figure the footer should quote, not whether it may quote
+     one. Treating t-out as a filter put "Showing 1-3 of 3" under a tab that
+     said 148. And p-out is paging, which is this file's own doing. */
+  function filtered(table) {
+    return !!table.querySelector('tbody tr.f-out');
+  }
+
   function pagers() {
     $$('.tfoot .pg').forEach(function (pg) {
       var foot = pg.closest('.tfoot');
@@ -133,9 +147,23 @@
 
         syncEmpty(table);
         if (label) {
-          label.textContent = list.length
-            ? 'Showing ' + (from + 1) + '–' + to + ' of ' + list.length
-            : 'Nothing matches these filters';
+          /* How big the set really is, in the app's own words: the count on
+             the tab that is open. The rows loaded here are a sample of it, so
+             counting them told the reader 6 where the tab said 344. Once a
+             filter is on, the rows are the set. */
+          var whole = null;
+          if (!filtered(table)) {
+            var sc = table.closest('.screen');
+            var tab = sc && sc.querySelector('.tab.on, .tab[aria-selected="true"]');
+            var m = tab && /([\d][\d\s\u00a0\u202f.,]*)\s*$/.exec(
+              tab.textContent.replace(/\s+/g, ' ').trim());
+            var n = m ? parseInt(m[1].replace(/[^\d]/g, ''), 10) : NaN;
+            if (!isNaN(n) && n >= list.length) whole = n;
+          }
+          label.textContent = !list.length ? 'Nothing matches these filters'
+            : whole !== null
+              ? 'Showing ' + (from + 1) + '\u2013' + to + ' of ' + group(whole)
+              : 'Showing ' + (from + 1) + '\u2013' + to + ' of ' + list.length;
         }
       }
 

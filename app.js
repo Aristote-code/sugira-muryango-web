@@ -1712,12 +1712,21 @@
         .replace(/,? exactly as (it is|they are) stored$/, '').replace(/\s*\d+$/, '');
       var icon = MARK[k];
       if (!icon) return;
+      /* A column that names a person gets a face, not a people glyph. The
+         table says which column that is, and who.js draws the initials there.
+         It also removes a kind mark it finds — but only one that is already
+         in the cell when it runs, and this ran after it on five tables, so
+         the IZU list, the posts, the people and the field lists each carried
+         a generic person icon sitting on top of the actual person's avatar.
+         Reading the table's own data-person is order-independent. */
+      if (th.hasAttribute('data-person')) return;
       [].forEach.call(tbl.querySelectorAll('tbody tr'), function (tr) {
         if (tr.classList.contains('grp')) return;
         var nm = tr.querySelector('.nm');
         /* A row that already draws its own mark keeps it: several tables name
            the thing more precisely than their column header does. */
         if (!nm || nm.querySelector('use[href^="#i-"]')) return;
+        if (nm.querySelector('.who-c, .av')) return;
         var sp = document.createElement('span');
         sp.className = 'cellmark';
         sp.innerHTML = '<svg aria-hidden="true"><use href="#i-' + icon + '"/></svg>';
