@@ -92,6 +92,18 @@
     var body = table.querySelector('tbody');
     var state = { col: null, shut: {} };
 
+    /* A table can say which of its columns holds the folder, and then it
+       opens folded by it. The name is matched against the column's own
+       heading, so a table that renames a column stops claiming one rather
+       than grouping by whatever now sits at that index. */
+    var want = table.getAttribute('data-group');
+    if (want) {
+      var pick = cols.filter(function (c) {
+        return c.name.toLowerCase() === want.toLowerCase();
+      })[0];
+      if (pick) state.col = pick.i;
+    }
+
     /* Group used to lead every toolbar, which is the wrong billing: "I can
        have like 100,000 families, or at national level — seeing that you are
        grouping here would be very difficult. Making this group in listing
@@ -111,6 +123,8 @@
     var cols0 = tq.querySelector('[data-q="cols"]');
     if (cols0) cols0.parentNode.insertBefore(chip, cols0);
     else tq.appendChild(chip);
+
+    if (state.col !== null) setTimeout(function () { paintChip(); draw(); });
 
     function paintChip() {
       var on = state.col !== null;

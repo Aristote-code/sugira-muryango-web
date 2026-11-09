@@ -30,31 +30,16 @@
         <svg aria-hidden="true"><use href="#i-dashboard"/></svg>
         <span class="tx">Dashboard</span></button>
 
-      <button class="ni" type="button" aria-expanded="true" aria-controls="g-hh" data-go="households" data-view="clear">
+      <button class="ni" type="button" data-go="households" data-view="clear">
         <svg aria-hidden="true"><use href="#i-households"/></svg>
         <span class="tx">Households</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
-      <ul class="subs" id="g-hh">
-        <li><button class="si" type="button" data-go="households" data-view="clear"><span class="tx">All households</span><span class="ct">2 210</span></button></li>
-        <li><button class="si" type="button" data-go="households" data-view="filter:status=Behind"><span class="tx">Behind schedule</span><span class="ct">148</span></button></li>
-        <li><button class="si" type="button" data-go="households" data-view="filter:status=Not started"><span class="tx">Enrolment</span></button></li>
-      </ul>
-
-      <button class="ni" type="button" aria-expanded="true" aria-controls="g-vs" data-go="visits" data-view="clear">
+      <button class="ni" type="button" data-go="visits" data-view="clear">
         <svg aria-hidden="true"><use href="#i-visits"/></svg>
         <span class="tx">Visits</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
-      <ul class="subs" id="g-vs">
-        <li><button class="si" type="button" data-go="visits" data-view="clear"><span class="tx">This week</span><span class="ct">147</span></button></li>
-        <li><button class="si" type="button" data-go="visits" data-view="tab:Not completed"><span class="tx">Missed</span><span class="ct">368</span></button></li>
-      </ul>
-
-      <button class="ni" type="button" aria-expanded="true" aria-controls="g-sf" data-go="safeguarding" data-view="tab:Open">
+      <button class="ni" type="button" data-go="safeguarding" data-view="tab:Open">
         <svg aria-hidden="true"><use href="#i-safeguarding"/></svg>
         <span class="tx">Safeguarding</span><span class="ct sig">3</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
-      <ul class="subs" id="g-sf">
-        <li><button class="si" type="button" data-go="safeguarding" data-view="tab:Open"><span class="tx">Open cases</span><span class="ct sig">3</span></button></li>
-        <li><button class="si" type="button" data-go="safeguarding" data-view="tab:Closed"><span class="tx">Closed cases</span></button></li>
-      </ul>
-    </div>
+      </div>
 
     <div class="navgrp">
       <p class="rlabel">Set up and run</p>
@@ -62,17 +47,12 @@
         <svg aria-hidden="true"><use href="#i-programme"/></svg>
         <span class="tx">Programme</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <ul class="subs" id="g-pr" hidden>
-        <li><button class="si" type="button" data-go="programme" data-view="tab:All"><span class="tx">Projects</span><span class="ct">19</span></button></li>
-        <li><button class="si" type="button" data-go="programme" data-view="tab:Forms"><span class="tx">Forms</span><span class="ct" id="formCountRail">—</span></button></li>
-        <li><button class="si" type="button" data-go="cohorts"><span class="tx">Cohorts</span><span class="ct">4</span></button></li>
-        <li><button class="si" type="button" data-go="translations"><span class="tx">Translations</span><span class="ct sig">13</span></button></li>
-      </ul>
-      <button class="ni" type="button" aria-expanded="false" aria-controls="g-rp" data-go="reports" data-view="tab:Saved">
+              <li><button class="si" type="button" data-go="cohorts"><span class="tx">Cohorts</span><span class="ct">4</span></button></li>
+              <li><button class="si" type="button" data-go="translations"><span class="tx">Translations</span><span class="ct sig">13</span></button></li>
+            </ul>
+      <button class="ni" type="button" data-go="reports" data-view="tab:Saved">
         <svg aria-hidden="true"><use href="#i-reports"/></svg>
         <span class="tx">Reports</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
-      <ul class="subs" id="g-rp" hidden>
-        <li><button class="si" type="button" data-go="reports" data-view="modal:report"><span class="tx">Build a report</span></button></li>
-      </ul>
       <button class="ni" type="button" data-go="followups">
         <svg aria-hidden="true"><use href="#i-clock"/></svg>
         <span class="tx">Follow-ups</span><span class="ct sig">6</span></button>
@@ -82,14 +62,9 @@
       <button class="ni" type="button" data-go="community">
         <svg aria-hidden="true"><use href="#i-message"/></svg>
         <span class="tx">Community</span><span class="ct sig">3</span></button>
-      <button class="ni" type="button" aria-expanded="false" aria-controls="g-fs" data-go="content" data-view="tab:Videos">
+      <button class="ni" type="button" data-go="content" data-view="tab:Videos">
         <svg aria-hidden="true"><use href="#i-support"/></svg>
         <span class="tx">Field support</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
-      <ul class="subs" id="g-fs" hidden>
-        <li><button class="si" type="button" data-go="content" data-view="tab:Videos"><span class="tx">Videos &amp; documents</span></button></li>
-        <li><button class="si" type="button" data-go="content" data-view="tab:FAQs"><span class="tx">FAQs</span></button></li>
-        <li><button class="si" type="button" data-go="content" data-view="tab:Feedback"><span class="tx">Feedback</span><span class="ct sig">7</span></button></li>
-      </ul>
       <button class="ni" type="button" aria-expanded="false" aria-controls="g-ad" data-go="people">
         <svg aria-hidden="true"><use href="#i-admin"/></svg>
         <span class="tx">Administration</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
@@ -2151,7 +2126,7 @@
 
         <div class="pad" data-panelid="docs" hidden>
           <div class="filters"><button class="fl" type="button"><span class="k">Type</span><b>All</b><span class="cv">&#9660;</span></button><span class="side" style="margin-left:auto;display:flex;gap:var(--space-2)"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg>New type</button><button class="btn sm" type="button" data-modal="publish"><svg aria-hidden="true"><use href="#i-plus"/></svg>Upload a document</button></span></div><div class="card flush plainsurface">
-            <div class="tblwrap"><table class="tbl">
+            <div class="tblwrap"><table class="tbl" data-group="Type">
               <thead><tr><th>Document</th><th>Type</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th><th class="ract">Actions</th></tr></thead>
               <tbody>
                 <tr><td class="nm">Safeguarding protocol</td><td class="mut">Policy</td><td><span class="chip bad"><i></i>Supervisors, social workers</span></td><td class="num mut">1.2 MB</td><td class="num mut">12 Sep</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Safeguarding protocol downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
