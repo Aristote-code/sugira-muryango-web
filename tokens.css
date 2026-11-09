@@ -192,6 +192,12 @@
      much more than the top reproduces that ratio at any viewport height, and
      holds it when the bar is short — which a fixed top does not. */
   --layout-command-bar-below: 17vh;
+  /* ClickUp's property label column is 120, and its own labels are Status,
+     Assignees, Dates. This app's are sentences — "Head of household" wants
+     122 of the 98 the icon and its gap leave, and was the one label in
+     eighteen that came out cut. The ClickUp token stays as the record of
+     ClickUp's measurement; this is what the app's own words need. */
+  --layout-property-label-width: var(--dimension-145);
   --layout-viewport-gutter: 32px;
   --z-base: 0;
   --z-sticky: 20;

@@ -1006,6 +1006,27 @@
     if (l) { setLayout(l.getAttribute('data-layout')); }
   });
 
+  /* The offer only stands while something empty is on screen.
+
+     Two things hide rows in a property grid and they overlap: More keeps
+     everything past the fourth field folded away, and Collapse hides the ones
+     with no value. On a household the only empty field is the ninth, so it was
+     already behind More — and pressing Collapse changed its own label and
+     nothing else. From the outside that is a control that does not work.
+
+     So the button appears when an empty field is actually visible, and the
+     check runs again whenever More opens or shuts. */
+  function offerCollapse(grid) {
+    var btn = document.querySelector('[data-pg="' + grid.id + '"]');
+    if (!btn) return;
+    var showing = [].filter.call(grid.querySelectorAll('.pgr.is-empty'), function (r) {
+      return !r.hidden && !grid.classList.contains('hide-empty');
+    }).length;
+    btn.hidden = !showing && !grid.classList.contains('hide-empty');
+  }
+  $$('.pg').forEach(offerCollapse);
+  window.SugiraOfferCollapse = offerCollapse;
+
   // ---- collapse empty fields, as the property grid offers ----
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-pg]');
@@ -1042,6 +1063,9 @@
       btn.setAttribute('aria-expanded', String(open));
       extra.forEach(function (r) { r.hidden = !open; });
       label.nodeValue = open ? 'Less' : 'More (' + extra.length + ')';
+      /* Opening More can bring an empty field into view, which is when the
+         offer to collapse them starts meaning something. */
+      if (window.SugiraOfferCollapse) window.SugiraOfferCollapse(grid);
     }
     show(false);
     btn.addEventListener('click', function () {
@@ -1242,7 +1266,10 @@
   });
 
   // ---- scope: one level, one programme rule ----
-  $$('.axis .levels').forEach(function (group) {
+  /* `.axis .levels` matched nothing: the app's one levels group is in a card
+     on the profile, not on an axis, so choosing where you are notified did
+     nothing at all. */
+  $$('.levels').forEach(function (group) {
     group.addEventListener('click', function (e) {
       var b = e.target.closest('.lvl');
       if (!b) return;
@@ -1518,6 +1545,23 @@
     }
     return fallback;
   }
+
+
+  /* A cell that ends in an ellipsis is a cell holding something nobody can
+     read. The row opens the record, where the sentence is whole — but a
+     tooltip says it where the reader is, which is what data-tip is for. The
+     check is done on the rendered cell, so a column that gets wider stops
+     claiming one. */
+  function tipTruncated(root) {
+    [].forEach.call((root || document).querySelectorAll('.tbl td.mut'), function (td) {
+      if (td.querySelector('[data-tip]') || td.hasAttribute('data-tip')) return;
+      var t = (td.textContent || '').trim();
+      if (!t || td.scrollWidth <= td.clientWidth + 1) return;
+      td.setAttribute('data-tip', t);
+    });
+  }
+  if (window.SugiraTablesReady) tipTruncated();
+  else document.addEventListener('tables:ready', function () { tipTruncated(); });
 
   /* ---- a row, opened the way a record opens ----
 
