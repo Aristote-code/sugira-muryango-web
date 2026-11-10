@@ -61,6 +61,7 @@
     people:        'Who can use the system, what they are allowed to do, and the place their role applies to. The place is part of the assignment, not part of the role.',
     permissions:   'A position is built on the one below it and may only add to it, so nobody starts from 112 blank checkboxes \u2014 which is what produced 21 roles for 10 jobs, three of them called Test role. Open a position to see what it starts from, the few things it adds, and the stored names behind them. Where a position applies \u2014 which sector, which district \u2014 is set when it is given to a person, not here.',
     places:        'The administrative hierarchy every role is scoped against, and every household belongs to. Six levels from province down to IZU. The programme runs in five districts across four provinces.',
+    profile:       'What your own role lets you do, read from it rather than set here. Changing any of it means changing the role, which is done in Roles & access.',
     programme:     'What a home visit contains: the projects, their sessions, the forms the visitor fills in, and the cohorts that decide who gets which session when.',
     reports:       'Build a question once, save it, and have it sent on a schedule.',
     roles:         'Superseded by Roles & access, which states a position as what it starts from plus what it adds. Kept until FXB has seen both.',

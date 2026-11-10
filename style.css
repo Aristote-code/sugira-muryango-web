@@ -1063,8 +1063,11 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .modal .mh .cellmark{margin-right:0}
 
 .modal .mb{padding:var(--space-3) var(--inset) var(--space-4);display:grid;gap:var(--space-4)}
-.padnote{font-size:13px;line-height:20px;color:var(--color-content-secondary);max-width:78ch}
-.padnote .rel{margin-inline:var(--dimension-2);vertical-align:-4px}
+/* Where a screen's work comes from, or where it goes when it leaves: a label
+   and a link, in the property row every record header already uses, rather
+   than a paragraph with the link buried in the middle of a sentence. */
+.pg-note{margin-top:0;margin-bottom:var(--space-4)}
+.pg-note .rel{vertical-align:-4px}
 .impact{padding:var(--space-3);border-radius:var(--radius-md);background:var(--color-bg-warning-subtle)}
 .impact b{display:block;margin-bottom:var(--dimension-6);font-size:12px;line-height:16px;font-weight:600;color:var(--color-content-warning)}
 .impact p{font-size:13px;line-height:19px;color:var(--color-content-primary)}
