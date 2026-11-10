@@ -52,7 +52,7 @@
   var ABOUT = {
     cohorts:       'A cohort decides which households get which session, and when. Changing one moves real families’ schedules. Five districts run the programme: Kirehe, Musanze, Ngoma, Nyanza and Rubavu.',
     community:     'Home visitors post to each other from the tablet. Anything a reader reports arrives here, and nothing is removed without a reason being recorded.',
-    content:       'What a home visitor can open on the tablet: the session videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose.',
+    content:       'What a home visitor can open on the tablet: the session videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose. A document is filed in a folder somebody made, and opening one downloads it rather than showing it here.',
     dashboard:     'Coverage, safeguarding and reporting across every district SUGIRA Muryango works in.',
     field:         '174 of 193 home visitors have reported today. Until the rest sync, every figure on the dashboard is provisional.',
     followups:     'An answer on a form can oblige someone to go back. These are the obligations that are open, who owns each one, and how long it has been waiting.',
@@ -64,7 +64,7 @@
     profile:       'What your own role lets you do, read from it rather than set here. Changing any of it means changing the role, which is done in Roles & access.',
     programme:     'What a home visit contains: the projects, their sessions, the forms the visitor fills in, and the cohorts that decide who gets which session when.',
     reports:       'Build a question once, save it, and have it sent on a schedule.',
-    roles:         'Superseded by Roles & access, which states a position as what it starts from plus what it adds. Kept until FXB has seen both.',
+    roles:         'Superseded by Roles & access, which states a position as what it starts from plus what it adds. Kept until FXB has seen both. A role that duplicates another is one to merge, not one to keep.',
     safeguarding:  'Three open cases. Two of them are past the 72-hour review window.',
     settings:      'The rules the whole programme runs on. Changing one here changes it for every district, every tablet and every household at once, so each says what it will move.',
     system:        'Who did what, and the housekeeping that keeps the data honest. The rules themselves live in Settings.',

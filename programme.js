@@ -531,10 +531,13 @@
        meaning two different things is how the live system got into trouble. */
     var foot = el('div', 'tfoot');
     var span = el('span');
+    /* Counts, not a sentence about one of them. "the three that had a
+       monitoring programme of their own are in here too, on the sessions
+       they monitor" was a fact wrapped in an explanation; the fact is three
+       and the explanation belongs on the info button. */
     span.innerHTML = library.length + ' forms across ' + projects.length
       + ' projects · ' + fmt(library.reduce(function (a, f) { return a + f.responses; }, 0))
-      + ' responses collected · the three that had a monitoring programme of '
-      + 'their own are in here too, on the sessions they monitor';
+      + ' responses · 3 from the monitoring programme';
     foot.appendChild(span);
     host.appendChild(foot);
   }
