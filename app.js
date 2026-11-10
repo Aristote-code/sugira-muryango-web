@@ -157,6 +157,36 @@
     },
     /* The default is the design. Continue marks the batch as training; a
        real visit takes a deliberate second click. gp1 48:30. */
+    doctype: {
+      title: 'New folder',
+      ok: 'Create it',
+      body: '<div><label for="f-dtn">Name</label><input id="f-dtn" type="text" '
+          + 'placeholder="e.g. Nutrition"></div>'
+          + '<div><label for="f-dtw">Who may open what is in it</label><select id="f-dtw">'
+          + '<option>Everyone</option><option>Supervisors and above</option>'
+          + '<option>A department\u2026</option></select></div>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
+          + '<span>Access is set on the folder, so moving a document into it changes who '
+          + 'can open that document.</span></p>',
+      done: 'Folder created \u2014 it holds nothing yet'
+    },
+    vcomments: {
+      title: 'Comments',
+      ok: 'Post',
+      body: '<div class="tl">'
+          + '<div class="te"><span class="ic"><svg aria-hidden="true">'
+          + '<use href="#i-message"/></svg></span><div><h4>M. Dusabe</h4>'
+          + '<p>The Kinyarwanda on the second page says \u201cweigh\u201d where it should say '
+          + '\u201cmeasure\u201d. Caregivers ask me about it every time.</p></div>'
+          + '<span class="when">2 Nov</span></div>'
+          + '<div class="te"><span class="ic"><svg aria-hidden="true">'
+          + '<use href="#i-message"/></svg></span><div><h4>C. Uwimana</h4>'
+          + '<p>Noted \u2014 raised with the translation team.</p></div>'
+          + '<span class="when">3 Nov</span></div></div>'
+          + '<div><label for="f-cmt">Add a comment</label>'
+          + '<textarea id="f-cmt" placeholder="Everyone who can open this can read it."></textarea></div>',
+      done: 'Comment posted'
+    },
     dept: {
       title: 'Add a department',
       ok: 'Add it',
@@ -403,6 +433,7 @@
             '<div><label for="f-cn">Number in that year</label><input id="f-cn" type="text" value="1"></div>' +
             '<div><label for="f-cr">Runs for</label><select id="f-cr"><option>Four months</option><option>Six months</option><option>Twelve months</option></select></div>' +
             '<div><label for="f-cs">First session</label><input id="f-cs" type="date" value="2027-01-11"></div>' +
+            '<p class="mhint">When it ends on 11 May, Cohort 2 \u00b7 2027 opens in the same districts that day.</p>' +
             '<div><label for="f-cd">Districts</label><select id="f-cd"><option>Not assigned yet</option><option>Ngoma</option><option>Nyanza</option><option>Rubavu</option></select></div>',
       done: 'Cohort 1 \u00b7 2027 created as a draft \u2014 no household is scheduled yet'
     },
@@ -436,6 +467,15 @@
       ok: 'Add it and save the access',
       body: '<div><label for="f-af">Form</label><select id="f-af"></select></div>'
           + '<p class="mhint" id="f-afw"></p>'
+          + '<div><label for="f-ams">Which sessions it goes into</label>'
+          + '<select id="f-ams" multiple size="4">'
+          + '<option>Straight into the project, no session</option>'
+          + '<option>5. The Importance of Good Nutrition</option>'
+          + '<option selected>6. The Importance of Good Health</option>'
+          + '<option>7. Managing the Stresses of Parenting</option>'
+          + '<option>9. Resolving Conflicts in the Home</option></select>'
+          + '<p class="mhint">One form, as many sessions as it belongs in. '
+          + 'Editing it changes every one of them.</p></div>'
           + '<div><label for="f-adp">Department</label><select id="f-adp"><option>Field delivery</option><option>Monitoring &amp; evaluation</option><option>Child protection &mdash; NCDA</option><option>Every department</option></select></div>'
           + '<div><label for="f-ad">Data access</label><select id="f-ad">'
           + '<option>IZU at Village and above</option><option>Supervisors and above</option>'
@@ -1757,6 +1797,24 @@
     $$('[data-pick="' + group + '"]').forEach(function (o) {
       o.setAttribute('aria-checked', String(o === pick));
     });
+  });
+
+  /* A folder is the table's own filter, shown as a list you can see the
+     shape of rather than a popover you have to open. Clicking one sets it. */
+  document.addEventListener('click', function (e) {
+    var f = e.target.closest('[data-folder]');
+    if (!f) return;
+    var key = f.getAttribute('data-folder').toLowerCase();
+    var value = f.getAttribute('data-value');
+    var screen = f.closest('.screen');
+    $$('[data-folder="' + f.getAttribute('data-folder') + '"]', screen || document)
+      .forEach(function (o) {
+        if (o === f) o.setAttribute('aria-current', 'true');
+        else o.removeAttribute('aria-current');
+      });
+    if (window.SugiraFilters && screen) {
+      window.SugiraFilters.set(screen.id, key, value);
+    }
   });
 
   // ---- a relationship row with more than three links expands in place ----

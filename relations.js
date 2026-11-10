@@ -1,4 +1,18 @@
-/* Relations.
+/* Relations, on the records that are configured rather than worked on.
+
+   "Relation ntago ari ngombwa" — "Relation is not necessary" — gp2 13:37,
+   said over a household and meant for every record of that kind: a case,
+   a referral, a visit. What relates to a case is the case, and a tab that
+   lists the household, the home visitor and the question again is a
+   second copy of the record you are already reading.
+
+   It stays on a form, a project, a session, a person and a position,
+   because gp1 24:31 asks for precisely this there: "you can see its
+   parent, you also see all those children, you have control over them...
+   all those permissions would be connected, they would have a way it is
+   traced." On those, what it is built on is the one thing the screen
+   does not otherwise say.
+
 
    Almost everything in this programme is a tie to something else: a form
    belongs to a session, a session to a project, a household to an IZU and a
@@ -45,38 +59,6 @@
 
   /* kind, what it points at, the screen it opens, and why it matters */
   var R = {
-    household: {
-      title: 'HH-1007 Mukamana',
-      rel: [
-        ['Place', 'i-location', 'Kabare · Kibungo · Ngoma', 'places', 'Village, sector and district'],
-        ['Home visitor', 'i-admin', 'M. Dusabe', 'people', 'The IZU at this village'],
-        ['Supervisor', 'i-admin', 'C. Uwimana', 'people', 'Sector lead who reviews this household’s cases'],
-        ['Cohort', 'i-visits', 'Cohort 1', 'cohorts', 'Decides which session is due and when'],
-        ['Project', 'i-programme', 'Household Module Tracking', 'project', 'The curriculum being delivered'],
-        ['Current session', 'i-programme', 'Session 6 — The Importance of Good Health', 'module', 'Four weeks behind schedule'],
-        ['Risk-of-harm case', 'i-safeguarding', 'RH-0044', 'case', 'Open, review overdue since 30 October']
-      ],
-      ref: [
-        ['Report', 'i-reports', 'Male caregiver attendance by district', 'reports', 'Counts this household'],
-        ['Report', 'i-reports', 'Household needs breakdown', 'reports', 'Counts this household'],
-        ['Follow-up', 'i-clock', 'Growth check at Kabare health centre', 'followups', 'Open, owned by M. Dusabe']
-      ]
-    },
-    'case': {
-      title: 'RH-0044',
-      rel: [
-        ['Household', 'i-households', 'HH-1007 Mukamana', 'household', 'Where the flag was raised'],
-        ['Raised by', 'i-admin', 'M. Dusabe', 'people', 'IZU at Village, at the Session 6 visit'],
-        ['Raised at', 'i-programme', 'Session 6 — question 5', 'module', 'The answer that opened this case'],
-        ['Supervisor', 'i-admin', 'C. Uwimana', 'people', 'Owns the 72-hour review'],
-        ['Place', 'i-location', 'Kibungo · Ngoma', 'places', 'Sector the case belongs to']
-      ],
-      ref: [
-        ['Rule', 'i-settings', 'Question 5 opens a risk-of-harm case', 'settings', 'Why this case exists'],
-        ['Report', 'i-reports', 'Risk of harm — type and victim', 'reports', 'Counts this case'],
-        ['Escalation', 'i-alert', 'District lead, Ngoma', 'people', 'Automatic on the 72-hour breach']
-      ]
-    },
     project: {
       title: 'Household Module Tracking',
       rel: [

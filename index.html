@@ -1358,7 +1358,9 @@
           <button class="tab" type="button" data-panel="preview">Preview</button>
           <button class="tab" type="button" data-panel="translate">Translate</button>
           <button class="tab" type="button" data-panel="data">Data <span class="chip" style="margin-left:var(--space-2)">986</span></button>
+          <button class="tab" type="button" data-panel="fdash">Dashboard</button>
           <button class="tab" type="button" data-panel="reports">Reports</button>
+          <button class="tab" type="button" data-panel="fbin">Deleted <span class="chip" style="margin-left:var(--space-2)">3</span></button>
           <button class="tab" type="button" data-panel="access">Access<span class="chip" style="margin-left:var(--space-2)">3</span></button>
         </div>
 
@@ -1500,6 +1502,52 @@
             </div>
           </div>
         </div>
+        <div class="pad" data-panelid="fdash" hidden>
+          <div class="stats">
+            <div class="st"><div class="l">Responses</div>
+              <div class="vrow"><div class="v">986</div><span class="delta up">+41 this week</span></div>
+              <div class="d">Since 18 January 2026</div></div>
+            <div class="st"><div class="l">Median time</div>
+              <div class="vrow"><div class="v">42 <small>minutes</small></div></div>
+              <div class="d">Shortest 11, longest 94</div></div>
+            <div class="st"><div class="l" data-tip="A required question left empty cannot happen on the tablet; this counts the ones that arrived blank from version 3, before the rule was added.">Required left blank</div>
+              <div class="vrow"><div class="v">7</div><span class="delta down">all on version 3</span></div>
+              <div class="d">Of 10&#8239;846 required answers</div></div>
+            <div class="st"><div class="l">Cases opened</div>
+              <div class="vrow"><div class="v">14 <small>of 986</small></div><span class="delta down">1.4%</span></div>
+              <div class="d">Question 5, answered Yego</div></div>
+          </div>
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>Who fills it in</h3><span class="side"><button class="rel" type="button" data-go="izu">IZU monitoring</button></span></div>
+              <div class="lr"><span class="t">M. Dusabe</span><span class="s">Kibungo &middot; Ngoma</span><span class="c">118</span></div>
+              <div class="lr"><span class="t">E. Mutesi</span><span class="s">Jarama &middot; Ngoma</span><span class="c">104</span></div>
+              <div class="lr"><span class="t">J. Kamanzi</span><span class="s">Mahama &middot; Kirehe</span><span class="c">97</span></div>
+              <div class="lr"><span class="t">A. Nyirahabimana</span><span class="s">Busasamana &middot; Nyanza</span><span class="c">88</span></div>
+              <div class="lr"><span class="t">The other 408</span><span class="s">Between 0 and 71 each</span><span class="c">579</span></div>
+            </div>
+            <div class="card">
+              <div class="card-h"><h3>Question 5 &mdash; is any child at risk of harm<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The one answer on this form that opens a case. Fourteen of 986 is the figure the safeguarding screen counts, which is why it is here rather than only there."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
+              <div class="lr"><span class="t">Oya &mdash; no</span><span class="c">972</span></div>
+              <div class="trk" style="margin:0 0 var(--space-3)"><i style="width:98.6%"></i></div>
+              <div class="lr"><span class="t">Yego &mdash; yes, a case opened</span><span class="c"><span class="chip bad"><i></i>14</span></span></div>
+              <div class="trk" style="margin:0"><i style="width:1.4%"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="pad" data-panelid="fbin" hidden>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Response</th><th data-person>Deleted by</th><th class="num">Deleted</th><th class="num">Gone after</th><th>Why</th><th class="ract">Actions</th></tr></thead>
+              <tbody>
+                <tr><td class="nm">HH-1319 &middot; Session 5</td><td>E. Mutesi</td><td class="num mut">28 Oct</td><td class="num">27 Nov</td><td class="mut">Training data cleanup</td><td class="rowacts"><a data-toast="HH-1319 · Session 5 restored — Visits done is now 1 843">Restore</a></td></tr>
+                <tr><td class="nm">HH-0871 &middot; Session 4</td><td>E. Mutesi</td><td class="num mut">28 Oct</td><td class="num">27 Nov</td><td class="mut">Training data cleanup</td><td class="rowacts"><a data-toast="HH-0871 · Session 4 restored — Visits done is now 1 843">Restore</a></td></tr>
+                <tr><td class="nm">HH-1456 &middot; Session 2</td><td>C. Uwimana</td><td class="num mut">12 Oct</td><td class="num"><span class="chip warn"><i></i>5 days</span></td><td class="mut">Entered against the wrong household</td><td class="rowacts"><a data-toast="HH-1456 · Session 2 restored — Visits done is now 1 843">Restore</a></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>3 deleted responses &middot; recoverable for 30 days, then gone &middot; a restored response goes back into every count that is missing it</span></div>
+          </div>
+        </div>
         <div class="pad" data-panelid="access" hidden>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
@@ -1530,6 +1578,7 @@
                 <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-visits"/></svg><span>Joins</span></span><span class="v">The one open in their district that day</span></div>
                 <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Code</span></span><span class="v">cohort &ndash; month &ndash; year <span class="conseq plain">1-12-2025</span></span></div>
                 <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Enrolment closes</span></span><span class="v">When the cohort reaches session 3</span></div>
+                <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>When it ends</span><button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A cohort runs for the length it was given and then goes inactive, and the next one in that district opens the same day without anybody doing anything. It is the step people forget, and a district with no open cohort quietly stops enrolling."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="v">The next one opens the same day <span class="conseq">Cohort 3 &middot; 2026 on 11 March</span></span></div>
               </div>
             </div>
             <div class="card">
@@ -1538,6 +1587,7 @@
               <div class="lr"><span class="t">By hand</span><span class="c"><span class="chip warn"><i></i>36</span></span></div>
               <div class="lr"><span class="t">Moved district mid-cohort</span><span class="c">21</span></div>
               <div class="lr"><span class="t">Enrolled past session 3</span><span class="c">15</span></div>
+              <div class="lr"><span class="t">Opened by the rollover</span><span class="s">Cohort 2 &middot; 2026, on 4 July</span><span class="c"><span class="chip ok"><i></i>Automatic</span></span></div>
             </div>
           </div>
           <div class="card flush plainsurface">
@@ -1715,7 +1765,7 @@
                 <tr><td class="mut">2 Nov 09:14</td><td>Was refused a case outside their sector</td><td class="mut">Rubavu</td><td><span class="mut">RH-0045</span></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Refused attempts are recorded too &mdash; the entry that answers &ldquo;who tried&rdquo;</span></div>
+            <div class="tfoot"><span>Everything this person did, including what they were refused &middot; the whole log is on <b>Activity</b></span></div>
           </div>
         </div>
       </section>
@@ -2067,22 +2117,28 @@
            feed buries the second in the first. -->
       <section class="screen" id="s-activity">
         <div class="tabs">
-          <button class="tab on" type="button" data-tab="all">Everything<span class="chip" style="margin-left:var(--space-2)">13</span></button>
+          <button class="tab on" type="button" data-tab="all">Everything<span class="chip" style="margin-left:var(--space-2)">17</span></button>
           <button class="tab" type="button" data-tab="access">Access<span class="chip" style="margin-left:var(--space-2)">5</span></button>
+          <button class="tab" type="button" data-tab="signin">Sign-ins<span class="chip" style="margin-left:var(--space-2)">4</span></button>
           <button class="tab" type="button" data-tab="out">Data out<span class="chip" style="margin-left:var(--space-2)">2</span></button>
-          <button class="tab" type="button" data-tab="refused">Refused<span class="chip" style="margin-left:var(--space-2)">2</span></button>
+          <button class="tab" type="button" data-tab="refused">Refused<span class="chip" style="margin-left:var(--space-2)">3</span></button>
         </div>
         <div class="pad">
           <div class="filters">
             <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg>
               <input type="text" placeholder="Search by person or what they touched" aria-label="Search activity"></div>
             
+            <button class="fl" type="button"><span class="k">When</span><b>Any time</b><span class="cv">&#9660;</span></button>
             <button class="fl" type="button"><span class="k">Place</span><b>Rwanda</b><span class="cv">&#9660;</span></button>
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>When</th><th data-person>Who</th><th>What they did</th><th>What it touched</th><th>How far it went</th><th class="gap"></th></tr></thead>
               <tbody>
+                <tr data-tags="all signin"><td class="mut">Today 09:40</td><td>C. Uwimana</td><td class="nm">Signed in</td><td class="mut">Web &middot; Kibungo</td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="all signin"><td class="mut">Today 07:12</td><td>M. Dusabe</td><td class="nm">Signed in</td><td class="mut">Tablet &middot; I-142-007</td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="refused signin"><td class="mut">Yesterday 23:08</td><td>E. Mutesi</td><td class="nm">Sign-in refused</td><td class="mut">Tablet &middot; wrong password, 4th try</td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="all signin"><td class="mut">Yesterday 06:58</td><td>A. Gahimana</td><td class="nm">Signed in</td><td class="mut">Web &middot; Kigali</td><td class="mut">&mdash;</td><td class="gap"></td></tr>
                 <tr data-tags="access"><td class="mut">Today 09:12</td><td>A. Gahimana</td><td class="nm">Changed what a position can do</td><td><button class="rel" type="button" data-go="position" data-pos-id="NCDA"><svg aria-hidden="true"><use href="#i-hierarchy"/></svg>National NCDA Government Official</button></td><td><span class="chip warn"><i></i>34 people</span></td><td class="gap"></td></tr>
                 <tr data-tags="all"><td class="mut">Today 08:41</td><td>C. Uwimana</td><td class="nm">Opened a risk-of-harm case</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
                 <tr data-tags="all"><td class="mut">Today 08:38</td><td>C. Uwimana</td><td class="nm">Recorded a supervisor review</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0041</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
@@ -2098,7 +2154,7 @@
                 <tr data-tags="access"><td class="mut">14 Oct 11:02</td><td>A. Gahimana</td><td class="nm">Published a form to the mobile app</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record</button></td><td><span class="chip warn"><i></i>193 villages</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Refused attempts are recorded too &mdash; the entry that answers &ldquo;who tried&rdquo;</span></div>
+            <div class="tfoot"><span><b>17</b> of 48 219 entries &middot; refused attempts and sign-ins are recorded too &mdash; the entries that answer &ldquo;who tried&rdquo;</span><span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">3</button><button type="button">&rsaquo;</button></span></div>
           </div>
         </div>
       </section>
@@ -2320,32 +2376,59 @@
         </div>
 
         <div class="pad" data-panelid="videos">
-          <div class="card flush plainsurface">
+<div class="cols c2e" style="grid-template-columns:minmax(0,17rem) minmax(0,1fr)">
+            <div class="card">
+              <div class="card-h"><h3>Folders<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Two kinds, because different people watch them: a help video is shown to a caregiver in their own home, a tutorial is how the app works."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg> New</button></span></div>
+              <div class="search" style="margin-bottom:var(--space-3)"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search folders" aria-label="Search folders"></div>
+              <div class="lr click" data-folder="Kind" data-value="All" aria-current="true"><span class="t" data-tip="Both kinds">All</span><span class="c">24</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-folder="Kind" data-value="Help"><span class="t" data-tip="Shown to a caregiver">Help</span><span class="c">17</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-folder="Kind" data-value="Tutorial"><span class="t" data-tip="How the app works">Tutorial</span><span class="c">7</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="t mut">Nothing is outside a folder</span></div>
+            </div>
+            <div>
+            <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th data-ownmark>Video</th><th>For</th><th>Languages</th><th>Visible to</th><th class="num">Opened</th><th class="ract">Actions</th></tr></thead>
+              <thead><tr><th data-ownmark>Video</th><th>Kind</th><th>For</th><th>Languages</th><th>Visible to</th><th class="num">Opened</th><th class="num">Comments</th><th class="ract">Actions</th></tr></thead>
               <tbody>
-                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>6:12</i></span>Playing with everyday objects</td><td class="mut">Session 3 &middot; Building Early Communication Skills</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num">1 844</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>4:48</i></span>Feeding a child who refuses</td><td class="mut">Session 5 &middot; The Importance of Good Nutrition</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num">1 602</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>7:30</i></span>Talking with fathers</td><td class="mut">Session 9 &middot; The Important Role Everyone Plays</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num">388</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>9:05</i></span>Recognising signs of harm</td><td class="mut">Safeguarding protocol</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip bad"><i></i>Supervisors and above</span></td><td class="num">214</td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>6:12</i></span>Playing with everyday objects</td><td class="mut">Help</td><td class="mut">Session 3 &middot; Building Early Communication Skills</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num">1 844</td><td class="num"><button class="rel" type="button" data-modal="vcomments">4</button></td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>4:48</i></span>Feeding a child who refuses</td><td class="mut">Help</td><td class="mut">Session 5 &middot; The Importance of Good Nutrition</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num">1 602</td><td class="num"><button class="rel" type="button" data-modal="vcomments">9</button></td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>7:30</i></span>Talking with fathers</td><td class="mut">Help</td><td class="mut">Session 9 &middot; The Important Role Everyone Plays</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num">388</td><td class="num"><button class="rel" type="button" data-modal="vcomments">2</button></td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm"><span class="vth" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg><i>9:05</i></span>Recognising signs of harm</td><td class="mut">Help</td><td class="mut">Safeguarding protocol</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td><span class="chip bad"><i></i>Supervisors and above</span></td><td class="num">214</td><td class="num"><button class="rel" type="button" data-modal="vcomments">11</button></td><td class="rowacts"><a data-rec="1">Preview</a><a data-modal="vedit">Edit</a><a data-modal="vdelete">Delete</a></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Showing 4 of 24 &middot; all play on the tablet offline once downloaded</span></div>
+            <div class="tfoot"><span>Showing <b>4</b> of 24 &middot; all play on the tablet offline once downloaded</span></div>
+          </div>
+          </div>
           </div>
         </div>
 
         <div class="pad" data-panelid="docs" hidden>
-          <div class="filters"><button class="fl" type="button"><span class="k">Type</span><b>All</b><span class="cv">&#9660;</span></button><span class="side" style="margin-left:auto;display:flex;gap:var(--space-2)"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg>New type</button><button class="btn sm" type="button" data-modal="publish"><svg aria-hidden="true"><use href="#i-plus"/></svg>Upload a document</button></span></div><div class="card flush plainsurface">
-            <div class="tblwrap"><table class="tbl" data-group="Type">
-              <thead><tr><th>Document</th><th>Type</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th><th class="ract">Actions</th></tr></thead>
+          <div class="filters"><button class="fl" type="button"><span class="k">Type</span><b>All</b><span class="cv">&#9660;</span></button><span class="side" style="margin-left:auto;display:flex;gap:var(--space-2)"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg>New type</button><button class="btn sm" type="button" data-modal="publish"><svg aria-hidden="true"><use href="#i-plus"/></svg>Upload a document</button></span></div>
+<div class="cols c2e" style="grid-template-columns:minmax(0,17rem) minmax(0,1fr)">
+            <div class="card">
+              <div class="card-h"><h3>Folders<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A folder is a kind of document, and what a document’s access is set on. Opening one shows everything in it; the four below hold all 41."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg> New</button></span></div>
+              <div class="search" style="margin-bottom:var(--space-3)"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search folders" aria-label="Search folders"></div>
+              <div class="lr click" data-folder="Type" data-value="All" aria-current="true"><span class="t" data-tip="Every folder">All</span><span class="c">41</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-folder="Type" data-value="Field"><span class="t" data-tip="Checklists and referral forms">Field</span><span class="c">17</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-folder="Type" data-value="Policy"><span class="t" data-tip="Protocols and guidance">Policy</span><span class="c">11</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-folder="Type" data-value="Training"><span class="t" data-tip="Session materials">Training</span><span class="c">7</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr click" data-folder="Type" data-value="Reporting"><span class="t" data-tip="What goes to NCDA">Reporting</span><span class="c">6</span><span class="ch">&rsaquo;</span></div>
+              <div class="lr"><span class="t mut">Nothing is outside a folder</span></div>
+            </div>
+            <div>
+            <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Document</th><th>Type</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th><th class="num">Comments</th><th class="ract">Actions</th></tr></thead>
               <tbody>
-                <tr><td class="nm">Safeguarding protocol</td><td class="mut">Policy</td><td><span class="chip bad"><i></i>Supervisors, social workers</span></td><td class="num mut">1.2 MB</td><td class="num mut">12 Sep</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Safeguarding protocol downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm">Home visit checklist</td><td class="mut">Field</td><td class="mut">Everyone</td><td class="num mut">240 KB</td><td class="num mut">3 Oct</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Home visit checklist downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm">Referral form &mdash; health post</td><td class="mut">Field</td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village, sector leads</td><td class="num mut">88 KB</td><td class="num mut">21 Aug</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Referral form &mdash; health post downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
-                <tr><td class="nm">Quarterly report to <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></td><td class="mut">Reporting</td><td><span class="chip warn"><i></i><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> only</span></td><td class="num mut">3.4 MB</td><td class="num mut">1 Oct</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Quarterly report to NCDA downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Safeguarding protocol</td><td class="mut">Policy</td><td><span class="chip bad"><i></i>Supervisors, social workers</span></td><td class="num mut">1.2 MB</td><td class="num mut">12 Sep</td><td class="num"><button class="rel" type="button" data-modal="vcomments">6</button></td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Safeguarding protocol downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Home visit checklist</td><td class="mut">Field</td><td class="mut">Everyone</td><td class="num mut">240 KB</td><td class="num mut">3 Oct</td><td class="num"><button class="rel" type="button" data-modal="vcomments">2</button></td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Home visit checklist downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Referral form &mdash; health post</td><td class="mut">Field</td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village, sector leads</td><td class="num mut">88 KB</td><td class="num mut">21 Aug</td><td class="num mut">—</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Referral form &mdash; health post downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Quarterly report to <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></td><td class="mut">Reporting</td><td><span class="chip warn"><i></i><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> only</span></td><td class="num mut">3.4 MB</td><td class="num mut">1 Oct</td><td class="num"><button class="rel" type="button" data-modal="vcomments">1</button></td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Quarterly report to NCDA downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>41 documents in 4 folders</span></div>
+            <div class="tfoot"><span>Showing <b>4</b> of 41 &middot; every document sits in one folder, and the folder is what its access is set on</span></div>
+          </div>
+          </div>
           </div>
         </div>
 
