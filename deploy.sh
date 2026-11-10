@@ -133,16 +133,32 @@ fi
 # cache entry made for a different one, so this removes the question rather
 # than answering it. The filenames on disk are untouched; only the references
 # in the published page carry ?v=.
-# The delimiter is '#', not '|': the alternation below uses '|', and sed reads
-# the first one as the end of the expression.
+# Every local asset, not a list of six.
+#
+# The list named app.js, menu.js, filters.js, actions.js, style.css and
+# logo.svg, which was right when the site had six files and wrong from the
+# seventh on. Sixteen of the twenty-two references the page carries went out
+# unversioned, so a browser holding yesterday's relations.js against today's
+# index.html saw a page where half the behaviour was missing — which happened
+# here today, and which looks exactly like a bad deploy rather than a stale
+# cache.
+#
+# Matching the shape of a local reference rather than naming the files means a
+# script added next month is versioned without anyone remembering to come
+# here. An https:// reference cannot match: it contains a slash.
+#
+# The delimiter is '#', not '|': the alternation uses '|', and sed reads the
+# first one as the end of the expression.
+want=$(grep -coE '(src|href)="[A-Za-z0-9_.-]+\.(js|css|svg)"' "$pub/index.html")
 tmpfile=$(mktemp)
-sed -E "s#(src|href)=\"(app\.js|menu\.js|filters\.js|actions\.js|style\.css|logo\.svg)\"#\1=\"\2?v=$sha\"#g" \
+sed -E "s#(src|href)=\"([A-Za-z0-9_.-]+\.(js|css|svg))\"#\1=\"\2?v=$sha\"#g" \
   "$pub/index.html" > "$tmpfile" && mv "$tmpfile" "$pub/index.html"
 versioned=$(grep -o "?v=$sha" "$pub/index.html" | wc -l | tr -d ' ')
-if [ "$versioned" -lt 4 ]; then
-  echo "deploy aborted — only $versioned asset references were versioned, expected at least 4."
+if [ "$versioned" -lt "$want" ]; then
+  echo "deploy aborted — $versioned of $want asset references were versioned."
   exit 1
 fi
+echo "  cache-busted $versioned asset references"
 
 echo "deploying $sha from a clean checkout:"
 printf '      %s\n' $site
