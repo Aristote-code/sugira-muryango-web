@@ -44,7 +44,7 @@
 
    What that produces, from the same grant data the matrix was built from:
 
-     IZU at Village (26) ── the field root: a home visitor sees no reports
+     IZU (26) ── the field root: a home visitor sees no reports
        └─ Sugira Muryango Sector lead (44)
 
      National NCDA (5) ──── the office root: reports and nothing else
@@ -271,16 +271,16 @@
      else it has, it has because the base has it. Nothing subtracts: a job that
      needs less than its base is a different rung, not an exception.
 
-     The three roots are a finding, not an arrangement. IZU at Village cannot
+     The three roots are a finding, not an arrangement. IZU cannot
      be built on anything, because every other position sees reports and a
      home visitor does not; the platform administrator cannot, because nothing
      on the office ladder owns the hierarchy and nothing it owns is inside a
      programme. Neither needed deciding — only reading. */
   var SEED = [
-    { id: 'IZU', name: 'IZU at Village', short: 'IZU at Village', base: null, people: 412,
+    { id: 'IZU', name: 'IZU', short: 'the IZU', base: null, people: 412,
       what: 'The home visitor. A village has two, and the biggest three. Everything they do '
           + 'happens in a household, on a tablet.',
-      reach: 'village',
+      reach: 'own',
       adds: ['hh-see', 'hh-enrol', 'hh-change', 'visit-see', 'visit-record', 'roh-see',
              'roh-raise', 'fs-see'] },
 
@@ -318,7 +318,7 @@
              'fs-community', 'ppl-see', 'maint-restore'] },
 
     { id: 'Admin', name: 'admin', short: 'admin', base: 'HQ', people: 1,
-      what: 'Everything inside one organisation, including this screen. Two people hold it.',
+      what: 'Everything inside one organisation, including this screen.',
       reach: 'national',
       adds: ['hh-remove', 'visit-record', 'roh-open', 'roh-raise', 'roh-close',
              'ppl-add', 'ppl-access'] },
@@ -352,22 +352,23 @@
      itself is still set when the position is given rather than on the
      position. */
   var REACH = {
-    /* "their own only" is not here. It read as the narrowest rung of six and
-       was held by nobody, because in this programme it cannot narrow anything:
-       there is one home visitor to a village, so the records a visitor made
-       and the records in their village are the same set. A rung that can never
-       tell two things apart is a promise the screen cannot keep — and the one
-       most likely to be ticked by someone trying to be careful.
+    /* "their own only" was taken out when a village had one home visitor:
+       the records a visitor made and the records in their village were the
+       same set, so the rung could not tell two things apart. The note left
+       here said it comes back if a village ever has two.
 
-       If a village ever has two visitors, it comes back, and then it will mean
-       something. */
-    village:  { chip: 'their village',  line: 'their village' },
+       A village has two. That was settled when Places said 193 home visitors
+       and eight other screens said 412 — 412 over 193 villages is a pair each
+       — and it means a home visitor has been able to open the households of
+       the person they share a village with ever since. */
+    own:      { chip: 'their own',      line: 'the households assigned to them' },
+    village:  { chip: 'their village',  line: 'their village, both visitors in it' },
     cell:     { chip: 'their cell',     line: 'their cell and the villages in it' },
     sector:   { chip: 'their sector',   line: 'their sector and everything in it' },
     district: { chip: 'their district', line: 'their district and everything in it' },
     national: { chip: 'everywhere',     line: 'everywhere, with no place limit' }
   };
-  var WIDTH = ['village', 'cell', 'sector', 'district', 'national'];
+  var WIDTH = ['own', 'village', 'cell', 'sector', 'district', 'national'];
 
   /* The two positions the Activity screen records a change against. Kept
      beside the reach rather than inside the renderer, so the drawer and that
@@ -484,7 +485,7 @@
   /* ---- words ---- */
 
   function shortOf(p) { return p.short || p.name.replace(/ \(.*\)$/, ''); }
-  /* "Everything IZU at Village has, plus five more things." The sentence is
+  /* "Everything IZU has, plus five more things." The sentence is
      the whole point of the model, so it is what the collapsed card shows. */
   /* The card used to carry a whole sentence here — "Everything National NCDA
      has, plus 2 things." The client asked, in front of the screen, what
@@ -711,7 +712,9 @@
       var rw = el('div', 'rec-reach');
       rw.appendChild(el('span', 'rec-reach-k', 'Reaches'));
       var rv = el('span', 'rec-reach-v');
-      var rc = el('span', 'chip', REACH[p.reach].line);
+      var rc = el('button', 'chip chip-b', REACH[p.reach].line);
+      rc.type = 'button';
+      rc.setAttribute('data-modal', 'poslevel');
       rc.setAttribute('data-tip', 'Where the holder is posted decides the place; this is '
         + 'how far from it they can open records. A grant that goes somewhere else says so '
         + 'on its own row.');
@@ -1126,6 +1129,19 @@
     total: total,
     held: held,
     renderOne: renderOne,
+    /* Which position the drawer is showing, and the rungs it could be
+       moved to, so the dialog that moves it does not keep its own copy. */
+    open: function () { return byId(state.open) || state.pos[0]; },
+    built: function (id) { var p = byId(id); return p ? descendants(p).length : 0; },
+    reachLines: function () { return WIDTH.map(function (k) { return [k, REACH[k].line]; }); },
+    setReach: function (id, r) {
+      var p = byId(id);
+      if (!p || !REACH[r]) return false;
+      p.reach = r;
+      render();
+      renderOne();
+      return true;
+    },
     reset: function () { state.pos = freshPositions(); state.open = null; cardOpen = {}; render(); }
   };
 })();

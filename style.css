@@ -1822,6 +1822,34 @@ td .conseq{margin-left:var(--space-2)}
 .axis-tag.now{background:var(--color-primitive-grey-100);border-color:var(--color-border-default);color:var(--color-content-secondary)}
 .axis-tag.new{background:var(--color-bg-primary-subtle);border-color:var(--x-clickup-color-effect-primary);color:var(--x-clickup-color-background-primary-pressed)}
 .axis-foot{font-size:12px;color:var(--color-content-secondary);margin:var(--space-3) 0 0;line-height:1.5}
+/* The caret that opens a session's forms under it. A row carries two
+   things to press, so the caret is small, quiet and first, and the name
+   stays the obvious one. */
+.sx{border:0;background:transparent;padding:0;cursor:pointer;
+  width:var(--space-6);height:var(--space-6);flex:none;
+  margin-left:calc(var(--space-1) * -1);margin-right:var(--dimension-2);
+  color:var(--color-content-secondary);display:inline-flex;align-items:center;
+  justify-content:center;vertical-align:-7px;border-radius:var(--radius-sm)}
+.sx:hover{background:var(--color-bg-hover)}
+.sx svg{width:var(--dimension-14);height:var(--dimension-14);
+  transition:transform var(--duration-fast,120ms) ease}
+.sx[aria-expanded="true"] svg{transform:rotate(90deg)}
+.sxr>td{padding:0}
+.sxb{padding:var(--space-3) var(--space-4) var(--space-4);
+  background:var(--x-clickup-color-background-on-main)}
+.sxh{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);
+  margin-bottom:var(--space-1);font-size:13px}
+.sxb .lr:first-of-type{border-top:1px solid var(--color-border-subtle)}
+.sxb .lr .t{flex:0 0 auto}
+.sxb .lr .s{margin-right:auto}
+
+/* A chip that changes the thing it states. Same shape as a chip that
+   only reports, because it reports the same fact — it just also lets
+   you move it. */
+.chip-b{cursor:pointer;border:1px solid transparent;font:inherit;font-size:12px}
+.chip-b:hover{border-color:var(--color-border-default)}
+.chip-b:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}
+
 /* the one treatment a withheld fact gets: the row keeps its shape, so a
    list of cases still reads as a list of cases. */
 .rd{color:var(--color-content-secondary);font-style:italic;font-size:13px}

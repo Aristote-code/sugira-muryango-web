@@ -118,6 +118,9 @@
          pages what the other two have left, so none of them can undo another. */
       function rows() {
         return $$('tbody tr', table).filter(function (r) {
+          /* A panel opened under a row is not a row of the table: it belongs
+             to the one above it and is paged, sorted and counted with it. */
+          if (r.classList.contains('sxr')) return false;
           return !r.classList.contains('f-out') && !r.classList.contains('t-out');
         });
       }

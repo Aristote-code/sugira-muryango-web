@@ -191,7 +191,7 @@
           + '<div><label for="f-dw">What it does</label><input id="f-dw" type="text" '
           + 'placeholder="One line. It appears beside the name wherever the department does."></div>'
           + '<div><label for="f-dp">Positions in it</label><select id="f-dp" multiple size="4">'
-          + '<option>IZU at Village</option><option>Cell coordinator</option>'
+          + '<option>IZU</option><option>Cell coordinator</option>'
           + '<option>Sector lead</option><option>District lead</option>'
           + '<option>HQ officer</option></select></div>'
           + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
@@ -408,7 +408,7 @@
       title: 'New form',
       ok: 'Create form',
       body: '<div><label for="f-fn">Form name</label><input id="f-fn" type="text" placeholder="e.g. Caregiver observation"></div>' +
-            '<div><label for="f-fw">Filled in by</label><select id="f-fw"><option>IZU at Village</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option></select></div>' +
+            '<div><label for="f-fw">Filled in by</label><select id="f-fw"><option>IZU</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option></select></div>' +
             '<p class="mhint">Created in this session, not imported from a global library.</p>',
       done: 'Form created in Session 6'
     },
@@ -471,7 +471,7 @@
           + 'Editing it changes every one of them.</p></div>'
           + '<div><label for="f-adp">Department</label><select id="f-adp"><option>Field delivery</option><option>Monitoring &amp; evaluation</option><option>Child protection &mdash; NCDA</option><option>Every department</option></select></div>'
           + '<div><label for="f-ad">Data access</label><select id="f-ad">'
-          + '<option>IZU at Village and above</option><option>Supervisors and above</option>'
+          + '<option>IZU and above</option><option>Supervisors and above</option>'
           + '<option>Nobody yet</option></select></div>'
           + '<div><label for="f-ar">Report access</label><select id="f-ar">'
           + '<option>Supervisors and above</option><option>M&amp;E and above</option>'
@@ -499,7 +499,7 @@
           + '<div id="f-auw" hidden><label for="f-aun">Who</label>'
           + '<select id="f-aun" multiple size="4">'
           + '<option>C. Uwimana \u2014 Sector lead, Kibungo</option>'
-          + '<option>M. Dusabe \u2014 IZU at Village, Kibungo</option>'
+          + '<option>M. Dusabe \u2014 IZU, Kibungo</option>'
           + '<option>J. Kamanzi \u2014 Sector lead, Mahama</option>'
           + '<option>B. Nkurunziza \u2014 District CPWO, Ngoma</option>'
           + '</select></div>'
@@ -534,7 +534,7 @@
            two projects happen to have decided, which is the whole point. */
         var FORMS = [
           { name: 'Anthropometric measurement', used: ['Risk of Harm management'],
-            clash: [['IZU at Village', 'Edit access in Risk of Harm management',
+            clash: [['IZU', 'Edit access in Risk of Harm management',
                      'Data access only here'],
                     ['Sector lead', 'no access in Risk of Harm management',
                      'Report access here']] },
@@ -775,7 +775,7 @@
     access: {
       title: 'Change access for C. Uwimana',
       ok: 'Save access',
-      body: '<div><label for="f-ap">Position</label><select id="f-ap"><option>Sugira Muryango Sector lead (SLA)</option><option>Sugira Muryango District lead (DTL)</option><option>IZU Cell Coordinator (ICC)</option><option>IZU at Village</option><option>HQ officer</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>National NCDA Government Official</option></select></div>' +
+      body: '<div><label for="f-ap">Position</label><select id="f-ap"><option>Sugira Muryango Sector lead (SLA)</option><option>Sugira Muryango District lead (DTL)</option><option>IZU Cell Coordinator (ICC)</option><option>IZU</option><option>HQ officer</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>National NCDA Government Official</option></select></div>' +
             '<div><label for="f-apr">Province</label><select id="f-apr"><option>Eastern</option><option>Northern</option><option>Southern</option><option>Western</option><option>Kigali</option></select></div>' +
             '<div><label for="f-ad">District</label><select id="f-ad"><option>Ngoma</option><option>Kirehe</option><option>Nyanza</option><option>Rubavu</option><option>Musanze</option></select></div>' +
             '<div><label for="f-as">Sector</label><select id="f-as"><option>Kibungo</option><option>Jarama</option><option>Sake</option><option>Zaza</option></select></div>' +
@@ -798,7 +798,7 @@
       title: 'Invite someone',
       ok: 'Send invitation',
       body: '<div><label for="f-ie">Email</label><input id="f-ie" type="email" placeholder="name@fxbrwanda.org"></div>' +
-            '<div><label for="f-ir">Role</label><select id="f-ir"><option>IZU at Village</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option><option>Sugira Muryango District lead (DTL)</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>HQ officer</option></select></div>' +
+            '<div><label for="f-ir">Role</label><select id="f-ir"><option>IZU</option><option>Sugira Muryango Sector lead (SLA)</option><option>IZU Cell Coordinator (ICC)</option><option>Sugira Muryango District lead (DTL)</option><option>District NCDA Child protection and Welfare Officer (CPWO)</option><option>HQ officer</option></select></div>' +
             '<div><label for="f-ip">Where</label><select id="f-ip"><option>Kibungo \u00b7 Ngoma</option><option>Jarama \u00b7 Ngoma</option><option>Sake \u00b7 Ngoma</option><option>Kigoma \u00b7 Nyanza</option></select></div>' +
             '<p class="mhint">They set their own password from the invitation. No one else sees it.</p>',
       done: 'Invitation sent \u2014 they appear under Invited until they accept'
@@ -858,6 +858,57 @@
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>This role can open risk-of-harm detail. Narrowing it hides open cases from the people working them.</span></p>',
       done: 'Role saved \u2014 17 people are affected'
     },
+    /* The one screen that could change a level did not exist, so a position
+       was stuck at whatever rung it was seeded with. Changing it moves every
+       permission on it and everything built on it at once, so the dialog
+       counts that before you do it rather than afterwards. */
+    poslevel: {
+      title: 'Change the level',
+      ok: 'Change it',
+      body: '<div><label for="f-pl2">This position works at</label>'
+          + '<select id="f-pl2"></select></div>'
+          + '<div class="impact" id="f-pl2w"></div>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
+          + '<span>Which place somebody covers stays on their assignment. This is how far '
+          + 'from that place the job reaches.</span></p>',
+      init: function (body) {
+        var P = window.SugiraPerms;
+        var sel = body.querySelector('#f-pl2');
+        var out = body.querySelector('#f-pl2w');
+        if (!P || !P.open || !sel) return;
+        var p = P.open();
+        if (!p) return;
+        sel.innerHTML = P.reachLines().map(function (r) {
+          return '<option value="' + r[0] + '">' + esc(r[1]) + '</option>';
+        }).join('');
+        sel.value = p.reach;
+        function say() {
+          var now = sel.value;
+          var same = now === p.reach;
+          out.innerHTML = '<div class="lr"><span class="t">' + esc(p.name) + '</span>'
+            + '<span class="s">' + (same ? 'stays where it is' : 'moves to this rung')
+            + '</span><span class="c">' + p.people + '</span></div>';
+          var below = P.built ? P.built(p.id) : 0;
+          out.innerHTML += '<div class="lr"><span class="t">Built on it</span>'
+            + '<span class="s">'
+            + (!below ? 'nothing is built on this one'
+                      : same ? 'unaffected'
+                             : 'moves with it, because a rung cannot reach less than what it is built on')
+            + '</span><span class="c">' + (below || '\u2014') + '</span></div>';
+        }
+        sel.addEventListener('change', say);
+        say();
+      },
+      done: function (body) {
+        var P = window.SugiraPerms;
+        var sel = body.querySelector('#f-pl2');
+        if (!P || !P.open || !sel) return 'Level changed';
+        var p = P.open();
+        var line = (sel.options[sel.selectedIndex] || {}).textContent || sel.value;
+        P.setReach(p.id, sel.value);
+        return p.name + ' now reaches ' + line;
+      }
+    },
     posadd: {
       title: 'Give a position to someone',
       ok: 'Give it to them',
@@ -900,17 +951,26 @@
       ok: 'Create position',
       body: '<div><label for="f-rn">Name</label><input id="f-rn" type="text" placeholder="e.g. District coordinator"></div>'
           + '<div><label for="f-rw">What the job is</label><textarea id="f-rw" placeholder="One sentence, the way someone in the programme would say it \u2014 \u201cRuns the programme in one sector and supervises the home visitors in it.\u201d This is what the card shows."></textarea></div>'
+          + '<div class="cols c2">'
           + '<div><label for="f-rb">Starts from</label><select id="f-rb"></select></div>'
+          + '<div><label for="f-rl">Level</label><select id="f-rl"></select></div></div>'
           + '<div><label for="f-rp">Programme</label><select id="f-rp"><option>All projects</option><option>Selected projects</option></select></div>'
           + '<p class="m-lead">It starts with everything that position has, and you add to it on the card. It cannot take anything away \u2014 something that needs less than its rung is a rung of its own.</p>'
           + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span data-count="{Positions} positions exist for ten jobs."></span><span> If this one would be an existing position plus one thing for one person, that belongs on their record as an exception \u2014 doing it here is how the live system came to carry twenty-one roles, three of them called Test role.</span></p>'
-          + '<p class="m-lead">Which sector or district someone covers is set when the position is given to them, not here. The same position runs in every sector.</p>',
+          + '<p class="m-lead">The level is the job\u2019s: a sector lead works at sector level wherever they are posted. <b>Which</b> sector is set when the position is given to somebody, not here.</p>',
       /* The ladder is the answer to "what can this start from", so the list
          is the ladder rather than a copy of it that was right in October. */
       init: function (body) {
         var sel = body.querySelector('#f-rb');
         var P = window.SugiraPerms;
         if (!sel || !P) return;
+        var lv = body.querySelector('#f-rl');
+        if (lv && P.reachLines) {
+          lv.innerHTML = P.reachLines().map(function (r) {
+            return '<option value="' + r[0] + '">' + esc(r[1]) + '</option>';
+          }).join('');
+          lv.value = 'sector';
+        }
         sel.innerHTML = '';
         P.positions().forEach(function (p) {
           var o = document.createElement('option');
@@ -1768,7 +1828,9 @@
     var t = e.target.closest('[data-go]');
     // A control inside a clickable row belongs to the control, not the row —
     // otherwise an Edit button in a table row would just open the row.
-    var inner = e.target.closest('[data-modal]');
+    /* A control inside a row that does its own thing — a dialog, or the
+       caret that opens the row's own panel — is not the row's link. */
+    var inner = e.target.closest('[data-modal], .sx');
     if (t && inner && t !== inner && t.contains(inner)) t = null;
     if (t) {
       var key = t.getAttribute('data-go');
@@ -1814,6 +1876,36 @@
     if (window.SugiraFilters && screen) {
       window.SugiraFilters.set(screen.id, key, value);
     }
+  });
+
+  /* A session opens its forms where it is; its name still opens the
+     record. gp1 13:16 wants the glance, gp1 24:31 wants the drawer, and a
+     caret beside a link is how every other list in the world offers both. */
+  document.addEventListener('click', function (e) {
+    var sx = e.target.closest('.sx');
+    if (!sx) return;
+    e.stopPropagation();
+    var row = sx.closest('tr');
+    var sub = row && row.nextElementSibling;
+    if (!sub || !sub.classList.contains('sxr')) return;
+    var open = sx.getAttribute('aria-expanded') === 'true';
+    sx.setAttribute('aria-expanded', String(!open));
+    sub.hidden = open;
+  });
+
+  /* Sorting, filtering or turning the page moves the rows out from under an
+     open panel, so every panel closes when any of those happen. Sorting and
+     filtering announce themselves; paging does not, so the pager's own
+     buttons are watched instead. */
+  function shutPanels(root) {
+    $$('.sxr', root || document).forEach(function (sub) { sub.hidden = true; });
+    $$('.sx', root || document).forEach(function (b) {
+      b.setAttribute('aria-expanded', 'false');
+    });
+  }
+  document.addEventListener('table:applied', function (e) { shutPanels(e.target); });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.tfoot .pg button')) shutPanels();
   });
 
   // ---- a relationship row with more than three links expands in place ----
@@ -2761,7 +2853,10 @@
         /* An indicator the form was built with is a column like any
            other; it just starts off the screen. */
         shown: !th.hasAttribute('data-off'),
-        onForm: th.hasAttribute('data-off'),
+        /* Why it is held back, in the markup's own words. Visits says
+           "on the form" because that is the point of holding those four
+           back; a report's schedule says nothing and is just offered. */
+        why: th.getAttribute('data-off') || '',
         gap: th.classList.contains('gap')
       };
     });
@@ -2983,7 +3078,7 @@
       /* the column */
       row.appendChild(pick('qf-col', col ? col.label : 'Column',
         cols.map(function (c) {
-          return { v: String(c.i), t: c.label + (c.onForm ? '  \u2014 on the form' : '') };
+          return { v: String(c.i), t: c.label + (c.why ? '  \u2014 ' + c.why : '') };
         }),
         String(r.i), function (v) {
           r.i = +v;
