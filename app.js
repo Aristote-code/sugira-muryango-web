@@ -40,7 +40,7 @@
                              ['The Importance of Good Health', null]], nav: 'programme' },
     form:         { crumbs: [['Programme', 'programme'], ['Household Module Tracking', 'project'],
                              ['The Importance of Good Health', 'module'], ['Visit record', null]], nav: 'programme' },
-    cohorts:      { crumbs: [['Programme', 'programme'], ['Cohorts', null]],              nav: 'cohorts' },
+    cohorts:      { crumbs: [['Cohorts', null]],                                          nav: 'cohorts' },
     translations: { crumbs: [['Programme', 'programme'], ['Translations', null]],         nav: 'translations' }
   };
   /* The crumbs are already this app's own answer to "where am I", so anything
@@ -2759,7 +2759,10 @@
         numeric: nums.length >= Math.ceil(vals.length * 0.6),
         enumish: distinct.length > 1 && distinct.length <= Math.max(4, rows.length / 2),
         options: distinct.sort(),
-        shown: true,
+        /* An indicator the form was built with is a column like any
+           other; it just starts off the screen. */
+        shown: !th.hasAttribute('data-off'),
+        onForm: th.hasAttribute('data-off'),
         gap: th.classList.contains('gap')
       };
     });
@@ -2980,10 +2983,16 @@
 
       /* the column */
       row.appendChild(pick('qf-col', col ? col.label : 'Column',
-        cols.map(function (c) { return { v: String(c.i), t: c.label }; }),
+        cols.map(function (c) {
+          return { v: String(c.i), t: c.label + (c.onForm ? '  \u2014 on the form' : '') };
+        }),
         String(r.i), function (v) {
           r.i = +v;
-          var k = colKind(cols.filter(function (c) { return c.i === r.i; })[0]);
+          var now = cols.filter(function (c) { return c.i === r.i; })[0];
+          /* Filtering on a question the table was not showing shows it: the
+             row that survives has to say what it survived on. */
+          if (now && !now.shown) { now.shown = true; }
+          var k = colKind(now);
           if (!OPS[k].some(function (o) { return o[0] === r.op; })) r.op = 'is';
           r.v = ''; r.v2 = '';
           apply(); drawFilters();

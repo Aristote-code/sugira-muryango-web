@@ -153,12 +153,17 @@
              filter is on, the rows are the set. */
           var whole = null;
           if (!filtered(table)) {
+            /* A table that knows its own size says so. The tab heuristic
+               below is for the lists that have a counted tab above them, and
+               it has nothing to read on a tab called "Translate". */
+            var declared = parseInt(table.getAttribute('data-total') || '', 10);
+            if (!isNaN(declared) && declared >= list.length) whole = declared;
             var sc = table.closest('.screen');
             var tab = sc && sc.querySelector('.tab.on, .tab[aria-selected="true"]');
             var m = tab && /([\d][\d\s\u00a0\u202f.,]*)\s*$/.exec(
               tab.textContent.replace(/\s+/g, ' ').trim());
             var n = m ? parseInt(m[1].replace(/[^\d]/g, ''), 10) : NaN;
-            if (!isNaN(n) && n >= list.length) whole = n;
+            if (whole === null && !isNaN(n) && n >= list.length) whole = n;
           }
           label.textContent = !list.length ? 'Nothing matches these filters'
             : whole !== null
