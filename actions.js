@@ -419,7 +419,7 @@
     var table = scope.querySelector('.tbl');
     if (!table) return;
 
-    function select(tag) {
+    function select(tag, initial) {
       var total = 0, shown = 0;
       if (tag === 'all') tag = null;      // the "everything" tab names itself
       $$('tbody tr', table).forEach(function (r) {
@@ -439,7 +439,9 @@
       var label = screen.querySelector('.tfoot span:not(.pg)');
       if (label) {
         if (!label.dataset.base) label.dataset.base = label.innerHTML;
-        label.innerHTML = tag
+        /* The written footer describes the tab the screen opens on, so it
+           stands until somebody moves off it. */
+        label.innerHTML = (tag && !initial)
           ? 'Showing ' + shown + ' of ' + total
           : label.dataset.base;
       }
@@ -452,6 +454,10 @@
       t.classList.add('on');
       select(t.getAttribute('data-tab'));
     });
+
+    /* The tab marked on is a choice already made, so make it. */
+    var first = tabs.filter(function (x) { return x.classList.contains('on'); })[0];
+    if (first) select(first.getAttribute('data-tab'), true);
   });
 
   /* ---- row actions as controls, not a row of links ----

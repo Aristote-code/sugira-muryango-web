@@ -53,6 +53,7 @@
      used to be a paragraph at the top of every screen, which the crumb
      had already named and which cost a row of layout to say. */
   var ABOUT = {
+    activity:      'Every change to who can do what, every export, every sign-in, and every attempt that was refused — which is the entry that answers “who tried”. Nothing here can be edited or deleted, by anybody, which is what makes it worth keeping.',
     cohorts:       'A cohort decides which households get which session, and when. Changing one moves real families’ schedules. Five districts run the programme: Kirehe, Musanze, Ngoma, Nyanza and Rubavu.',
     community:     'Home visitors post to each other from the tablet. Anything a reader reports arrives here, and nothing is removed without a reason being recorded.',
     content:       'What a home visitor can open on the tablet: the session videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose. A document is filed in a folder somebody made, and opening one downloads it rather than showing it here.',
