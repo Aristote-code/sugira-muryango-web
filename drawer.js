@@ -28,10 +28,10 @@
       ['C. Uwimana', 'enrolled this household in Cohort 1', '12 Jun']
     ],
     'case': [
-      ['System', 'escalated to the district lead — still unreviewed after 24 hours', '31 Oct'],
+      ['System', 'escalated to the district lead — still unreviewed after 24 hours', '1 Nov'],
       ['System', 'escalated to the district lead on the 72-hour breach', '31 Oct'],
-      ['C. Uwimana', 'declined P. Habimana’s request to open this case in full', '30 Oct'],
-      ['P. Habimana', 'asked to open this case in full — monthly safeguarding summary', '30 Oct'],
+      ['System', 'told C. Uwimana and M. Dusabe that a name had been read', '29 Oct'],
+      ['P. Habimana', 'opened this case in full — monthly safeguarding summary', '29 Oct'],
       ['M. Dusabe', 'raised this flag at Session 6, question 5', '28 Oct']
     ],
     project: [
@@ -50,7 +50,7 @@
     ],
     person: [
       ['A. Gahimana', 'granted an exception: delete a risk-of-harm case', '1 Nov'],
-      ['System', 'recorded a refused attempt to open a case in Nyanza', '29 Oct'],
+      ['System', 'told this person that RH-0044 was opened by somebody not on it', '29 Oct'],
       ['A. Gahimana', 'gave this person the Sector lead position at Kibungo', '3 Sep']
     ]
   };

@@ -278,7 +278,8 @@
      programme. Neither needed deciding — only reading. */
   var SEED = [
     { id: 'IZU', name: 'IZU at Village', short: 'IZU at Village', base: null, people: 412,
-      what: 'The home visitor, one per village. Everything they do happens in a household, on a tablet.',
+      what: 'The home visitor. A village has two, and the biggest three. Everything they do '
+          + 'happens in a household, on a tablet.',
       reach: 'village',
       adds: ['hh-see', 'hh-enrol', 'hh-change', 'visit-see', 'visit-record', 'roh-see',
              'roh-raise', 'fs-see'] },
@@ -327,6 +328,7 @@
       what: 'Owns the place hierarchy and the organisations on it. Holds nothing inside a '
           + 'programme \u2014 no household, no visit, no case.',
       reach: 'national',
+      heldBy: 'Held by FXB Rwanda',
       adds: ['plat-places', 'plat-orgs', 'plat-grant', 'ppl-see'] }
   ];
 
@@ -395,7 +397,7 @@
   function freshPositions() {
     return SEED.map(function (p) {
       return { id: p.id, name: p.name, short: p.short, base: p.base, people: p.people, what: p.what,
-               reach: p.reach || null,
+               reach: p.reach || null, heldBy: p.heldBy || null,
                reaches: Object.keys(p.reaches || {}).reduce(function (a, k) {
                  a[k] = p.reaches[k]; return a;
                }, {}),
@@ -641,12 +643,18 @@
 
     var foot = el('div', 'rolec-f');
     foot.appendChild(reach(total(p)));
+    /* A count of nobody reads as a hole somebody forgot to fill. Platform
+       administration is not a job inside a programme and has no holder on
+       the people list by design, so the card says who holds it instead. */
     var held = el('span', 'rolec-p',
-      p.people ? p.people + (p.people === 1 ? ' person' : ' people') : 'Nobody yet');
+      p.people ? p.people + (p.people === 1 ? ' person' : ' people')
+               : (p.heldBy || 'Nobody yet'));
     if (!p.people) {
-      held.setAttribute('data-tip', 'The position exists and nobody has been given it. '
-        + 'Who holds platform administration \u2014 FXB Rwanda, a joint body, or NCDA \u2014 '
-        + 'is the one thing about it that is not ours to decide.');
+      held.setAttribute('data-tip', p.heldBy
+        ? 'Platform administration belongs to the organisation that runs the deployment, '
+          + 'not to anybody inside a programme \u2014 which is why it holds no household, no '
+          + 'visit and no case. It has no holder on the people list and is not meant to.'
+        : 'The position exists and nobody has been given it.');
     }
     foot.appendChild(held);
     a.appendChild(foot);

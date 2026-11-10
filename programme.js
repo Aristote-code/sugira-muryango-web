@@ -228,7 +228,7 @@
   /* The rest of the app spells IZU, SLA and HQ out on hover rather than in the
      row. Built here rather than written into thirty-seven cells. */
   var SHORT = {
-    'IZU': 'IZU — the home visitor at village level, one per village',
+    'IZU': 'IZU — the home visitor at village level. A village has two, and the biggest three',
     'SLA': 'SLA — Sugira Muryango Sector lead',
     'HQ': 'HQ — the FXB Rwanda head office team'
   };

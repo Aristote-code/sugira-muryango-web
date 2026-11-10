@@ -219,7 +219,7 @@
         if (pair[0] === 'IZU at Village') {
           var ab = el('abbr', null, 'IZU');
           ab.setAttribute('data-tip',
-            'IZU — the home visitor at village level, one per village');
+            'IZU — the home visitor at village level. A village has two, and the biggest three');
           k.appendChild(ab);
           k.appendChild(document.createTextNode(' at Village'));
         } else {

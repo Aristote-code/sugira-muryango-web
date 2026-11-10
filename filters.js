@@ -101,13 +101,15 @@
      ones, so scoping down and adding the five back up gives the same totals.
      Cohorts 3 and 4 hold no districts, so filtering to either correctly
      empties the board — that is the data saying something true. */
-  /* `izu` is the home visitors a district has, and there is one to a village,
-     so it is also the number of villages with a home visitor — which is what
-     "Reported today" counts against. It used to be a second field, `staff`,
-     summing to 193 against izu's 486: the same people counted twice, two
-     screens apart, with two answers. The total is 412 because that is what
-     the live system stores, on the Roles screen headed "exactly as it is
-     stored". */
+  /* `izu` is the home visitors a district has, which is what "Reported
+     today" counts against. It used to be a second field, `staff`, summing to
+     193 against izu's 486: the same people counted twice, two screens apart,
+     with two answers. The total is 412 because that is what the live system
+     stores, on the Roles screen headed "exactly as it is stored", and 412
+     over 193 villages is the pair each village has.
+
+     Places draws its tree from these same five rows, so this is the one
+     place a district's households and home visitors are written down. */
   var BOARD = {
     Ngoma:   { hh: 560, visits: 470, behind: 34, izu: 105, izuOn: 89, said: 95, male: 41, calls: 93 },
     Kirehe:  { hh: 420, visits: 330, behind: 38, izu: 78,  izuOn: 66, said: 70, male: 33, calls: 69 },
@@ -691,6 +693,9 @@
      and it must go through the same path a click does, so the two can never
      hold different ideas of what the screen is showing. */
   window.SugiraFilters = {
+    /* Published so the place tree spreads these numbers rather than
+       inventing its own and totalling to the same national figure. */
+    board: function () { return BOARD; },
     set: function (screenId, key, value) {
       var btn = $$('#' + screenId + ' .fl').filter(function (b) { return keyOf(b) === key; })[0];
       if (!btn) return false;

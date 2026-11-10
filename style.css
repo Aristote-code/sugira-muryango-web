@@ -42,6 +42,7 @@
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   --i-check:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M5 14L8.5 17.5L19 6.5" stroke="%23000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   --lh-16:16px;
+  --lh-20:20px;
 }
 *{box-sizing:border-box}
 html,body{font-family:var(--ui);height:100%}
@@ -1399,6 +1400,10 @@ td.num{white-space:nowrap}
 /* what changing this would affect — the reason the relationship matters */
 .conseq{font-size:11px;line-height:16px;color:var(--color-content-warning);white-space:nowrap}
 .conseq.plain{color:var(--color-content-secondary)}
+/* In a .pgr the row is a flex line and the gap separates these; a table
+   cell is not, so the aside needs its own space or it runs into the word
+   in front of it. */
+td .conseq{margin-left:var(--space-2)}
 /* Something that has already run out is not a warning any more — it is a fact
    about the past, and it stays on the record because that is what an auditor
    came to read. */
@@ -1817,46 +1822,20 @@ td.num{white-space:nowrap}
 .axis-tag.now{background:var(--color-primitive-grey-100);border-color:var(--color-border-default);color:var(--color-content-secondary)}
 .axis-tag.new{background:var(--color-bg-primary-subtle);border-color:var(--x-clickup-color-effect-primary);color:var(--x-clickup-color-background-primary-pressed)}
 .axis-foot{font-size:12px;color:var(--color-content-secondary);margin:var(--space-3) 0 0;line-height:1.5}
-/* viewing-as: the risk-of-harm access bands, switchable */
-.vas{display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-4)}
-.vas.inrec{margin:var(--space-3) 0 var(--space-1)}
-.vas-l{display:inline-flex;align-items:center;gap:var(--space-1);font-size:12px;font-weight:600;
-  color:var(--color-content-secondary);}
-.vas-l svg{width:var(--dimension-14);height:var(--dimension-14)}
-.vas-g{display:inline-flex;border:1px solid var(--color-border-default);border-radius:var(--radius-md);
-  background:var(--color-bg-surface);padding:var(--dimension-2);gap:var(--dimension-2);flex-wrap:wrap}
-.vas-b{border:0;background:transparent;border-radius:6px;
-  padding:var(--space-1) var(--space-3);font-family:var(--ui);font-size:13px;font-weight:500;
-  color:var(--color-content-secondary);cursor:pointer;white-space:nowrap}
-.vas-b:hover{background:var(--color-primitive-grey-100);color:var(--color-content-primary)}
-.vas-b.on{background:var(--color-bg-primary-default);color:var(--color-content-on-primary)}
-.vas-n{font-size:12px;color:var(--color-content-secondary)}
-.rnote{border:1px solid var(--color-border-default);background:var(--x-clickup-color-background-on-main);border-radius:var(--radius-md);
-  padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)}
-.rnote p{font-size:13px;color:var(--color-content-secondary);line-height:1.55;margin:0;max-width:92ch}
-.rnote code{font-size:12px}
-/* a redacted row keeps its shape so the count stays readable */
-.r-shut{display:none}
-tr.shut .r-open{display:none}
-tr.shut .r-shut{display:inline}
-tr.shut{cursor:default}
-tr.shut .nm{color:var(--color-content-secondary);font-weight:500}
+/* the one treatment a withheld fact gets: the row keeps its shape, so a
+   list of cases still reads as a list of cases. */
 .rd{color:var(--color-content-secondary);font-style:italic;font-size:13px}
-/* the locked case */
-.lockwrap{padding:0 var(--space-6) var(--space-6)}
-.rlock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-4);
-  border-radius:var(--radius-lg);background:var(--color-bg-surface);
-  box-shadow:var(--elevation-raised);padding:var(--space-12) var(--space-6);text-align:center}
-.rlock-i{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;
-  border-radius:50%;background:var(--color-bg-danger-subtle);color:var(--color-content-danger);margin-bottom:var(--space-4)}
-.rlock-i svg{width:var(--space-4);height:var(--space-4)}
-.rlock h3{font-size:var(--surface-empty-title-font-size);line-height:var(--surface-empty-title-line-height);font-weight:500}
-.rlock p{max-width:var(--surface-empty-description-max-width);
-  font-size:var(--surface-empty-description-font-size);line-height:20px;
-  color:var(--color-content-secondary);margin:0}
-.rlock-a{display:flex;gap:var(--space-2);justify-content:center;margin:var(--space-2) 0 0;flex-wrap:wrap}
-.rlock-f{font-size:12px;color:var(--color-content-secondary);margin:0;max-width:var(--surface-empty-description-max-width)}
-.offlimits{display:none}
+/* the tick on a picked answer in the tablet preview */
+.lr .pick{width:var(--dimension-14);height:var(--dimension-14);visibility:hidden;
+  color:var(--color-content-link);display:block}
+.lr[aria-checked="true"] .pick{visibility:visible}
+.lr[aria-checked="true"] .t{font-weight:500}
+/* the answer behind a question in field support */
+.faq-a{margin:0;padding:0 0 var(--space-3);font-size:13px;line-height:1.55;
+  color:var(--color-content-secondary);max-width:68ch}
+.lr[aria-current="true"] .t{font-weight:500;color:var(--color-content-link)}
+.lr[aria-expanded="true"] .ch{transform:rotate(90deg)}
+.lr .ch{transition:transform var(--duration-fast,120ms) ease}
 .tr.more .nm{color:var(--color-content-secondary);font-style:italic}
 .tr.more .rt{color:var(--color-content-secondary)}
 /* filter popovers: ClickUp's surface, the old app's chaining, neither's waiting */
@@ -2315,7 +2294,7 @@ svg:has(> use[href^="#i-"]){fill:currentColor;stroke:none;flex:none}
    widths on every screen, and a flex middle would drift with them. ClickUp's
    does not drift: it is 286 wide at the same place whatever the page says. */
 .kb-pill{position:absolute;left:50%;transform:translateX(-50%);
-  display:inline-flex;align-items:center;gap:var(--dimension-4);
+  display:inline-flex;align-items:center;gap:var(--space-1);
   width:var(--search-pill-width);
   height:var(--size-control-sm);padding:0 var(--dimension-7);
   border:0;border-radius:var(--radius-full);
@@ -2431,7 +2410,7 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .asg-b{display:flex;align-items:center;gap:var(--space-3);width:100%;
   padding:var(--space-3) var(--space-4);
   border:1px solid var(--color-border-default);border-left:2px solid transparent;
-  border-radius:var(--radius-md);background:var(--color-bg-main);
+  border-radius:var(--radius-md);background:var(--color-bg-surface);
   font:inherit;text-align:left;cursor:pointer}
 .asg-b:hover{background:var(--color-bg-hover)}
 .asg-b:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}

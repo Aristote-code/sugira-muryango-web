@@ -152,18 +152,71 @@
             '<div><label for="f-arw">Why</label><select id="f-arw"><option>Replaced by a newer version</option><option>No longer part of the programme</option><option>Created in error</option></select></div>',
       done: 'Archived — it leaves the tablet at the next sync'
     },
-    rohask: {
-      title: 'Request access to RH-0044',
-      ok: 'Send request',
-      body: '<div><label for="f-why">Why you need the case detail</label><textarea id="f-why" placeholder="Required. The sector lead who holds the case reads this, and it is kept in the audit trail whether the request is granted or refused."></textarea></div>' +
-            '<div><label for="f-how">For how long</label><select id="f-how"><option>Until the case closes</option><option>7 days</option><option>24 hours</option></select></div>' +
-            '<div><label for="f-tell">Who is told</label><select id="f-tell" disabled><option>The sector lead, and the home visitor who raised the flag</option></select></div>',
-      done: 'Request sent to C. Uwimana — recorded in the audit trail'
+    binned: {
+      title: 'Deleted responses',
+      icon: 'admin',
+      wide: true,
+      ok: 'Restore all three',
+      body: '<div class="tblwrap"><table class="tbl"><thead><tr><th>Response</th>'
+          + '<th>Form</th><th>Deleted by</th><th class="num">Deleted</th>'
+          + '<th class="num">Gone after</th></tr></thead><tbody>'
+          + '<tr><td class="nm">HH-1319 \u00b7 Session 5</td><td class="mut">Visit record</td>'
+          + '<td class="mut">E. Mutesi</td><td class="num mut">28 Oct</td>'
+          + '<td class="num">27 Nov</td></tr>'
+          + '<tr><td class="nm">HH-0871 \u00b7 Session 4</td><td class="mut">Visit record</td>'
+          + '<td class="mut">E. Mutesi</td><td class="num mut">28 Oct</td>'
+          + '<td class="num">27 Nov</td></tr>'
+          + '<tr><td class="nm">HH-1456 \u00b7 weekly call</td>'
+          + '<td class="mut">IZU Telephone Supervision</td><td class="mut">C. Uwimana</td>'
+          + '<td class="num mut">12 Oct</td><td class="num"><span class="chip warn"><i></i>5 days</span>'
+          + '</td></tr></tbody></table></div>'
+          + '<p class="m-lead">Restoring puts a response back into every count that is '
+          + 'currently missing it, which is why the figure it belongs to moves when you do.</p>',
+      done: '3 responses restored \u2014 Visits done is now 1 845 of 2 210'
+    },
+    org: {
+      title: 'Add an organisation',
+      icon: 'admin',
+      ok: 'Add it and invite',
+      body: '<div><label for="f-on">Name</label><input id="f-on" type="text" '
+          + 'placeholder="As it should read on an export and on a referral"></div>'
+          + '<div><label for="f-or">Where it reaches</label><select id="f-or">'
+          + '<option>Nowhere until it runs a project</option>'
+          + '<option>Kirehe, Musanze, Ngoma, Nyanza, Rubavu</option>'
+          + '<option>National</option></select></div>'
+          + '<div><label for="f-ox">What it sees outside that</label><select id="f-ox">'
+          + '<option>Nothing</option><option>Exports with no names in them</option>'
+          + '<option>A risk-of-harm case, once it is referred</option></select></div>'
+          + '<div><label for="f-oa">Its administrator</label><input id="f-oa" type="email" '
+          + 'placeholder="Invited now, and names the rest of their own people themselves"></div>',
+      done: 'Added \u2014 the invitation is on its way'
+    },
+    rohopen: {
+      title: 'Open RH-0044 in full',
+      icon: 'safeguarding',
+      ok: 'Open in full',
+      body: '<div><label for="f-why">Why you need the household and the home visitor</label>'
+          + '<textarea id="f-why" placeholder="Required. It stays on the case, and the sector lead '
+          + 'and the home visitor who raised the flag both read it."></textarea></div>'
+          + '<div><label for="f-how">For how long</label><select id="f-how">'
+          + '<option>until the case closes</option><option>for 7 days</option>'
+          + '<option>for 24 hours</option></select></div>'
+          + '<div><label for="f-tell">Who is told, as you open it</label>'
+          + '<select id="f-tell" disabled><option>C. Uwimana, and M. Dusabe who raised the flag</option>'
+          + '</select></div>',
+      /* Nothing here is granted, so there is nothing to wait for: the dialog
+         closes onto an open case and two new lines in the audit trail. */
+      done: function (body) {
+        var why = (body.querySelector('#f-why') || {}).value || '';
+        var how = (body.querySelector('#f-how') || {}).value || 'until the case closes';
+        rohOpen(why.trim(), how);
+        return 'Opened \u2014 C. Uwimana and M. Dusabe have been told';
+      }
     },
     upd: {
       title: 'Add an update',
       ok: 'Save update',
-      body: '<div><label for="f-ud">Date</label><input id="f-ud" type="date" value="2026-11-03"></div>' +
+      body: '<div><label for="f-ud">Date</label><input id="f-ud" type="date" value="2026-11-06"></div>' +
             '<div><label for="f-us">Status</label><select id="f-us"><option>Active</option><option>Stabilised</option></select></div>' +
             '<div><label for="f-uc">Update</label><textarea id="f-uc" placeholder="What has changed since the last update?"></textarea></div>',
       done: 'Update added'
@@ -171,7 +224,7 @@
     refer: {
       title: 'Record a follow-up',
       ok: 'Save follow-up',
-      body: '<div><label for="f-rd">Date</label><input id="f-rd" type="date" value="2026-11-03"></div>' +
+      body: '<div><label for="f-rd">Date</label><input id="f-rd" type="date" value="2026-11-06"></div>' +
             '<div><label for="f-ro">Outcome</label><select id="f-ro"><option>Seen at the health centre</option><option>Did not attend</option><option>Referred on</option><option>Closed — stabilised</option></select></div>' +
             '<div><label for="f-rn">What came back</label><textarea id="f-rn" placeholder="What the referral found, in the referrer’s words"></textarea></div>',
       done: 'Follow-up recorded on RF-0112'
@@ -180,7 +233,7 @@
       title: 'Log a visit',
       ok: 'Log visit',
       body: '<div><label for="f-mod">Module</label><select id="f-mod"><option>7 — The Importance of Good Nutrition</option><option>8 — Managing the Stresses of Parenting</option></select></div>' +
-            '<div><label for="f-date">Date of visit</label><input id="f-date" type="date" value="2026-11-02"></div>' +
+            '<div><label for="f-date">Date of visit</label><input id="f-date" type="date" value="2026-11-06"></div>' +
             '<div><label for="f-out">Outcome</label><select id="f-out"><option>Completed</option><option>Household absent</option><option>Road access</option><option>Security concern</option></select></div>',
       done: 'Visit logged — it will sync when the tablet next connects'
     },
@@ -1540,8 +1593,6 @@
     var inner = e.target.closest('[data-modal]');
     if (t && inner && t !== inner && t.contains(inner)) t = null;
     if (t) {
-      // A redacted row is not a link. Nothing behind it is reachable.
-      if (t.classList.contains('shut')) return;
       var key = t.getAttribute('data-go');
       // Remember the rail row this came from, if it is one, so setNav can light
       // the row you picked rather than the first one naming the same screen.
@@ -1557,6 +1608,18 @@
     if (m) { openModal(m.getAttribute('data-modal'), m); }
   });
 
+  /* One answer at a time, in the tablet preview. Nothing is submitted and
+     the card beside it says so; what this is for is showing the layout, and
+     an answer nobody can pick is not the layout. */
+  document.addEventListener('click', function (e) {
+    var pick = e.target.closest('[data-pick]');
+    if (!pick) return;
+    var group = pick.getAttribute('data-pick');
+    $$('[data-pick="' + group + '"]').forEach(function (o) {
+      o.setAttribute('aria-checked', String(o === pick));
+    });
+  });
+
   // ---- a relationship row with more than three links expands in place ----
   document.addEventListener('click', function (e) {
     var m = e.target.closest('[data-more]');
@@ -1566,47 +1629,183 @@
     if (row) row.classList.add('is-open');
   });
 
-  // ---- risk of harm: switch the role looking at the screen ----
-  /* Nothing here is saved. The four bands are what splitting roh-list into a
-     count and a detail makes possible, and the client picks between them. */
-  function applyRoh(mode) {
-    $$('.vas-b').forEach(function (b) {
-      b.classList.toggle('on', b.getAttribute('data-roh') === mode);
-    });
-    $$('[data-open]').forEach(function (el) {
-      var ok = el.getAttribute('data-open').split(' ').indexOf(mode) > -1;
-      if (el.classList.contains('lockwrap')) { el.hidden = ok; }
-      else {
-        el.classList.toggle('shut', !ok);
-        if (el.tagName === 'TR') {
-          if (ok) { el.setAttribute('tabindex', '0'); el.setAttribute('role', 'link'); }
-          else { el.removeAttribute('tabindex'); el.removeAttribute('role'); }
+  // ---- risk of harm: the two facts that name a child ----
+  /* Reach decides whether a case is on your list at all — cases outside the
+     places you cover are absent, not redacted — and reach is the same reach
+     the assignments and the access tree already use. What reach does not
+     carry is the household and the home visitor, because those name a child
+     and chasing an overdue review does not need them.
+
+     So they are withheld, and opening them is taken rather than granted. A
+     gate held by the person who holds the case is not a safeguard: this
+     case's own audit trail is the proof, where the national agency asked for
+     the detail and the sector lead refused it while sitting on a review that
+     was already two days late. The deterrent is that the opening is attached
+     to your name for good and the people on the case are told as it happens. */
+  /* Which cases this person has opened, and for how long. Empty is the
+     ordinary state: you are on none of them. */
+  var rohOpened = {};
+
+  function rohApply() {
+    $$('[data-hold]').forEach(function (el) {
+      var until = rohOpened[el.getAttribute('data-hold')];
+      if (!until) {
+        if (!el.hasAttribute('data-was')) {
+          el.setAttribute('data-was', el.innerHTML);
+          el.innerHTML = '<span class="rd">withheld</span>';
+        }
+      } else if (el.hasAttribute('data-was')) {
+        el.innerHTML = el.getAttribute('data-was');
+        el.removeAttribute('data-was');
+        /* A grant with an end date has to say it where the fact is, or the
+           end date is something you would have to go and look up. */
+        if (el.hasAttribute('data-holdwhen')) {
+          el.insertAdjacentHTML('beforeend',
+            '<span class="conseq">open to you ' + esc(until) + '</span>');
         }
       }
     });
-    // the case body is only reachable when the case itself is
-    var caseOpen = ['full', 'own'].indexOf(mode) > -1;
-    var sc = document.getElementById('s-case');
-    if (sc) {
-      $$('[data-panelid]', sc).forEach(function (x) { x.classList.toggle('offlimits', !caseOpen); });
-      var bar = sc.querySelector('.tabs');
-      if (bar) bar.hidden = !caseOpen;
-      var rec = sc.querySelector('.pg');
-      if (rec) rec.classList.toggle('offlimits', !caseOpen);
-      var desc = sc.querySelector('.rec-desc');
-      if (desc) desc.hidden = !caseOpen;
-      var acts = sc.querySelector('.rec-top .acts');
-      if (acts) acts.hidden = !caseOpen;
+    var mine = !!rohOpened['RH-0044'];
+    $$('[data-rohoff]').forEach(function (x) { x.hidden = mine; });
+    $$('[data-rohon]').forEach(function (x) { x.hidden = !mine; });
+    var who = document.getElementById('rohWho');
+    if (who) {
+      who.innerHTML = !mine ? ''
+        : '<div class="lr"><span class="t">A. Gahimana</span>'
+        + '<span class="s"><abbr data-tip="HQ \u2014 the FXB Rwanda head office team">HQ</abbr>'
+        + ' officer \u00b7 opened it today</span></div>';
     }
-    $$('[data-when]').forEach(function (x) {
-      x.hidden = x.getAttribute('data-when') !== mode;
-    });
-    document.body.setAttribute('data-roh', mode);
   }
-  $$('.vas-b').forEach(function (b) {
-    b.addEventListener('click', function () { applyRoh(b.getAttribute('data-roh')); });
+
+  /* Opening writes two entries, not one. The second is the point: a name was
+     read by somebody who is not on the case, and the people who are were told. */
+  function rohOpen(why, until) {
+    rohOpened['RH-0044'] = until;
+    var tl = $('#s-case [data-panelid="audit"] .tl');
+    if (tl) {
+      tl.insertAdjacentHTML('beforeend',
+        '<div class="te"><span class="ic bad"><svg aria-hidden="true">'
+        + '<use href="#i-safeguarding"/></svg></span><div><h4>Opened in full</h4>'
+        + '<p>A. Gahimana \u00b7 <abbr data-tip="HQ \u2014 the FXB Rwanda head office team">HQ</abbr>'
+        + ' officer \u00b7 ' + esc(until) + (why ? ' \u00b7 reason given: \u201c' + esc(why) + '\u201d' : '')
+        + '</p></div><span class="when">today 09:12</span></div>'
+        + '<div class="te"><span class="ic"><svg aria-hidden="true">'
+        + '<use href="#i-message"/></svg></span><div><h4>The people on the case were told</h4>'
+        + '<p>C. Uwimana and M. Dusabe \u00b7 a name was read by someone not on the case</p>'
+        + '</div><span class="when">today 09:12</span></div>');
+      var n = tl.children.length;
+      var chip = $('#s-case .tabs [data-panel="audit"] .chip');
+      if (chip) chip.textContent = String(n);
+      var side = $('#s-case [data-panelid="audit"] .card-h .s');
+      if (side) side.textContent = n + ' entries \u00b7 written whether or not the case was opened';
+    }
+    rohApply();
+  }
+
+  rohApply();
+
+
+  /* ---- field support: the questions, and the answers behind them ----
+     Every answer below is a rule stated somewhere else in the app — thirty
+     days offline on the Tablet tab, 72 hours in the safeguarding protocol,
+     two weeks between sessions in the programme settings. Written here in
+     the words of the person holding the tablet rather than the words of the
+     screen that sets it. */
+  var FAQ = [
+    ['Using the tablet', 9, [
+      ['What happens if I lose signal mid-visit?',
+       'Nothing stops. The form is filled in on the device and held there, for up to thirty '
+       + 'days, and goes up the next time the tablet reaches a connection.'],
+      ['How do I know a visit has synced?',
+       'It stops being counted as held on the device. Your own list marks it as sent, and '
+       + 'your sector lead sees the same thing on Field status.'],
+      ['The form will not let me continue',
+       'One of the eleven required questions above is empty. The form marks it and takes you '
+       + 'back to it. A question you genuinely cannot answer takes Not known rather than '
+       + 'being left blank.'],
+      ['Changing a visit after it was sent',
+       'You do not change it, you add to it. The original answers stay and the correction is '
+       + 'recorded beside them with the date, because a report built on the old figure has to '
+       + 'stay explicable.']
+    ]],
+    ['Recording a visit', 14, [
+      ['How long should a session take?',
+       'The median is 42 minutes. Under twenty is flagged to your supervisor — not because it '
+       + 'is wrong, but because it usually means the session was cut short.'],
+      ['The caregiver is not the one on the record',
+       'Record who was actually there. Changing who the household belongs to is done on the '
+       + 'household, not in the visit.'],
+      ['Can I record two sessions in one day?',
+       'Yes. Sessions are two weeks apart, so the second one will show as early and your '
+       + 'sector lead will see that.'],
+      ['What counts as completed?',
+       'Every required question answered and the session marked delivered. A household that '
+       + 'was out is an outcome, not an unfinished visit.']
+    ]],
+    ['When a household is absent', 6, [
+      ['Nobody is home',
+       'Record the visit with the outcome Household absent. It counts as a visit attempted '
+       + 'and the session stays due.'],
+      ['How many times before it is a missed visit?',
+       'Thirty days with no session delivered. The household then shows as behind the cohort.'],
+      ['The family has moved',
+       'Record the visit as absent and tell your sector lead. Moving a household between '
+       + 'villages is theirs to do, not yours.'],
+      ['Can I visit on a different day?',
+       'Yes. The schedule is two weeks between sessions, not a fixed day of the week.']
+    ]],
+    ['Raising a safeguarding concern', 11, [
+      ['What happens after I answer yes to question 5?',
+       'A case opens, your supervisor is told the same day, and a supervisor review is due '
+       + 'within 72 hours.'],
+      ['Who sees what I wrote?',
+       'The people on the case. Everybody else sees that a case exists and when its review is '
+       + 'due; the household and what you reported open only when somebody says why, and you '
+       + 'are told the moment they do.'],
+      ['I raised it by mistake',
+       'Say so at the review and it is recorded as not substantiated. A case is never deleted, '
+       + 'because a record that can be deleted is not a record.'],
+      ['Nothing has happened and the review is late',
+       'The district lead is told automatically when the 72 hours pass, and again 24 hours '
+       + 'after that. The clock is on the case where you can see it.']
+    ]]
+  ];
+  var faqAt = 0;
+
+  function faqDraw() {
+    var cats = document.getElementById('faqCats');
+    var list = document.getElementById('faqList');
+    if (!cats || !list) return;
+    cats.innerHTML = FAQ.map(function (c, i) {
+      return '<div class="lr click" data-faq="' + i + '"'
+        + (i === faqAt ? ' aria-current="true"' : '')
+        + '><span class="t">' + esc(c[0]) + '</span><span class="c">' + c[1]
+        + '</span><span class="ch">›</span></div>';
+    }).join('');
+    var c = FAQ[faqAt];
+    document.getElementById('faqName').textContent = c[0];
+    document.getElementById('faqCount').textContent = c[1] + ' questions';
+    /* Four of the nine are written. Saying so beats a list that looks whole
+       and is not — the client writes the rest, and the gap is the ask. */
+    list.innerHTML = c[2].map(function (q, i) {
+      return '<div class="lr click" data-faqq="' + i + '" aria-expanded="false">'
+        + '<span class="t">' + esc(q[0]) + '</span><span class="ch">›</span></div>'
+        + '<p class="faq-a" hidden>' + esc(q[1]) + '</p>';
+    }).join('') + '<div class="lr"><span class="t mut">'
+      + (c[1] - c[2].length) + ' more not written yet</span></div>';
+  }
+
+  document.addEventListener('click', function (e) {
+    var cat = e.target.closest('[data-faq]');
+    if (cat) { faqAt = +cat.getAttribute('data-faq'); faqDraw(); return; }
+    var q = e.target.closest('[data-faqq]');
+    if (!q) return;
+    var open = q.getAttribute('aria-expanded') === 'true';
+    q.setAttribute('aria-expanded', String(!open));
+    if (q.nextElementSibling) q.nextElementSibling.hidden = open;
   });
-  if (document.querySelector('.vas-b')) applyRoh('full');
+
+  faqDraw();
 
   // ---- each grid row lists the permissions it replaces ----
   $$('.pm-count').forEach(function (b) {

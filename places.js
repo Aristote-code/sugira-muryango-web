@@ -10,8 +10,8 @@
    provinces, 5 districts, 63 sectors and 193 villages, and a hand-written copy
    of that would be wrong within a week. Every count rolls up from the villages,
    so a parent is the sum of its children at every level, and the totals match
-   what the rest of the app states: 2 210 households and 193 home visitors, one
-   per village. */
+   what the rest of the app states: 2 210 households and 412 home visitors over
+   193 villages, which is the pair each village has. */
 (function () {
   'use strict';
 
@@ -36,6 +36,10 @@
 
   var TOTAL_HOUSEHOLDS = 2210;
   var TOTAL_VILLAGES = 193;
+  /* Not one per village. 412 is what the stored roles table holds and
+     what every other screen states, and 412 over 193 villages is the
+     pair each village has, with a third in the biggest. */
+  var TOTAL_IZU = 412;
 
   /* ---- build ---- */
 
@@ -51,8 +55,23 @@
     var extra = TOTAL_VILLAGES - base * sectors.length;
     var vi = 0, ci = 0, village = 0;
 
-    var perVillage = Math.floor(TOTAL_HOUSEHOLDS / TOTAL_VILLAGES);
-    var spare = TOTAL_HOUSEHOLDS - perVillage * TOTAL_VILLAGES;
+    /* How many villages each district ends up with, so each district's own
+       households and home visitors can be spread over its own villages
+       rather than the nation's over all of them. */
+    var inDistrict = {};
+    sectors.forEach(function (s, si) {
+      inDistrict[s.district] = (inDistrict[s.district] || 0) + base + (si < extra ? 1 : 0);
+    });
+    var board = (window.SugiraFilters && window.SugiraFilters.board)
+      ? window.SugiraFilters.board() : null;
+    var share = {};
+    Object.keys(inDistrict).forEach(function (d) {
+      var v = inDistrict[d];
+      var hh = board && board[d] ? board[d].hh : Math.round(TOTAL_HOUSEHOLDS * v / TOTAL_VILLAGES);
+      var iz = board && board[d] ? board[d].izu : Math.round(TOTAL_IZU * v / TOTAL_VILLAGES);
+      share[d] = { villages: v, hh: Math.floor(hh / v), hhSpare: hh - Math.floor(hh / v) * v,
+                   iz: Math.floor(iz / v), izSpare: iz - Math.floor(iz / v) * v, seen: 0 };
+    });
 
     sectors.forEach(function (s, si) {
       var n = base + (si < extra ? 1 : 0);
@@ -62,13 +81,16 @@
         var take = Math.min(2, n - made);          // two villages to a cell
         var cell = { name: CELLS[ci++ % CELLS.length] + ' cell', level: 'Cell', children: [] };
         for (var k = 0; k < take; k++) {
-          var hh = perVillage + (village < spare ? 1 : 0);
+          var sh = share[s.district];
+          var hh = sh.hh + (sh.seen < sh.hhSpare ? 1 : 0);
+          var iz = sh.iz + (sh.seen < sh.izSpare ? 1 : 0);
+          sh.seen++;
           village++;
           cell.children.push({
             name: VILLAGES[vi++ % VILLAGES.length] + ' village',
             level: 'Village',
             households: hh,
-            /* one home visitor per village, which is what IZU means here */
+            visitors: iz,
             izu: 'I-' + String(100 + village),
             children: []
           });
@@ -106,6 +128,7 @@
     n.children.forEach(roll);
     n.households = n.children.reduce(function (a, c) { return a + c.households; }, 0);
     n.villages = n.children.reduce(function (a, c) { return a + c.villages; }, 0);
+    n.visitors = n.children.reduce(function (a, c) { return a + c.visitors; }, 0);
     return n;
   }
 
@@ -209,9 +232,8 @@
 
     var rt = el('span', 'plr-r');
     rt.appendChild(el('span', null, fmt(node.households) + ' households'));
-    rt.appendChild(el('span', null, node.level === 'Village'
-      ? node.izu
-      : fmt(node.villages) + (node.villages === 1 ? ' home visitor' : ' home visitors')));
+    rt.appendChild(el('span', null, fmt(node.visitors)
+      + (node.visitors === 1 ? ' home visitor' : ' home visitors')));
     r.appendChild(rt);
 
     if (kids) r.onclick = onToggle;
@@ -262,9 +284,10 @@
       })(roots, 0, '');
       var total = roots.reduce(function (a, r) { return a + r.households; }, 0);
       var vs = roots.reduce(function (a, r) { return a + r.villages; }, 0);
+      var hv = roots.reduce(function (a, r) { return a + r.visitors; }, 0);
       var cap = document.getElementById('placeCount');
-      if (cap) cap.textContent = fmt(total) + ' households · ' + fmt(vs)
-        + ' villages · 5 districts · 4 provinces';
+      if (cap) cap.textContent = fmt(total) + ' households · ' + fmt(hv)
+        + ' home visitors · ' + fmt(vs) + ' villages · 5 districts · 4 provinces';
     }
 
     draw();
