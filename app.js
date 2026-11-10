@@ -93,14 +93,6 @@
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Two cases are open and both are already past 72 hours. Shortening the window does not reopen closed cases, but it will mark more of them late.</span></p>',
       done: 'Review window changed'
     },
-    cleanup: {
-      title: 'Clean up training data',
-      ok: 'Upload and preview',
-      body: '<p class="m-lead">Upload a CSV of the accounts used in training. Nothing is removed until you have seen the preview and confirmed it.</p>' +
-            '<div><label for="f-cu">CSV file</label><input id="f-cu" type="file"></div>' +
-            '<div><label for="f-cc">Match on</label><select id="f-cc"><option>Email</option><option>Phone number</option></select></div>',
-      done: 'Uploaded — review the preview before anything is removed'
-    },
     profile: {
       title: 'Edit profile',
       ok: 'Save',
@@ -504,6 +496,13 @@
           + '<div><label for="f-au">Assigned to</label><select id="f-au">'
           + '<option>Everyone the access above reaches</option>'
           + '<option>Named people only\u2026</option></select></div>'
+          + '<div id="f-auw" hidden><label for="f-aun">Who</label>'
+          + '<select id="f-aun" multiple size="4">'
+          + '<option>C. Uwimana \u2014 Sector lead, Kibungo</option>'
+          + '<option>M. Dusabe \u2014 IZU at Village, Kibungo</option>'
+          + '<option>J. Kamanzi \u2014 Sector lead, Mahama</option>'
+          + '<option>B. Nkurunziza \u2014 District CPWO, Ngoma</option>'
+          + '</select></div>'
           + '<div id="f-afc"></div>',
       done: 'Form added — its access in this project is saved',
       init: function (body, from) {
@@ -517,6 +516,15 @@
         if (vis && visw) {
           vis.addEventListener('change', function () {
             visw.hidden = vis.selectedIndex !== 4;
+          });
+        }
+        /* Same again for naming people: an option that opens nothing is
+           a promise the dialog does not keep. */
+        var asg = body.querySelector('#f-au');
+        var asgw = body.querySelector('#f-auw');
+        if (asg && asgw) {
+          asg.addEventListener('change', function () {
+            asgw.hidden = asg.selectedIndex !== 1;
           });
         }
         var here = (from && from.getAttribute('data-report-project')) || 'this project';
@@ -729,16 +737,6 @@
        how you end up with Policy and policy. Made here, it is a thing with a
        name and a default audience, and every document put in it starts from
        that rather than from whatever the last person chose. */
-    doctype: {
-      title: 'New document type',
-      ok: 'Create the type',
-      body: '<div><label for="f-dtn">Name</label><input id="f-dtn" type="text" placeholder="e.g. Consent forms"></div>'
-          + '<div><label for="f-dtv">Who it is for, to begin with</label><select id="f-dtv">'
-          + '<option>Everyone</option><option>IZU at Village</option>'
-          + '<option>Supervisors and above</option><option>M&amp;E only</option></select></div>'
-          + '<p class="mhint">Each document can be narrowed further. Nothing in a type is opened here — a document is downloaded, which is what the field asked for.</p>',
-      done: 'Type created — it is offered the next time anything is uploaded'
-    },
     publish: {
       title: 'Publish to the field',
       ok: 'Publish',
