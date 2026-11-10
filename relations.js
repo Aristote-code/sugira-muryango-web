@@ -16,6 +16,33 @@
 (function () {
   'use strict';
 
+  /* How many permissions a position opens, out of how many exist. The second
+     number used to be typed into this row, and went stale the day a group was
+     added to the ladder. A function rather than a string, because this file is
+     read before permissions.js has shaped its data. */
+  /* The Sector lead's headcount, read from the ladder rather than typed. It
+     said twelve while the ladder said eleven and the live system seventeen. */
+  function slaHolders() {
+    var P = window.SugiraPerms;
+    var p = P && P.positions().filter(function (x) { return x.id === 'SLA'; })[0];
+    var n = p ? p.people : 0;
+    return n + (n === 1 ? ' person holds this position' : ' people hold this position');
+  }
+  function assignLine() {
+    var a = window.SugiraAssignments ? window.SugiraAssignments.all() : [];
+    if (!a.length) return 'None';
+    return a.map(function (x) { return x.short + ' · ' + x.place; }).join(', ');
+  }
+  function projectLine() {
+    var a = window.SugiraAssignments ? window.SugiraAssignments.picked() : null;
+    if (!a) return '—';
+    return a.projects.length + (a.projects.length === 1 ? ' project' : ' projects');
+  }
+  function permCount() {
+    return '14 of the ' + (window.SugiraPerms ? window.SugiraPerms.all.length : 26)
+      + ' permissions';
+  }
+
   /* kind, what it points at, the screen it opens, and why it matters */
   var R = {
     household: {
@@ -92,9 +119,8 @@
     person: {
       title: 'C. Uwimana',
       rel: [
-        ['Position', 'i-admin', 'Sugira Muryango Sector lead (SLA)', 'permissions', 'Where the 44 permissions come from'],
-        ['Place', 'i-location', 'Kibungo · Ngoma', 'places', 'Records open at this sector and everything under it'],
-        ['Projects', 'i-programme', 'Tracking, Enrollment, Risk of harm', 'project', 'The three they are assigned to'],
+        ['Assignments', 'i-admin', assignLine, 'permissions', 'A position and the place it applies to, one row each'],
+        ['Projects', 'i-programme', projectLine, 'project', 'What the chosen assignment covers'],
         ['Reports to', 'i-admin', 'District lead, Ngoma', 'people', 'Where a breach escalates']
       ],
       ref: [
@@ -105,8 +131,8 @@
     position: {
       title: 'Sugira Muryango Sector lead (SLA)',
       rel: [
-        ['People', 'i-admin', '12 people hold this position', 'people', 'Each at their own place'],
-        ['Permissions', 'i-settings', '14 of the 26 permissions', 'permissions', 'What the position opens'],
+        ['People', 'i-admin', slaHolders, 'people', 'Each at their own place'],
+        ['Permissions', 'i-settings', permCount, 'permissions', 'What the position opens'],
         ['Places', 'i-location', 'Any sector', 'places', 'The place is set when the position is given, not on the position']
       ],
       ref: [
@@ -145,7 +171,8 @@
       b.appendChild(ic);
       var mid = el('span', 'relrow-m');
       mid.appendChild(el('span', 'relrow-k', it[0]));
-      mid.appendChild(el('span', 'relrow-n', it[2]));
+      mid.appendChild(el('span', 'relrow-n',
+        typeof it[2] === 'function' ? it[2]() : it[2]));
       b.appendChild(mid);
       b.appendChild(el('span', 'relrow-w', it[4]));
       ul.appendChild(b);
@@ -252,19 +279,26 @@
      recounted when the room it has changes — which is what happens when its
      screen opens, when the drawer takes a different layout, and on resize.
      The recount changes the chips, not the room, so it does not feed itself. */
+  var ro = null, seen = null;
   function watch() {
     if (!window.ResizeObserver) return;
-    var was = new WeakMap();
-    var ro = new ResizeObserver(function (entries) {
-      entries.forEach(function (en) {
-        var w = Math.round(en.contentRect.width);
-        if (!w || was.get(en.target) === w) return;
-        was.set(en.target, w);
-        if (!en.target.closest('.pgr.is-open')) fit(en.target);
+    if (!ro) {
+      var was = new WeakMap();
+      seen = new WeakSet();
+      ro = new ResizeObserver(function (entries) {
+        entries.forEach(function (en) {
+          var w = Math.round(en.contentRect.width);
+          if (!w || was.get(en.target) === w) return;
+          was.set(en.target, w);
+          if (!en.target.closest('.pgr.is-open')) fit(en.target);
+        });
       });
-    });
+    }
     document.querySelectorAll('.pgr .v').forEach(function (v) {
-      if (v.querySelectorAll('.rel:not(.more)').length > 1) ro.observe(v);
+      if (v.querySelectorAll('.rel:not(.more)').length > 1 && !seen.has(v)) {
+        seen.add(v);
+        ro.observe(v);
+      }
     });
   }
 
@@ -288,4 +322,11 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
   else mount();
+
+  /* A row whose chips arrive later says so, rather than being counted once at
+     load and never again. Both the measure and the watch are idempotent. */
+  window.SugiraRelations = {
+    fit: fit,
+    refit: function (v) { if (v) { fit(v); } watch(); }
+  };
 })();

@@ -9,6 +9,7 @@
     record:       { crumbs: [['Record', null]],                                          nav: null },
     household:    { crumbs: [['Households', 'households'], ['HH-1007 Mukamana', null]],   nav: 'households' },
     visits:       { crumbs: [['Visits', null]],                                           nav: 'visits' },
+    visit:        { crumbs: [['Visits', 'visits'], ['VIS-8841 \u00b7 HH-1007', null]],         nav: 'visits' },
     safeguarding: { crumbs: [['Safeguarding', null]],                                     nav: 'safeguarding' },
     "case":       { crumbs: [['Safeguarding', 'safeguarding'], ['RH-0044', null]],        nav: 'safeguarding' },
     field:        { crumbs: [['Field status', null]],                                     nav: 'field' },
@@ -54,7 +55,7 @@
     community:     'Home visitors post to each other from the tablet. Anything a reader reports arrives here, and nothing is removed without a reason being recorded.',
     content:       'What a home visitor can open on the tablet: the session videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose. A document is filed in a folder somebody made, and opening one downloads it rather than showing it here.',
     dashboard:     'Coverage, safeguarding and reporting across every district SUGIRA Muryango works in.',
-    field:         '174 of 193 home visitors have reported today. Until the rest sync, every figure on the dashboard is provisional.',
+    field:         '371 of 412 home visitors have reported today. Until the rest sync, every figure on the dashboard is provisional.',
     followups:     'An answer on a form can oblige someone to go back. These are the obligations that are open, who owns each one, and how long it has been waiting.',
     households:    '2 210 enrolled across five districts. 148 are behind their cohort schedule.',
     izu:           'Whether a session was delivered the way it was designed, scored by the cell coordinator who sat in on it. A low grade is a training need, not a disciplinary one.',
@@ -441,6 +442,36 @@
             '<p class="mhint">Only question 5 does this today. A second one would send two cases to the same supervisor for one visit.</p>',
       done: 'Question saved \u2014 the tablet gets it when the form is published'
     },
+    /* D4 · the rule is a setting, so it is editable where it is shown, and
+       what changing it would move is stated before you change it — the same
+       contract every other rule in this app has. "Cohort for the household,
+       it must not be the one that sets it" was the client's own objection to
+       the live system, where a cohort is whatever somebody typed. */
+    crule: {
+      title: 'How a household gets its cohort',
+      ok: 'Save the rule',
+      body: '<div><label for="f-cr1">Decided by</label><select id="f-cr1">'
+          + '<option>Enrolment date, then the household\u2019s district</option>'
+          + '<option>Enrolment date only</option>'
+          + '<option>Nothing \u2014 every household is set by hand</option></select></div>'
+          + '<div><label for="f-cr2">They join</label><select id="f-cr2">'
+          + '<option>The cohort open in that district on the day they enrol</option>'
+          + '<option>The next cohort to start in that district</option></select></div>'
+          + '<div><label for="f-cr3">Enrolment closes at</label><select id="f-cr3">'
+          + '<option>Session 3</option><option>Session 1</option><option>Session 6</option>'
+          + '<option>It never closes</option></select></div>'
+          + '<div><label for="f-cr4">Code</label><select id="f-cr4">'
+          + '<option>cohort \u2013 month \u2013 year \u2014 1-12-2025</option>'
+          + '<option>cohort \u2013 year \u2014 1-2026</option>'
+          + '<option>cohort \u2013 year \u2013 district \u2014 1-2026-Mulira</option></select></div>'
+          + '<div class="impact"><b>What this moves</b>'
+          + '<p>Nothing already enrolled changes. The rule decides the next household to join, '
+          + 'and the 36 set by hand keep what they were given \u2014 an override beats the rule '
+          + 'until somebody removes it.</p>'
+          + '<p>Changing the code changes how new cohorts are named, not the five districts\u2019 '
+          + 'existing codes, which is why four of them do not match each other today.</p></div>',
+      done: 'Rule saved \u2014 it applies to the next household enrolled'
+    },
     cmanage: {
       title: 'Manage Cohort 1 · 2026',
       ok: 'Save the cohort',
@@ -610,7 +641,7 @@
           + '<div><label for="f-pg">Group</label><select id="f-pg"><option>Households</option><option>Visits</option><option>Risk-of-harm cases</option><option>Programme</option><option>Reports</option><option>Field support</option><option>People &amp; access</option><option>Maintenance</option></select></div>'
           + '<div><label for="f-pr">Replaces, in the live system</label><input id="f-pr" type="text" placeholder="Optional \u2014 the stored names this stands for, comma separated"></div>'
           + '<p class="m-lead">It is granted by nothing until a position or a role takes it, and appears on every position\u2019s list unticked.</p>'
-          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Twenty-six cover the whole programme. The live system carries a hundred and twelve because each screen added its own rather than reusing one \u2014 so check the list first for something that already does this.</span></p>',
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span data-count="{Perms} cover the whole programme."></span><span> The live system carries a hundred and twelve because each screen added its own rather than reusing one \u2014 so check the list first for something that already does this.</span></p>',
       done: 'Permission added \u2014 it is on every position, waiting to be granted'
     },
     rolenew: {
@@ -635,11 +666,27 @@
       ok: 'Create position',
       body: '<div><label for="f-rn">Name</label><input id="f-rn" type="text" placeholder="e.g. District coordinator"></div>'
           + '<div><label for="f-rw">What the job is</label><textarea id="f-rw" placeholder="One sentence, the way someone in the programme would say it \u2014 \u201cRuns the programme in one sector and supervises the home visitors in it.\u201d This is what the card shows."></textarea></div>'
-          + '<div><label for="f-rb">Starts from</label><select id="f-rb"><option>IZU at Village \u2014 8 of 26</option><option>Sugira Muryango Sector lead (SLA) \u2014 14 of 26</option><option>National NCDA Government Official \u2014 2 of 26</option><option>District NCDA Child protection and Welfare Officer (CPWO) \u2014 4 of 26</option><option>IZU Cell Coordinator (ICC) \u2014 6 of 26</option><option>Sugira Muryango District lead (DTL) \u2014 7 of 26</option><option>HQ officer \u2014 19 of 26</option><option>Nothing \u2014 build from zero</option></select></div>'
+          + '<div><label for="f-rb">Starts from</label><select id="f-rb"></select></div>'
           + '<div><label for="f-rp">Programme</label><select id="f-rp"><option>All projects</option><option>Selected projects</option></select></div>'
           + '<p class="m-lead">It starts with everything that position has, and you add to it on the card. It cannot take anything away \u2014 something that needs less than its rung is a rung of its own.</p>'
-          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Eight positions exist for ten jobs. If this one would be an existing position plus one thing for one person, that belongs on their record as an exception \u2014 doing it here is how the live system came to carry twenty-one roles, three of them called Test role.</span></p>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span data-count="{Positions} positions exist for ten jobs."></span><span> If this one would be an existing position plus one thing for one person, that belongs on their record as an exception \u2014 doing it here is how the live system came to carry twenty-one roles, three of them called Test role.</span></p>'
           + '<p class="m-lead">Which sector or district someone covers is set when the position is given to them, not here. The same position runs in every sector.</p>',
+      /* The ladder is the answer to "what can this start from", so the list
+         is the ladder rather than a copy of it that was right in October. */
+      init: function (body) {
+        var sel = body.querySelector('#f-rb');
+        var P = window.SugiraPerms;
+        if (!sel || !P) return;
+        sel.innerHTML = '';
+        P.positions().forEach(function (p) {
+          var o = document.createElement('option');
+          o.textContent = p.name + ' \u2014 ' + P.total(p) + ' of ' + P.all.length;
+          sel.appendChild(o);
+        });
+        var zero = document.createElement('option');
+        zero.textContent = 'Nothing \u2014 build from zero';
+        sel.appendChild(zero);
+      },
       done: 'Position created \u2014 it already has everything the one it starts from has'
     },
     /* The client called this one "very challenging", and the reason was in the
@@ -730,6 +777,321 @@
         rename();
       },
       done: 'Report saved and queued'
+    },
+    /* The client described this one step by step and we had not built it.
+
+         "Every person is exported. There are columns that are not only the
+          same, but they are not exported … There is a lot of columns that you
+          have in your family … Even better, we don't need to do it in your
+          family. We should bring all the project. I hit a more project, near
+          the module, we give it a drop-down. After the module … a drop-down to
+          listing a more forms … I hit a more form, I hit a more columns …
+          exporting."                                          [58:48–60:34]
+
+       What they were objecting to is an Export button on a list of households
+       that hands back every column the table has ever carried. Their fix is
+       the one in those four lines: start at the project, narrow to a module,
+       narrow to a form, then choose columns — because a form is the only thing
+       in this system that knows what its own columns are.
+
+       The lists are read from the app's own programme data, so a module that
+       holds no form cannot be chosen and a form nobody has answered says so
+       before you ask for its rows. */
+    /* Four minutes of the recording are about this and none of it was built.
+
+         "We have to use the training data cleanup ... if you have a template,
+          you can get a training. If you download it, you can download it ...
+          When you have a training, you can upload your template, and preview
+          your data ... I have to download the template, I have to use the
+          training, I have to use the email and I have to use the user to
+          identify the user. Then I will upload it ... you can upload the
+          system and ... preview the data."          [44:18]–[47:09]
+
+       Three things are being asked for, and the third is the one that matters:
+       a template to fill in, an upload, and a *preview before it commits*. A
+       bulk upload that writes straight through is how a spreadsheet of five
+       hundred rows silently creates eleven new accounts from eleven typos, and
+       "training data cleanup" is the name of the job that follows.
+
+       Email is the key, which the client said twice. So the preview's only
+       real question is: did this row find a person? Everything else is detail.
+       Rows that match are counted, rows that do not are shown by name, and
+       nothing is written until somebody has seen both numbers. */
+    training: {
+      title: 'Import training records',
+      ok: 'Import 38 rows',
+      wide: true,
+      icon: 'admin',
+      body: '<div class="lr"><span class="t">The template</span>'
+          + '<span class="s">Email, training, date completed, score</span>'
+          + '<span class="c"><button class="btn sec sm" type="button" data-toast="training-template.csv downloaded">'
+          + '<svg aria-hidden="true"><use href="#i-download"/></svg>Download</button></span></div>'
+          + '<div><label for="t-file">Your filled-in template</label>'
+          + '<select id="t-file"><option>izu-refresher-november.csv — 41 rows</option>'
+          + '<option>sector-lead-safeguarding.csv — 17 rows</option></select></div>'
+          + '<div><label id="t-pl">What will happen</label>'
+          + '<div class="lr"><span class="t" id="t-what"></span>'
+          + '<span class="c" id="t-count"></span></div>'
+          + '<div class="tblwrap" aria-labelledby="t-pl"><table class="tbl"><thead><tr>'
+          + '<th>Email</th><th>Who that is</th><th>Completed</th>'
+          + '<th>What will happen</th><th class="gap"></th></tr></thead>'
+          + '<tbody id="t-rows"></tbody></table></div></div>'
+          + '<p class="m-lead" id="t-sum"></p>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
+          + '<span>A row whose email is not on the system is skipped, never used to make an '
+          + 'account. Fix it in the spreadsheet and upload again — importing twice is safe, '
+          + 'because a row that is already recorded is counted as unchanged rather than added.</span></p>',
+      init: function (body) {
+        var sel = body.querySelector('#t-file');
+        var rows = body.querySelector('#t-rows');
+        var sum = body.querySelector('#t-sum');
+        var what = body.querySelector('#t-what');
+        var count = body.querySelector('#t-count');
+        var ok = document.getElementById('mOk');
+
+        /* Two files, so the preview is visibly a reading of what was uploaded
+           rather than a fixed picture. The second one is the awkward case:
+           most of it is already recorded. */
+        var FILES = {
+          'izu-refresher-november.csv': {
+            total: 41,
+            rows: [
+              ['m.dusabe@fxbrwanda.org', 'M. Dusabe', 'Safeguarding refresher', '28 Oct', 'add'],
+              ['e.mutesi@fxbrwanda.org', 'E. Mutesi', 'Safeguarding refresher', '28 Oct', 'add'],
+              ['j.kamanzi@fxbrwanda.org', 'J. Kamanzi', 'Safeguarding refresher', '29 Oct', 'add'],
+              ['b.uwamahoro@fxbrwanda.org', 'B. Uwamahoro', 'Safeguarding refresher', '29 Oct', 'same'],
+              ['a.nyirahabimna@fxbrwanda.org', null, 'Safeguarding refresher', '29 Oct', 'skip'],
+              ['f.uwase@fxbrwanda.org', 'F. Uwase', 'Safeguarding refresher', '30 Oct', 'add'],
+              ['', null, 'Safeguarding refresher', '30 Oct', 'skip']
+            ],
+            add: 38, same: 1, skip: 2
+          },
+          'sector-lead-safeguarding.csv': {
+            total: 17,
+            rows: [
+              ['c.uwimana@fxbrwanda.org', 'C. Uwimana', 'Risk-of-harm protocol', '14 Oct', 'same'],
+              ['a.gahimana@fxbrwanda.org', 'A. Gahimana', 'Risk-of-harm protocol', '14 Oct', 'same'],
+              ['p.hakizimana@fxbrwanda.org', 'P. Hakizimana', 'Risk-of-harm protocol', '15 Oct', 'add'],
+              ['sector.lead@fxbrwanda', null, 'Risk-of-harm protocol', '15 Oct', 'skip']
+            ],
+            add: 3, same: 13, skip: 1
+          }
+        };
+        var WORD = {
+          add: ['ok', 'Recorded'],
+          same: ['', 'Already recorded'],
+          skip: ['bad', 'No such email']
+        };
+
+        function draw() {
+          var name = sel.value.replace(/ — .*$/, '');
+          var f = FILES[name];
+          if (!f) return;
+          rows.innerHTML = '';
+          /* The training is a property of the file, not of a row: it is the
+             same value forty-one times. It is named once, above. */
+          what.textContent = f.rows[0][2];
+          count.textContent = f.total + ' rows';
+          f.rows.forEach(function (r) {
+            var tr = document.createElement('tr');
+            var w = WORD[r[4]];
+            tr.innerHTML =
+              '<td class="nm"></td><td></td><td class="mut"></td>'
+              + '<td><span class="chip ' + w[0] + '"><i></i></span></td><td class="gap"></td>';
+            tr.cells[0].textContent = r[0] || '(blank)';
+            if (r[1]) tr.cells[1].textContent = r[1];
+            else {
+              var m = document.createElement('span');
+              m.className = 'rd';
+              m.textContent = 'Nobody';
+              tr.cells[1].appendChild(m);
+            }
+            tr.cells[2].textContent = r[3];
+            tr.cells[3].querySelector('.chip').appendChild(document.createTextNode(w[1]));
+            rows.appendChild(tr);
+          });
+          sum.textContent = 'Showing ' + f.rows.length + ' of ' + f.total + ' rows · '
+            + f.add + ' recorded, ' + f.same + ' already there, ' + f.skip
+            + ' skipped because the email matches nobody';
+          if (ok) {
+            ok.textContent = f.add
+              ? 'Import ' + f.add + (f.add === 1 ? ' row' : ' rows')
+              : 'Nothing to import';
+            ok.disabled = !f.add;
+          }
+        }
+        sel.addEventListener('change', draw);
+        draw();
+      },
+      done: function (body) {
+        var sum = body.querySelector('#t-sum');
+        var m = /(\d+) recorded, (\d+) already there, (\d+) skipped/.exec(
+          (sum && sum.textContent) || '');
+        if (!m) return 'Training records imported';
+        return m[1] + ' training records added, ' + m[2] + ' were already there, '
+          + m[3] + ' skipped — the skipped rows are in the file you can download';
+      }
+    },
+    dataexport: {
+      title: 'Export collected data',
+      ok: 'Export',
+      wide: true,
+      icon: 'download',
+      body: '<div class="cols c2">'
+          + '<div><label for="x-proj">Project</label><select id="x-proj"></select></div>'
+          + '<div><label for="x-mod">Module</label><select id="x-mod"></select></div>'
+          + '</div>'
+          + '<div><label for="x-form">Form</label><select id="x-form"></select></div>'
+          + '<div><label for="x-where">Where</label><select id="x-where"></select></div>'
+          + '<div><label id="x-cl">Columns</label>'
+          + '<div class="acc-grid" id="x-cols" role="group" aria-labelledby="x-cl"></div></div>'
+          + '<p class="m-lead" id="x-sum"></p>',
+      init: function (body, from) {
+        var proj = body.querySelector('#x-proj'), mod = body.querySelector('#x-mod');
+        var form = body.querySelector('#x-form'), where = body.querySelector('#x-where');
+        var cols = body.querySelector('#x-cols'), sum = body.querySelector('#x-sum');
+        var prog = window.SUGIRA_PROGRAMME, places = window.SUGIRA_PLACES;
+        var ANY = 'Every module';
+
+        /* Fixed columns every response carries, whichever form it came from.
+           These are the ones the client said arrive whether you want them or
+           not, so they arrive here unticked except the two that identify the
+           row at all. */
+        var FIXED = [
+          ['Household ID', 1], ['Caregiver', 1], ['Family ID', 0], ['National ID', 0],
+          ['Phone', 0], ['Enrolled', 0],
+          ['Village', 1], ['Cell', 0], ['Sector', 1], ['District', 1],
+          ['Visit date', 1], ['Home visitor', 1], ['Minutes', 0],
+          ['Who was present', 0], ['Form version', 0], ['Sent in', 0]
+        ];
+
+        function group(x) { return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+        function fill(sel, items) {
+          sel.innerHTML = '';
+          items.forEach(function (t) {
+            var o = document.createElement('option');
+            o.textContent = t;
+            sel.appendChild(o);
+          });
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        /* Only what can actually be exported: a project with a live form, and
+           within it a form somebody has answered. Offering the rest is a dead
+           end dressed as a choice. */
+        var live = (prog ? prog.projects : []).filter(function (p) {
+          return p.forms.some(function (f) { return f.status === 'Active'; });
+        });
+        function projOf(name) {
+          return live.filter(function (p) { return p.name === name; })[0] || null;
+        }
+        function formsIn(pname, module) {
+          var p = projOf(pname);
+          if (!p) return [];
+          return p.forms.filter(function (f) {
+            if (f.status !== 'Active') return false;
+            if (module === ANY) return true;
+            return (f.sessions || []).indexOf(module) >= 0;
+          });
+        }
+        function modulesIn(pname) {
+          var p = projOf(pname), seen = {}, out = [];
+          if (!p) return [ANY];
+          p.forms.forEach(function (f) {
+            if (f.status !== 'Active') return;
+            (f.sessions || []).forEach(function (sname) {
+              if (!seen[sname]) { seen[sname] = 1; out.push(sname); }
+            });
+          });
+          /* Sessions carry their number in their name. Anything without one
+             — the welcome, the closing, the boosters — sorts after the
+             numbered ones, in the order the programme wrote it. */
+          function num(x) { var m = /^(\d+)/.exec(x); return m ? +m[1] : 99; }
+          out.sort(function (a, b) { return num(a) - num(b); });
+          return [ANY].concat(out);
+        }
+        function chosenForm() {
+          return formsIn(proj.value, mod.value).filter(function (f) {
+            return f.name === form.value.replace(/ — .*$/, '');
+          })[0] || null;
+        }
+
+        function box(label, on, n) {
+          var wrap = document.createElement('label');
+          wrap.className = 'acc-p';
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'acc-pb';
+          btn.setAttribute('role', 'checkbox');
+          btn.setAttribute('aria-checked', String(!!on));
+          btn.innerHTML = '<span class="acc-box' + (on ? ' on' : '') + '">'
+            + (on ? '<svg aria-hidden="true"><use href="#i-check"/></svg>' : '')
+            + '</span><span class="acc-pn"></span>';
+          btn.querySelector('.acc-pn').textContent = label;
+          btn.setAttribute('data-n', n == null ? 1 : n);
+          btn.addEventListener('click', function () {
+            var now = btn.getAttribute('aria-checked') !== 'true';
+            btn.setAttribute('aria-checked', String(now));
+            var b = btn.querySelector('.acc-box');
+            b.className = 'acc-box' + (now ? ' on' : '');
+            b.innerHTML = now ? '<svg aria-hidden="true"><use href="#i-check"/></svg>' : '';
+            tally();
+          });
+          wrap.appendChild(btn);
+          return wrap;
+        }
+
+        function counts() {
+          var on = 0, all = 0;
+          Array.prototype.forEach.call(cols.querySelectorAll('.acc-pb'), function (b) {
+            var n = parseInt(b.getAttribute('data-n'), 10) || 1;
+            all += n;
+            if (b.getAttribute('aria-checked') === 'true') on += n;
+          });
+          return { on: on, all: all };
+        }
+        function tally() {
+          var c = counts(), f = chosenForm();
+          var rows = f ? f.responses : 0;
+          sum.textContent = rows
+            ? c.on + ' of ' + c.all + ' columns · about ' + group(rows) + ' rows'
+            : 'This form has no responses yet, so there is nothing to export.';
+        }
+
+        function drawCols() {
+          var f = chosenForm();
+          cols.innerHTML = '';
+          FIXED.forEach(function (c) { cols.appendChild(box(c[0], !!c[1], 1)); });
+          if (f) cols.appendChild(box('All ' + f.questions + ' answers on this form', true, f.questions));
+          tally();
+        }
+
+        proj.addEventListener('change', function () { fill(mod, modulesIn(proj.value)); });
+        mod.addEventListener('change', function () {
+          fill(form, formsIn(proj.value, mod.value).map(function (f) {
+            return f.name + ' — ' + group(f.responses) + ' responses';
+          }));
+        });
+        form.addEventListener('change', drawCols);
+
+        fill(proj, live.map(function (p) { return p.name; }));
+        /* Opened from a project, that project is already answered. */
+        if (from) {
+          var want = from.getAttribute && from.getAttribute('data-export-project');
+          if (want && live.some(function (p) { return p.name === want; })) {
+            proj.value = want;
+            proj.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+        fill(where, ['All of Rwanda']
+          .concat(places ? places.provinces : [])
+          .concat(places ? places.districts.map(function (d) { return d + ' district'; }) : []));
+      },
+      done: function (body) {
+        var sum = body.querySelector('#x-sum');
+        return sum && /rows/.test(sum.textContent)
+          ? 'Exporting — ' + sum.textContent
+          : 'Nothing to export: that form has no responses';
+      }
     },
   };
 
@@ -903,7 +1265,7 @@
   // ---- drawer: a record opens over the list it came from ----
   // Records open in the drawer; the screens that *list* them stay pages.
   var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1,
-                     position: 1, rolecard: 1, record: 1 };
+                     position: 1, rolecard: 1, record: 1, visit: 1 };
   var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
   var dwStack = [], dwHeld = null, dwReturn = null;
 
@@ -1466,7 +1828,11 @@
     pending = def;
     lastFocus = document.activeElement;
     mTitle.textContent = def.title;
+    mOk.disabled = false;
     mBody.innerHTML = def.body;
+    /* A dialog that states how many permissions or positions there are reads
+       the number off the ladder, so it is filled in here rather than typed. */
+    if (window.SugiraPerms) window.SugiraPerms.stamp(mBody);
     mOk.textContent = def.ok;
     mOk.classList.toggle('danger', !!def.danger);
     /* One dialog, two sizes. A form is 520 because that is as wide as a
@@ -1512,7 +1878,10 @@
        read afterwards, because what happened can depend on what was chosen.
        Settling a conflict and leaving it open are not the same outcome. */
     if (def && def.onOk && def.onOk(mBody) === false) return;
-    var msg = def ? def.done : 'Saved';
+    /* Most dialogs confirm with a fixed sentence. One of them — the data
+       export — has to report what it is actually sending, which is only
+       knowable from the fields, so it is read while they still exist. */
+    var msg = def ? (typeof def.done === 'function' ? def.done(mBody) : def.done) : 'Saved';
     closeModal();
     if (msg) say(msg);
   });
@@ -1721,6 +2090,12 @@
          a generic person icon sitting on top of the actual person's avatar.
          Reading the table's own data-person is order-independent. */
       if (th.hasAttribute('data-person')) return;
+      /* A column that draws its own mark — the video list's thumbnail — says
+         so, rather than borrowing data-person to mean "hands off". That
+         borrowing put an avatar of the video's own title on every row,
+         because who.js reads the same attribute and means something else
+         by it. */
+      if (th.hasAttribute('data-ownmark')) return;
       [].forEach.call(tbl.querySelectorAll('tbody tr'), function (tr) {
         if (tr.classList.contains('grp')) return;
         var nm = tr.querySelector('.nm');
@@ -2443,6 +2818,7 @@
   function init() {
     Array.prototype.slice.call(document.querySelectorAll('table.tbl')).forEach(function (t) {
       if (t.dataset.enhanced) return;
+      if (t.closest('#mBody')) { t.dataset.enhanced = '1'; return; }
       t.dataset.enhanced = '1';
       try { enhance(t); } catch (err) { /* one bad table must not stop the rest */ }
     });

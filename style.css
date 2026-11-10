@@ -577,8 +577,12 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .lr{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) 0;border-top:1px solid var(--color-border-subtle);font-size:14px}
 .lr:first-of-type{border-top:0}
 .lr .t{flex:1;min-width:0;font-weight:600}
-.lr .s{color:var(--color-content-secondary);font-size:13px}
-.lr .c{font-weight:600;font-variant-numeric:tabular-nums}
+/* The aside gives up its width before the name does, and ellipsises rather
+   than overflowing into it. The number gives up none: it is the thing the row
+   exists to say. */
+.lr .s{color:var(--color-content-secondary);font-size:13px;
+  min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lr .c{font-weight:600;font-variant-numeric:tabular-nums;flex:none}
 .lr .ch{color:var(--color-content-secondary)}
 .lr.click{cursor:pointer;margin-inline:calc(var(--space-2) * -1);padding-inline:var(--space-2);border-radius:10px}
 .lr.click:hover{background:var(--x-clickup-color-background-on-main-hover)}
@@ -730,12 +734,18 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .bc.lo i{background:var(--x-clickup-color-effect-primary)}
 .bc u{text-decoration:none;font-size:11px;color:var(--color-content-secondary);text-align:center}
 .hb{display:grid;gap:var(--space-2)}
-.hr{display:grid;grid-template-columns:6.9rem 1fr 2.7rem;gap:var(--space-2);align-items:center}
+.hr{display:grid;grid-template-columns:minmax(0,6.9rem) minmax(0,1fr) 2.7rem;
+  gap:var(--space-2);align-items:center;min-width:0}
 .hr .l{font-size:13px;color:var(--color-content-secondary);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hr .t{height:.85rem;background:var(--x-clickup-color-background-on-main-hover);border-radius:var(--radius-full);overflow:hidden}
 .hr .t i{display:block;height:100%;background:var(--color-bg-primary-default);border-radius:var(--radius-full)}
 .hr.hot .t i{background:var(--color-bg-warning-default)}
 .hr .v{font-size:13px;font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:980px){
+  .hr{align-items:start}
+  .hr .l{white-space:normal;text-overflow:clip;text-align:left}
+  .hr .t{margin-top:var(--space-1)}
+}
 .mx{display:grid;gap:var(--space-1);min-width:var(--dimension-520)}
 .mr{display:grid;grid-template-columns:5.6rem repeat(12,1fr);gap:var(--space-1);align-items:center}
 .mr .lb{font-size:.75rem;color:var(--color-content-secondary);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1370,6 +1380,15 @@ td.num{white-space:nowrap}
 .pgr .v .rel.more,.pgr .v .conseq{flex:none}
 .pgr .v .rel.more[hidden]{display:none}
 .pgr .v.measuring .rel{flex:none}
+/* Some property rows hold a sentence rather than a value — the rule that
+   decides a household's cohort is four of them. They are allowed the height
+   their text needs from the start, because there is nothing to ask for: the
+   whole row is the answer. */
+.pg-tall .pgr{height:auto;min-height:var(--size-control-md);align-items:start}
+.pg-tall .pgr .k{height:var(--size-control-md)}
+.pg-tall .pgr .v{height:auto;min-height:var(--size-control-md);
+  overflow:visible;white-space:normal;align-items:center}
+
 /* A row holds one line until someone asks for the rest; only then is it allowed
    past the 32 the grid is built on, because that growth was asked for. */
 .pgr.is-open{height:auto;min-height:var(--size-control-md);align-items:start}
@@ -2373,3 +2392,77 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
    whole sentence in it, but nothing said so. The app's own way of saying it
    is data-tip, which these now carry. */
 .tbl td.mut[data-tip]{cursor:help}
+
+/* A video's thumbnail, at list size. The plate and the play mark are the
+   ones the preview opens with, so a row and the thing it opens are plainly
+   the same object. The length sits in the frame because that is where a
+   player puts it. */
+.vth{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:var(--dimension-54);height:var(--dimension-30);flex:none;margin-right:var(--space-2);
+  border-radius:var(--radius-sm);background:var(--color-primitive-grey-1100);
+  vertical-align:-9px;overflow:hidden}
+.vth svg{width:var(--space-3);height:var(--space-3);
+  color:var(--x-clickup-color-content-on-dark);
+  transform:translateY(calc(var(--dimension-3) * -1))}
+.vth i{position:absolute;right:0;bottom:0;
+  padding:0 var(--dimension-3);border-radius:var(--x-clickup-radii-2);
+  background:var(--color-primitive-alpha-grey-1000);color:var(--color-content-inverse);
+  font-size:11px;line-height:16px;font-style:normal;font-variant-numeric:tabular-nums}
+/* Narrow: the frame goes and the length with it, because a 54px picture of
+   nothing is not worth a third of the column. */
+@media (max-width:880px){
+  .vth{width:var(--space-4);height:var(--space-4);background:none;vertical-align:-3px}
+  .vth svg{color:var(--color-content-tertiary)}
+  .vth i{display:none}
+}
+
+/* ---------------- assignments ----------------
+   A position says what somebody may do, a place says whose records they may do
+   it to, and the pair is an assignment. One person may hold more than one, so
+   this is a list that happens to have two rows rather than a field that
+   happens to have one value.
+
+   One of them is chosen, and that choice governs two tabs — the permission
+   tree and the place tree — so the chosen row carries the selected treatment
+   a tab carries: a left edge in the primary colour, not a fill. A fill would
+   put the same weight on it as the record header above. */
+.asgs{display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-2)}
+.asg{display:flex;min-width:0}
+.asg-b{display:flex;align-items:center;gap:var(--space-3);width:100%;
+  padding:var(--space-3) var(--space-4);
+  border:1px solid var(--color-border-default);border-left:2px solid transparent;
+  border-radius:var(--radius-md);background:var(--color-bg-main);
+  font:inherit;text-align:left;cursor:pointer}
+.asg-b:hover{background:var(--color-bg-hover)}
+.asg-b:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:2px}
+.asg.on .asg-b{border-left-color:var(--color-bg-primary-default);
+  background:var(--color-bg-selected)}
+.asg-h{display:flex;align-items:center;gap:var(--space-2);min-width:0;flex:1 1 auto}
+.asg-i{width:var(--space-4);height:var(--space-4);flex:none;color:var(--color-content-secondary)}
+.asg-n{font-size:14px;line-height:20px;font-weight:600;color:var(--color-content-primary);
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.asg-w{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}
+.asg-p{font-size:13px;line-height:18px;color:var(--color-content-primary)}
+.asg-d{font-size:12px;line-height:16px;color:var(--color-content-secondary);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.asg-m{margin-left:auto;flex:none}
+/* Narrow: the three columns stack, and the chip goes under the place rather
+   than squeezing the position's name to nothing. */
+@media (max-width:880px){
+  .asg-b{flex-wrap:wrap}
+  .asg-w{flex:1 1 100%}
+  .asg-m{margin-left:0}
+}
+/* The projects an assignment covers sit on one line under the list, as the
+   relation buttons they are everywhere else. */
+#asgProjects{display:flex;flex-wrap:wrap;gap:var(--space-2);justify-content:flex-end}
+
+/* A table inside a dialog is read at the dialog's width. The body lays its
+   children out in a column, and a grid item's automatic minimum is its
+   content — so the preview table sized the whole row to its own min-content
+   and the dialog spilled 29px past its own edge with nothing able to scroll
+   it. Letting the children shrink puts the scroll back where it belongs, on
+   the table's own wrapper. */
+#mBody{min-width:0}
+#mBody>*{min-width:0;max-width:100%}
+#mBody .tblwrap{max-width:100%}

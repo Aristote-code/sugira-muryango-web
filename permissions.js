@@ -54,9 +54,15 @@
            └─ HQ officer (88)
                └─ admin (112)
 
-   Two roots, and they meet nowhere: the field ladder and the office ladder
-   share no rung. That falls out of the data rather than being arranged, and it
-   is the most useful sentence on the screen.
+     Platform administrator (4) — the platform root: the hierarchy and the
+       organisations on it, and nothing inside any programme
+
+   Three roots, and they meet nowhere: the field ladder, the office ladder and
+   the platform hold no rung in common. That falls out of the data rather than
+   being arranged, and it is the most useful sentence on the screen — the
+   third one is D14 stated as structure, since a job that admin cannot be
+   built on and that cannot be built on admin is, by this model's own rule, a
+   different ladder.
 
    The 112 stored names are still here, each with a definition generated from
    its object and verb — because the complaint was that nothing anywhere says
@@ -190,6 +196,19 @@
         'role-delete', 'permission-create', 'permission-edit', 'permission-delete'],
       { risk: 'Whoever holds this can give themselves everything else on this screen.' }],
 
+    ['plat-places', 'platform', 'Change the place hierarchy',
+      'Add, rename and retire provinces, districts, sectors, cells and villages.',
+      [],
+      { risk: 'Every role is scoped against this hierarchy, so moving a place moves who can see what.' }],
+    ['plat-orgs', 'platform', 'Add and approve organisations',
+      'Put an organisation on the platform, and decide whether it may see another\u2019s households.',
+      [],
+      { risk: 'An organisation is the outermost scope. Getting this wrong crosses a data-protection boundary.' }],
+    ['plat-grant', 'platform', 'Give an organisation its administrator',
+      'Name the person who runs an organisation and may then grant everything inside it.',
+      [],
+      { risk: 'This is where every other grant in that organisation comes from.' }],
+
     ['maint-restore', 'maintenance', 'Restore deleted records',
       'Bring back something that was deleted, and see the checklists and monitoring forms behind it.',
       ['recycle-data', 'checklist-list', 'monitoring-forms-list']]
@@ -219,7 +238,12 @@
     { key: 'people', name: 'People & access', icon: 'i-admin',
       blurb: 'Who is on the system and what they may do — this screen included.' },
     { key: 'maintenance', name: 'Maintenance', icon: 'i-settings',
-      blurb: 'Putting back what was deleted.' }
+      blurb: 'Putting back what was deleted.' },
+    /* D14 · running the platform is not the top of running a programme. It is
+       a different job on a different object — the hierarchy and the
+       organisations on it, neither of which belongs to any one programme. */
+    { key: 'platform', name: 'The platform itself', icon: 'i-hierarchy', guarded: true,
+      blurb: 'The place hierarchy every organisation is scoped against, and the organisations on it.' }
   ];
 
   /* ---- shape it ---- */
@@ -247,17 +271,19 @@
      else it has, it has because the base has it. Nothing subtracts: a job that
      needs less than its base is a different rung, not an exception.
 
-     The two roots are a finding, not an arrangement. IZU at Village cannot be
-     built on anything, because every other position sees reports and a home
-     visitor does not. */
+     The three roots are a finding, not an arrangement. IZU at Village cannot
+     be built on anything, because every other position sees reports and a
+     home visitor does not; the platform administrator cannot, because nothing
+     on the office ladder owns the hierarchy and nothing it owns is inside a
+     programme. Neither needed deciding — only reading. */
   var SEED = [
-    { id: 'IZU', name: 'IZU at Village', short: 'IZU at Village', base: null, people: 146,
+    { id: 'IZU', name: 'IZU at Village', short: 'IZU at Village', base: null, people: 412,
       what: 'The home visitor, one per village. Everything they do happens in a household, on a tablet.',
       reach: 'village',
       adds: ['hh-see', 'hh-enrol', 'hh-change', 'visit-see', 'visit-record', 'roh-see',
              'roh-raise', 'fs-see'] },
 
-    { id: 'SLA', name: 'Sugira Muryango Sector lead (SLA)', short: 'the Sector lead', base: 'IZU', people: 11,
+    { id: 'SLA', name: 'Sugira Muryango Sector lead (SLA)', short: 'the Sector lead', base: 'IZU', people: 17,
       what: 'Runs the programme in one sector and supervises the home visitors in it.',
       reach: 'sector',
       adds: ['visit-change', 'roh-open', 'roh-close', 'prog-see', 'rep-see',
@@ -268,12 +294,12 @@
       reach: 'national',
       adds: ['rep-see', 'roh-see'] },
 
-    { id: 'CPWO', name: 'District NCDA Child protection and Welfare Officer (CPWO)', short: 'the district CPWO', base: 'NCDA', people: 2,
+    { id: 'CPWO', name: 'District NCDA Child protection and Welfare Officer (CPWO)', short: 'the district CPWO', base: 'NCDA', people: 5,
       what: 'Takes the referral when a case leaves the programme. Works on cases, not on households.',
       reach: 'district',
       adds: ['roh-open', 'roh-close'] },
 
-    { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 21,
+    { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 84,
       what: 'Sits in on visits in one cell and scores how they were delivered.',
       reach: 'cell',
       adds: ['hh-see', 'visit-see', 'visit-record', 'fs-see'] },
@@ -283,18 +309,25 @@
       reach: 'district',
       adds: ['hh-see', 'visit-see', 'prog-see', 'rep-build', 'fs-see'] },
 
-    { id: 'HQ', name: 'HQ officer', short: 'the HQ officer', base: 'DTL', people: 4,
+    { id: 'HQ', name: 'HQ officer', short: 'the HQ officer', base: 'DTL', people: 13,
       what: 'FXB Rwanda head office. Builds the programme everyone else delivers.',
       reach: 'national',
       adds: ['hh-enrol', 'hh-change', 'visit-change', 'prog-change', 'prog-archive',
              'prog-translate', 'prog-cohorts', 'rep-export', 'fs-change',
              'fs-community', 'ppl-see', 'maint-restore'] },
 
-    { id: 'Admin', name: 'admin', short: 'admin', base: 'HQ', people: 2,
-      what: 'Everything, including this screen. Two people hold it.',
+    { id: 'Admin', name: 'admin', short: 'admin', base: 'HQ', people: 1,
+      what: 'Everything inside one organisation, including this screen. Two people hold it.',
       reach: 'national',
       adds: ['hh-remove', 'visit-record', 'roh-open', 'roh-raise', 'roh-close',
-             'ppl-add', 'ppl-access'] }
+             'ppl-add', 'ppl-access'] },
+
+    { id: 'Platform', name: 'Platform administrator', short: 'the platform administrator',
+      base: null, people: 0,
+      what: 'Owns the place hierarchy and the organisations on it. Holds nothing inside a '
+          + 'programme \u2014 no household, no visit, no case.',
+      reach: 'national',
+      adds: ['plat-places', 'plat-orgs', 'plat-grant', 'ppl-see'] }
   ];
 
   /* ---- how far a grant goes --------------------------------------------
@@ -608,7 +641,14 @@
 
     var foot = el('div', 'rolec-f');
     foot.appendChild(reach(total(p)));
-    foot.appendChild(el('span', 'rolec-p', p.people + (p.people === 1 ? ' person' : ' people')));
+    var held = el('span', 'rolec-p',
+      p.people ? p.people + (p.people === 1 ? ' person' : ' people') : 'Nobody yet');
+    if (!p.people) {
+      held.setAttribute('data-tip', 'The position exists and nobody has been given it. '
+        + 'Who holds platform administration \u2014 FXB Rwanda, a joint body, or NCDA \u2014 '
+        + 'is the one thing about it that is not ours to decide.');
+    }
+    foot.appendChild(held);
     a.appendChild(foot);
 
     a.onclick = function () {
@@ -1015,8 +1055,62 @@
     if (empty) empty.hidden = !(q && !n);
   }
 
+  /* ---- counts, said once ----
+
+     Six places in this app state how many permissions, groups or positions
+     there are, in words as often as in digits. Every one of them was typed,
+     and adding the platform group made every one of them wrong. A sentence
+     that carries a count now carries a placeholder instead, and this fills
+     it: {perms} 29, {Perms} Twenty-nine, {groups} 9, {groupWord} nine,
+     {positions} 9, {positionWord} nine. */
+  var WORD = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
+    'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    'seventeen', 'eighteen', 'nineteen', 'twenty', 'twenty-one', 'twenty-two',
+    'twenty-three', 'twenty-four', 'twenty-five', 'twenty-six', 'twenty-seven',
+    'twenty-eight', 'twenty-nine', 'thirty', 'thirty-one', 'thirty-two'];
+  function word(x) { return WORD[x] || String(x); }
+  function counts() {
+    return {
+      perms: String(ALL.length),
+      Perms: word(ALL.length).charAt(0).toUpperCase() + word(ALL.length).slice(1),
+      permWord: word(ALL.length),
+      groups: String(GROUPS.length),
+      groupWord: word(GROUPS.length),
+      positions: String(state.pos.length),
+      positionWord: word(state.pos.length),
+      Positions: word(state.pos.length).charAt(0).toUpperCase()
+        + word(state.pos.length).slice(1)
+    };
+  }
+  function fillCounts(text) {
+    var c = counts();
+    return String(text).replace(/\{(\w+)\}/g, function (m, k) {
+      return c[k] == null ? m : c[k];
+    });
+  }
+  /* Anything with a brace left in a tip or a label is one of these. */
+  function stamp(root) {
+    var r = root || document;
+    Array.prototype.forEach.call(r.querySelectorAll('[data-tip*="{"]'), function (el) {
+      el.setAttribute('data-tip', fillCounts(el.getAttribute('data-tip')));
+    });
+    Array.prototype.forEach.call(r.querySelectorAll('[data-count]'), function (el) {
+      el.textContent = fillCounts(el.getAttribute('data-count'));
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { stamp(); });
+  } else {
+    stamp();
+  }
+  /* A drawer hands over a fresh copy of the screen, braces and all. */
+  document.addEventListener('drawer:render', function () { setTimeout(function () { stamp(); }, 0); });
+
   window.SugiraPerms = {
     render: render,
+    counts: counts,
+    fillCounts: fillCounts,
+    stamp: stamp,
     renderPerms: renderPerms,
     all: ALL,
     groups: GROUPS,

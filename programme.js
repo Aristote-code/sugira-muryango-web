@@ -34,9 +34,13 @@
     '9.The Important Role that Everyone Plays in Raising a Baby Well',
     '10.Good Parenting is Better than Being Born Well',
     '11.Making the Home a Place Where a Baby’s Brain Can Grow',
-    '12.With a United Family, Anything is Possible'];
+    '12.With a United Family, Anything is Possible',
+    'Closing session', '3-Month Booster Session', '6-Month Booster Session',
+    '12-Month Booster Session'];
 
-  var EVERY_SESSION = SESSIONS.slice(1);
+  /* The twelve numbered ones. A form that goes on every module goes on the
+     curriculum, not on the welcome, the closing or a booster. */
+  var EVERY_SESSION = SESSIONS.slice(1, 13);
 
   /* The four sessions a supervisor sits in on. The old Monitoring forms tab
      listed these as modules of their own, with the same names as the sessions
@@ -155,6 +159,47 @@
   var library = projects.reduce(function (a, p) { return a.concat(p.forms); }, []);
 
   window.SUGIRA_PROGRAMME = { projects: projects, forms: library };
+
+  /* ---- a project counts its own contents ----
+
+     The project record stated how many sessions and forms it holds, and both
+     numbers were typed. It said 14 sessions above a list of 17, and 34 forms
+     — which is a programme-wide figure, not this project's — above a list of
+     12. They are read from the same data the lists are drawn from now, so a
+     session added to the programme cannot leave the record behind. */
+  function projectCounts() {
+    var slots = document.querySelectorAll('[data-proj-count]');
+    if (!slots.length) return;
+    var p = projects.filter(function (x) {
+      return x.name === 'Household Module Tracking';
+    })[0];
+    if (!p) return;
+    var use = {};
+    projects.forEach(function (q) {
+      (q.sessions || []).forEach(function (s) { (use[s] = use[s] || []).push(q.name); });
+    });
+    var shared = (p.sessions || []).filter(function (s) {
+      return use[s] && use[s].length > 1;
+    }).length;
+    var ns = (p.sessions || []).length, nf = p.forms.length;
+    var val = {
+      sessions: ns + (ns === 1 ? ' session' : ' sessions'),
+      shared: shared + ' shared with other projects',
+      forms: nf + (nf === 1 ? ' form' : ' forms')
+    };
+    Array.prototype.forEach.call(slots, function (el) {
+      var k = el.getAttribute('data-proj-count');
+      if (val[k]) el.textContent = val[k];
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', projectCounts);
+  } else {
+    projectCounts();
+  }
+  document.addEventListener('drawer:render', function () {
+    setTimeout(projectCounts, 0);
+  });
 
   /* ---- bits ---- */
 

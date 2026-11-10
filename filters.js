@@ -101,12 +101,19 @@
      ones, so scoping down and adding the five back up gives the same totals.
      Cohorts 3 and 4 hold no districts, so filtering to either correctly
      empties the board — that is the data saying something true. */
+  /* `izu` is the home visitors a district has, and there is one to a village,
+     so it is also the number of villages with a home visitor — which is what
+     "Reported today" counts against. It used to be a second field, `staff`,
+     summing to 193 against izu's 486: the same people counted twice, two
+     screens apart, with two answers. The total is 412 because that is what
+     the live system stores, on the Roles screen headed "exactly as it is
+     stored". */
   var BOARD = {
-    Ngoma:   { hh: 560, visits: 470, behind: 34, izu: 124, izuOn: 108, staff: 49, said: 46, male: 41, calls: 92 },
-    Kirehe:  { hh: 420, visits: 330, behind: 38, izu: 92,  izuOn: 72,  staff: 37, said: 31, male: 33, calls: 62 },
-    Nyanza:  { hh: 450, visits: 392, behind: 26, izu: 99,  izuOn: 86,  staff: 39, said: 36, male: 39, calls: 70 },
-    Rubavu:  { hh: 480, visits: 400, behind: 22, izu: 105, izuOn: 92,  staff: 42, said: 39, male: 40, calls: 76 },
-    Musanze: { hh: 300, visits: 250, behind: 28, izu: 66,  izuOn: 54,  staff: 26, said: 22, male: 34, calls: 44 }
+    Ngoma:   { hh: 560, visits: 470, behind: 34, izu: 105, izuOn: 89, said: 95, male: 41, calls: 93 },
+    Kirehe:  { hh: 420, visits: 330, behind: 38, izu: 78,  izuOn: 66, said: 70, male: 33, calls: 69 },
+    Nyanza:  { hh: 450, visits: 392, behind: 26, izu: 84,  izuOn: 71, said: 76, male: 39, calls: 75 },
+    Rubavu:  { hh: 480, visits: 400, behind: 22, izu: 89,  izuOn: 76, said: 80, male: 40, calls: 79 },
+    Musanze: { hh: 300, visits: 250, behind: 28, izu: 56,  izuOn: 48, said: 50, male: 34, calls: 50 }
   };
   var COHORT_SHARE = { '1': 0.55, '2': 0.45, '3': 0, '4': 0 };
   var PERIOD_SHARE = { 'This week': 0.08, 'This month': 0.31, 'This cohort': 1, 'All time': 1 };
@@ -143,11 +150,11 @@
     var cs = cohort ? (COHORT_SHARE[cohort] || 0) : 1;
     var ps = PERIOD_SHARE[period] === undefined ? 1 : PERIOD_SHARE[period];
 
-    var t = { hh: 0, visits: 0, behind: 0, izu: 0, izuOn: 0, staff: 0, said: 0, calls: 0, maleW: 0 };
+    var t = { hh: 0, visits: 0, behind: 0, izu: 0, izuOn: 0, said: 0, calls: 0, maleW: 0 };
     ds.forEach(function (d) {
       var b = BOARD[d];
       t.hh += b.hh * cs; t.visits += b.visits * cs * ps; t.behind += b.behind * cs;
-      t.izu += b.izu; t.izuOn += b.izuOn; t.staff += b.staff; t.said += b.said;
+      t.izu += b.izu; t.izuOn += b.izuOn; t.said += b.said;
       t.calls += b.calls * ps; t.maleW += b.male * b.visits * cs * ps;
     });
     var male = t.visits ? t.maleW / t.visits : 0;
@@ -156,7 +163,7 @@
     var tiles = {
       visits:      { v: t.visits, of: t.hh, pct: pct(t.visits, t.hh), d: period.toLowerCase() },
       behind:      { v: t.behind, of: t.hh, pct: pct(t.behind, t.hh) },
-      reported:    { v: t.said, of: t.staff, pct: pct(t.said, t.staff) },
+      reported:    { v: t.said, of: t.izu, pct: pct(t.said, t.izu) },
       izu:         { v: t.izuOn, of: t.izu, pct: pct(t.izuOn, t.izu) },
       male:        { v: null, pct: Math.round(male) },
       supervision: { v: t.calls, of: t.izu, pct: pct(t.calls, t.izu) }

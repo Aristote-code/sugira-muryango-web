@@ -54,7 +54,7 @@
       ['Full name', 'text', 'C. Uwimana'],
       ['Phone', 'text', '+250 78 555 0144'],
       ['Employee number', 'text', ''],
-      ['Started', 'date', '3 September 2026']
+      ['Started', 'date', '19 August 2026']
     ]
   };
 
