@@ -10,13 +10,15 @@
     household:    { crumbs: [['Households', 'households'], ['HH-1007 Mukamana', null]],   nav: 'households' },
     visits:       { crumbs: [['Visits', null]],                                           nav: 'visits' },
     visit:        { crumbs: [['Visits', 'visits'], ['VIS-8841 \u00b7 HH-1007', null]],         nav: 'visits' },
-    safeguarding: { crumbs: [['Safeguarding', null]],                                     nav: 'safeguarding' },
-    "case":       { crumbs: [['Safeguarding', 'safeguarding'], ['RH-0044', null]],        nav: 'safeguarding' },
+    safeguarding: { crumbs: [['Risk of harm', null]],                                     nav: 'safeguarding' },
+    "case":       { crumbs: [['Risk of harm', 'safeguarding'], ['RH-0044', null]],        nav: 'safeguarding' },
+    referrals:    { crumbs: [['Referrals', null]],                                        nav: 'referrals' },
+    referral:     { crumbs: [['Referrals', 'referrals'], ['RF-0112', null]],              nav: 'referrals' },
     field:        { crumbs: [['Field status', null]],                                     nav: 'field' },
     reports:      { crumbs: [['Reports', null]],                                          nav: 'reports' },
     followups:    { crumbs: [['Follow-ups', null]],                                      nav: 'followups' },
     community:    { crumbs: [['Community', null]],                                       nav: 'community' },
-    izu:          { crumbs: [['IZU performance', null]],                                 nav: 'izu' },
+    izu:          { crumbs: [['IZU monitoring', null]],                                  nav: 'izu' },
     content:      { crumbs: [['Field support', null]],                                   nav: 'content' },
     people:       { crumbs: [['People', null]],                                           nav: 'people' },
     roles:        { crumbs: [['Roles & access', null]],                                   nav: 'roles' },
@@ -66,7 +68,8 @@
     programme:     'What a home visit contains: the projects, their sessions, the forms the visitor fills in, and the cohorts that decide who gets which session when.',
     reports:       'Build a question once, save it, and have it sent on a schedule.',
     roles:         'Superseded by Roles & access, which states a position as what it starts from plus what it adds. Kept until FXB has seen both. A role that duplicates another is one to merge, not one to keep.',
-    safeguarding:  'Three open cases. Two of them are past the 72-hour review window.',
+    referrals:     'A referral is a risk-of-harm case sent somewhere. It stays open here until the place it was sent to answers, because a case can look handled when nothing has happened.',
+    safeguarding:  'Three open cases. Two of them are not reviewed; one of those is past the 72-hour window.',
     settings:      'The rules the whole programme runs on. Changing one here changes it for every district, every tablet and every household at once, so each says what it will move.',
     system:        'Who did what, and the housekeeping that keeps the data honest. The rules themselves live in Settings.',
     translations:  'Thirteen of the thirty-four forms that carry text are not fully translated. Anything still English-only reaches a home visitor in a language the household may not read.',
@@ -151,6 +154,51 @@
       body: '<p class="m-lead">Archiving takes the form off the tablet at the next sync. Responses already collected stay where they are and keep appearing in reports &mdash; nothing is deleted.</p>' +
             '<div><label for="f-arw">Why</label><select id="f-arw"><option>Replaced by a newer version</option><option>No longer part of the programme</option><option>Created in error</option></select></div>',
       done: 'Archived — it leaves the tablet at the next sync'
+    },
+    /* The default is the design. Continue marks the batch as training; a
+       real visit takes a deliberate second click. gp1 48:30. */
+    dept: {
+      title: 'Add a department',
+      ok: 'Add it',
+      body: '<div><label for="f-dn">Name</label><input id="f-dn" type="text" '
+          + 'placeholder="e.g. Nutrition"></div>'
+          + '<div><label for="f-do">Organisation</label><select id="f-do">'
+          + '<option>FXB Rwanda</option><option>NCDA</option>'
+          + '<option>Boston College</option></select></div>'
+          + '<div><label for="f-dw">What it does</label><input id="f-dw" type="text" '
+          + 'placeholder="One line. It appears beside the name wherever the department does."></div>'
+          + '<div><label for="f-dp">Positions in it</label><select id="f-dp" multiple size="4">'
+          + '<option>IZU at Village</option><option>Cell coordinator</option>'
+          + '<option>Sector lead</option><option>District lead</option>'
+          + '<option>HQ officer</option></select></div>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
+          + '<span>A position can only be in one department, so choosing one here takes it '
+          + 'out of the department it is in now.</span></p>',
+      done: 'Department added \u2014 nobody is in it until a position moves'
+    },
+    trainask: {
+      title: 'Before this is sent',
+      icon: 'alert',
+      ok: 'Continue',
+      body: '<p class="m-lead">7 visits are waiting on this tablet.</p>'
+          + '<div class="lr click" data-pick="train" role="radio" aria-checked="true">'
+          + '<span class="t">Training \u2014 practice from a session</span>'
+          + '<span class="c"><svg class="pick" aria-hidden="true"><use href="#i-check"/></svg>'
+          + '</span></div>'
+          + '<div class="lr click" data-pick="train" role="radio" aria-checked="false">'
+          + '<span class="t">Real visits to households</span>'
+          + '<span class="c"><svg class="pick" aria-hidden="true"><use href="#i-check"/></svg>'
+          + '</span></div>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
+          + '<span>Training visits are sent and kept apart: they never reach a count, a '
+          + 'report or a supervisor\u2019s caseload, and the cleanup removes them. Marking '
+          + 'them real is the step that takes a second click.</span></p>',
+      done: function (body) {
+        var real = body.querySelector('[data-pick][aria-checked="true"]');
+        return real && /Real/.test(real.textContent)
+          ? '7 visits sent as real \u2014 they are in today\u2019s counts'
+          : '7 visits sent as training \u2014 no count, no report, no caseload';
+      }
     },
     binned: {
       title: 'Deleted responses',
@@ -252,12 +300,79 @@
             '<div><label for="f-coh">Cohort</label><select id="f-coh"><option>Cohort 4</option><option>Cohort 5 (not yet started)</option></select></div>',
       done: 'Household enrolled in Cohort 4'
     },
+    /* Six questions, not two. The level is the one that matters: it
+       decides which places can be chosen, and a project nobody can place is
+       a project nobody can see. gp1 08:37, gp5 13:54. */
     project: {
       title: 'New project',
       ok: 'Create project',
-      body: '<div><label for="f-pn">Project name</label><input id="f-pn" type="text" placeholder="e.g. FCG participation and interaction"></div>' +
-            '<div><label for="f-pm">Start from</label><select id="f-pm"><option>An empty project</option><option>A copy of Household Module Tracking</option></select></div>',
-      done: 'Project created'
+      body: '<div><label for="f-pn">Project name</label><input id="f-pn" type="text" '
+          + 'placeholder="e.g. FCG participation and interaction"></div>'
+          + '<div><label for="f-pm">Start from</label><select id="f-pm">'
+          + '<option>An empty project</option>'
+          + '<option>A copy of Household Module Tracking</option></select></div>'
+          + '<div class="cols c2">'
+          + '<div><label for="f-ps">Status</label><select id="f-ps">'
+          + '<option>Draft \u2014 nobody sees it yet</option><option>Active</option></select></div>'
+          + '<div><label for="f-pl">Level</label><select id="f-pl">'
+          + '<option>National</option><option>District</option><option>Sector</option>'
+          + '</select></div></div>'
+          + '<div id="f-pwrap"><label for="f-pw">Where it runs</label>'
+          + '<select id="f-pw"></select></div>'
+          + '<div><label for="f-pmob">On the mobile app</label><select id="f-pmob">'
+          + '<option>Yes \u2014 its forms reach the tablet</option>'
+          + '<option>No \u2014 web only</option></select></div>'
+          + '<div><label for="f-pmd">Does it have sessions</label><select id="f-pmd">'
+          + '<option>No \u2014 forms go straight into the project</option>'
+          + '<option>Yes \u2014 choose them now</option></select></div>'
+          + '<div id="f-pmdw" hidden><label for="f-pmods">Which sessions</label>'
+          + '<select id="f-pmods" multiple size="4"></select></div>',
+      init: function (body) {
+        var lvl = body.querySelector('#f-pl');
+        var where = body.querySelector('#f-pw');
+        var wrap = body.querySelector('#f-pwrap');
+        var has = body.querySelector('#f-pmd');
+        var mw = body.querySelector('#f-pmdw');
+        var mods = body.querySelector('#f-pmods');
+        var P = window.SUGIRA_PROGRAMME;
+        var WHERE = {
+          National: ['Rwanda \u2014 every district'],
+          District: ['Kirehe', 'Musanze', 'Ngoma', 'Nyanza', 'Rubavu'],
+          Sector: ['Kibungo \u00b7 Ngoma', 'Jarama \u00b7 Ngoma', 'Sake \u00b7 Ngoma',
+                   'Mahama \u00b7 Kirehe', 'Kigoma \u00b7 Nyanza', 'Kinigi \u00b7 Musanze']
+        };
+        function drawWhere() {
+          var list = WHERE[lvl.value] || [];
+          where.innerHTML = list.map(function (v) {
+            return '<option>' + v + '</option>';
+          }).join('');
+          where.multiple = lvl.value !== 'National';
+          where.size = lvl.value === 'National' ? 1 : Math.min(5, list.length);
+          wrap.hidden = false;
+        }
+        function drawMods() {
+          mw.hidden = has.selectedIndex === 0;
+          if (mw.hidden || mods.options.length) return;
+          var names = (P && P.projects && P.projects[0] && P.projects[0].sessions) || [];
+          if (!names.length) {
+            names = ['1. Family Narrative', '2. Early Stimulation & Play',
+                     '3. Building Early Communication Skills', '4. Good Hygiene'];
+          }
+          mods.innerHTML = names.map(function (v) {
+            return '<option>' + v + '</option>';
+          }).join('');
+        }
+        lvl.addEventListener('change', drawWhere);
+        has.addEventListener('change', drawMods);
+        drawWhere();
+        drawMods();
+      },
+      done: function (body) {
+        var lvl = (body.querySelector('#f-pl') || {}).value || 'National';
+        var st = (body.querySelector('#f-ps') || {}).selectedIndex;
+        return 'Project created at ' + lvl.toLowerCase() + ' level'
+          + (st === 0 ? ' \u2014 a draft, so nobody sees it yet' : '');
+      }
     },
     module: {
       title: 'Add a session',
@@ -321,6 +436,7 @@
       ok: 'Add it and save the access',
       body: '<div><label for="f-af">Form</label><select id="f-af"></select></div>'
           + '<p class="mhint" id="f-afw"></p>'
+          + '<div><label for="f-adp">Department</label><select id="f-adp"><option>Field delivery</option><option>Monitoring &amp; evaluation</option><option>Child protection &mdash; NCDA</option><option>Every department</option></select></div>'
           + '<div><label for="f-ad">Data access</label><select id="f-ad">'
           + '<option>IZU at Village and above</option><option>Supervisors and above</option>'
           + '<option>Nobody yet</option></select></div>'
@@ -330,12 +446,38 @@
           + '<div><label for="f-ae2">Edit access</label><select id="f-ae2">'
           + '<option>M&amp;E and above</option><option>HQ only</option>'
           + '<option>Nobody yet</option></select></div>'
+          + '<div><label for="f-aa">Archive access</label><select id="f-aa">'
+          + '<option>HQ only</option><option>M&amp;E and above</option>'
+          + '<option>Nobody yet</option></select></div>'
+          + '<div><label for="f-av">Data visibility</label><select id="f-av">'
+          + '<option>Only the place they are posted to</option>'
+          + '<option>Their district</option><option>Their province</option>'
+          + '<option>Everything in this project</option>'
+          + '<option>A value on this form\u2026</option></select></div>'
+          + '<div id="f-avw" hidden class="cols c2">'
+          + '<div><label for="f-avf">Field</label><select id="f-avf">'
+          + '<option>Gender of the caregiver</option><option>Cohort</option>'
+          + '<option>Child under five</option></select></div>'
+          + '<div><label for="f-avv">Is</label><select id="f-avv">'
+          + '<option>Male</option><option>Female</option></select></div></div>'
+          + '<div><label for="f-au">Assigned to</label><select id="f-au">'
+          + '<option>Everyone the access above reaches</option>'
+          + '<option>Named people only\u2026</option></select></div>'
           + '<div id="f-afc"></div>',
       done: 'Form added — its access in this project is saved',
       init: function (body, from) {
         var sel = body.querySelector('#f-af');
         var warn = body.querySelector('#f-afw');
         var host = body.querySelector('#f-afc');
+        /* Visibility by a field value is the one answer that needs a
+           second question, so it asks it rather than hiding it. */
+        var vis = body.querySelector('#f-av');
+        var visw = body.querySelector('#f-avw');
+        if (vis && visw) {
+          vis.addEventListener('change', function () {
+            visw.hidden = vis.selectedIndex !== 4;
+          });
+        }
         var here = (from && from.getAttribute('data-report-project')) || 'this project';
 
         /* A form already in use somewhere carries what that project gave it.
@@ -850,50 +992,42 @@
        The lists are read from the app's own programme data, so a module that
        holds no form cannot be chosen and a form nobody has answered says so
        before you ask for its rows. */
-    /* Four minutes of the recording are about this and none of it was built.
+    /* Four minutes of the recording, and the job is a deletion, not an
+       import. The template says who was trained and when; the preview shows
+       the submissions those people made inside that window; the button
+       removes them before they are counted as real.
 
-         "We have to use the training data cleanup ... if you have a template,
-          you can get a training. If you download it, you can download it ...
-          When you have a training, you can upload your template, and preview
-          your data ... I have to download the template, I have to use the
-          training, I have to use the email and I have to use the user to
-          identify the user. Then I will upload it ... you can upload the
-          system and ... preview the data."          [44:18]–[47:09]
-
-       Three things are being asked for, and the third is the one that matters:
-       a template to fill in, an upload, and a *preview before it commits*. A
-       bulk upload that writes straight through is how a spreadsheet of five
-       hundred rows silently creates eleven new accounts from eleven typos, and
-       "training data cleanup" is the name of the job that follows.
-
-       Email is the key, which the client said twice. So the preview's only
-       real question is: did this row find a person? Everything else is detail.
-       Rows that match are counted, rows that do not are shown by name, and
-       nothing is written until somebody has seen both numbers. */
+       Two things follow from that. The first is that nothing here writes to
+       a person — a training record on a profile was never what was asked
+       for. The second is that the preview has to say what the deletion moves,
+       because a figure that drops by 186 overnight with no explanation is
+       how people stop trusting a dashboard. */
     training: {
-      title: 'Import training records',
-      ok: 'Import 38 rows',
+      title: 'Training data cleanup',
+      ok: 'Delete 186 submissions',
       wide: true,
       icon: 'admin',
       body: '<div class="lr"><span class="t">The template</span>'
-          + '<span class="s">Email, training, date completed, score</span>'
-          + '<span class="c"><button class="btn sec sm" type="button" data-toast="training-template.csv downloaded">'
+          + '<span class="s">Email or telephone, name, date of the training</span>'
+          + '<span class="c"><button class="btn sec sm" type="button" '
+          + 'data-toast="training-template.csv downloaded">'
           + '<svg aria-hidden="true"><use href="#i-download"/></svg>Download</button></span></div>'
-          + '<div><label for="t-file">Your filled-in template</label>'
-          + '<select id="t-file"><option>izu-refresher-november.csv — 41 rows</option>'
-          + '<option>sector-lead-safeguarding.csv — 17 rows</option></select></div>'
-          + '<div><label id="t-pl">What will happen</label>'
+          + '<div><label for="t-file">Who was trained</label>'
+          + '<select id="t-file"><option>izu-refresher-november.csv \u2014 41 rows</option>'
+          + '<option>sector-lead-safeguarding.csv \u2014 17 rows</option></select></div>'
+          + '<div><label id="t-pl">What will be deleted</label>'
           + '<div class="lr"><span class="t" id="t-what"></span>'
           + '<span class="c" id="t-count"></span></div>'
           + '<div class="tblwrap" aria-labelledby="t-pl"><table class="tbl"><thead><tr>'
-          + '<th>Email</th><th>Who that is</th><th>Completed</th>'
-          + '<th>What will happen</th><th class="gap"></th></tr></thead>'
+          + '<th>Email or telephone</th><th>Who that is</th><th>Trained</th>'
+          + '<th class="num">Submissions</th><th>What happens</th>'
+          + '<th class="gap"></th></tr></thead>'
           + '<tbody id="t-rows"></tbody></table></div></div>'
           + '<p class="m-lead" id="t-sum"></p>'
           + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
-          + '<span>A row whose email is not on the system is skipped, never used to make an '
-          + 'account. Fix it in the spreadsheet and upload again — importing twice is safe, '
-          + 'because a row that is already recorded is counted as unchanged rather than added.</span></p>',
+          + '<span>Only submissions made on the day of the training are deleted. A row that '
+          + 'matches nobody is skipped and listed, never used to delete somebody else\u2019s '
+          + 'work. Deleted submissions are recoverable for 30 days.</span></p>',
       init: function (body) {
         var sel = body.querySelector('#t-file');
         var rows = body.querySelector('#t-rows');
@@ -902,54 +1036,55 @@
         var count = body.querySelector('#t-count');
         var ok = document.getElementById('mOk');
 
-        /* Two files, so the preview is visibly a reading of what was uploaded
-           rather than a fixed picture. The second one is the awkward case:
-           most of it is already recorded. */
+        /* Two files, so the preview is visibly a reading of what was
+           uploaded rather than a fixed picture. The second is the awkward
+           case: most of those people made nothing that day, which is what a
+           clean training looks like. */
         var FILES = {
           'izu-refresher-november.csv': {
             total: 41,
             rows: [
-              ['m.dusabe@fxbrwanda.org', 'M. Dusabe', 'Safeguarding refresher', '28 Oct', 'add'],
-              ['e.mutesi@fxbrwanda.org', 'E. Mutesi', 'Safeguarding refresher', '28 Oct', 'add'],
-              ['j.kamanzi@fxbrwanda.org', 'J. Kamanzi', 'Safeguarding refresher', '29 Oct', 'add'],
-              ['b.uwamahoro@fxbrwanda.org', 'B. Uwamahoro', 'Safeguarding refresher', '29 Oct', 'same'],
-              ['a.nyirahabimna@fxbrwanda.org', null, 'Safeguarding refresher', '29 Oct', 'skip'],
-              ['f.uwase@fxbrwanda.org', 'F. Uwase', 'Safeguarding refresher', '30 Oct', 'add'],
-              ['', null, 'Safeguarding refresher', '30 Oct', 'skip']
+              ['m.dusabe@fxbrwanda.org', 'M. Dusabe', 'Safeguarding refresher', '28 Oct', 31, 'del'],
+              ['+250 78 555 0117', 'E. Mutesi', 'Safeguarding refresher', '28 Oct', 44, 'del'],
+              ['j.kamanzi@fxbrwanda.org', 'J. Kamanzi', 'Safeguarding refresher', '29 Oct', 26, 'del'],
+              ['b.uwamahoro@fxbrwanda.org', 'B. Uwamahoro', 'Safeguarding refresher', '29 Oct', 0, 'none'],
+              ['a.nyirahabimna@fxbrwanda.org', null, 'Safeguarding refresher', '29 Oct', 0, 'skip'],
+              ['+250 78 555 0144', 'F. Uwase', 'Safeguarding refresher', '30 Oct', 18, 'del'],
+              ['', null, 'Safeguarding refresher', '30 Oct', 0, 'skip']
             ],
-            add: 38, same: 1, skip: 2
+            del: 186, people: 38, none: 1, skip: 2, cases: 4
           },
           'sector-lead-safeguarding.csv': {
             total: 17,
             rows: [
-              ['c.uwimana@fxbrwanda.org', 'C. Uwimana', 'Risk-of-harm protocol', '14 Oct', 'same'],
-              ['a.gahimana@fxbrwanda.org', 'A. Gahimana', 'Risk-of-harm protocol', '14 Oct', 'same'],
-              ['p.hakizimana@fxbrwanda.org', 'P. Hakizimana', 'Risk-of-harm protocol', '15 Oct', 'add'],
-              ['sector.lead@fxbrwanda', null, 'Risk-of-harm protocol', '15 Oct', 'skip']
+              ['c.uwimana@fxbrwanda.org', 'C. Uwimana', 'Risk-of-harm protocol', '14 Oct', 0, 'none'],
+              ['a.gahimana@fxbrwanda.org', 'A. Gahimana', 'Risk-of-harm protocol', '14 Oct', 0, 'none'],
+              ['+250 78 555 0208', 'P. Hakizimana', 'Risk-of-harm protocol', '15 Oct', 9, 'del'],
+              ['sector.lead@fxbrwanda', null, 'Risk-of-harm protocol', '15 Oct', 0, 'skip']
             ],
-            add: 3, same: 13, skip: 1
+            del: 9, people: 1, none: 15, skip: 1, cases: 1
           }
         };
         var WORD = {
-          add: ['ok', 'Recorded'],
-          same: ['', 'Already recorded'],
-          skip: ['bad', 'No such email']
+          del:  ['bad', 'Deleted'],
+          none: ['', 'Nothing that day'],
+          skip: ['warn', 'No such email or telephone']
         };
 
         function draw() {
-          var name = sel.value.replace(/ — .*$/, '');
+          var name = sel.value.replace(/ \u2014 .*$/, '');
           var f = FILES[name];
           if (!f) return;
           rows.innerHTML = '';
           /* The training is a property of the file, not of a row: it is the
              same value forty-one times. It is named once, above. */
           what.textContent = f.rows[0][2];
-          count.textContent = f.total + ' rows';
+          count.textContent = f.total + ' people';
           f.rows.forEach(function (r) {
             var tr = document.createElement('tr');
-            var w = WORD[r[4]];
-            tr.innerHTML =
-              '<td class="nm"></td><td></td><td class="mut"></td>'
+            var w = WORD[r[5]];
+            tr.innerHTML = '<td class="nm"></td><td></td><td class="mut"></td>'
+              + '<td class="num"></td>'
               + '<td><span class="chip ' + w[0] + '"><i></i></span></td><td class="gap"></td>';
             tr.cells[0].textContent = r[0] || '(blank)';
             if (r[1]) tr.cells[1].textContent = r[1];
@@ -960,17 +1095,21 @@
               tr.cells[1].appendChild(m);
             }
             tr.cells[2].textContent = r[3];
-            tr.cells[3].querySelector('.chip').appendChild(document.createTextNode(w[1]));
+            tr.cells[3].textContent = r[4] ? String(r[4]) : '\u2014';
+            if (!r[4]) tr.cells[3].className = 'num mut';
+            tr.cells[4].querySelector('.chip').appendChild(document.createTextNode(w[1]));
             rows.appendChild(tr);
           });
-          sum.textContent = 'Showing ' + f.rows.length + ' of ' + f.total + ' rows · '
-            + f.add + ' recorded, ' + f.same + ' already there, ' + f.skip
-            + ' skipped because the email matches nobody';
+          sum.textContent = 'Showing ' + f.rows.length + ' of ' + f.total + ' people \u00b7 '
+            + f.del + ' submissions from ' + f.people + ' of them, including ' + f.cases
+            + ' risk-of-harm flags raised in the room \u00b7 ' + f.none
+            + ' made nothing that day \u00b7 ' + f.skip
+            + ' skipped because the email or telephone matches nobody';
           if (ok) {
-            ok.textContent = f.add
-              ? 'Import ' + f.add + (f.add === 1 ? ' row' : ' rows')
-              : 'Nothing to import';
-            ok.disabled = !f.add;
+            ok.textContent = f.del
+              ? 'Delete ' + f.del + (f.del === 1 ? ' submission' : ' submissions')
+              : 'Nothing to delete';
+            ok.disabled = !f.del;
           }
         }
         sel.addEventListener('change', draw);
@@ -978,11 +1117,11 @@
       },
       done: function (body) {
         var sum = body.querySelector('#t-sum');
-        var m = /(\d+) recorded, (\d+) already there, (\d+) skipped/.exec(
+        var m = /(\d+) submissions from (\d+) of them, including (\d+)/.exec(
           (sum && sum.textContent) || '');
-        if (!m) return 'Training records imported';
-        return m[1] + ' training records added, ' + m[2] + ' were already there, '
-          + m[3] + ' skipped — the skipped rows are in the file you can download';
+        if (!m) return 'Training submissions deleted';
+        return m[1] + ' submissions and ' + m[3] + ' flags removed \u2014 every count that '
+          + 'included them has moved, and they are recoverable for 30 days';
       }
     },
     dataexport: {
@@ -1318,7 +1457,7 @@
   // ---- drawer: a record opens over the list it came from ----
   // Records open in the drawer; the screens that *list* them stay pages.
   var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1,
-                     position: 1, rolecard: 1, record: 1, visit: 1 };
+                     position: 1, rolecard: 1, record: 1, visit: 1, referral: 1 };
   var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
   var dwStack = [], dwHeld = null, dwReturn = null;
 
@@ -1628,6 +1767,52 @@
     var row = m.closest('.pgr');
     if (row) row.classList.add('is-open');
   });
+
+
+  /* ---- the submission behind a record ----
+     One list, drawn wherever the record it produced is read. The visit's
+     copy used to be written into the markup, so the case and the referral
+     had nothing to draw and were asking the reader to go and find it. */
+  var SUBMISSION = [
+    ['Was the session delivered in full?', 'Yes', ''],
+    ['Who took part?', 'Caregiver', 'male caregiver absent'],
+    ['Which activities were completed?', '4 of 5', 'the handwashing demonstration was not done'],
+    ['Did the caregiver practise the activity?', 'Yes', ''],
+    /* The two that name a child. Held wherever this is drawn, including
+       on the visit, because the visit is one click from the case. */
+    ['Is any child in this household at risk of harm?', 'CASE', 'opened RH-0044', 1],
+    ['Which child?', 'Mukamana Alice', '2 years', 1],
+    ['Has the household a health insurance card?', 'No', 'expired August'],
+    ['Was a referral made?', 'Yes', 'health post'],
+    ['How long did the session take?', '42 minutes', ''],
+    ['Anything the next visitor should know?', '',
+     'Grandmother now lives in the household and was present for most of the session.']
+  ];
+
+  function submissionTable() {
+    var rows = SUBMISSION.map(function (q, i) {
+      var answer = q[1] === 'CASE'
+        ? '<span class="chip bad"><i></i>Yes · neglect</span> '
+          + '<button class="rel" type="button" data-go="case">'
+          + '<svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button>'
+        : esc(q[1]);
+      var note = q[2] ? '<span class="mut">' + (q[1] ? '· ' : '') + esc(q[2]) + '</span>' : '';
+      return '<tr><td class="num mut">' + (i + 1) + '</td><td class="nm">' + esc(q[0])
+        + '</td><td' + (q[3] ? ' data-hold="RH-0044"' : '') + '>' + answer + ' ' + note
+        + '</td><td class="gap"></td></tr>';
+    }).join('');
+    return '<div class="tblwrap"><table class="tbl">'
+      + '<thead><tr><th style="width:3rem" class="num">#</th><th>Question</th>'
+      + '<th>Answer</th><th class="gap"></th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+      + '<div class="tfoot"><span>Showing 1–10 of 30 · 30 answered, 0 left blank · '
+      + '<button class="rel" type="button" data-go="form">'
+      + '<svg aria-hidden="true"><use href="#i-reports"/></svg>Visit record, version 4</button>'
+      + '</span></div>';
+  }
+
+  $$('[data-submission]').forEach(function (host) { host.innerHTML = submissionTable(); });
+  /* The cells inside are written after this file's own markup pass, so
+     the holder is told to look again rather than assuming it ran last. */
 
   // ---- risk of harm: the two facts that name a child ----
   /* Reach decides whether a case is on your list at all — cases outside the

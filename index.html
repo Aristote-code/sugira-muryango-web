@@ -38,7 +38,10 @@
         <span class="tx">Visits</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
       <button class="ni" type="button" data-go="safeguarding" data-view="tab:Open">
         <svg aria-hidden="true"><use href="#i-safeguarding"/></svg>
-        <span class="tx">Safeguarding</span><span class="ct sig">3</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
+        <span class="tx">Risk of harm</span><span class="ct sig">3</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
+      <button class="ni" type="button" data-go="referrals">
+        <svg aria-hidden="true"><use href="#i-message"/></svg>
+        <span class="tx">Referrals</span><span class="ct sig">3</span></button>
       </div>
 
     <div class="navgrp">
@@ -58,7 +61,7 @@
         <span class="tx">Follow-ups</span><span class="ct sig">6</span></button>
       <button class="ni" type="button" data-go="izu">
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <span class="tx">IZU performance</span><span class="ct">344</span></button>
+        <span class="tx">IZU monitoring</span><span class="ct">344</span></button>
       <button class="ni" type="button" data-go="community">
         <svg aria-hidden="true"><use href="#i-message"/></svg>
         <span class="tx">Community</span><span class="ct sig">3</span></button>
@@ -125,7 +128,7 @@
         <div class="acts" data-for="translations" hidden><button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export strings</button></div>
         <div class="acts" data-for="people" hidden>
               <button class="btn sec" type="button"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button>
-              <button class="btn sec" type="button" data-modal="training"><svg aria-hidden="true"><use href="#i-admin"/></svg>Import training</button>
+              
               <button class="btn" type="button" data-modal="invite"><svg aria-hidden="true"><use href="#i-plus"/></svg>Invite someone</button></div>
         
         <div class="acts" data-for="roles" hidden>
@@ -202,32 +205,12 @@
                the stat cards above state. -->
           <div class="card wk">
             <div class="wk-hd">
-              <div><h3>Visits completed each week<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Share of the visits scheduled for that week, all five districts"><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3>
+              <div><h3 id="wkTitle">Visits completed each week<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Share of the visits scheduled for that week, all five districts"><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3>
                 </div>
-              <div class="wk-now"><b>83%</b><span>week ending 2 Nov</span></div>
+              <div class="wk-now" id="wkNow"><b>83%</b><span>week ending 2 Nov</span></div>
             </div>
-            <svg class="wk-plot" viewBox="0 0 1132 184" role="img"
-                 aria-label="Weekly visit completion, twelve weeks. Steady between 90 and 96 percent until the week ending 2 November, which falls to 83 percent.">
-              <g class="wk-grid">
-                <line x1="56" y1="20" x2="1100" y2="20"/>
-                <line x1="56" y1="76" x2="1100" y2="76"/>
-                <line x1="56" y1="132" x2="1100" y2="132"/>
-              </g>
-              <line class="wk-base" x1="56" y1="160" x2="1100" y2="160"/>
-              <g class="wk-ax">
-                <text x="44" y="24">100%</text><text x="44" y="80">90%</text><text x="44" y="136">80%</text>
-              </g>
-              <path class="wk-area" d="M56,42.4 L150.9,48 L245.8,53.6 L340.7,42.4 L435.6,59.2 L530.5,48 L625.5,53.6 L720.4,64.8 L815.3,59.2 L910.2,76 L1005.1,70.4 L1100,115.2 L1100,160 L56,160 Z"/>
-              <polyline class="wk-line" points="56,42.4 150.9,48 245.8,53.6 340.7,42.4 435.6,59.2 530.5,48 625.5,53.6 720.4,64.8 815.3,59.2 910.2,76 1005.1,70.4"/>
-              <polyline class="wk-last" points="1005.1,70.4 1100,115.2"/>
-              <circle class="wk-dot" cx="1100" cy="115.2" r="4.5"/>
-              <g class="wk-lbl">
-                <text x="150.9" y="178">25 Aug</text><text x="340.7" y="178">8 Sep</text>
-                <text x="530.5" y="178">22 Sep</text><text x="720.4" y="178">6 Oct</text>
-                <text x="910.2" y="178">20 Oct</text>
-                <text x="1100" y="178" text-anchor="end">2 Nov</text>
-              </g>
-            </svg>
+            <svg class="wk-plot" id="wkPlot" viewBox="0 0 1132 184" role="img"
+                 aria-label="Visit completion over time"></svg>
           </div>
 
           <div class="sect"><div><h2>Where to look first<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The places and people furthest from where they should be this week."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h2></div></div>
@@ -678,28 +661,8 @@
         </div>
 
         <div class="pad" data-panelid="answers">
-          <div class="card flush plainsurface">
-            <div class="tblwrap"><table class="tbl">
-              <thead><tr><th style="width:3rem" class="num">#</th><th>Question</th><th>Answer</th><th class="gap"></th></tr></thead>
-              <tbody>
-                <tr><td class="num mut">1</td><td class="nm">Was the session delivered in full?</td><td>Yes</td><td class="gap"></td></tr>
-                <tr><td class="num mut">2</td><td class="nm">Who took part?</td><td>Caregiver <span class="mut">&middot; male caregiver absent</span></td><td class="gap"></td></tr>
-                <tr><td class="num mut">3</td><td class="nm">Which activities were completed?</td><td>4 of 5 <span class="mut">&middot; the handwashing demonstration was not done</span></td><td class="gap"></td></tr>
-                <tr><td class="num mut">4</td><td class="nm">Did the caregiver practise the activity?</td><td>Yes</td><td class="gap"></td></tr>
-                <tr><td class="num mut">5</td><td class="nm">Is any child in this household at risk of harm?</td><td><span class="chip bad"><i></i>Yes &middot; neglect</span> <button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button></td><td class="gap"></td></tr>
-                <tr><td class="num mut">6</td><td class="nm">Which child?</td><td>Mukamana Alice <span class="mut">&middot; 2 years</span></td><td class="gap"></td></tr>
-                <tr><td class="num mut">7</td><td class="nm">Has the household a health insurance card?</td><td>No <span class="mut">&middot; expired August</span></td><td class="gap"></td></tr>
-                <tr><td class="num mut">8</td><td class="nm">Was a referral made?</td><td>Yes <span class="mut">&middot; health post</span></td><td class="gap"></td></tr>
-                <tr><td class="num mut">9</td><td class="nm">How long did the session take?</td><td>42 minutes</td><td class="gap"></td></tr>
-                <tr><td class="num mut">10</td><td class="nm">Anything the next visitor should know?</td><td class="mut">Grandmother now lives in the household and was present for most of the session.</td><td class="gap"></td></tr>
-              </tbody>
-            </table></div>
-            <div class="tfoot"><span>Showing 1&ndash;10 of 30 &middot; 30 answered, 0 left blank</span>
-              <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">3</button><button type="button">&rsaquo;</button></span>
-            </div>
-          </div>
+          <div class="card flush plainsurface" data-submission></div>
         </div>
-
         <div class="pad" data-panelid="happened" hidden>
           <div class="cols c2">
             <div class="card">
@@ -776,6 +739,104 @@
       </section>
 
       <!-- ============ CASE DETAIL ============ -->
+      <section class="screen" id="s-referrals">
+        <div class="filters">
+          <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by referral, case or where it was sent" aria-label="Search referrals"></div>
+        </div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-tab="open">Open<span class="chip" style="margin-left:var(--space-2)">3</span></button>
+          <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:var(--space-2)">3</span></button>
+          </div>
+        <div class="pad">
+          <div class="al">
+                <button class="al-hd" type="button" aria-expanded="true" aria-controls="al-rf">
+                  <svg aria-hidden="true"><use href="#i-alert"/></svg><span>Follow-up overdue</span><span class="ct">One of three open</span><svg class="cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
+                <div class="al-bd" id="al-rf">
+                  <p class="al-lead">A referral is chased until the place it was sent to answers. RF-0109 was due on 9 November and nothing has come back.</p>
+                  <div class="al-row">
+                    <span class="al-what"><span class="lb">Referral RF-0109</span><span class="nm" data-hold="RH-0038">HH-1204 Ingabire</span><span class="lb">District CPWO &middot; Ngoma</span></span>
+                    <span class="al-act"><span class="chip bad"><i></i>3 days late</span><button class="btn sm" type="button" data-go="referral">Open referral</button></span>
+                  </div>
+                </div>
+              </div>
+          <div class="card flush plainsurface">
+            <div class="tblwrap"><table class="tbl">
+              <thead>
+                <tr><th>Referral</th><th>Household<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The household and what was reported about the family are withheld until you open the case and say why. A referral carries the same rule as the case it came out of."><svg aria-hidden="true"><use href="#i-info"/></svg></button></th><th>Out of</th><th>Type</th><th>Referred to</th><th class="num">Follow-up due</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr data-tags="open" data-go="referral"><td class="nm">RF-0112</td><td data-hold="RH-0044">HH-1007 Mukamana</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button></td><td>Health &middot; growth faltering</td><td class="mut">Kabare health centre &middot; Kibungo</td><td class="num">12 Nov</td><td><span class="chip warn"><i></i>Waiting</span></td></tr>
+                <tr data-tags="open" data-go="referral"><td class="nm">RF-0109</td><td data-hold="RH-0038">HH-1204 Ingabire</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0038</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Ngoma</td><td class="num">9 Nov &middot; 3 days late</td><td><span class="chip bad"><i></i>Overdue</span></td></tr>
+                <tr data-tags="open" data-go="referral"><td class="nm">RF-0107</td><td data-hold="RH-0041">HH-0988 Uwase</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0041</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Ngoma</td><td class="num">2 Nov</td><td><span class="chip ok"><i></i>Answered</span></td></tr>
+                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0104</td><td data-hold="RH-0035">HH-1133 Habimana</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0035</button></td><td>Health &middot; immunisation</td><td class="mut">Mahama health post &middot; Kirehe</td><td class="num">24 Oct</td><td><span class="chip"><i></i>Closed</span></td></tr>
+                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0101</td><td data-hold="RH-0029">HH-1319 Mukandayisenga</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0029</button></td><td>Social protection &middot; insurance</td><td class="mut">Sector social worker &middot; Kinigi</td><td class="num">18 Oct</td><td><span class="chip"><i></i>Closed</span></td></tr>
+                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0098</td><td data-hold="RH-0024">HH-0871 Niyonsenga</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0024</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Rubavu</td><td class="num">12 Oct</td><td><span class="chip"><i></i>Not substantiated</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span><b>3 open referrals</b> &middot; one overdue &middot; one answered and waiting to be closed</span></div>
+          </div>
+        </div>
+      </section>
+      <section class="screen" id="s-referral">
+        <div class="rec">
+          <div class="rec-top">
+            <span class="rec-type"><svg aria-hidden="true"><use href="#i-message"/></svg> Referral</span>
+            <span class="rec-id">RF-0112</span>
+            <span class="acts">
+              <button class="btn sm" type="button" data-modal="refer"><svg aria-hidden="true"><use href="#i-check"/></svg> Record what came back</button>
+            </span>
+          </div>
+          <h1>Growth faltering &mdash; child under five</h1>
+          <div class="pg" id="pg-referral">
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Status</span></span><span class="v"><span class="pg-badge warn">Waiting</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Household</span><button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The household and what was reported about the family are withheld until you open the case and say why. A referral carries the same rule as the case it came out of."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="v" data-hold="RH-0044" data-holdwhen><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>HH-1007 Mukamana</button></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg><span>Out of</span></span><span class="v"><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button><span class="conseq">neglect, child under five</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Place</span></span><span class="v">Kibungo &middot; Ngoma</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Type</span></span><span class="v">Health &middot; growth faltering</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Referred to</span></span><span class="v">Kabare health centre &middot; Kibungo</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-person"/></svg><span>Referred by</span></span><span class="v"><button class="rel" type="button" data-go="people"><svg aria-hidden="true"><use href="#i-person"/></svg>J. Kamanzi</button><span class="conseq plain">sector lead</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Sent</span></span><span class="v">31 October 2026</span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-visits"/></svg><span>Follow-up due</span></span><span class="v">12 November 2026 <span class="chip"><i></i>in 6 days</span></span></div>
+            <div class="pgr is-empty"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>What came back</span></span><span class="v empty">&mdash;</span></div>
+          </div>
+          <button class="pg-collapse" type="button" data-pg="pg-referral">Collapse empty fields</button>
+</div>
+        <div class="tabs">
+          <button class="tab on" type="button" data-panel="rfupdates">Updates</button>
+          <button class="tab" type="button" data-panel="rfanswers">The visit behind it <span class="chip" style="margin-left:var(--space-2)">30</span></button>
+        </div>
+        <div class="pad" data-panelid="rfupdates">
+          <div class="cols c2">
+            <div class="card">
+              <div class="card-h"><h3>Updates</h3><span class="side"><button class="btn sec sm" type="button" data-modal="upd"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add an update</button></span></div>
+              <div class="tl">
+                <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-message"/></svg></span>
+                  <div><h4>Referral sent</h4><p>Kabare health centre &middot; by J. Kamanzi</p></div><span class="when">31 Oct</span></div>
+                <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-message"/></svg></span>
+                  <div><h4>Mother contacted by phone</h4><p>Agreed to a growth check &middot; M. Dusabe</p></div><span class="when">29 Oct</span></div>
+                <div class="te"><span class="ic warn"><svg aria-hidden="true"><use href="#i-alert"/></svg></span>
+                  <div><h4>Flag raised at the Session 6 visit</h4><p>Child under five showing signs of neglect &middot; M. Dusabe</p></div><span class="when">28 Oct</span></div>
+              </div>
+            </div>
+            <div style="display:grid;gap:var(--space-4);align-content:start">
+              <div class="card">
+                <div class="card-h"><h3>Who is waiting on this</h3></div>
+                <div class="lr"><span class="t">Kabare health centre</span><span class="s">Kibungo &middot; has the referral</span><span class="c"><span class="chip warn"><i></i>No answer yet</span></span></div>
+                <div class="lr"><span class="t">J. Kamanzi</span><span class="s">Sector lead &middot; chasing it</span></div>
+                <div class="lr"><span class="t">M. Dusabe</span><span class="s">Home visitor &middot; re-checks at Session 7</span></div>
+              </div>
+              <div class="card">
+                <div class="card-h"><h3>If nothing comes back<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A referral with no answer is the failure mode this screen exists to catch: the case looks handled because something was sent, and nobody checks that anything happened."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
+                <div class="lr"><span class="t">12 November</span><span class="s">Follow-up due</span></div>
+                <div class="lr"><span class="t">15 November</span><span class="s">District lead is told</span></div>
+                <div class="lr"><span class="t">Re-checked at Session 7</span><span class="s">11 November &middot; M. Dusabe</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pad" data-panelid="rfanswers" hidden>
+          <div class="card flush plainsurface" data-submission></div>
+        </div>
+      </section>
       <section class="screen" id="s-case">
         <div class="rec">
           <div class="rec-top">
@@ -805,7 +866,7 @@
           <button class="tab on" type="button" data-panel="case">Case</button>
           <button class="tab" type="button" data-panel="actions">Actions</button>
           <button class="tab" type="button" data-panel="referrals">Referrals</button>
-          <button class="tab" type="button" data-panel="audit">Audit trail <span class="chip" style="margin-left:var(--space-2)">9</span></button>
+          <button class="tab" type="button" data-panel="casesub">The visit behind it <span class="chip" style="margin-left:var(--space-2)">30</span></button><button class="tab" type="button" data-panel="audit">Audit trail <span class="chip" style="margin-left:var(--space-2)">9</span></button>
         </div>
         <div class="pad" data-panelid="case">
           <div class="al">
@@ -881,6 +942,9 @@
           </div>
         </div>
 
+        <div class="pad" data-panelid="casesub" hidden>
+          <div class="card flush plainsurface" data-submission></div>
+        </div>
         <div class="pad" data-panelid="audit" hidden>
           <div class="card">
             <div class="card-h"><h3>Every touch of this case</h3><span class="s">9 entries &middot; written whether or not the case was opened</span></div>
@@ -1063,6 +1127,8 @@
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Modules</span></span><span class="v"><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-programme"/></svg><span data-proj-count="sessions">14 sessions</span></button><span class="conseq" data-proj-count="shared">12 shared with other projects</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Forms</span></span><span class="v"><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-reports"/></svg><span data-proj-count="forms">34 forms</span></button></span></div>
                                     <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Translation</span></span><span class="v"><span class="chip ok"><i></i>100%</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-hierarchy"/></svg><span>Level</span><button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A project at district level is visible to the people posted in the districts it names, and absent for everyone else. The level is set when the project is created and decides which places can be chosen at all."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="v">District <span class="conseq plain">Kirehe, Musanze, Ngoma, Nyanza, Rubavu</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Shared with</span><button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="An organisation a project is shared with may read its data and nothing else — no export, no edit, no report. Sharing is the only thing that crosses the line between two organisations."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="v"><button class="rel" type="button" data-go="places"><svg aria-hidden="true"><use href="#i-admin"/></svg>NCDA</button><span class="conseq">reads only</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-monitor"/></svg><span>Mobile app</span></span><span class="v">Yes</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Created</span></span><span class="v">June 2026</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-person"/></svg><span>Owner</span></span><span class="v">A. Gahimana &middot; FXB Rwanda</span></div>
@@ -1591,6 +1657,7 @@
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-person"/></svg><span data-tip="A position and the place it applies to. Somebody can hold more than one — running their own sector and covering a district is ordinary — so this is a list.">Assignments</span></span><span class="v" data-person-assign></span></div>
             <div class="pgr" data-pgr="roles"><span class="k"><svg aria-hidden="true"><use href="#i-plus"/></svg><span data-tip="Permissions added on top of a position. A person may hold any number of these, or none.">Roles</span></span><span class="v" data-person-roles></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-edit"/></svg><span data-tip="One person, one thing, with an end date and a reason. An exception is what a position does not give and somebody needed anyway.">Exceptions</span></span><span class="v"><button class="rel" type="button" data-go="person" data-view="tab:What they can open"><svg aria-hidden="true"><use href="#i-edit"/></svg>1 in force</button><span class="conseq">ends in 8 days</span></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-admin"/></svg><span>Department</span><button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The part of the organisation this person belongs to. A form’s access is given to a department, so this is what decides which forms they meet at all."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="v"><button class="rel" type="button" data-go="places"><svg aria-hidden="true"><use href="#i-admin"/></svg>Field delivery</button><span class="conseq plain">FXB Rwanda</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Email</span></span><span class="v">c.uwimana@fxbrwanda.org</span></div>
             
             
@@ -1717,14 +1784,27 @@
           <div class="card flush plainsurface" style="margin-top:var(--space-4)">
             <div class="card-h"><h3>Organisations on this platform<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="An organisation reaches the places its own projects run in and sees nothing outside them. That is the default and it is not a setting, so anything that crosses the line has to be named in the last column but one."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="org"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add one</button></span></div>
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Organisation</th><th>What it runs</th><th>Where it reaches</th><th>What it sees outside that</th><th>Administers the platform</th><th class="gap"></th></tr></thead>
+              <thead><tr><th>Organisation</th><th class="num">Departments</th><th>What it runs</th><th>Where it reaches</th><th>What it sees outside that</th><th>Administers the platform</th><th class="gap"></th></tr></thead>
               <tbody>
-                <tr><td class="nm">FXB Rwanda</td><td>SUGIRA Muryango<span class="conseq">19 projects</span></td><td class="mut">Kirehe, Musanze, Ngoma, Nyanza, Rubavu</td><td class="mut"><span class="rd">Nothing</span></td><td>S. Habyarimana<span class="conseq">this deployment</span></td><td class="gap"></td></tr>
-                <tr><td class="nm">Boston College</td><td class="mut">Nothing &middot; research partner</td><td class="mut">The same five districts</td><td>Exports with no names in them<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The partner evaluates the programme, which needs the answers and not the families. An export to this organisation drops the household, the caregiver and the home visitor, and the export dialog cannot be made to put them back."><svg aria-hidden="true"><use href="#i-info"/></svg></button></td><td class="mut"><span class="rd">No</span></td><td class="gap"></td></tr>
-                <tr><td class="nm"><abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></td><td class="mut">Nothing</td><td class="mut">National</td><td>A risk-of-harm case, once it is referred<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Referral is the only thing that moves a record across this line, and it moves one record, not a list. The district child-protection officer is an NCDA post, so a referral is how the agency comes to hold a case at all."><svg aria-hidden="true"><use href="#i-info"/></svg></button></td><td class="mut"><span class="rd">No</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">FXB Rwanda</td><td class="num">3</td><td>SUGIRA Muryango<span class="conseq">19 projects</span></td><td class="mut">Kirehe, Musanze, Ngoma, Nyanza, Rubavu</td><td class="mut"><span class="rd">Nothing</span></td><td>S. Habyarimana<span class="conseq">this deployment</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">Boston College</td><td class="num mut">&mdash;</td><td class="mut">Nothing &middot; research partner</td><td class="mut">The same five districts</td><td>Exports with no names in them<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The partner evaluates the programme, which needs the answers and not the families. An export to this organisation drops the household, the caregiver and the home visitor, and the export dialog cannot be made to put them back."><svg aria-hidden="true"><use href="#i-info"/></svg></button></td><td class="mut"><span class="rd">No</span></td><td class="gap"></td></tr>
+                <tr><td class="nm"><abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></td><td class="num">1</td><td class="mut">Nothing</td><td class="mut">National</td><td>A risk-of-harm case, once it is referred<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Referral is the only thing that moves a record across this line, and it moves one record, not a list. The district child-protection officer is an NCDA post, so a referral is how the agency comes to hold a case at all."><svg aria-hidden="true"><use href="#i-info"/></svg></button></td><td class="mut"><span class="rd">No</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>3 organisations &middot; one runs a programme, two are named on cases and exports and run nothing</span></div>
+          </div>
+          <div class="card flush plainsurface" style="margin-top:var(--space-4)">
+            <div class="card-h"><h3>Departments<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A department is how an organisation manages its own people, and what a form’s access is given to. The four below hold all 539 people on the system between them, which is the only way to know none of them is a label on nobody."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="dept"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add one</button></span></div>
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Department</th><th>Organisation</th><th>What it does</th><th class="num">People</th><th>Positions in it</th><th class="gap"></th></tr></thead>
+              <tbody>
+                <tr><td class="nm">Field delivery</td><td class="mut">FXB Rwanda</td><td class="mut">Visits households and supervises those who do</td><td class="num">518</td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village, Cell coordinator, Sector lead, District lead</td><td class="gap"></td></tr>
+                <tr><td class="nm">Monitoring &amp; evaluation</td><td class="mut">FXB Rwanda</td><td class="mut">Builds the forms and reads what comes back</td><td class="num">13</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="gap"></td></tr>
+                <tr><td class="nm">Systems</td><td class="mut">FXB Rwanda</td><td class="mut">Accounts, access and the platform itself</td><td class="num">1</td><td class="mut">admin</td><td class="gap"></td></tr>
+                <tr><td class="nm">Child protection</td><td class="mut"><abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></td><td class="mut">Takes referred cases</td><td class="num">7</td><td class="mut"><abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr> national, District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr></td><td class="gap"></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>4 departments &middot; <b>539</b> people, which is everyone &middot; a form&rsquo;s access is given to a department, not to a person</span></div>
           </div>
         </div>
       </section>
@@ -1765,6 +1845,7 @@
               <div class="lr"><span class="t">Email</span><span class="s">a.gahimana@fxbrwanda.org</span></div>
               <div class="lr"><span class="t">Phone</span><span class="s">+250 78 555 0144</span></div>
               <div class="lr"><span class="t">Organisation</span><span class="s">FXB Rwanda &middot; SUGIRA Muryango</span></div>
+              <div class="lr"><span class="t">Department</span><span class="s">Monitoring &amp; evaluation</span><span class="c"><button class="rel" type="button" data-go="places">13 people</button></span></div>
               <div class="lr"><span class="t">Joined</span><span class="s">6 March 2025</span></div>
             </div>
             <div class="card">
@@ -1940,6 +2021,7 @@
             </div>
             <div class="card">
               <div class="card-h"><h3>What the tablet carries</h3></div>
+              <div class="lr"><span class="t">Every upload is asked<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A trainee uploading practice visits on their first morning is the single biggest source of data nobody can explain later. The tablet asks before it sends, and the default answer is training, so a click nobody read marks the batch as practice rather than as twenty-six real risk flags."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="s">Is this training data? &mdash; Continue means yes</span><span class="c"><button class="rel" type="button" data-modal="trainask">See it</button></span></div>
               <div class="lr"><span class="t">Forms</span><span class="s">4 live forms, at version 4</span><span class="c"><button class="rel" type="button" data-go="form">371 of 412 devices</button></span></div>
               <div class="lr"><span class="t">Session videos</span><span class="s">24 items, 1.2 GB</span><span class="c"><span class="chip ok"><i></i>Offline</span></span></div>
               <div class="lr"><span class="t">Written guidance</span><span class="s">41 documents</span><span class="c"><span class="chip ok"><i></i>Offline</span></span></div>

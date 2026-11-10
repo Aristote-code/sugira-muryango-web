@@ -75,7 +75,11 @@
     place:    { all: 'Rwanda',      tree: true },
     district: { all: 'All',         options: DISTRICTS },
     cohort:   { all: 'All',         options: ['1', '2', '3', '4'] },
-    period:   { all: 'This cohort', options: ['This week', 'This month', 'This cohort', 'All time'] },
+    /* The same words every list uses, plus the one only a programme has.
+       "Even to all the pages, they would all look like that." gp2 00:33 */
+    period:   { all: 'This cohort', options: ['Today', 'This week', 'This month',
+                                              'This year', 'This cohort', 'All time',
+                                              'Date range\u2026'] },
     /* "switching between today, this week, this month… there would also be a
        place where you can put a range of time", and "even to all the pages,
        they would all look like that". One dimension, one word, every list that
@@ -118,7 +122,85 @@
     Musanze: { hh: 300, visits: 250, behind: 28, izu: 56,  izuOn: 48, said: 50, male: 34, calls: 50 }
   };
   var COHORT_SHARE = { '1': 0.55, '2': 0.45, '3': 0, '4': 0 };
-  var PERIOD_SHARE = { 'This week': 0.08, 'This month': 0.31, 'This cohort': 1, 'All time': 1 };
+  var PERIOD_SHARE = { 'Today': 0.012, 'This week': 0.08, 'This month': 0.31,
+                       'This year': 1, 'This cohort': 1, 'All time': 1,
+                       'Date range\u2026': 0.31 };
+
+  /* ---- the trend, at whatever grain the period asks for ----
+     Four series rather than one, because "weekly" and "this year" are not
+     the same question asked at two zoom levels: one is asking which day of
+     the week people stop working, the other which month the programme
+     slipped. Each ends where the stat cards above it say it ends. */
+  var TREND = {
+    day:   { t: 'each day',   lab: 'day',
+             pts: [83, 88, 86, 84, 83],
+             x: ['Mon 2', 'Tue 3', 'Wed 4', 'Thu 5', 'Fri 6'] },
+    days:  { t: 'each day',   lab: 'day',
+             pts: [86, 83, 88, 86, 84, 83],
+             x: ['1 Nov', '2 Nov', '3 Nov', '4 Nov', '5 Nov', '6 Nov'] },
+    range: { t: 'each day',   lab: 'day',
+             pts: [92, 91, 93, 90, 92, 88, 61, 90, 91, 89, 92, 90, 87, 59,
+                   90, 89, 91, 88, 90, 86, 58, 89, 88, 90, 87, 86, 83, 88, 86, 84, 83],
+             x: ['8 Oct', '15 Oct', '22 Oct', '29 Oct', '6 Nov'] },
+    week:  { t: 'each week',  lab: 'week ending',
+             pts: [92, 91, 90, 92, 89, 91, 90, 88, 89, 86, 87, 83],
+             x: ['25 Aug', '8 Sep', '22 Sep', '6 Oct', '20 Oct', '2 Nov'] },
+    month: { t: 'each month', lab: 'month',
+             pts: [94, 93, 95, 92, 94, 93, 91, 92, 90, 89, 85],
+             x: ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'] }
+  };
+  var GRAIN = {
+    'Today': 'day', 'This week': 'day', 'This month': 'days',
+    'This year': 'month', 'This cohort': 'week', 'All time': 'week',
+    'Date range\u2026': 'range'
+  };
+
+  function drawTrend(period) {
+    var plot = document.getElementById('wkPlot');
+    if (!plot) return;
+    var s = TREND[GRAIN[period] || 'week'];
+    var L = 56, R = 1100, TOP = 20, BASE = 160;
+    var y = function (v) { return TOP + (100 - v) * 5.6; };
+    var step = s.pts.length > 1 ? (R - L) / (s.pts.length - 1) : 0;
+    var xy = s.pts.map(function (v, i) {
+      return [Math.round((L + i * step) * 10) / 10, Math.round(y(v) * 10) / 10];
+    });
+    var pt = function (p) { return p[0] + ',' + p[1]; };
+    var line = xy.slice(0, -1).map(pt).join(' ');
+    var last = xy[xy.length - 1];
+    var area = 'M' + xy.map(pt).join(' L') + ' L' + last[0] + ',' + BASE
+             + ' L' + L + ',' + BASE + ' Z';
+    /* Six labels at most, whatever the grain: thirty dates along the foot
+       of a chart is a texture, not an axis. */
+    var every = Math.max(1, Math.round((s.pts.length - 1) / (s.x.length - 1)));
+    var labels = s.x.map(function (t, i) {
+      var at = Math.min(xy.length - 1, i * every);
+      var anchor = at === xy.length - 1 ? ' text-anchor="end"' : '';
+      return '<text x="' + xy[at][0] + '" y="178"' + anchor + '>' + t + '</text>';
+    }).join('');
+    plot.innerHTML =
+      '<g class="wk-grid"><line x1="56" y1="20" x2="1100" y2="20"/>'
+      + '<line x1="56" y1="76" x2="1100" y2="76"/>'
+      + '<line x1="56" y1="132" x2="1100" y2="132"/></g>'
+      + '<line class="wk-base" x1="56" y1="160" x2="1100" y2="160"/>'
+      + '<g class="wk-ax"><text x="44" y="24">100%</text>'
+      + '<text x="44" y="80">90%</text><text x="44" y="136">80%</text></g>'
+      + '<path class="wk-area" d="' + area + '"/>'
+      + '<polyline class="wk-line" points="' + line + '"/>'
+      + '<polyline class="wk-last" points="' + pt(xy[xy.length - 2] || last)
+      + ' ' + pt(last) + '"/>'
+      + '<circle class="wk-dot" cx="' + last[0] + '" cy="' + last[1] + '" r="4.5"/>'
+      + '<g class="wk-lbl">' + labels + '</g>';
+    plot.setAttribute('aria-label', 'Visit completion ' + s.t + ', '
+      + s.pts.length + ' points, ending at ' + s.pts[s.pts.length - 1] + ' per cent.');
+    var title = document.getElementById('wkTitle');
+    if (title) title.firstChild.nodeValue = 'Visits completed ' + s.t;
+    var now = document.getElementById('wkNow');
+    if (now) {
+      now.querySelector('b').textContent = s.pts[s.pts.length - 1] + '%';
+      now.querySelector('span').textContent = s.lab + ' ' + s.x[s.x.length - 1];
+    }
+  }
 
   // which districts a place value covers — a sector resolves to its district
   function districtsFor(place) {
@@ -185,6 +267,8 @@
       var delta = el.querySelector('.delta');
       if (delta && x.v !== null) delta.textContent = x.pct + '%';
     });
+
+    drawTrend(period);
 
     var where = place || 'Rwanda';
     var bits = [where === 'Rwanda' ? 'All five districts' : where];
@@ -561,10 +645,13 @@
     sum.hidden = false;
     sum.innerHTML = '';
 
-    var n = document.createElement('span');
-    n.className = 'flsum-n';
-    n.textContent = shown + ' of ' + total;
-    sum.appendChild(n);
+    /* Only where there are rows to have counted. */
+    if (total) {
+      var n = document.createElement('span');
+      n.className = 'flsum-n';
+      n.textContent = shown + ' of ' + total;
+      sum.appendChild(n);
+    }
 
     active.forEach(function (f) {
       var c = document.createElement('button');
