@@ -18,6 +18,7 @@
     reports:      { crumbs: [['Reports', null]],                                          nav: 'reports' },
     followups:    { crumbs: [['Follow-ups', null]],                                      nav: 'followups' },
     community:    { crumbs: [['Community', null]],                                       nav: 'community' },
+    copost:       { crumbs: [['Community', 'community'], ['CP-0318', null]],             nav: 'community' },
     izu:          { crumbs: [['IZU monitoring', null]],                                  nav: 'izu' },
     content:      { crumbs: [['Field support', null]],                                   nav: 'content' },
     people:       { crumbs: [['People', null]],                                           nav: 'people' },
@@ -150,6 +151,30 @@
     },
     /* The default is the design. Continue marks the batch as training; a
        real visit takes a deliberate second click. gp1 48:30. */
+    cohide: {
+      title: 'Hide this post',
+      ok: 'Hide it',
+      danger: true,
+      body: '<div><label for="f-chw">Why</label><select id="f-chw">'
+          + '<option>Advice that is not in the curriculum</option>'
+          + '<option>Names a household</option><option>Not about the programme</option>'
+          + '<option>Something else\u2026</option></select></div>'
+          + '<div><label for="f-chn">What the author is told</label><textarea id="f-chn" '
+          + 'placeholder="M. Dusabe reads this. Say what to do differently, not only what was wrong."></textarea></div>'
+          + '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg>'
+          + '<span>The post comes off every tablet at the next sync and stays here with your '
+          + 'name on it. Nothing is deleted.</span></p>',
+      done: 'Hidden \u2014 off the tablets at the next sync, and M. Dusabe has been told'
+    },
+    codismiss: {
+      title: 'Dismiss the reports',
+      ok: 'Dismiss both',
+      body: '<p class="m-lead">Two people reported this post for the same reason. Dismissing '
+          + 'leaves the post where it is and tells both of them it was looked at.</p>'
+          + '<div><label for="f-cdn">What they are told</label><textarea id="f-cdn" '
+          + 'placeholder="One line. They see it, the author does not."></textarea></div>',
+      done: 'Reports dismissed \u2014 E. Mutesi and B. Uwamahoro have been told'
+    },
     doctype: {
       title: 'New folder',
       ok: 'Create it',
@@ -1556,7 +1581,8 @@
   // ---- drawer: a record opens over the list it came from ----
   // Records open in the drawer; the screens that *list* them stay pages.
   var DRAWERABLE = { household: 1, 'case': 1, form: 1, project: 1, module: 1, person: 1,
-                     position: 1, rolecard: 1, record: 1, visit: 1, referral: 1 };
+                     position: 1, rolecard: 1, record: 1, visit: 1, referral: 1,
+                     copost: 1 };
   var dw = $('#dw'), dwBody = $('#dwBody'), dwCrumbs = $('#dwCrumbs'), dwPanel = $('#dwPanel');
   var dwStack = [], dwHeld = null, dwReturn = null;
 
