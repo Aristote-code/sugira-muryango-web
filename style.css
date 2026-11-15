@@ -234,6 +234,133 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .btn.ghost:hover{background:var(--button-ghost-bg-hover)}
 .btn.danger{background:var(--button-danger-bg-default);color:var(--button-danger-content)}
 .btn.danger:hover{background:var(--button-danger-bg-hover)}
+.btn.sec.danger{background:var(--button-secondary-bg-default);color:var(--color-content-danger)}
+.btn.sec.danger:hover{background:var(--button-secondary-bg-hover)}
+
+/* ---- the views a list of collected data carries ----
+   ClickUp's view bar: the same row of named views above every list, the
+   one in use underlined. Data is the list itself. */
+.vbar{display:flex;align-items:center;gap:var(--dimension-2);height:var(--view-tabs-height);padding:0 var(--space-6);border-bottom:1px solid var(--color-border-subtle);background:var(--color-bg-surface);overflow-x:auto;scrollbar-width:none;flex:none}
+.vbar::-webkit-scrollbar{display:none}
+/* A generated report is named by its maker; the name is the row, so it is read whole. */
+.tbl.vt td.nm .rel{max-width:none}
+.vb{position:relative;display:inline-flex;align-items:center;gap:var(--space-1);height:var(--size-control-xs);padding:0 var(--dimension-6);background:none;border:0;border-radius:var(--radius-sm);font:inherit;font-size:.875rem;font-weight:500;color:var(--color-content-secondary);white-space:nowrap;cursor:pointer}
+.vb svg{width:var(--dimension-14);height:var(--dimension-14)}
+.vb:hover{background:var(--color-bg-hover);color:var(--color-content-primary)}
+.vb.on{color:var(--color-bg-primary-default)}
+.vb.on::after{content:"";position:absolute;left:0;right:0;bottom:calc((var(--size-control-xs) - var(--view-tabs-height)) / 2);height:2px;background:var(--color-bg-primary-default);border-radius:2px}
+.v-off{display:none!important}
+.vpanel{display:grid;gap:var(--space-4);align-content:start}
+.vtq{display:flex;gap:var(--space-2);padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-border-subtle)}
+.tbl td.ck,.tbl th.ck{width:var(--space-8)}
+.tbl .acts-c{text-align:right;white-space:nowrap}
+.tbl .acts-c .btn+.btn{margin-left:var(--space-2)}
+.empty-line{margin:0;padding:var(--space-4);font-size:.875rem;color:var(--color-content-tertiary)}
+.vres-h{padding:var(--space-4) var(--space-4) var(--space-3)}
+.vres-h .side{display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap}
+.st .v.bad{color:var(--color-content-danger)}
+.st .v.warn{color:var(--color-content-warning)}
+.tfoot .btn{margin-left:auto}
+
+/* report builder */
+.rb{display:grid;gap:var(--space-5)}
+.rb-row{display:grid;gap:var(--space-2)}
+.rb-row>label,.rb-l{font-size:.875rem;font-weight:500;color:var(--color-content-primary)}
+.rb input[type=text],.rb select{height:var(--size-control-md);padding:0 var(--space-3);border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-bg-surface);font:inherit;font-size:.875rem;color:var(--color-content-primary)}
+.rb-ind{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--space-2) var(--space-4)}
+.rb-ck{display:flex;align-items:center;gap:var(--space-2);font-size:.875rem;color:var(--color-content-secondary)}
+.rb-conds{display:grid;gap:var(--space-2)}
+.rb-cond{display:grid;grid-template-columns:1.4fr 1fr 1.4fr auto;gap:var(--space-2);align-items:center}
+.rb-row>.btn{justify-self:start}
+.rb-pair{display:grid;grid-template-columns:1fr auto;gap:var(--space-2)}
+.rb-foot{display:flex;justify-content:flex-end;gap:var(--space-2);padding-top:var(--space-2);border-top:1px solid var(--color-border-subtle)}
+
+/* follow-ups: the partners' own form, history under it */
+.fu{display:grid;gap:var(--space-4);align-content:start}
+.fu-form{display:grid;gap:var(--space-4)}
+.fu-form label{display:grid;gap:var(--space-2);font-size:.875rem;font-weight:500;color:var(--color-content-primary)}
+.fu-form input,.fu-form select,.fu-form textarea{width:100%;padding:var(--space-2) var(--space-3);border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-bg-surface);font:inherit;font-size:.875rem;color:var(--color-content-primary)}
+.fu-form input,.fu-form select{height:var(--size-control-md)}
+.req{color:var(--color-content-danger);font-weight:500}
+.fu-list{display:grid}
+.fu-e{display:grid;grid-template-columns:auto 1fr;gap:var(--space-3);padding:var(--space-3) 0;border-top:1px solid var(--color-border-subtle)}
+.fu-e:first-child{border-top:0}
+.fu-e .av{width:var(--space-8);height:var(--space-8);font-size:.75rem}
+.fu-m{display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap;font-size:.875rem}
+.fu-m .mut{color:var(--color-content-tertiary)}
+.fu-b p{margin:var(--space-1) 0 0;font-size:.875rem;color:var(--color-content-secondary)}
+.fu-hist .card-h,.fu-add .card-h{margin-bottom:var(--space-3)}
+.fu-acts{margin-left:auto;display:flex;gap:var(--space-3);font-size:.8125rem}
+
+/* a module's title in the other language, under the one it is filed by */
+.rec-alt{margin:calc(var(--space-2) * -1) 0 var(--space-3);font-size:.875rem;color:var(--color-content-secondary)}
+/* where a page of data sits: form, project, module */
+.dhead{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.acc-k .lr .rowacts,.lr .c.rowacts{display:flex;gap:var(--space-3)}
+
+/* importing forms into a module */
+.imp-s{margin-bottom:var(--space-2)}
+.imp{display:grid;max-height:var(--dimension-322);overflow:auto;border:1px solid var(--color-border-subtle);border-radius:var(--radius-md)}
+.imp-r{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:var(--space-3);padding:var(--space-3);border-top:1px solid var(--color-border-subtle);cursor:pointer}
+.imp-r:first-child{border-top:0}
+.imp-r:hover{background:var(--color-bg-hover)}
+.imp-r input{grid-row:1 / 3;align-self:center}
+.imp-n{font-size:.875rem;font-weight:500;color:var(--color-content-primary)}
+.imp-m{font-size:.75rem;color:var(--color-content-secondary)}
+
+/* the new-form steps */
+.wz-steps{display:flex;gap:var(--space-2);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-border-subtle)}
+.wz-s{display:inline-flex;align-items:center;gap:var(--space-2);height:var(--size-control-sm);padding:0 var(--space-3);border:0;border-radius:var(--radius-full);background:none;font:inherit;font-size:.875rem;font-weight:500;color:var(--color-content-secondary);cursor:pointer}
+.wz-s b{display:inline-flex;align-items:center;justify-content:center;width:var(--space-5);height:var(--space-5);border-radius:50%;background:var(--color-bg-hover);font-size:.75rem}
+.wz-s.on{background:var(--color-bg-primary-subtle);color:var(--color-bg-primary-default)}
+.wz-s.on b{background:var(--color-bg-primary-default);color:var(--color-content-on-primary)}
+.wz-p{display:grid;gap:var(--space-4)}
+.wz-x{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);padding-top:var(--space-2)}
+.wz-perm{padding:var(--space-3) 0;border-top:1px solid var(--color-border-subtle)}
+.wz-perm:first-child{border-top:0}
+.wz-b{display:grid;grid-template-columns:var(--dimension-160) 1fr;gap:var(--space-3)}
+.wz-pal{display:grid;gap:var(--space-1);align-content:start}
+.wz-f{height:var(--size-control-sm);padding:0 var(--space-3);border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-bg-surface);font:inherit;font-size:.8125rem;text-align:left;cursor:grab}
+.wz-f:hover{border-color:var(--color-border-strong)}
+.wz-can{display:grid;gap:var(--space-2);align-content:start;min-height:var(--dimension-160);padding:var(--space-3);border:1px dashed var(--color-border-default);border-radius:var(--radius-md);background:var(--color-bg-canvas)}
+.wz-q{display:grid;grid-template-columns:auto 1fr auto;gap:var(--space-2);align-items:center;padding:var(--space-2);border-radius:var(--radius-md);background:var(--color-bg-surface);box-shadow:var(--elevation-raised)}
+.wz-t{font-size:.75rem;font-weight:500;color:var(--color-content-secondary)}
+.wz-q input{height:var(--size-control-sm);padding:0 var(--space-2);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);font:inherit;font-size:.875rem}
+.wz-nav{display:flex;justify-content:space-between;padding-top:var(--space-3);border-top:1px solid var(--color-border-subtle)}
+
+/* permissions as a checklist, grouped the way the menu is */
+.pblock{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--space-4) var(--space-5);padding-top:var(--space-2)}
+.pgrp{display:grid;gap:var(--space-2);align-content:start}
+.pgrp>b{font-size:.8125rem;font-weight:600;color:var(--color-content-primary)}
+.pp-x{margin-left:auto;font-size:.75rem;color:var(--color-content-tertiary)}
+.pp-x.add{color:var(--color-content-success)}
+.pp-x.rm{color:var(--color-content-danger)}
+.pp .rb-ck{gap:var(--space-2)}
+.pfold{border:1px solid var(--color-border-subtle);border-radius:var(--radius-md);padding:var(--space-3)}
+.pfold>summary{display:flex;align-items:center;gap:var(--space-2);font-size:.875rem;font-weight:500;color:var(--color-content-primary);cursor:pointer}
+/* the partners' follow-up report filters */
+.fur{display:grid;gap:var(--space-4)}
+.fur-f{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--space-3) var(--space-4)}
+.fur-f label{display:block;margin-bottom:var(--space-1);font-size:.875rem;font-weight:500;color:var(--color-content-primary)}
+.fur-f input,.fur-f select{width:100%;height:var(--size-control-md);padding:0 var(--space-3);border:1px solid var(--color-border-default);border-radius:var(--radius-md);background:var(--color-bg-surface);font:inherit;font-size:.875rem;color:var(--color-content-primary)}
+.fur-go{display:flex;justify-content:flex-end}
+.izt-sum td{border-top:1px solid var(--color-border-default)}
+.izt-sum td{font-weight:600}
+
+/* a link whose screen was retired keeps its words */
+.lnk-off{color:inherit}
+
+/* checkboxes are checkboxes, wherever they sit — a dialog's field styles
+   are for text boxes and lists */
+.rb-ck input[type=checkbox],.imp-r input[type=checkbox]{width:auto;height:auto;padding:0;border:0;flex:none;margin:0;accent-color:var(--color-bg-primary-default)}
+.modal label.rb-ck,.modal .imp-r{display:flex;margin:0;font-weight:400;font-size:.875rem;color:var(--color-content-primary)}
+.modal .imp-r{display:grid}
+
+/* a record in edit mode */
+.pg-in{width:100%;height:var(--size-control-sm);padding:0 var(--space-2);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);background:var(--color-bg-surface);font:inherit;font-size:.875rem;color:var(--color-content-primary)}
+.pg-editbar{display:flex;justify-content:flex-end;gap:var(--space-2);padding:var(--space-3) 0}
+.tbl tbody tr[data-open]{cursor:pointer}
+.tbl tbody tr[data-open].cur td{background:var(--color-bg-primary-subtle)}
 .btn:disabled{opacity:var(--button-disabled-opacity);cursor:not-allowed}
 .btn.sm{height:var(--button-sm-height);padding:0 var(--space-2);font-size:var(--button-sm-font-size);border-radius:var(--button-sm-radius);gap:var(--space-1)}
 .btn.sm svg{width:var(--space-4);height:var(--space-4)}
@@ -547,6 +674,30 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .st .v small{font-size:.875rem;font-weight:500;color:var(--color-content-secondary);letter-spacing:normal}
 .st .d{font-size:.875rem;font-weight:500;color:var(--color-content-secondary)}
 .st .vrow{display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap}
+/* The partners' four headline figures, the last of them red because it is
+   the one a government reader is looking for. */
+@media (min-width:1000px){.stats.s4{grid-template-columns:repeat(4,1fr)}}
+.st.hot{background:var(--color-bg-danger-default);border:0;text-align:left;font:inherit;cursor:pointer}
+.st.hot .l,.st.hot .v,.st.hot .v small,.st.hot .d{color:var(--color-content-on-primary)}
+.st.hot:hover{box-shadow:var(--elevation-overlay)}
+.st.hot:focus-visible{outline:2px solid var(--color-border-strong);outline-offset:2px}
+@media (min-width:1000px){.cols.c4{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:640px) and (max-width:999px){.cols.c4{grid-template-columns:1fr 1fr}}
+.dn{position:relative;width:var(--dimension-136);height:var(--dimension-136);margin:var(--space-3) auto var(--space-3)}
+.dn svg{width:100%;height:100%;transform:none}
+.dn circle{fill:none;stroke-width:6}
+.dn .dn-bg{stroke:var(--color-border-subtle)}
+.dn .dn-s.bad,.lg.bad{stroke:var(--color-bg-danger-default);background:var(--color-bg-danger-default)}
+.dn .dn-s.ok,.lg.ok{stroke:var(--color-content-success);background:var(--color-content-success)}
+.dn .dn-s.pri,.lg.pri{stroke:var(--color-bg-primary-default);background:var(--color-bg-primary-default)}
+.dn .dn-s.warn,.lg.warn{stroke:var(--color-bg-warning-default);background:var(--color-bg-warning-default)}
+.dn .dn-s.mute,.lg.mute{stroke:var(--color-content-tertiary);background:var(--color-content-tertiary)}
+.dn-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.dn-c b{font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--color-content-primary)}
+.dn-c span{font-size:.75rem;color:var(--color-content-secondary)}
+.dnc .legend{justify-content:center}
+.al-more{display:flex;justify-content:flex-end;padding-top:var(--space-2)}
+.al-more .btn svg{width:var(--dimension-14);height:var(--dimension-14)}
 .delta{font-size:.75rem;font-weight:500;line-height:18px;padding:var(--dimension-1) var(--space-2);border-radius:var(--radius-full);white-space:nowrap;letter-spacing:0}
 .delta.up{color:var(--color-content-success);background:var(--color-bg-success-subtle)}
 .delta.down{color:var(--color-content-danger);background:var(--color-bg-danger-subtle)}
@@ -967,6 +1118,10 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .pgr .k{display:flex;align-items:center;gap:var(--dimension-6);height:var(--size-control-md);font-size:var(--property-grid-font-size);line-height:16px;color:var(--color-content-secondary);min-width:0}
 .pgr .k svg{width:var(--space-4);height:var(--space-4);flex:none;color:var(--x-clickup-color-content-placeholder)}
 .pgr .k span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* A label too long for its column takes a second line rather than losing its end. */
+#pg-record .pgr{height:auto;min-height:var(--size-control-md);align-items:start}
+#pg-record .pgr .k{height:auto;min-height:var(--size-control-md)}
+#pg-record .pgr .k span{white-space:normal;padding:var(--space-2) 0}
 .pgr .v{display:flex;align-items:center;gap:var(--space-2);height:var(--size-control-md);
   max-width:var(--property-grid-property-value-max-width);padding:var(--dimension-2) var(--space-2);
   border-radius:var(--x-clickup-radii-3);
@@ -1114,6 +1269,60 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 body:has(.shell.mini) .toast{left:calc(var(--dimension-76) + var(--dimension-7) + var(--space-2))}
 @media (max-width:880px){.toast{left:16px;right:16px;min-width:0}}
 .toast[hidden]{display:none}
+/* ---------------- picking rows, and the bar that acts on them ----------------
+   Every list in this app could be read and none could be acted on, so moving a
+   week of visits to another home visitor meant opening a week of records. The
+   box lives inside the first cell rather than in a column of its own: a column
+   would push every cell along by one, and the record drawer, the sort and the
+   filter rules all read a row by index. */
+.tq-count:empty{display:none}
+.selbox{display:inline-flex;align-items:center;justify-content:center;width:var(--space-4);height:var(--space-4);
+  margin-right:var(--space-2);padding:0;border:0;background:none;vertical-align:middle;cursor:pointer;flex:none}
+.selbox .bx{display:inline-flex;align-items:center;justify-content:center;width:var(--space-4);height:var(--space-4);
+  box-sizing:border-box;border-radius:var(--radius-xs);border:1px solid var(--color-primitive-grey-600);
+  background:var(--color-bg-surface);color:transparent}
+.selbox .bx svg{width:var(--dimension-10);height:var(--dimension-10);fill:none}
+.selbox.on .bx{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default);
+  color:var(--color-content-on-primary)}
+/* Select-all over part of a list is neither on nor off, and a tick there would
+   claim the rows the tabs and the pager are holding back. */
+.selbox.some .bx{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default)}
+.selbox.some .bx svg{display:none}
+.selbox.some .bx::after{content:"";width:var(--dimension-10);height:var(--dimension-2);
+  border-radius:var(--radius-full);background:var(--color-content-on-primary)}
+.selbox:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px;border-radius:var(--radius-xs)}
+.tbl tbody tr.sel{background:var(--color-bg-primary-subtle)}
+/* The bar sits over the content rather than in the toolbar, because what you
+   do to a selection is not a property of the view. */
+/* Centred on the work, not on the window: the menu is a third of the left of
+   the screen and a bar centred past it reads as leaning. The toast clears the
+   menu the same way. */
+.bulk{position:fixed;bottom:var(--space-4);left:calc(50% + var(--dimension-268) / 2);transform:translateX(-50%);
+  display:flex;align-items:center;gap:var(--space-2);min-height:var(--space-12);box-sizing:border-box;
+  padding:var(--space-2) var(--space-3);background:var(--x-clickup-color-background-menu);
+  border-radius:var(--radius-lg);box-shadow:var(--elevation-overlay);z-index:var(--z-toast)}
+.bulk[hidden]{display:none}
+body:has(.shell.mini) .bulk{left:calc(50% + var(--dimension-76) / 2)}
+@media (max-width:880px){.bulk{left:50%}}
+.bulk-n{padding-left:var(--space-2);font-size:13px;line-height:16px;font-weight:600;
+  color:var(--color-content-primary);font-variant-numeric:tabular-nums}
+.bulk-x{display:inline-flex;align-items:center;justify-content:center;
+  width:var(--size-control-xs);height:var(--size-control-xs);flex:none;
+  border:0;border-radius:var(--radius-sm);background:none;color:var(--color-content-tertiary);cursor:pointer}
+.bulk-x:hover{background:var(--color-bg-hover);color:var(--color-content-secondary)}
+.bulk-x svg{width:var(--space-3);height:var(--space-3)}
+.bulk-sep{width:var(--dimension-1);height:var(--space-5);background:var(--color-border-default);flex:none}
+.bulk-b{display:inline-flex;align-items:center;gap:var(--space-1);height:var(--size-control-sm);
+  padding:0 var(--space-2);border:0;border-radius:var(--radius-sm);background:none;
+  color:var(--color-content-secondary);font-family:var(--ui);font-size:13px;line-height:16px;cursor:pointer}
+.bulk-b:hover{background:var(--color-bg-hover);color:var(--color-content-primary)}
+.bulk-b svg{width:var(--space-4);height:var(--space-4);flex:none;color:var(--color-content-tertiary)}
+.bulk-b:focus-visible,.bulk-x:focus-visible{outline:2px solid var(--color-bg-primary-default);outline-offset:1px}
+/* Two arrows in the record header: the next row opens without going back to
+   the list for it. */
+.dw-walk{display:inline-flex;align-items:center;gap:var(--dimension-2);flex:none}
+.dw-walk[hidden]{display:none}
+.dw-ico:disabled{opacity:.4;cursor:default}
 /* standalone document: the artifact skeleton used to provide these */
 [hidden]{display:none!important}
 img{max-width:100%}
@@ -1379,6 +1588,8 @@ td.num{white-space:nowrap}
 /* The count and the consequence are the two things that must stay readable, so
    they keep their width while the chips give theirs up. */
 .pgr .v .rel.more,.pgr .v .conseq{flex:none}
+/* One link and its aside: the link is the value, so it is the one that keeps its width. */
+.pgr .v .rel:only-of-type{flex:none}
 .pgr .v .rel.more[hidden]{display:none}
 .pgr .v.measuring .rel{flex:none}
 /* Some property rows hold a sentence rather than a value — the rule that

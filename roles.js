@@ -68,7 +68,7 @@
     { id: 'community', name: 'Community manager', icon: 'i-message', people: 3,
       across: ['SLA', 'DTL', 'HQ'],
       what: 'Answers what field staff post, and keeps the guidance they read current.',
-      grants: ['fs-see', 'fs-change', 'fs-community'] }
+      grants: ['fs-community'] }
   ];
 
   function fresh() {

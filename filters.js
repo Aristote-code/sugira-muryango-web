@@ -85,12 +85,20 @@
        they would all look like that". One dimension, one word, every list that
        has a moment in it. */
     when:     { all: 'Any time', fixed: true, options: ['Today', 'This week', 'This month', 'This year', 'Date range…'] },
-    form:     { all: 'Any',         options: ['Visit record', 'Caregiver obs.', 'Supervisor spot-check'] },
+    /* The dashboard's time filter, named for what it is. "Period" holding a
+       date range two clicks down read as no date filter at all, so the range
+       comes first and the presets follow it. */
+    dates:    { all: 'All dates', options: ['Date range…', 'Today', 'This week',
+                                            'This month', 'This year', 'This cohort'] },
+    form:     { all: 'Any',         options: ['Household Module Tracking Form', 'Caregiver obs.', 'Supervisor spot-check'] },
     status:   { all: 'Any',         options: ['Active', 'Behind', 'Complete', 'Overdue', 'Invited'] },
     module:   { all: 'Any',         options: SESSIONS },
     role:     { all: 'Any',         options: ROLES },
+    position: { all: 'Any',         options: ROLES },
     project:  { all: 'Any',         options: PROJECTS },
-    year:     { all: 'All',         options: ['2026', '2025', '2024'] },
+    year:     { all: 'All', fixed: true, options: ['2027', '2026'] },
+    cell:     { all: 'All',         options: [] },
+    village:  { all: 'All',         options: [] },
     izu:      { all: 'All',         options: ['M. Dusabe', 'J. Kamanzi', 'E. Mutesi', 'A. Nyirahabimana', 'B. Uwamahoro'] },
     level:    { all: 'All',         options: ['Province', 'District', 'Sector'] },
     /* A document type is a folder somebody made, so the list of them is read
@@ -115,12 +123,14 @@
      Places draws its tree from these same five rows, so this is the one
      place a district's households and home visitors are written down. */
   var BOARD = {
-    Ngoma:   { hh: 560, visits: 470, behind: 34, izu: 105, izuOn: 89, said: 95, male: 41, calls: 93 },
-    Kirehe:  { hh: 420, visits: 330, behind: 38, izu: 78,  izuOn: 66, said: 70, male: 33, calls: 69 },
-    Nyanza:  { hh: 450, visits: 392, behind: 26, izu: 84,  izuOn: 71, said: 76, male: 39, calls: 75 },
-    Rubavu:  { hh: 480, visits: 400, behind: 22, izu: 89,  izuOn: 76, said: 80, male: 40, calls: 79 },
-    Musanze: { hh: 300, visits: 250, behind: 28, izu: 56,  izuOn: 48, said: 50, male: 34, calls: 50 }
+    Ngoma:   { hh: 560, visits: 470, behind: 34, izu: 105, izuOn: 89, said: 95, male: 41, calls: 93, users: 130, roh: 12, rohOpen: 2 },
+    Kirehe:  { hh: 420, visits: 330, behind: 38, izu: 78,  izuOn: 66, said: 70, male: 33, calls: 69, users: 98,  roh: 8,  rohOpen: 0 },
+    Nyanza:  { hh: 450, visits: 392, behind: 26, izu: 84,  izuOn: 71, said: 76, male: 39, calls: 75, users: 104, roh: 7,  rohOpen: 1 },
+    Rubavu:  { hh: 480, visits: 400, behind: 22, izu: 89,  izuOn: 76, said: 80, male: 40, calls: 79, users: 109, roh: 4,  rohOpen: 0 },
+    Musanze: { hh: 300, visits: 250, behind: 28, izu: 56,  izuOn: 48, said: 50, male: 34, calls: 50, users: 70,  roh: 3,  rohOpen: 0 }
   };
+  /* National staff belong to no district, so they count only nationally. */
+  var NATIONAL_USERS = 28;
   var COHORT_SHARE = { '1': 0.55, '2': 0.45, '3': 0, '4': 0 };
   var PERIOD_SHARE = { 'Today': 0.012, 'This week': 0.08, 'This month': 0.31,
                        'This year': 1, 'This cohort': 1, 'All time': 1,
@@ -202,6 +212,41 @@
     }
   }
 
+  /* The four rings under the headline figures read the same totals the
+     figures do, so a filter moves both or neither. */
+  function ring(el, parts, total, word) {
+    if (!el) return;
+    var sum = parts.reduce(function (a, p) { return a + p[0]; }, 0) || 1;
+    var at = 25, segs = el.querySelectorAll('.dn-s');
+    parts.forEach(function (p, i) {
+      var share = Math.round(p[0] / sum * 1000) / 10;
+      if (segs[i]) {
+        segs[i].setAttribute('stroke-dasharray', share + ' ' + (100 - share));
+        segs[i].setAttribute('stroke-dashoffset', String(at));
+      }
+      at -= share;
+    });
+    var b = el.querySelector('.dn-c b');
+    if (b) b.textContent = fmt(total);
+    var card = el.closest('.card');
+    var lg = card ? card.querySelectorAll('.legend span') : [];
+    parts.forEach(function (p, i) {
+      if (lg[i]) lg[i].lastChild.nodeValue = p[1] + ' ' + Math.round(p[0] / sum * 100) + '%';
+    });
+    var svg = el.querySelector('svg');
+    if (svg) svg.setAttribute('aria-label', word + ': ' + parts.map(function (p) {
+      return p[1].toLowerCase() + ' ' + Math.round(p[0] / sum * 100) + '%';
+    }).join(', '));
+  }
+  function donuts(t, male) {
+    var q = function (k) { return document.querySelector('#s-dashboard [data-donut="' + k + '"]'); };
+    var roh = Math.max(t.roh, t.rohOpen);
+    ring(q('roh'), [[t.rohOpen, 'Active'], [roh - t.rohOpen, 'Inactive']], roh, 'Risk of harm');
+    ring(q('visits'), [[t.visits, 'Conducted'], [Math.max(0, t.hh - t.visits), 'Pending']], t.hh, 'Visits');
+    ring(q('izu'), [[t.izuOn, 'Active'], [t.izu - t.izuOn, 'Resigned']], t.izu, 'IZU');
+    ring(q('male'), [[male, 'Attended'], [100 - male, 'Not attended']], t.visits, 'Male caregiver');
+  }
+
   // which districts a place value covers — a sector resolves to its district
   function districtsFor(place) {
     if (!place || place === 'Rwanda') return Object.keys(BOARD);
@@ -226,17 +271,26 @@
     var place = get('place');
     var cohort = get('cohort');
     var periodBtn = $$('.filters .fl').filter(function (b) {
-      return keyOf(b) === 'period' && b.closest('#s-dashboard');
+      return (keyOf(b) === 'dates' || keyOf(b) === 'period') && b.closest('#s-dashboard');
     })[0];
     var period = periodBtn ? valueOf(periodBtn) : 'This cohort';
+    if (period === 'All dates') period = 'This cohort';
+    /* A typed range scales like a month: the share is what moves the board,
+       and the chip already says the exact span. */
+    if (/\d{4}\s*–/.test(period)) period = 'Date range…';
 
     var ds = districtsFor(place);
     var cs = cohort ? (COHORT_SHARE[cohort] || 0) : 1;
+    /* Cohorts are counted within a year; every one running now began in 2026. */
+    var year = get('year');
+    if (year && year !== '2026') cs = 0;
     var ps = PERIOD_SHARE[period] === undefined ? 1 : PERIOD_SHARE[period];
 
-    var t = { hh: 0, visits: 0, behind: 0, izu: 0, izuOn: 0, said: 0, calls: 0, maleW: 0 };
+    var t = { hh: 0, visits: 0, behind: 0, izu: 0, izuOn: 0, said: 0, calls: 0, maleW: 0,
+              users: ds.length === Object.keys(BOARD).length ? NATIONAL_USERS : 0, roh: 0, rohOpen: 0 };
     ds.forEach(function (d) {
       var b = BOARD[d];
+      t.users += b.users; t.roh += b.roh * (cs ? 1 : 0) * Math.min(1, ps * 1.5); t.rohOpen += b.rohOpen * (cs ? 1 : 0);
       t.hh += b.hh * cs; t.visits += b.visits * cs * ps; t.behind += b.behind * cs;
       t.izu += b.izu; t.izuOn += b.izuOn; t.said += b.said;
       t.calls += b.calls * ps; t.maleW += b.male * b.visits * cs * ps;
@@ -245,6 +299,9 @@
     var pct = function (a, b) { return b ? Math.round(a / b * 100) : 0; };
 
     var tiles = {
+      users:       { v: t.users, pct: 100 },
+      families:    { v: t.hh, pct: 100 },
+      roh:         { v: t.rohOpen, slash: Math.max(t.roh, t.rohOpen), pct: 100 },
       visits:      { v: t.visits, of: t.hh, pct: pct(t.visits, t.hh), d: period.toLowerCase() },
       behind:      { v: t.behind, of: t.hh, pct: pct(t.behind, t.hh) },
       reported:    { v: t.said, of: t.izu, pct: pct(t.said, t.izu) },
@@ -260,7 +317,16 @@
       var v = el.querySelector('.v');
       if (v) {
         v.innerHTML = (x.v === null ? x.pct + '%' : fmt(x.v)) +
-          (x.of !== undefined ? ' <small>of ' + fmt(x.of) + '</small>' : '');
+          (x.of !== undefined ? ' <small>of ' + fmt(x.of) + '</small>' : '') +
+          (x.slash !== undefined ? ' <small>/ ' + fmt(x.slash) + '</small>' : '');
+      }
+      if (k === 'supervision') {
+        var sd = el.querySelector('.d');
+        if (sd) sd.textContent = x.pct + '% of this month’s expected calls';
+      }
+      if (k === 'roh') {
+        var rd = el.querySelector('.d');
+        if (rd) rd.textContent = fmt(Math.max(0, x.slash - x.v)) + ' inactive';
       }
       var trk = el.querySelector('.trk i');
       if (trk) trk.style.width = Math.min(100, x.pct) + '%';
@@ -269,9 +335,11 @@
     });
 
     drawTrend(period);
+    donuts(t, male);
 
     var where = place || 'Rwanda';
     var bits = [where === 'Rwanda' ? 'All five districts' : where];
+    if (year) bits.push(year);
     if (cohort) bits.push('Cohort ' + cohort);
     bits.push(period);
     var sub = document.getElementById('dashScope');
@@ -407,17 +475,21 @@
   }
 
   /* A filter binds to a column, not to the row's text.
-     Matching against whole-row text made the cohort "4" match HH-1042, and on a
+     Matching against whole-row text made the cohort "4" match I-221-142, and on a
      screen with two tables it hid rows in the table the filter had nothing to
      say about. A filter now applies to a table only when that table has one of
      its columns, and then it reads that column alone. */
   var COLUMN_FOR = {
-    place:    ['place', 'where'],
+    place:    ['place', 'where', 'district'],
     district: ['place', 'where', 'district'],
     cohort:   ['cohort'],
+    cell:     ['=cell'],
+    village:  ['=village'],
+    year:     ['year', '=date recorded', '=created'],
     status:   ['status', 'outcome'],
     module:   ['module', 'session'],
     role:     ['role'],
+    position: ['position', 'role'],
     project:  ['project', 'projects'],
     level:    ['level'],
     form:     ['form', 'survey'],
@@ -545,12 +617,17 @@
     // A screen can hold several tables behind tabs. Only the one on screen
     // should contribute values, or Status on Follow-ups offers On and Off
     // from the rules table nobody is looking at.
+    var narrow = valueOf(btn) === dim.all;
     var tables = $$('.tbl', screen).filter(function (t) { return t.offsetParent !== null; });
     if (!tables.length) tables = $$('.tbl', screen);
     tables.forEach(function (table) {
       var i = headerIndex(table, key);
       if (i < 0) return;
       $$('tbody tr', table).forEach(function (r) {
+        /* Project, then module, then form: a choice already made narrows what
+           the next one offers. A filter that is itself set still lists every
+           value, so it can be changed. */
+        if (narrow && r.classList.contains('f-out')) return;
         var c = r.children[i];
         if (!c) return;
         var v = visibleText(c);
@@ -558,6 +635,11 @@
       });
     });
     return seen.length > 1 ? seen.sort() : dim.options;
+  }
+
+  function headerText(row, idx) {
+    var t = row.closest('table'), th = t && t.tHead && t.tHead.rows[0] && t.tHead.rows[0].cells[idx];
+    return th ? th.textContent.trim().toLowerCase() : '';
   }
 
   function cellMatches(row, idx, value, key) {
@@ -574,6 +656,15 @@
       return days(d) >= win[0] && days(d) <= win[1];
     }
     var v = value.toLowerCase();
+    /* A table that spells a place out across Village, Cell, Sector and
+       District columns is matched on the whole row, and on the province the
+       row carries, so any level of the place tree finds it. */
+    if (key === 'place' && headerText(row, idx) !== 'place') {
+      var all = ((row.innerText || '') + ' ' + (row.getAttribute('data-find') || '')).toLowerCase();
+      return all.indexOf(v.replace(/ province$/, '')) > -1 || districtsFor(value).some(function (d) {
+        return all.indexOf(d.toLowerCase()) > -1;
+      });
+    }
     return t === v || (v.length >= 3 && t.indexOf(v) > -1);
   }
 
@@ -604,7 +695,7 @@
       total += rows.length;
       rows.forEach(function (row) {
         var keep = cols.every(function (c) { return cellMatches(row, c.i, c.f.value, c.f.key); });
-        if (keep && q) keep = (row.innerText || '').toLowerCase().indexOf(q) > -1;
+        if (keep && q) keep = ((row.innerText || '') + ' ' + (row.getAttribute('data-find') || '')).toLowerCase().indexOf(q) > -1;
         row.classList.toggle('f-out', !keep);
         if (keep) shown += 1;
       });

@@ -117,7 +117,7 @@
 
   /* What a screen is called. The breadcrumb is the app's own answer to "where
      am I", and its last step is the screen's own name — "Household Module
-     Tracking" for the project, "HH-1007 Mukamana" for the household. Which
+     Tracking" for the project, "I-534-107 Mukamana" for the household. Which
      settles a question that has no rule otherwise: a household is known by
      its code and a project by its title, and the crumbs already know which
      is which, because somebody decided it once when they wrote them. */
@@ -497,7 +497,7 @@
       mid.appendChild(mark(it.title, q));
       if (it.where) {
         /* A result can match on where it lives rather than on its name —
-           "every command on HH-1007" — and a row whose title has nothing
+           "every command on I-534-107" — and a row whose title has nothing
            marked in it looks like a mistake until the location says why. */
         var w = mark(it.where, q);
         w.className = 'kb-w';

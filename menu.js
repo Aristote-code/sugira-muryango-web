@@ -265,6 +265,9 @@
      menu above, keeping the real <select> in the DOM so its value, its name and
      its label association still work. */
   function enhanceSelect(sel) {
+    /* A field can be gone again before this runs: a record put into edit
+       mode and cancelled in one go leaves a select with nowhere to sit. */
+    if (!sel.parentNode || !sel.isConnected) return;
     if (sel.dataset.cmenu) return;
     sel.dataset.cmenu = '1';
 

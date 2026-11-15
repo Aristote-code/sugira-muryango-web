@@ -110,7 +110,7 @@
       'Put a household on the programme and record who is in it.',
       ['family-create', 'familymember-create', 'familymodule-create', 'admittedfamily-create',
         'householdenrollment-create']],
-    ['hh-change', 'households', 'Change household details',
+    ['hh-change', 'households', 'Change a household’s details',
       'Correct a household’s details, or who is counted in it.',
       ['family-edit', 'familymember-edit', 'familymodule-edit', 'admittedfamily-edit',
         'householdenrollment-edit']],
@@ -119,15 +119,18 @@
       ['family-delete', 'familymember-delete', 'familymodule-delete', 'admittedfamily-delete',
         'householdenrollment-delete'], { risk: 'Deletes the record and everything collected against it.' }],
 
-    ['visit-see', 'visits', 'See visits and answers',
+    ['visit-see', 'visits', 'See recorded visits',
       'See visits, and read the answers people gave.',
       ['sessioninaction-list', 'View-collected-data']],
     ['visit-record', 'visits', 'Record a visit',
       'Deliver a session and send the completed form in from the tablet.',
       ['sessioninaction-create', 'submit-form']],
-    ['visit-change', 'visits', 'Change a recorded visit',
+    ['visit-change', 'visits', 'Change a visit',
       'Correct a visit already recorded, and set a follow-up.',
       ['sessioninaction-edit', 'follow-up']],
+    ['visit-delete', 'visits', 'Delete a visit',
+      'Delete a visit recorded by mistake. It goes to Recycled data and can be restored.',
+      ['sessioninaction-delete']],
 
     ['roh-see', 'roh', 'See that cases exist',
       'See that a case exists and how many are open — not the child’s record.',
@@ -140,24 +143,36 @@
       'Open a risk-of-harm case from a visit.', ['roh-create']],
     ['roh-close', 'roh', 'Close a case',
       'Record the outcome and close a case.', ['roh-edit']],
+    ['roh-follow', 'roh', 'Add a follow-up',
+      'Add a date, a status and a comment to a risk of harm.', ['follow-up']],
 
-    ['prog-see', 'programme', 'See the programme',
-      'See projects, sessions, forms and the questions in them.',
+    ['ref-see', 'referrals', 'See referrals',
+      'See referrals and where they were sent.', []],
+    ['ref-make', 'referrals', 'Make a referral',
+      'Send a risk of harm somewhere and record where.', []],
+    ['ref-follow', 'referrals', 'Add a follow-up',
+      'Add a date, a status and a comment to a referral.', []],
+    ['ref-close', 'referrals', 'Close a referral',
+      'Record what came back and close it.', []],
+
+    ['prog-see', 'programme', 'See projects',
+      'See projects, modules, forms and the questions in them.',
       ['project-list', 'module-list', 'form-list', 'question-list', 'construct-list',
         'language-list']],
-    ['prog-change', 'programme', 'Change sessions and forms',
-      'Write and edit sessions, forms and questions, and cut a new version of a form.',
+    ['prog-change', 'programme', 'Change modules and forms',
+      'Write and edit modules, forms and questions, and cut a new version of a form.',
       ['project-create', 'project-edit', 'module-create', 'module-edit', 'form-create',
         'form-edit', 'question-create', 'question-edit', 'construct-create', 'construct-edit',
         'language-create', 'language-edit', 'create-form-version']],
-    ['prog-archive', 'programme', 'Archive part of the programme',
-      'Take a project, session or form out of use, keeping everything it collected.',
+    ['prog-archive', 'programme', 'Archive part of a project',
+      'Take a project, module or form out of use, keeping everything it collected.',
       ['project-delete', 'module-delete', 'form-delete', 'question-delete', 'construct-delete',
         'language-delete', 'can-archive-project']],
     ['prog-translate', 'programme', 'Translate',
       'Write the Kinyarwanda for a form and its questions.', ['can-translate-forms']],
     ['prog-cohorts', 'programme', 'Manage cohorts',
-      'Decide which households get which session, and when.', ['manage-cohort']],
+      'Decide which households get which module, and when.', ['manage-cohort']],
+
 
     ['rep-see', 'reports', 'See reports',
       'Open reports and indicators someone has already built.',
@@ -171,47 +186,28 @@
       'Take the data out of the system as a file.', ['export-data'],
       { risk: 'Once a file leaves the system nothing in it can be withdrawn.' }],
 
-    ['fs-see', 'field', 'See field support material',
-      'Open the videos, documents and FAQs the field team uses.',
-      ['help-list', 'instruction-list', 'category-list', 'resource-list', 'feedback-list']],
-    ['fs-change', 'field', 'Change the material',
-      'Add, edit and remove the videos, documents and FAQs.',
-      ['help-create', 'instruction-create', 'instruction-edit', 'instruction-delete',
-        'category-create', 'category-edit', 'category-delete', 'resource-create',
-        'resource-edit', 'resource-delete']],
-    ['fs-community', 'field', 'Moderate community posts',
+    ['izu-see', 'izu', 'See IZU monitoring',
+      'See how each IZU’s modules were scored.', []],
+    ['izu-record', 'izu', 'Record a supervision',
+      'Score a module the IZU delivered.', []],
+    ['izu-export', 'izu', 'Export raw scores', 'Take the supervision scores out as a file.', []],
+
+    ['fs-community', 'other', 'Moderate community posts',
       'Answer, hide and remove what field staff post to each other.',
       ['feedback-create', 'feedback-edit', 'feedback-delete', 'manage-community']],
 
-    ['ppl-see', 'people', 'See people',
+    ['ppl-see', 'people', 'See users',
       'See who is on the system, what they hold, and when they were last active.',
       ['user-list', 'role-list', 'permission-list', 'profile-list', 'userlogs-list']],
-    ['ppl-add', 'people', 'Add and invite people',
-      'Invite someone and create their account.',
+    ['ppl-add', 'people', 'Create users',
+      'Create someone’s account, with their position and where it applies.',
       ['user-create', 'profile-create'],
-      { risk: 'An invitation carries a position with it, so this grants whatever that position holds.' }],
-    ['ppl-access', 'people', 'Change what people can do',
-      'Change positions, roles and permissions — including your own.',
+      { risk: 'A new user carries a position with it, so this grants whatever that position holds.' }],
+    ['ppl-access', 'people', 'Change what users can do',
+      'Change positions and permissions — including your own.',
       ['user-edit', 'user-delete', 'profile-edit', 'profile-delete', 'role-create', 'role-edit',
         'role-delete', 'permission-create', 'permission-edit', 'permission-delete'],
-      { risk: 'Whoever holds this can give themselves everything else on this screen.' }],
-
-    ['plat-places', 'platform', 'Change the place hierarchy',
-      'Add, rename and retire provinces, districts, sectors, cells and villages.',
-      [],
-      { risk: 'Every role is scoped against this hierarchy, so moving a place moves who can see what.' }],
-    ['plat-orgs', 'platform', 'Add and approve organisations',
-      'Put an organisation on the platform, and decide whether it may see another\u2019s households.',
-      [],
-      { risk: 'An organisation is the outermost scope. Getting this wrong crosses a data-protection boundary.' }],
-    ['plat-grant', 'platform', 'Give an organisation its administrator',
-      'Name the person who runs an organisation and may then grant everything inside it.',
-      [],
-      { risk: 'This is where every other grant in that organisation comes from.' }],
-
-    ['maint-restore', 'maintenance', 'Restore deleted records',
-      'Bring back something that was deleted, and see the checklists and monitoring forms behind it.',
-      ['recycle-data', 'checklist-list', 'monitoring-forms-list']]
+      { risk: 'Whoever holds this can give themselves everything else on this screen.' }]
   ];
 
   /* The one stored name that is deliberately not above. Said here rather than
@@ -226,24 +222,21 @@
     { key: 'households', name: 'Households', icon: 'i-households',
       blurb: 'The family and everyone counted in it.' },
     { key: 'visits', name: 'Visits', icon: 'i-visits',
-      blurb: 'A session delivered in the household, and the form filled in while it happened.' },
-    { key: 'roh', name: 'Risk-of-harm cases', icon: 'i-safeguarding', guarded: true,
+      blurb: 'A module delivered in the household, and the form filled in while it happened.' },
+    { key: 'roh', name: 'Risk of harm', icon: 'i-safeguarding', guarded: true,
       blurb: 'A child may be at risk. The one group where seeing and opening are separate.' },
-    { key: 'programme', name: 'Programme', icon: 'i-programme',
-      blurb: 'The projects, sessions and forms everyone else delivers.' },
+    { key: 'referrals', name: 'Referrals', icon: 'i-message',
+      blurb: 'A risk of harm sent somewhere, followed up until it comes back.' },
+    { key: 'programme', name: 'Projects', icon: 'i-programme',
+      blurb: 'The projects, modules and forms everyone else delivers.' },
     { key: 'reports', name: 'Reports', icon: 'i-reports',
       blurb: 'Questions asked of what has been collected.' },
-    { key: 'field', name: 'Field support', icon: 'i-support',
-      blurb: 'What the field team reads, watches and asks each other.' },
-    { key: 'people', name: 'People & access', icon: 'i-admin',
+    { key: 'izu', name: 'IZU monitoring', icon: 'i-check',
+      blurb: 'How the sessions an IZU delivers are scored.' },
+    { key: 'people', name: 'Users and access', icon: 'i-admin',
       blurb: 'Who is on the system and what they may do — this screen included.' },
-    { key: 'maintenance', name: 'Maintenance', icon: 'i-settings',
-      blurb: 'Putting back what was deleted.' },
-    /* D14 · running the platform is not the top of running a programme. It is
-       a different job on a different object — the hierarchy and the
-       organisations on it, neither of which belongs to any one programme. */
-    { key: 'platform', name: 'The platform itself', icon: 'i-hierarchy', guarded: true,
-      blurb: 'The place hierarchy every organisation is scoped against, and the organisations on it.' }
+    { key: 'other', name: 'Other', icon: 'i-settings',
+      blurb: 'Field support material and the community.' }
   ];
 
   /* ---- shape it ---- */
@@ -277,18 +270,18 @@
      on the office ladder owns the hierarchy and nothing it owns is inside a
      programme. Neither needed deciding — only reading. */
   var SEED = [
-    { id: 'IZU', name: 'IZU', short: 'the IZU', base: null, people: 412,
+    { id: 'IZU', name: 'IZU at Village', short: 'the IZU at Village', base: null, people: 412,
       what: 'The home visitor. A village has two, and the biggest three. Everything they do '
           + 'happens in a household, on a tablet.',
       reach: 'own',
       adds: ['hh-see', 'hh-enrol', 'hh-change', 'visit-see', 'visit-record', 'roh-see',
-             'roh-raise', 'fs-see'] },
+             'roh-raise', 'roh-follow', 'ref-see', 'ref-follow'] },
 
     { id: 'SLA', name: 'Sugira Muryango Sector lead (SLA)', short: 'the Sector lead', base: 'IZU', people: 17,
       what: 'Runs the programme in one sector and supervises the home visitors in it.',
       reach: 'sector',
-      adds: ['visit-change', 'roh-open', 'roh-close', 'prog-see', 'rep-see',
-             'rep-build'] },
+      adds: ['visit-change', 'visit-delete', 'roh-open', 'roh-close', 'ref-make', 'ref-close', 'prog-see', 'rep-see',
+             'rep-build', 'izu-see'] },
 
     { id: 'NCDA', name: 'National NCDA Government Official', short: 'National NCDA', base: null, people: 2,
       what: 'Government oversight. Reads the numbers, never the names behind them.',
@@ -303,33 +296,30 @@
     { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 84,
       what: 'Sits in on visits in one cell and scores how they were delivered.',
       reach: 'cell',
-      adds: ['hh-see', 'visit-see', 'visit-record', 'fs-see'] },
+      adds: ['hh-see', 'visit-see', 'visit-record', 'izu-see', 'izu-record'] },
+
+    { id: 'ISC', name: 'IZU Sector Coordinator (ISC)', short: 'the Sector Coordinator', base: 'ICC', people: 27,
+      what: 'Supervises the cell coordinators in one sector by telephone, and scores them.',
+      reach: 'sector',
+      adds: ['rep-see', 'izu-export'] },
 
     { id: 'DTL', name: 'Sugira Muryango District lead (DTL)', short: 'the District lead', base: 'NCDA', people: 5,
       what: 'Reads across a whole district. Reports on it rather than working in it.',
       reach: 'district',
-      adds: ['hh-see', 'visit-see', 'prog-see', 'rep-build', 'fs-see'] },
+      adds: ['hh-see', 'visit-see', 'prog-see', 'rep-build'] },
 
     { id: 'HQ', name: 'HQ officer', short: 'the HQ officer', base: 'DTL', people: 13,
       what: 'FXB Rwanda head office. Builds the programme everyone else delivers.',
       reach: 'national',
       adds: ['hh-enrol', 'hh-change', 'visit-change', 'prog-change', 'prog-archive',
-             'prog-translate', 'prog-cohorts', 'rep-export', 'fs-change',
-             'fs-community', 'ppl-see', 'maint-restore'] },
+             'prog-translate', 'prog-cohorts', 'rep-export',
+             'fs-community', 'ppl-see', 'ref-make', 'izu-see', 'izu-export'] },
 
     { id: 'Admin', name: 'admin', short: 'admin', base: 'HQ', people: 1,
       what: 'Everything inside one organisation, including this screen.',
       reach: 'national',
       adds: ['hh-remove', 'visit-record', 'roh-open', 'roh-raise', 'roh-close',
-             'ppl-add', 'ppl-access'] },
-
-    { id: 'Platform', name: 'Platform administrator', short: 'the platform administrator',
-      base: null, people: 0,
-      what: 'Owns the place hierarchy and the organisations on it. Holds nothing inside a '
-          + 'programme \u2014 no household, no visit, no case.',
-      reach: 'national',
-      heldBy: 'Held by FXB Rwanda',
-      adds: ['plat-places', 'plat-orgs', 'plat-grant', 'ppl-see'] }
+             'ppl-add', 'ppl-access'] }
   ];
 
   /* ---- how far a grant goes --------------------------------------------
@@ -700,6 +690,43 @@
     give.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';
     give.appendChild(document.createTextNode('Give it to someone'));
     acts.appendChild(give);
+    /* Edit and Delete, as on every other record. */
+    var ed = el('button', 'btn sec sm');
+    ed.type = 'button';
+    ed.innerHTML = '<svg aria-hidden="true"><use href="#i-edit"/></svg> Edit';
+    ed.onclick = function () {
+      window.SugiraModal.ask({
+        title: 'Edit ' + p.name, ok: 'Save changes',
+        body: '<div><label for="f-pen">Name</label><input id="f-pen" type="text"></div>'
+          + '<div><label for="f-pew">What it is for</label><textarea id="f-pew" rows="3"></textarea></div>',
+        init: function (b) { b.querySelector('#f-pen').value = p.name; b.querySelector('#f-pew').value = p.what || ''; },
+        onOk: function (b) {
+          var n = b.querySelector('#f-pen').value.trim();
+          if (n) p.name = n;
+          p.what = b.querySelector('#f-pew').value.trim();
+          render(); renderOne();
+        },
+        done: 'Position changed'
+      });
+    };
+    var del = el('button', 'btn sec sm danger');
+    del.type = 'button';
+    del.innerHTML = '<svg aria-hidden="true"><use href="#i-cross"/></svg> Delete';
+    del.onclick = function () {
+      window.SugiraModal.ask({
+        title: 'Delete ' + p.name + '?', ok: 'Delete', danger: true, body: '',
+        onOk: function () {
+          state.pos = state.pos.filter(function (x) { return x !== p; });
+          state.open = null;
+          var c = document.querySelector('#dw:not([hidden]) [data-dw="close"]');
+          if (c) c.click();
+          render();
+        },
+        done: p.name + ' deleted'
+      });
+    };
+    acts.appendChild(ed);
+    acts.appendChild(del);
     rtop.appendChild(acts);
 
     rec.appendChild(rtop);
@@ -889,13 +916,6 @@
        on the toolbar, where an explanation can be asked for rather than read
        every time. What is left are the two things you can go and do. */
     var foot = el('p', 'pm-foot');
-    var asis = el('button', 'rel');
-    asis.type = 'button';
-    asis.setAttribute('data-go', 'roles');
-    asis.innerHTML = '<svg aria-hidden="true"><use href="#i-admin"/></svg>';
-    asis.appendChild(document.createTextNode('How it works today'));
-    foot.appendChild(asis);
-
     var undo = el('button', 'rel');
     undo.type = 'button';
     undo.setAttribute('data-perms-act', 'discard');
@@ -989,10 +1009,6 @@
     }
     tr.appendChild(use);
 
-    var old = el('td', 'num mut');
-    old.textContent = perm.replaces.length || '\u2014';
-    if (perm.replaces.length) old.setAttribute('data-tip', perm.replaces.join(', '));
-    tr.appendChild(old);
     return tr;
   }
 
@@ -1032,8 +1048,8 @@
     var t = el('table', 'tbl');
     var head = el('thead');
     var hr = el('tr');
-    ['Permission', 'Group', 'What it means', 'Granted by', 'Replaces'].forEach(function (h, i) {
-      hr.appendChild(el('th', i === 4 ? 'num' : null, h));
+    ['Permission', 'Group', 'What it means', 'Granted by'].forEach(function (h) {
+      hr.appendChild(el('th', null, h));
     });
     head.appendChild(hr);
     t.appendChild(head);
@@ -1041,7 +1057,7 @@
     ALL.forEach(function (perm) { body.appendChild(permRow(perm)); });
     var none = el('tr', 't-empty');
     var td = el('td');
-    td.colSpan = 5;
+    td.colSpan = 4;
     td.textContent = 'Nothing matches what you typed.';
     none.appendChild(td);
     none.hidden = true;

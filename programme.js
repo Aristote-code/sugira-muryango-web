@@ -62,7 +62,7 @@
       ['Flash weekly report on every module', 'Raporo yihuse ya buri kiganiro', 11, 986, 'Active', EVERY_SESSION, 'IZU at Village'],
       ['General Questions-Self report', 'Ibibazo Rusange ku biganiro byose', 18, 412, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
       ['Family-Specific Competencies-Self-report', 'Ibibazo ku bushobozi bwo gutanga ikiganiro', 16, 388, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
-      ['Visit record', '', 30, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
+      ['Household Module Tracking Form', '', 30, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
       ['Caregiver observation', '', 12, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
       ['Supervisor spot-check', '', 8, 141, 'Active', ['6.The Importance of Good Health'], 'Sector lead (SLA)'],
       ['Managing the Stresses of Parenting — visit record', '', 34, 0, 'Draft', ['7.Managing the Stresses of Parenting and Family Life'], 'IZU at Village'],
@@ -84,7 +84,7 @@
     ]],
     ['Risk of Harm/other family problems Management', 'tablet', null, [], [
       ['Risk of Harm management — intake', '', 28, 344, 'Active', [], 'IZU at Village'],
-      ['Risk of Harm management — 72-hour review', '', 9, 318, 'Active', [], 'Sector lead (SLA)']
+      ['Risk of Harm management — supervisor review', '', 9, 318, 'Active', [], 'Sector lead (SLA)']
     ]],
     ['FCG participation and interaction form', 'tablet', null, [], [
       ['FCG participation and interaction', '', 14, 1204, 'Active', [], 'IZU at Village']
@@ -183,7 +183,7 @@
     }).length;
     var ns = (p.sessions || []).length, nf = p.forms.length;
     var val = {
-      sessions: ns + (ns === 1 ? ' session' : ' sessions'),
+      sessions: ns + (ns === 1 ? ' module' : ' modules'),
       shared: shared + ' shared with other projects',
       forms: nf + (nf === 1 ? ' form' : ' forms')
     };
@@ -227,23 +227,11 @@
 
   /* The rest of the app spells IZU, SLA and HQ out on hover rather than in the
      row. Built here rather than written into thirty-seven cells. */
-  var SHORT = {
-    'IZU': 'IZU — the home visitor at village level. A village has two, and the biggest three',
-    'SLA': 'SLA — Sugira Muryango Sector lead',
-    'HQ': 'HQ — the FXB Rwanda head office team'
-  };
-
-  function spellOut(text) {
-    return String(text).replace(/\b(IZU|SLA|HQ)\b/g, function (a) {
-      return '<abbr data-tip="' + SHORT[a] + '">' + a + '</abbr>';
-    });
-  }
-
-  /* "6.The Importance of Good Health" is the session's stored name; everywhere
-     else in the app it is Session 6. */
+  /* "6.The Importance of Good Health" is the module's stored name; everywhere
+     else in the app it is Module 6. */
   function shortSession(name) {
     var m = /^(\d+)\./.exec(name);
-    return m ? 'Session ' + m[1] : name;
+    return m ? 'Module ' + m[1] : name;
   }
 
   /* A session carries the forms that name it. Said once, here, so the tree and
@@ -371,7 +359,7 @@
        cells, where they also sort and line up. */
     var head = table.tHead && table.tHead.rows[0];
     if (head && head.cells.length === 4) {
-      ['Sessions', 'Forms', 'Responses'].forEach(function (t, n) {
+      ['Modules', 'Forms', 'Responses'].forEach(function (t, n) {
         var th = el('th', 'num', t);
         head.insertBefore(th, head.cells[1 + n]);
       });
@@ -433,9 +421,9 @@
         if (p.sessions.length) {
           /* Its own caret, so the forms every session carries open and shut
              as a group instead of unrolling with the project. */
-          var gT = caret('Forms carried by every session');
+          var gT = caret('Forms carried by every module');
           var gTr = tag(kidRow({
-            depth: 1, toggle: gT, iconId: 'i-reports', name: 'Carried by every session',
+            depth: 1, toggle: gT, iconId: 'i-reports', name: 'Carried by every module',
             sessions: null, forms: own.length, responses: fmt(sumResp(own))
           }));
           thread(gT, gTr, function () {
@@ -479,12 +467,11 @@
     var table = el('table', 'tbl');
     var head = el('thead');
     var hr = el('tr');
-    /* Questions is not here. It is on the form and in the tree, and a column
-       that wide pushed Filled in by off the card — which is the column that
-       tells a monitoring form from a visit form. */
-    ['Form', 'Kinyarwanda', 'Project', 'Used in', 'Filled in by', 'Responses', 'Status']
+    /* Who filled a form in belongs to each response, on the data page, not
+       to the form. */
+    ['Form', 'Kinyarwanda', 'Project', 'Used in', 'Responses', 'Status']
       .forEach(function (h, i) {
-        hr.appendChild(el('th', i === 5 ? 'num' : null, h));
+        hr.appendChild(el('th', i === 4 ? 'num' : null, h));
       });
     head.appendChild(hr);
     table.appendChild(head);
@@ -524,21 +511,18 @@
       pj.appendChild(pb);
       tr.appendChild(pj);
 
-      /* "Session 6", not "6.The Importance of Good Health" — the rest of the
-         app says Session 6, and the full title on the row pushed every other
+      /* "Module 6", not "6.The Importance of Good Health" — the rest of the
+         app says Module 6, and the full title on the row pushed every other
          column off the card. It is on the tooltip. */
       var used = el('td', 'mut');
       used.textContent = !f.sessions.length ? 'The project itself'
         : f.sessions.length === 1 ? shortSession(f.sessions[0])
-          : f.sessions.length + ' sessions';
+          : f.sessions.length + ' modules';
       if (f.sessions.length > 1 || shortSession(f.sessions[0]) !== f.sessions[0]) {
         used.setAttribute('data-tip', f.sessions.join(' · '));
       }
       tr.appendChild(used);
 
-      var by = el('td', 'mut');
-      by.innerHTML = spellOut(f.by);
-      tr.appendChild(by);
 
       /* "I enter a module, I go to see forms of this module, I go into data of
          a specific form, to filter, to export… it's a very long flow." The

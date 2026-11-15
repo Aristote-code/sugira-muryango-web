@@ -62,9 +62,9 @@
     project: {
       title: 'Household Module Tracking',
       rel: [
-        ['Sessions', 'i-programme', '12 sessions, a welcome, a closing and three boosters', 'module', 'What a household receives'],
+        ['Modules', 'i-programme', '12 modules, a welcome, a closing and three boosters', 'module', 'What a household receives'],
         ['Forms', 'i-reports', '12 forms carry this project’s questions', 'form', 'Ten filled in on a visit, two by a supervisor'],
-        ['Cohorts', 'i-visits', 'Cohort 1, Cohort 2', 'cohorts', 'Decide who gets which session when'],
+        ['Cohorts', 'i-visits', 'Cohort 1, Cohort 2', 'cohorts', 'Decide who gets which module when'],
         ['Households', 'i-households', '2 210 enrolled', 'households', 'Everyone on this curriculum']
       ],
       ref: [
@@ -73,23 +73,23 @@
       ]
     },
     module: {
-      title: 'Session 6 — The Importance of Good Health',
+      title: 'Module 6 — The Importance of Good Health',
       rel: [
-        ['Project', 'i-programme', 'Household Module Tracking', 'project', 'The curriculum this session is part of'],
-        ['Form', 'i-reports', 'Visit record', 'form', 'What the visitor fills in during this session'],
-        ['Cohorts', 'i-visits', 'Cohort 1, Cohort 2', 'cohorts', 'Changing the interval moves this session for everyone not yet there'],
-        ['Households', 'i-households', '986 at this session', 'households', 'Delivery drops sharply from here on']
+        ['Project', 'i-programme', 'Household Module Tracking', 'project', 'The curriculum this module is part of'],
+        ['Form', 'i-reports', 'Household Module Tracking Form', 'form', 'What the visitor fills in during this module'],
+        ['Cohorts', 'i-visits', 'Cohort 1, Cohort 2', 'cohorts', 'Changing the interval moves this module for everyone not yet there'],
+        ['Households', 'i-households', '986 at this module', 'households', 'Delivery drops sharply from here on']
       ],
       ref: [
-        ['Safeguarding', 'i-safeguarding', 'Question 5 opens a risk-of-harm case', 'settings', 'This session can open a case'],
-        ['Report', 'i-reports', 'Average minutes per module', 'reports', 'Counts this session']
+        ['Safeguarding', 'i-safeguarding', 'Question 5 opens a risk-of-harm case', 'settings', 'This module can open a case'],
+        ['Report', 'i-reports', 'Average minutes per module', 'reports', 'Counts this module']
       ]
     },
     form: {
-      title: 'Visit record',
+      title: 'Household Module Tracking Form',
       rel: [
-        ['Session', 'i-programme', 'Session 6 — The Importance of Good Health', 'module', 'Where this form is used'],
-        ['Project', 'i-programme', 'Household Module Tracking', 'project', 'Through the session above'],
+        ['Module', 'i-programme', 'Module 6 — The Importance of Good Health', 'module', 'Where this form is used'],
+        ['Project', 'i-programme', 'Household Module Tracking', 'project', 'Through the module above'],
         ['Languages', 'i-message', 'English, Kinyarwanda', 'translations', 'Kinyarwanda is complete for this form'],
         ['Responses', 'i-reports', '986 responses', 'reports', 'What a report on this form reads']
       ],
@@ -115,7 +115,7 @@
       rel: [
         ['People', 'i-admin', slaHolders, 'people', 'Each at their own place'],
         ['Permissions', 'i-settings', permCount, 'permissions', 'What the position opens'],
-        ['Places', 'i-location', 'Any sector', 'places', 'The place is set when the position is given, not on the position']
+        ['Places', 'i-location', 'Any sector', null, 'The place is set when the position is given, not on the position']
       ],
       ref: [
         ['Escalation', 'i-alert', 'Unreviewed cases after 72 hours', 'settings', 'This position is who the clock runs against']
@@ -126,12 +126,12 @@
     title: 'A. Gahimana',
     rel: [
       ['Position', 'i-admin', 'HQ officer', 'permissions', 'Where the 88 permissions come from'],
-      ['Place', 'i-location', 'National', 'places', 'Every district, which is why nothing is hidden'],
+      ['Place', 'i-location', 'National', null, 'Every district, which is why nothing is hidden'],
       ['Projects', 'i-programme', 'All projects', 'project', 'No project scope set']
     ],
     ref: [
       ['Report', 'i-reports', 'Male caregiver attendance by district', 'reports', 'Last run today at 06:00'],
-      ['Activity', 'i-clock', 'Published Visit record to the tablet', 'system', 'Recorded against this account']
+      ['Activity', 'i-clock', 'Published Household Module Tracking Form to the tablet', 'activity', 'Recorded against this account']
     ]
   };
 
@@ -147,7 +147,7 @@
     items.forEach(function (it) {
       var b = el('button', 'relrow');
       b.type = 'button';
-      b.setAttribute('data-go', it[3]);
+      if (it[3]) b.setAttribute('data-go', it[3]); else b.disabled = true;
       var ic = el('span', 'relrow-i');
       ic.innerHTML = '<svg aria-hidden="true"><use href="#' + it[1] + '"/></svg>';
       b.appendChild(ic);
@@ -296,7 +296,8 @@
        — a form's tab is the only place that names the projects using it — and
        taking it off them would lose that with nowhere to put it. */
     Object.keys(R).forEach(function (k) {
-      if (k === 'household') return;
+      /* The client fixed which tabs a person, a module and a form have. */
+      if (k === 'household' || k === 'person' || k === 'module' || k === 'form') return;
       build(k, R[k]);
     });
     watch();

@@ -30,31 +30,19 @@
       ['Project name', 'text', { en: 'Household Module Tracking',
         rw: 'Gukurikirana amasomo y’umuryango' }],
       ['Description', 'text', { en: 'The core home-visiting curriculum: twelve '
-        + 'fortnightly sessions plus two boosters.', rw: '' }],
+        + 'fortnightly modules plus two boosters.', rw: '' }],
       ['Project URL', 'text', ''],
       ['Archived', 'choice:Yes,No', 'No']
     ],
     module: [
-      ['Session name', 'text', { en: 'The Importance of Good Health',
+      ['Module name', 'text', { en: 'The Importance of Good Health',
         rw: 'Akamaro k’ubuzima bwiza' }],
-      ['Order in the project', 'number', '6'],
-      ['Weeks after the previous session', 'number', '2'],
-      ['Booster session', 'choice:Yes,No', 'No'],
-      ['Opens a risk-of-harm case', 'choice:Yes,No', 'Yes'],
-      ['Notes for the visitor', 'text', '']
+      ['Booster session', 'choice:Yes,No', 'No']
     ],
     form: [
-      ['Form name', 'text', { en: 'Visit record', rw: 'Inyandiko y’uruzinduko' }],
+      ['Form name', 'text', { en: 'Household Module Tracking Form', rw: 'Inyandiko y’uruzinduko' }],
       ['Version', 'number', '4'],
-      ['Published to the tablet', 'choice:Yes,No', 'Yes'],
-      ['Archived', 'choice:Yes,No', 'No'],
-      ['Replaces', 'text', '']
-    ],
-    person: [
-      ['Full name', 'text', 'C. Uwimana'],
-      ['Phone', 'text', '+250 78 555 0144'],
-      ['Employee number', 'text', ''],
-      ['Started', 'date', '19 August 2026']
+      ['Archived', 'choice:Yes,No', 'No']
     ]
   };
 

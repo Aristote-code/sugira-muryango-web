@@ -21,26 +21,25 @@
      own vocabulary rather than a generic audit line. */
   var ACTIVITY = {
     household: [
-      ['M. Dusabe', 'raised a risk-of-harm flag at the Session 6 visit', '28 Oct'],
-      ['M. Dusabe', 'recorded Session 6 as delivered — 42 minutes', '28 Oct'],
+      ['M. Dusabe', 'raised a risk-of-harm flag at the Module 6 visit', '28 Oct'],
+      ['M. Dusabe', 'recorded Module 6 as delivered — 42 minutes', '28 Oct'],
       ['System', 'moved this household to behind schedule after a second missed visit', '14 Oct'],
-      ['M. Dusabe', 'recorded Session 4 as delivered — 51 minutes', '30 Sep'],
+      ['M. Dusabe', 'recorded Module 4 as delivered — 51 minutes', '30 Sep'],
       ['C. Uwimana', 'enrolled this household in Cohort 1', '12 Jun']
     ],
     'case': [
-      ['System', 'escalated to the district lead — still unreviewed after 24 hours', '1 Nov'],
-      ['System', 'escalated to the district lead on the 72-hour breach', '31 Oct'],
+      ['E. Mutesi', 'added a follow-up — status Active', '31 Oct'],
       ['System', 'told C. Uwimana and M. Dusabe that a name had been read', '29 Oct'],
       ['P. Habimana', 'opened this case in full — monthly safeguarding summary', '29 Oct'],
-      ['M. Dusabe', 'raised this flag at Session 6, question 5', '28 Oct']
+      ['M. Dusabe', 'raised this flag at Module 6, question 5', '28 Oct']
     ],
     project: [
-      ['A. Gahimana', 'published a new version of the Visit record form', '2 Nov'],
-      ['M&E team', 'changed the interval between sessions to two weeks', '21 Oct'],
+      ['A. Gahimana', 'published a new version of the Household Module Tracking Form', '2 Nov'],
+      ['M&E team', 'changed the interval between modules to two weeks', '21 Oct'],
       ['A. Gahimana', 'added Cohort 2', '4 Sep']
     ],
     module: [
-      ['A. Gahimana', 'published the Visit record form to the tablet', '2 Nov'],
+      ['A. Gahimana', 'published the Household Module Tracking Form to the tablet', '2 Nov'],
       ['System', 'rescheduled 986 households after the interval changed', '21 Oct']
     ],
     form: [
@@ -49,7 +48,7 @@
       ['A. Gahimana', 'added question 5 — opens a risk-of-harm case', '14 Oct']
     ],
     person: [
-      ['A. Gahimana', 'granted an exception: delete a risk-of-harm case', '1 Nov'],
+      ['A. Gahimana', 'added a permission for this person: close a risk-of-harm case', '1 Nov'],
       ['System', 'told this person that RH-0044 was opened by somebody not on it', '29 Oct'],
       ['A. Gahimana', 'gave this person the Sector lead position at Kibungo', '3 Sep']
     ]

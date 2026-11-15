@@ -249,7 +249,7 @@
       if (period && screen) {
         var fl = $$('.fl', screen).filter(function (f) {
           var k = f.querySelector('.k');
-          return k && k.textContent.trim().toLowerCase() === 'period';
+          var kk = k && k.textContent.trim().toLowerCase(); return kk === 'period' || kk === 'dates';
         })[0];
         if (fl) {
           fl.querySelector('b').textContent = period;

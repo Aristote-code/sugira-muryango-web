@@ -44,10 +44,10 @@
     return KINDS.filter(function (k) { return k.id === id; })[0] || KINDS[0];
   }
 
-  /* The Visit record, as it stands. Ten of its thirty, which is what fits on
+  /* The Household Module Tracking Form, as it stands. Ten of its thirty, which is what fits on
      a screen without the list becoming the thing you are reading. */
   var FORM = {
-    name: 'Visit record',
+    name: 'Household Module Tracking Form',
     rw: 'Inyandiko y’urugendo',
     q: [
       { id: 'q1', en: 'Date of visit', rw: 'Itariki y’urugendo', kind: 'date', req: true },
