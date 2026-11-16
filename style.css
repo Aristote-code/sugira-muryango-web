@@ -2732,3 +2732,87 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 /* Filters grouped in the panel speak through the button's count, not a strip. */
 .filters.grouped + .flsum{display:none}
 .tfoot .pg[hidden]{display:none}
+/* ---------------- New form, at the size of the record modal ----------------
+   Building a form is a page's worth of work, so the dialog takes the room the
+   record drawer takes as a modal: inset 24 on every side. The steps sit in the
+   title bar, where ClickUp's form keeps Build, Settings and Preview, and the
+   Build step is the form builder itself, its three columns at full height,
+   each scrolling on its own. */
+.scrim.xl{padding:var(--layout-panel-task-modal-inset)}
+.modal.xl{width:100%;height:100%;max-height:none}
+.modal.xl .mh{position:relative;height:var(--dimension-45);padding:0 var(--space-2) 0 var(--space-4);border-bottom:1px solid var(--color-border-subtle);flex:none}
+.modal.xl .mh h3{flex:none}
+.modal.xl .mh #mClose{margin-left:auto}
+.modal.xl .mb{padding:0;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;gap:0}
+.modal.xl .mf{flex:none}
+.modal .wz-back{margin-right:auto}
+.modal .wz-back[hidden]{display:none}
+.nf-steps{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:var(--space-2)}
+.modal .mh .nf-steps .wz-s{width:auto;height:var(--size-control-sm);padding:0 var(--space-3) 0 var(--space-1);display:inline-flex;border-radius:var(--radius-full);color:var(--color-content-secondary)}
+.modal .mh .nf-steps .wz-s.on{background:var(--color-bg-primary-subtle);color:var(--color-bg-primary-default)}
+.nf-sep{width:var(--space-6);height:1px;background:var(--color-border-default)}
+.wz-s.done b{background:var(--color-bg-primary-subtle);color:var(--color-bg-primary-default)}
+.nf-p[hidden]{display:none}
+.nf-build{flex:1;min-height:0;display:flex}
+.modal .fb{flex:1;min-height:0;gap:0;align-items:stretch;grid-template-columns:var(--dimension-240) minmax(0,1fr) var(--dimension-300)}
+.modal .fb > .fb-pane{min-height:0;overflow:auto;padding:var(--space-4);gap:var(--space-2)}
+.modal .fb > .fb-kinds{border-right:1px solid var(--color-border-subtle)}
+.modal .fb > .fb-form{background:var(--color-bg-canvas);padding:var(--space-8) var(--space-6) var(--space-12)}
+.modal .fb > .fb-form > *{width:100%;max-width:var(--dimension-720);margin-inline:auto}
+.modal .fb > .fb-prev{border-left:1px solid var(--color-border-subtle);background:var(--color-bg-canvas)}
+.modal .fb .fb-h{align-items:center}
+.modal .fb .fb-h h3{display:flex;align-items:center;gap:var(--space-1);white-space:nowrap}
+.modal .fb > .fb-prev > .fb-h{flex-wrap:wrap;row-gap:var(--space-2)}
+.modal .fb > .fb-pane > *,.modal .fb .fb-body > *{flex:none}
+.modal .fb-form > .fb-h{margin-top:var(--space-3)}
+.modal .fb-kind{padding:var(--space-2) var(--space-3)}
+/* the form's name, as its first card */
+.fb-name{display:grid;gap:var(--space-1);padding:var(--space-5) var(--space-6);border-radius:var(--radius-lg);background:var(--color-bg-surface);box-shadow:var(--x-clickup-elevation-border-1);border-top:4px solid var(--color-bg-primary-default)}
+.modal .fb-name input{height:auto;padding:0;border:0;border-radius:0;background:none;box-shadow:0 1px 0 transparent}
+.modal .fb-name input:focus{outline:0;box-shadow:0 1px 0 var(--color-bg-primary-default)}
+.modal .fb-name .fb-name-en{font-size:24px;line-height:32px;font-weight:600;color:var(--color-content-primary)}
+.modal .fb-name .fb-name-rw{font-size:14px;line-height:20px;color:var(--color-content-secondary)}
+.modal .fb-list{gap:var(--space-3)}
+.modal .fb-f{padding:var(--space-3) var(--space-3) var(--space-4)}
+/* The dialog's own field rules are for a column of fields; the builder's
+   inputs and switches keep their own sizes. */
+.modal .fb input.fb-q,.modal .fb input.fb-opts{height:var(--size-control-md);padding:0 var(--space-2);font-size:13px}
+.modal .fb input.fb-opts{width:calc(100% - var(--space-7));font-size:12px}
+.modal .fb input.fb-qrw{width:calc(100% - var(--space-7));margin-left:var(--space-7);font-size:12px;color:var(--color-content-secondary)}
+.modal .fb input[type=checkbox]{width:auto;height:auto;padding:0}
+.modal .fb label.fb-sw{display:inline-flex;margin:0;font-size:12px;font-weight:400;color:var(--color-content-secondary)}
+.modal .fb .fb-empty{align-items:center;justify-content:center;min-height:var(--dimension-200);border:1px dashed var(--color-border-strong);border-radius:var(--radius-lg);background:var(--color-bg-surface)}
+/* what every form like this carries, under the pieces */
+.nf-side{display:flex;flex-direction:column;margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--color-border-subtle)}
+.modal .nf-sw{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);min-height:var(--size-control-md);margin:0;position:relative;font-size:13px;font-weight:400;color:var(--color-content-primary);cursor:pointer}
+.nf-swl{display:flex;align-items:center;gap:var(--space-2);min-width:0}
+.nf-swl svg{width:var(--space-4);height:var(--space-4);flex:none;color:var(--color-content-secondary)}
+.modal .nf-sw input{position:absolute;opacity:0;width:1px;height:1px;margin:0;padding:0}
+.nf-sw i{position:relative;width:28px;height:16px;border-radius:var(--radius-full);background:var(--color-border-strong);flex:none;transition:background 120ms}
+.nf-sw i::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--color-bg-surface);transition:transform 120ms}
+.nf-sw input:checked + i{background:var(--color-bg-primary-default)}
+.nf-sw input:checked + i::after{transform:translateX(12px)}
+.nf-sw input:focus-visible + i{outline:2px solid var(--color-border-focus);outline-offset:2px}
+/* permissions and notifications, each a column on the canvas */
+.nf-pane{flex:1;min-height:0;overflow:auto;background:var(--color-bg-canvas);padding:var(--space-8) var(--space-6)}
+.nf-col{max-width:var(--dimension-720);margin:0 auto;display:flex;flex-direction:column;gap:var(--space-4)}
+.nf-col.wide{max-width:var(--dimension-980)}
+.nf-card{background:var(--color-bg-surface);border-radius:var(--radius-lg);box-shadow:var(--x-clickup-elevation-border-1);overflow:hidden}
+.nf-ch{display:flex;align-items:center;gap:var(--space-1);padding:var(--space-4) var(--space-5) var(--space-2)}
+.nf-ch h4{font-size:14px;line-height:20px;font-weight:600}
+.nf-rows{padding:0 var(--space-5) var(--space-3)}
+.nf-rows .nf-sw + .nf-sw{border-top:1px solid var(--color-border-subtle)}
+.nf-rows .empty-line{padding:var(--space-2) 0}
+.nf-cond{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:var(--space-2);padding:0 var(--space-5)}
+.nf-msg{padding:var(--space-4) var(--space-5) var(--space-5)}
+.nf-mx{width:100%;border-collapse:collapse;font-size:14px}
+.nf-mx th,.nf-mx td{height:var(--dimension-45);padding:0 var(--space-3);border-bottom:1px solid var(--color-border-subtle);text-align:center;white-space:nowrap}
+.nf-mx thead th{height:var(--size-control-lg);font-size:12px;font-weight:500;color:var(--color-content-secondary);background:var(--x-clickup-color-background-on-main)}
+.nf-mx th:first-child{text-align:left;padding-left:var(--space-5);width:34%}
+.nf-mx tbody th{font-weight:500;color:var(--color-content-primary)}
+.nf-mx tbody tr:last-child>*{border-bottom:0}
+.nf-mx tbody tr:hover>*{background:var(--color-bg-hover)}
+.nf-mx .ihelp{vertical-align:middle;margin-left:var(--space-1)}
+.modal .nf-mx input{width:var(--space-4);height:var(--space-4);padding:0;accent-color:var(--color-bg-primary-default);cursor:pointer;vertical-align:middle}
+@media (max-width:1100px){.modal .fb{grid-template-columns:var(--dimension-240) minmax(0,1fr)}.modal .fb > .fb-prev{display:none}}
+@media (max-width:760px){.scrim.xl{padding:0}.modal.xl{border-radius:0}.modal .fb{grid-template-columns:1fr}.modal .fb > .fb-kinds{display:none}.nf-steps{position:static;transform:none}.nf-sep{display:none}}

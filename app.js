@@ -77,6 +77,24 @@
     visits:        '147 visits are due this week. 1 842 of 2 210 are done so far in this cohort, and 368 are still missed, the oldest 34 days.'
   };
 
+  /* The New form dialog's parts: what every form like this can carry, and who
+     can be given access to it. */
+  var FORM_FIXED = [
+    ['consent', 'Consent question', 'check', true],
+    ['mobile', 'Show on the mobile app', 'monitor', true],
+    ['location', 'Location', 'location', true],
+    ['household', 'Household ID', 'households', false]
+  ];
+  var FORM_ACCESS = [
+    ['View', 'Who sees the form exists and can open it'],
+    ['Data', 'Who can read what was collected'],
+    ['Report', 'Who can build and read reports on it'],
+    ['Report builder', 'Who can build reports on this form'],
+    ['Edit', 'Who can change the questions'],
+    ['Archive', 'Who can take it off the tablets']
+  ];
+  var FORM_ORGS = ['FXB Rwanda · Head office', 'FXB Rwanda · Monitoring & evaluation', 'FXB Rwanda · Field delivery', 'NCDA · Child protection'];
+
   var MODALS = {
     setint: {
       title: 'Change the interval between modules',
@@ -510,100 +528,117 @@
        what with it, then who hears when it is sent in — and only people who
        can read the data are offered for that. Made here, once; projects and
        modules import it, already set up. */
+    /* The partners' own order, kept: build the form, then say who may do
+       what with it, then who hears when it is sent in — and only people who
+       can read the data are offered for that. Made here, once; projects and
+       modules import it, already set up.
+       Building is a page's worth of work, so the dialog opens at the size a
+       record takes as a modal, and the Build step is the form builder itself:
+       the pieces, the form, and how it will read on the tablet. */
     form: {
       title: 'New form',
-      ok: 'Create form',
-      wide: true,
-      body: '<div class="wz-steps" role="tablist">'
-          + '<button type="button" class="wz-s on" data-wz="0"><b>1</b>Build</button>'
-          + '<button type="button" class="wz-s" data-wz="1"><b>2</b>Permissions</button>'
-          + '<button type="button" class="wz-s" data-wz="2"><b>3</b>Notifications</button></div>'
-          + '<div class="wz-p" data-wzp="0">'
-          + '<div class="cols c2e"><div><label for="f-fn">Name in English</label><input id="f-fn" type="text"></div>'
-          + '<div><label for="f-fnr">Name in Kinyarwanda</label><input id="f-fnr" type="text"></div></div>'
-          + '<div><span class="rb-l">Add to every form like this</span><div class="wz-x">'
-          + '<label class="rb-ck"><input type="checkbox" checked>Consent question</label>'
-          + '<label class="rb-ck"><input type="checkbox" checked>Show on the mobile app</label>'
-          + '<label class="rb-ck"><input type="checkbox" checked>Location (province to village)</label>'
-          + '<label class="rb-ck"><input type="checkbox">Household ID</label></div></div>'
-          + '<div class="wz-b"><div class="wz-pal"><span class="rb-l">Drag a field in</span>'
-          + ['Text', 'Number', 'Date', 'One choice', 'Several choices', 'Yes / No', 'Photo', 'Signature'].map(function (t) {
-              return '<button type="button" class="wz-f" draggable="true" data-fld="' + t + '">' + t + '</button>'; }).join('')
-          + '</div><div class="wz-can" id="f-can"><p class="empty-line">Drop fields here, in the order they are asked</p></div></div>'
-          + '</div>'
-          + '<div class="wz-p" data-wzp="1" hidden>'
-          + ['View access', 'Data access', 'Report access', 'Report builder access', 'Edit access', 'Archive access'].map(function (k, i) {
-              return '<div class="wz-perm"><span class="rb-l">' + k + '</span><div class="wz-x">'
-                + ['FXB Rwanda · Head office', 'FXB Rwanda · Monitoring & evaluation', 'FXB Rwanda · Field delivery', 'NCDA · Child protection']
-                  .map(function (o, j) {
-                    return '<label class="rb-ck"><input type="checkbox" data-perm="' + i + '" value="' + o + '"'
-                      + (j < (i === 0 ? 3 : i === 1 ? 2 : 1) ? ' checked' : '') + '>' + o + '</label>';
-                  }).join('') + '</div></div>';
-            }).join('')
-          + '</div>'
-          + '<div class="wz-p" data-wzp="2" hidden>'
-          + '<div><label for="f-nw">When a response is sent in, tell</label><div class="wz-x" id="f-nw"></div></div>'
-          + '<div><span class="rb-l">And when an answer says</span><div class="rb-cond">'
-          + '<select aria-label="Question"><option>Q5 Any sign of harm or neglect?</option><option>Q8 Referred to the health post?</option></select>'
-          + '<select aria-label="Operator"><option>is</option><option>is not</option></select>'
-          + '<input type="text" aria-label="Value" value="Yes"><span></span></div>'
-          + '<div><label for="f-nm">send this message</label><input id="f-nm" type="text" value="A risk of harm was raised in your area"></div></div>'
-          + '</div>'
-          + '<div class="wz-nav"><button type="button" class="btn sec sm" data-wzgo="-1">Back</button></div>',
-      /* One way forward: the dialog's own button is Next until the last step,
-         where it becomes Create form. */
+      ok: 'Next',
+      size: 'xl',
+      body: '<div class="nf-steps" role="tablist" aria-label="Steps">'
+          + ['Build', 'Permissions', 'Notifications'].map(function (t, i) {
+              return (i ? '<span class="nf-sep" aria-hidden="true"></span>' : '')
+                + '<button type="button" role="tab" class="wz-s' + (i ? '' : ' on') + '" data-wz="' + i + '"><b>' + (i + 1) + '</b>' + t + '</button>';
+            }).join('') + '</div>'
+          + '<div class="nf-p nf-build" data-wzp="0"><div class="fb" id="f-build"></div></div>'
+          + '<div class="nf-p nf-pane" data-wzp="1" hidden><div class="nf-col wide">'
+          +   '<div class="nf-card"><table class="nf-mx"><thead><tr><th scope="col">Organisation</th>'
+          +   FORM_ACCESS.map(function (k) {
+                return '<th scope="col">' + k[0] + '<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="' + k[1] + '"><svg aria-hidden="true"><use href="#i-info"/></svg></button></th>';
+              }).join('') + '</tr></thead><tbody>'
+          +   FORM_ORGS.map(function (o, j) {
+                return '<tr><th scope="row">' + o + '</th>' + FORM_ACCESS.map(function (k, i) {
+                  return '<td><input type="checkbox" data-perm="' + i + '" value="' + o + '" aria-label="' + k[0] + ' for ' + o + '"'
+                    + (j < (i === 0 ? 3 : i === 1 ? 2 : 1) ? ' checked' : '') + '></td>';
+                }).join('') + '</tr>';
+              }).join('')
+          +   '</tbody></table></div>'
+          + '</div></div>'
+          + '<div class="nf-p nf-pane" data-wzp="2" hidden><div class="nf-col">'
+          +   '<section class="nf-card"><header class="nf-ch"><h4>When a response is sent in, tell</h4>'
+          +     '<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Only organisations with data access can be told"><svg aria-hidden="true"><use href="#i-info"/></svg></button></header>'
+          +     '<div class="nf-rows" id="f-nw"></div></section>'
+          +   '<section class="nf-card"><header class="nf-ch"><h4>And when an answer says</h4></header>'
+          +     '<div class="nf-cond"><select id="f-nq" aria-label="Question"><option>No question yet</option></select>'
+          +     '<select aria-label="Operator"><option>is</option><option>is not</option></select>'
+          +     '<input type="text" aria-label="Value" value="Yego"></div>'
+          +     '<div class="nf-msg"><label for="f-nm">Send this message</label><input id="f-nm" type="text" value="A risk of harm was raised in your area"></div></section>'
+          + '</div></div>',
       init: function (body) {
         var at = 0;
+        /* The steps sit in the title bar, where ClickUp's form keeps Build,
+           Settings and Preview, and Back sits with the dialog's own buttons. */
+        var steps = body.querySelector('.nf-steps');
+        mTitle.parentNode.insertBefore(steps, mTitle.nextSibling);
+        var back = document.createElement('button');
+        back.type = 'button';
+        back.className = 'btn sec wz-back';
+        back.textContent = 'Back';
+        mFoot.insertBefore(back, mFoot.firstChild);
+        back.onclick = function () { step(at - 1); };
+        steps.addEventListener('click', function (e) {
+          var s = e.target.closest('[data-wz]');
+          if (s) step(+s.getAttribute('data-wz'));
+        });
+
+        /* What every form like this carries, under the pieces it is built from. */
+        var side = document.createElement('div');
+        side.className = 'nf-side';
+        side.innerHTML = '<div class="fb-h"><h3>On every form like this</h3></div>'
+          + FORM_FIXED.map(function (x) {
+              return '<label class="nf-sw"><span class="nf-swl"><svg aria-hidden="true"><use href="#i-' + x[2] + '"/></svg>' + x[1] + '</span>'
+                + '<input type="checkbox" role="switch" data-fixed="' + x[0] + '"' + (x[3] ? ' checked' : '') + '><i aria-hidden="true"></i></label>';
+            }).join('');
+        var B = window.SugiraBuilder;
+        if (B && B.mount) B.mount(body.querySelector('#f-build'), { name: '', rw: '', q: [] }, side);
+
         function step(n) {
           at = Math.max(0, Math.min(2, n));
-          Array.prototype.forEach.call(body.querySelectorAll('.wz-s'), function (b, i) { b.classList.toggle('on', i === at); });
-          Array.prototype.forEach.call(body.querySelectorAll('.wz-p'), function (p, i) { p.hidden = i !== at; });
-          body.querySelector('[data-wzgo="-1"]').hidden = at === 0;
+          Array.prototype.forEach.call(steps.querySelectorAll('.wz-s'), function (b, i) {
+            b.classList.toggle('on', i === at);
+            b.classList.toggle('done', i < at);
+            b.setAttribute('aria-selected', String(i === at));
+          });
+          Array.prototype.forEach.call(body.querySelectorAll('.nf-p'), function (p, i) { p.hidden = i !== at; });
+          back.hidden = at === 0;
           body._wzAt = at;
           mOk.textContent = at < 2 ? 'Next' : 'Create form';
-          if (at === 2) {
-            /* Only the departments that can read the data can be told about it. */
-            var can = Array.prototype.filter.call(body.querySelectorAll('[data-perm="1"]'), function (c) { return c.checked; })
-              .map(function (c) { return c.value; });
-            body.querySelector('#f-nw').innerHTML = can.length ? can.map(function (o) {
-              return '<label class="rb-ck"><input type="checkbox" checked>' + esc(o) + '</label>';
-            }).join('') : '<p class="empty-line">Nobody has data access yet, so there is nobody to tell</p>';
-          }
+          if (at === 2) notify();
         }
-        body.addEventListener('click', function (e) {
-          var s = e.target.closest('[data-wz]');
-          if (s) { step(+s.getAttribute('data-wz')); return; }
-          var g = e.target.closest('[data-wzgo]');
-          if (g) step(at + +g.getAttribute('data-wzgo'));
-          var f = e.target.closest('.wz-f');
-          if (f) add(f.getAttribute('data-fld'));
-        });
-        var can = body.querySelector('#f-can');
-        function add(t) {
-          var hint = can.querySelector('.empty-line');
-          if (hint) hint.remove();
-          var row = document.createElement('div');
-          row.className = 'wz-q';
-          row.innerHTML = '<span class="wz-t">' + esc(t) + '</span><input type="text" aria-label="Question" placeholder="Question in English">'
-            + '<button type="button" class="btn sec sm" aria-label="Remove"><svg aria-hidden="true"><use href="#i-cross"/></svg></button>';
-          row.querySelector('button').onclick = function () { row.remove(); };
-          can.appendChild(row);
+
+        /* Only the organisations that can read the data can be told about it,
+           and the answer to watch is one of this form's own questions. */
+        function notify() {
+          var can = Array.prototype.filter.call(body.querySelectorAll('[data-perm="1"]'), function (c) { return c.checked; })
+            .map(function (c) { return c.value; });
+          body.querySelector('#f-nw').innerHTML = can.length ? can.map(function (o) {
+            return '<label class="nf-sw"><span class="nf-swl">' + esc(o) + '</span><input type="checkbox" role="switch" checked><i aria-hidden="true"></i></label>';
+          }).join('') : '<p class="empty-line">Nobody has data access yet</p>';
+          var sel = body.querySelector('#f-nq');
+          var asked = (B ? B.form().q : []).map(function (q, i) { return 'Q' + (i + 1) + ' ' + q.en; });
+          sel.innerHTML = asked.length ? asked.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('')
+            : '<option>No question yet</option>';
+          sel.disabled = !asked.length;
+          var trig = sel.parentNode.querySelector('.cselect');
+          if (trig) trig.disabled = !asked.length;
+          sel.dispatchEvent(new Event('change'));
         }
-        Array.prototype.forEach.call(body.querySelectorAll('.wz-f'), function (f) {
-          f.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', f.getAttribute('data-fld')); });
-        });
-        can.addEventListener('dragover', function (e) { e.preventDefault(); });
-        can.addEventListener('drop', function (e) { e.preventDefault(); add(e.dataTransfer.getData('text/plain')); });
+
         body._wzStep = step;
         step(0);
       },
       onOk: function (body) {
-        if (body._wzAt < 2) { body._wzStep(body._wzAt + 1); return false; }
-        /* A form needs a name before it can be made. */
         var nm = body.querySelector('#f-fn');
+        /* A form needs a name before it goes any further. */
         if (!nm.value.trim()) { body._wzStep(0); say('Give the form a name in English'); nm.focus(); return false; }
+        if (body._wzAt < 2) { body._wzStep(body._wzAt + 1); return false; }
         /* The new form arrives on the Forms page as a draft, not yet in any project. */
-        if (window.SugiraForms) window.SugiraForms.add(nm.value.trim(), body.querySelector('#f-fnr').value.trim());
+        var built = window.SugiraBuilder && window.SugiraBuilder.form();
+        if (window.SugiraForms) window.SugiraForms.add(nm.value.trim(), body.querySelector('#f-fnr').value.trim(), built ? built.q.length : 0);
       },
       done: function (body) {
         var n = body.querySelector('#f-fn').value.trim();
@@ -2603,6 +2638,9 @@
     var a = liveAnchor;
     window.SugiraPop.close();
     if (a && a.focus) a.focus();
+    /* The panel was the layer on top. A dialog under it — the New form
+       builder's condition panel opens over the dialog — stays open. */
+    e.stopImmediatePropagation();
   });
 
   /* An access change that nobody recorded is the thing the activity log exists
@@ -2710,6 +2748,10 @@
        column of fields wants to be; something you look at rather than fill in
        needs the room its content has a shape of. */
     modalEl.classList.toggle('wide', !!def.wide);
+    /* And a third, for a builder: the size the record drawer takes as a modal. */
+    modalEl.classList.toggle('xl', def.size === 'xl');
+    scrim.classList.toggle('xl', def.size === 'xl');
+    Array.prototype.forEach.call(scrim.querySelectorAll('.mh .nf-steps, .mf .wz-back'), function (n) { n.remove(); });
     /* The mark belongs to the thing, so it goes in the title bar with it and
        takes its colour from the same rule the tables read. */
     var mark = mTitle.parentNode.querySelector('.cellmark');
@@ -3101,7 +3143,8 @@
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     }
-    if (e.key === 'Escape' && !scrim.hidden) closeModal();
+    /* A menu open over the dialog takes Escape first, and only the menu goes. */
+    if (e.key === 'Escape' && !scrim.hidden && !(window.SugiraMenu && window.SugiraMenu.isOpen())) closeModal();
     if (e.key === 'Tab' && !scrim.hidden) {
       var f = $$('button, textarea, input, select, [tabindex]:not([tabindex="-1"])', scrim)
         .filter(function (n) { return n.offsetParent !== null; });

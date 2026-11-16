@@ -74,12 +74,27 @@
 
   var picked = null;     // the question being worked on
   var host = null;
+  /* Where the builder is drawn. The form's own page had it once; now a new
+     form is built in the New form dialog, which starts from nothing, names
+     the form at the top and writes the Kinyarwanda on the card, because a
+     form that does not exist yet has no Translate tab to send anyone to. */
+  var mode = 'page';
+  var aside = null;
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
     if (text != null) n.textContent = text;
     return n;
+  }
+  function tip(text) {
+    var b = el('button', 'ihelp');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'What this is');
+    b.setAttribute('aria-expanded', 'false');
+    b.setAttribute('data-tip', text);
+    b.innerHTML = '<svg aria-hidden="true"><use href="#i-info"/></svg>';
+    return b;
   }
   function svg(id, cls) {
     var s = el('span', cls);
@@ -344,7 +359,10 @@
   function palette() {
     var pane = el('div', 'fb-pane fb-kinds');
     var h = el('div', 'fb-h');
-    h.appendChild(el('h3', null, 'Add a question'));
+    var ht = el('h3', null, 'Add a question');
+    ht.appendChild(tip('A question joins the end of the form. Drag its handle to '
+      + 'move it, or hold the handle and use the arrow keys.'));
+    h.appendChild(ht);
     pane.appendChild(h);
 
     KINDS.forEach(function (k) {
@@ -357,7 +375,8 @@
       b.appendChild(m);
       b.onclick = function () {
         var q = { id: 'q' + (Date.now() % 100000), en: k.label, rw: '', kind: k.id,
-          opts: (k.id === 'single' || k.id === 'multi' || k.id === 'check')
+          opts: k.id === 'yesno' ? ['Yego', 'Oya']
+            : (k.id === 'single' || k.id === 'multi' || k.id === 'check')
             ? ['Option 1', 'Option 2'] : undefined };
         FORM.q.push(q);
         picked = q.id;
@@ -369,9 +388,7 @@
       pane.appendChild(b);
     });
 
-    var note = el('p', 'mhint', 'A question joins the end of the form. Drag its '
-      + 'handle to move it, or hold the handle and use the arrow keys.');
-    pane.appendChild(note);
+    if (aside) pane.appendChild(aside);
     return pane;
   }
 
@@ -453,11 +470,16 @@
        and whether answering it opens a risk-of-harm case, which is not a
        thing to toggle past on the way to somewhere else. The number is the
        way in, because the number is what everything else calls it by. */
-    var num = el('button', 'fb-n');
-    num.type = 'button';
+    var num;
+    if (mode === 'page') {
+      num = el('button', 'fb-n');
+      num.type = 'button';
+      num.setAttribute('data-modal', 'qedit');
+      num.setAttribute('data-tip', 'Open question ' + (i + 1) + ' in full');
+    } else {
+      num = el('span', 'fb-n');
+    }
     num.textContent = String(i + 1);
-    num.setAttribute('data-modal', 'qedit');
-    num.setAttribute('data-tip', 'Open question ' + (i + 1) + ' in full');
     var input = el('input', 'fb-q');
     input.type = 'text';
     input.value = q.en;
@@ -498,6 +520,16 @@
     top.appendChild(input);
     top.appendChild(kb);
     body.appendChild(top);
+    if (mode !== 'page') {
+      var rw = el('input', 'fb-q fb-qrw');
+      rw.type = 'text';
+      rw.lang = 'rw';
+      rw.value = q.rw || '';
+      rw.placeholder = 'Kinyarwanda';
+      rw.setAttribute('aria-label', 'Question ' + (i + 1) + ' in Kinyarwanda');
+      rw.oninput = function () { q.rw = rw.value; q.stale = false; redrawPreview(); };
+      body.appendChild(rw);
+    }
 
     /* A choice question with nothing to choose from is a question the field
        cannot answer, and the tablet would draw it as an empty space with a
@@ -590,6 +622,12 @@
       foot.appendChild(c);
     }
 
+    if (mode !== 'page') {
+      body.appendChild(foot);
+      li.appendChild(body);
+      li.appendChild(delBtn(q));
+      return li;
+    }
     var rwState = el('span', 'fb-rw' + (q.rw ? (q.stale ? ' is-stale' : '') : ' is-missing'));
     rwState.textContent = rwLabel(q);
     rwState.setAttribute('data-tip', q.rw
@@ -602,6 +640,10 @@
     body.appendChild(foot);
     li.appendChild(body);
 
+    li.appendChild(delBtn(q));
+    return li;
+  }
+  function delBtn(q) {
     var del = el('button', 'fb-del');
     del.type = 'button';
     del.setAttribute('aria-label', 'Remove ' + q.en);
@@ -610,14 +652,14 @@
       e.stopPropagation();
       remove(q);
     };
-    li.appendChild(del);
-    return li;
+    return del;
   }
 
   function canvas() {
     var pane = el('div', 'fb-pane fb-form');
+    if (mode !== 'page') pane.appendChild(naming());
     var h = el('div', 'fb-h');
-    h.appendChild(el('h3', null, FORM.name));
+    h.appendChild(el('h3', null, mode === 'page' ? FORM.name : 'Questions'));
     var n = el('span', 'fb-count');
     var req = FORM.q.filter(function (q) { return q.req; }).length;
     n.textContent = FORM.q.length + ' questions · ' + req + ' required';
@@ -629,8 +671,6 @@
          what to do next and points at the only thing that can do it. */
       var none = el('div', 'fb-empty');
       none.appendChild(el('p', 'fb-empty-t', 'No questions yet'));
-      none.appendChild(el('p', 'fb-empty-s',
-        'Pick a kind on the left and it joins the form here.'));
       pane.appendChild(none);
       return pane;
     }
@@ -639,6 +679,24 @@
     FORM.q.forEach(function (q, i) { ol.appendChild(card(q, i)); });
     pane.appendChild(ol);
     return pane;
+  }
+
+  /* The form's name, at the top of the form, the way the tablet shows it. */
+  function naming() {
+    var box = el('div', 'fb-name');
+    [['f-fn', 'name', 'Form name', 'Name in English', null],
+     ['f-fnr', 'rw', 'Izina mu Kinyarwanda', 'Name in Kinyarwanda', 'rw']].forEach(function (f) {
+      var i = el('input', f[0] === 'f-fn' ? 'fb-name-en' : 'fb-name-rw');
+      i.type = 'text';
+      i.id = f[0];
+      i.value = FORM[f[1]] || '';
+      i.placeholder = f[2];
+      i.setAttribute('aria-label', f[3]);
+      if (f[4]) i.lang = f[4];
+      i.oninput = function () { FORM[f[1]] = i.value; paintPreview(); };
+      box.appendChild(i);
+    });
+    return box;
   }
 
   /* ---- what the home visitor will see, down the right ---- */
@@ -798,8 +856,9 @@
     var n = FORM.q.length;
     var req = FORM.q.filter(function (q) { return q.req; }).length;
 
-    var count = document.querySelector('#fbuild .fb-count');
+    var count = host && host.querySelector('.fb-count');
     if (count) count.textContent = n + ' questions · ' + req + ' required';
+    if (mode !== 'page') return;
 
     var kv = document.querySelectorAll('#s-form [data-panelid="build"] .kv > div');
     [].forEach.call(kv, function (d) {
@@ -888,7 +947,7 @@
 
   function remove(q) {
     var dep = dependents(q);
-    if (!dep.length) return cut(q);
+    if (!dep.length || mode !== 'page') return cut(q);
     window.SugiraModal.ask({
       title: 'Remove question ' + (FORM.q.indexOf(q) + 1) + '?',
       ok: 'Remove it',
@@ -987,5 +1046,19 @@
     document.addEventListener('DOMContentLoaded', init);
   } else init();
 
-  window.SugiraBuilder = { form: FORM, draw: draw };
+  /* A new form, built from nothing in the element given; what it holds is
+     read back with form(). `side` is drawn under the pieces on every draw. */
+  function mount(where, form, side) {
+    host = where;
+    FORM = form;
+    mode = 'new';
+    aside = side || null;
+    picked = null;
+    edits = 0;
+    undo = null;
+    lang = 'rw';
+    draw();
+  }
+
+  window.SugiraBuilder = { form: function () { return FORM; }, draw: draw, mount: mount };
 })();

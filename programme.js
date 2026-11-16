@@ -595,8 +595,8 @@
      project carries yet, and the list is drawn again from the library so the
      new row is a row like any other: selectable, sortable, counted. */
   window.SugiraForms = {
-    add: function (name, rw) {
-      library.unshift({ name: name, rw: rw || '', questions: 0, responses: 0, status: 'Draft',
+    add: function (name, rw, questions) {
+      library.unshift({ name: name, rw: rw || '', questions: questions || 0, responses: 0, status: 'Draft',
         sessions: [], by: 'IZU at Village', project: '', bySupervisor: false });
       var host = document.getElementById('formLib');
       if (!host) return;
