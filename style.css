@@ -2722,3 +2722,5 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .rowacts a[data-acc="remove"],.rowacts a[data-toast="Rule removed"]{color:var(--color-content-danger)}
 /* Inside a dialog a long choice or status wraps rather than leaving the box. */
 .modal .acc-grid label,.modal .tbl .chip{white-space:normal}
+/* A wrapped name hangs beside its tick box instead of running under it. */
+.tbl.tight td.wrap:has(> .selbox){padding-left:calc(var(--space-3) + var(--space-6));text-indent:calc(var(--space-6) * -1)}

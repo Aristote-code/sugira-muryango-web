@@ -502,20 +502,26 @@
          names run to sixty characters, so most of them end in an ellipsis. The
          whole name is on the tooltip rather than on a wider chip. */
       var pj = el('td');
-      var pb = el('button', 'rel');
-      pb.type = 'button';
-      pb.setAttribute('data-go', 'project');
-      pb.setAttribute('data-tip', f.project);
-      pb.innerHTML = '<svg aria-hidden="true"><use href="#i-programme"/></svg>';
-      pb.appendChild(document.createTextNode(f.project));
-      pj.appendChild(pb);
+      if (f.project) {
+        var pb = el('button', 'rel');
+        pb.type = 'button';
+        pb.setAttribute('data-go', 'project');
+        pb.setAttribute('data-tip', f.project);
+        pb.innerHTML = '<svg aria-hidden="true"><use href="#i-programme"/></svg>';
+        pb.appendChild(document.createTextNode(f.project));
+        pj.appendChild(pb);
+      } else {
+        /* Made on the Forms page and not yet imported anywhere. */
+        pj.className = 'mut';
+        pj.textContent = 'Not in a project yet';
+      }
       tr.appendChild(pj);
 
       /* "Module 6", not "6.The Importance of Good Health" — the rest of the
          app says Module 6, and the full title on the row pushed every other
          column off the card. It is on the tooltip. */
       var used = el('td', 'mut');
-      used.textContent = !f.sessions.length ? 'The project itself'
+      used.textContent = !f.project ? '\u2014' : !f.sessions.length ? 'The project itself'
         : f.sessions.length === 1 ? shortSession(f.sessions[0])
           : f.sessions.length + ' modules';
       if (f.sessions.length > 1 || shortSession(f.sessions[0]) !== f.sessions[0]) {
@@ -574,13 +580,40 @@
   /* the two places that announce how many forms there are read the library,
      so neither can drift from it */
   function mountCounts() {
-    ['formCount', 'formCountRail'].forEach(function (id) {
+    var by = function (st) { return library.filter(function (f) { return f.status === st; }).length; };
+    var val = { formCount: library.length, formCountRail: library.length,
+      formCountActive: by('Active'), formCountDraft: by('Draft'), formCountArchived: by('Archived') };
+    Object.keys(val).forEach(function (id) {
       var n = document.getElementById(id);
-      if (n) n.textContent = String(library.length);
+      if (n) n.textContent = String(val[id]);
     });
   }
 
   function mount() { mountTree(); mountList(); mountCounts(); }
+
+  /* A form created on the Forms page joins the library as a draft that no
+     project carries yet, and the list is drawn again from the library so the
+     new row is a row like any other: selectable, sortable, counted. */
+  window.SugiraForms = {
+    add: function (name, rw) {
+      library.unshift({ name: name, rw: rw || '', questions: 0, responses: 0, status: 'Draft',
+        sessions: [], by: 'IZU at Village', project: '', bySupervisor: false });
+      var host = document.getElementById('formLib');
+      if (!host) return;
+      var page = host.closest('.screen');
+      Array.prototype.forEach.call(page ? page.querySelectorAll('.tq') : [], function (b) { b.remove(); });
+      host.innerHTML = '';
+      mountList();
+      mountCounts();
+      /* The new toolbar lands after the page's own button; put the button back
+         at the end of the row, where every list keeps its primary action. */
+      setTimeout(function () {
+        var acts = page && page.querySelector('.filters .acts');
+        var end = acts && (acts.closest('.end') || acts);
+        if (end) end.parentNode.appendChild(end);
+      }, 60);
+    }
+  };
 
   /* Mount now rather than on DOMContentLoaded. Every script here is deferred,
      so the document is already parsed when this runs, and app.js — loaded

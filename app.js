@@ -32,6 +32,7 @@
     login:        { crumbs: [['Sign in', null]],                                          nav: null },
 
     programme:    { crumbs: [['Projects', null]],                                        nav: 'programme' },
+    forms:        { crumbs: [['Forms', null]],                                           nav: 'forms' },
     project:      { crumbs: [['Projects', 'programme'], ['Household Module Tracking', null]],
                     nav: 'programme' },
     module:       { crumbs: [['Projects', 'programme'], ['Household Module Tracking', 'project'],
@@ -64,6 +65,7 @@
     permissions:   'A position is built on the one below it and may only add to it, so nobody starts from 112 blank checkboxes \u2014 which is what produced 21 roles for 10 jobs, three of them called Test role. Open a position to see what it starts from, the few things it adds, and the stored names behind them. Where a position applies \u2014 which sector, which district \u2014 is set when it is given to a person, not here.',
     places:        'The administrative hierarchy every role is scoped against, and every household belongs to. Six levels from province down to IZU. The programme runs in five districts across four provinces.',
     profile:       'What your own position lets you do, read from it rather than set here. Changing any of it means changing the position, which is done in Positions & access.',
+    forms:         'Every form in the programme. A form is made here once, with who can see it, fill it in and read what comes back; projects and modules then import it.',
     programme:     'What a home visit contains: the projects, their modules, the forms the visitor fills in, and the cohorts that decide who gets which module when.',
     reports:       'Every report built in a project, by project, module and form.',
     roles:         'The positions as the live system stores them, kept until FXB has seen both. A position that duplicates another is one to merge, not one to keep.',
@@ -550,7 +552,6 @@
           + '<div class="wz-nav"><button type="button" class="btn sec sm" data-wzgo="-1">Back</button></div>',
       /* One way forward: the dialog's own button is Next until the last step,
          where it becomes Create form. */
-      onOk: function (body) { if (body._wzAt < 2) { body._wzStep(body._wzAt + 1); return false; } },
       init: function (body) {
         var at = 0;
         function step(n) {
@@ -595,6 +596,14 @@
         can.addEventListener('drop', function (e) { e.preventDefault(); add(e.dataTransfer.getData('text/plain')); });
         body._wzStep = step;
         step(0);
+      },
+      onOk: function (body) {
+        if (body._wzAt < 2) { body._wzStep(body._wzAt + 1); return false; }
+        /* A form needs a name before it can be made. */
+        var nm = body.querySelector('#f-fn');
+        if (!nm.value.trim()) { body._wzStep(0); say('Give the form a name in English'); nm.focus(); return false; }
+        /* The new form arrives on the Forms page as a draft, not yet in any project. */
+        if (window.SugiraForms) window.SugiraForms.add(nm.value.trim(), body.querySelector('#f-fnr').value.trim());
       },
       done: function (body) {
         var n = body.querySelector('#f-fn').value.trim();
