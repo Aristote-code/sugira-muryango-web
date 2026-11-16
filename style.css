@@ -2724,3 +2724,11 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .modal .acc-grid label,.modal .tbl .chip{white-space:normal}
 /* A wrapped name hangs beside its tick box instead of running under it. */
 .tbl.tight td.wrap:has(> .selbox){padding-left:calc(var(--space-3) + var(--space-6));text-indent:calc(var(--space-6) * -1)}
+/* Grouped filters: the page's filters live in the table's Filters panel,
+   so their chips leave the toolbar. */
+.filters.grouped > .fl,.tq.grouped .fl{display:none}
+.qrow .qf-fixed{cursor:default;color:var(--color-content-secondary)}
+.qrow .qf-fixed:hover{border-color:var(--color-border-default)}
+/* Filters grouped in the panel speak through the button's count, not a strip. */
+.filters.grouped + .flsum{display:none}
+.tfoot .pg[hidden]{display:none}

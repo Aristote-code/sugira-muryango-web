@@ -657,6 +657,8 @@
       return days(d) >= win[0] && days(d) <= win[1];
     }
     var v = value.toLowerCase();
+    /* A cohort is its number, whether the cell says "1" or "Cohort 1 · 2026". */
+    if (key === 'cohort') return (t.match(/\d+/) || [''])[0] === v.replace(/\D/g, '');
     /* A table that spells a place out across Village, Cell, Sector and
        District columns is matched on the whole row, and on the province the
        row carries, so any level of the place tree finds it. */
@@ -844,9 +846,16 @@
     btn.setAttribute('aria-expanded', 'false');
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      window.SugiraMenu.show(btn, dim.tree ? placeItems(btn) : listItems(btn, dim),
-                             { width: dim.tree ? 220 : 200 });
+      openAt(btn, btn);
     });
+  }
+  /* A chip's menu, shown under whatever asked for it: the chip itself, or its
+     row in the table's Filters panel. */
+  function openAt(btn, anchor) {
+    var dim = DIMENSIONS[keyOf(btn)];
+    if (!dim) return;
+    window.SugiraMenu.show(anchor, dim.tree ? placeItems(btn) : listItems(btn, dim),
+                           { width: dim.tree ? 220 : 200 });
   }
 
   $$('.filters .fl').forEach(wire);
@@ -872,6 +881,12 @@
      and it must go through the same path a click does, so the two can never
      hold different ideas of what the screen is showing. */
   window.SugiraFilters = {
+    /* For the table's Filters panel, which holds these chips as its rows. */
+    open: function (btn, anchor) { openAt(btn, anchor || btn); },
+    isOn: function (btn) { var d = DIMENSIONS[keyOf(btn)]; return !!d && valueOf(btn) !== d.all; },
+    name: function (btn) { var k = btn.querySelector('.k'); return k ? k.textContent.trim() : ''; },
+    value: function (btn) { return valueOf(btn); },
+    reset: function (btn) { var d = DIMENSIONS[keyOf(btn)]; if (!d) return; setValue(btn, d.all); apply(btn); },
     /* Published so the place tree spreads these numbers rather than
        inventing its own and totalling to the same national figure. */
     board: function () { return BOARD; },

@@ -3396,6 +3396,44 @@
 
     var filterBtn = bar.querySelector('[data-q="filter"]');
     var colsBtn = bar.querySelector('[data-q="cols"]');
+
+    /* ---- grouped filters ----
+       "Group filters on tables", the way ClickUp does: one Filter button, and
+       behind it one Filters panel where each filter is a row and Add filter
+       adds another. The place, cohort, module and date filters used to stand
+       on the toolbar as a row of chips beside that button. They now live in
+       the panel with the rest; the chips stay in the page, out of sight, so
+       everything that reads or sets them still finds them. */
+    var dimOn = {};
+    /* The page's filter row: the one this toolbar joined, or the one the
+       panel or page carries further up (IZU monitoring has its figures in
+       between). */
+    var dimBar = joined ? fRow : ((scope && scope.querySelector('.filters')) || (scr && scr.querySelector('.filters')));
+    if (dimBar && dimBar.closest('#s-dashboard')) dimBar = null;
+    function dims() {
+      var out = [];
+      if (dimBar) out = out.concat([].slice.call(dimBar.querySelectorAll(':scope > .fl')));
+      out = out.concat([].slice.call(bar.querySelectorAll('.fl')));
+      return out.filter(function (b) { return b.querySelector('.k') && !b.classList.contains('grpby'); });
+    }
+    function dimsOn() {
+      var F = window.SugiraFilters;
+      return dims().filter(function (b) { return F && F.isOn(b); });
+    }
+    function groupChips() {
+      if (dimBar) dimBar.classList.add('grouped');
+      bar.classList.add('grouped');
+    }
+    groupChips();
+    function paintFilterBtn() {
+      var n = activeCount();
+      filterBtn.classList.toggle('on', n > 0);
+      filterBtn.innerHTML = ICON.filter + 'Filter' + (n ? '<span class="n">' + n + '</span>' : '');
+    }
+    document.addEventListener('filters:applied', function () {
+      paintFilterBtn();
+      if (live(fPop)) drawFilters();
+    });
     var count = bar.querySelector('.tq-count');
     /* The duplicate Export still goes: two buttons doing one thing is a
        choice nobody wants to make. The Filter stays. It used to go for the
@@ -3469,7 +3507,7 @@
     }
 
     function activeCount() {
-      return state.rules.filter(function (r) { return ruleReady(r); }).length;
+      return state.rules.filter(function (r) { return ruleReady(r); }).length + dimsOn().length;
     }
     /* A half-built row filters nothing rather than everything: you pick a
        column before you have said what to compare it to, and the table
@@ -3494,10 +3532,11 @@
       clear.type = 'button';
       clear.className = 'qclear';
       clear.textContent = 'Clear all';
-      clear.hidden = !state.rules.length;
+      clear.hidden = !state.rules.length && !dimsOn().length;
       clear.onclick = function (e) {
         e.stopPropagation();
-        state.rules = []; state.match = 'and';
+        state.rules = []; state.match = 'and'; dimOn = {};
+        dimsOn().forEach(function (b) { window.SugiraFilters.reset(b); });
         apply(); drawFilters();
       };
       head.appendChild(clear);
@@ -3528,8 +3567,14 @@
         box.appendChild(m);
       }
 
+      dims().forEach(function (b) {
+        var F = window.SugiraFilters;
+        var key = F.name(b);
+        if (!F.isOn(b) && !dimOn[key]) return;
+        box.appendChild(dimRow(b, key));
+      });
       state.rules.forEach(function (r, n) { box.appendChild(ruleRow(r, n)); });
-      if (!state.rules.length) {
+      if (!state.rules.length && !box.querySelector('.qdim')) {
         var none = document.createElement('p');
         none.className = 'qnone';
         none.textContent = 'Nothing filtered.';
@@ -3544,11 +3589,66 @@
       add.appendChild(document.createTextNode('Add filter'));
       add.onclick = function (e) {
         e.stopPropagation();
-        var first = cols.filter(function (c) { return c.shown; })[0] || cols[0];
-        state.rules.push({ i: first ? first.i : null, op: 'is', v: '', v2: '' });
-        drawFilters();
+        var F = window.SugiraFilters;
+        var anyCol = function () {
+          var first = cols.filter(function (c) { return c.shown; })[0] || cols[0];
+          state.rules.push({ i: first ? first.i : null, op: 'is', v: '', v2: '' });
+          drawFilters();
+        };
+        var free = dims().filter(function (b) { return !F.isOn(b) && !dimOn[F.name(b)]; });
+        if (!free.length || !window.SugiraMenu) { anyCol(); return; }
+        window.SugiraMenu.show(add, free.map(function (b) {
+          return { label: F.name(b), onPick: function () {
+            dimOn[F.name(b)] = true;
+            drawFilters();
+            var v = fPop && fPop.querySelector('.qdim[data-k="' + F.name(b) + '"] .qf-pick');
+            if (v) F.open(b, v);
+          } };
+        }).concat([{ separator: true }, { label: 'Any other column', onPick: anyCol }]), { width: 200 });
       };
       fPop.appendChild(add);
+    }
+
+    /* One of the page's own filters, as a row: what it filters, and its value. */
+    function dimRow(b, key) {
+      var F = window.SugiraFilters;
+      var row = document.createElement('div');
+      row.className = 'qrow qdim';
+      row.setAttribute('data-k', key);
+      row.setAttribute('role', 'group');
+      row.setAttribute('aria-label', key + ' filter');
+      var name = document.createElement('span');
+      name.className = 'cselect qf qf-col qf-fixed';
+      name.innerHTML = '<span class="cselect-t"></span>';
+      name.firstChild.textContent = key;
+      row.appendChild(name);
+      var is = document.createElement('span');
+      is.className = 'cselect qf qf-op qf-fixed';
+      is.innerHTML = '<span class="cselect-t">is</span>';
+      row.appendChild(is);
+      var val = document.createElement('div');
+      val.className = 'qf-val';
+      var v = document.createElement('button');
+      v.type = 'button';
+      v.className = 'cselect qf qf-pick';
+      v.setAttribute('aria-haspopup', 'menu');
+      v.innerHTML = '<span class="cselect-t"></span><span class="cselect-c" aria-hidden="true"><svg><use href="#i-chevronDown"/></svg></span>';
+      v.firstChild.textContent = F.value(b);
+      v.onclick = function (e) { e.stopPropagation(); F.open(b, v); };
+      val.appendChild(v);
+      row.appendChild(val);
+      var kill = document.createElement('button');
+      kill.type = 'button';
+      kill.className = 'qf-x';
+      kill.setAttribute('aria-label', 'Remove the ' + key + ' filter');
+      kill.innerHTML = ICON.x || '×';
+      kill.onclick = function (e) {
+        e.stopPropagation();
+        delete dimOn[key];
+        if (F.isOn(b)) F.reset(b); else drawFilters();
+      };
+      row.appendChild(kill);
+      return row;
     }
 
     /* One condition: column, what to ask of it, what to compare against. */
@@ -3633,7 +3733,7 @@
       var c = document.createElement('span');
       c.className = 'cselect-c';
       c.setAttribute('aria-hidden', 'true');
-      c.textContent = '▾';
+      c.innerHTML = '<svg><use href="#i-chevronDown"/></svg>';
       b.appendChild(c);
       b.onclick = function (e) {
         e.stopPropagation();
@@ -3770,7 +3870,7 @@
       }
       var active = activeCount();
       filterBtn.classList.toggle('on', active > 0);
-      filterBtn.innerHTML = ICON.filter + 'Filter' + (active ? '<span class="n">' + active + '</span>' : '');
+      paintFilterBtn();
       var hiddenCols = cols.filter(function (c) { return !c.shown; }).length;
       colsBtn.classList.toggle('on', hiddenCols > 0);
       colsBtn.innerHTML = ICON.cols + 'Columns' + (hiddenCols ? '<span class="n">' + (cols.length - hiddenCols) + '</span>' : '');
