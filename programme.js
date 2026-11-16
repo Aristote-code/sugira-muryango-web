@@ -26,7 +26,7 @@
      worse than leaving the gap visible — the gap is the finding.
 
      The library is 34 forms because Translations already says "of 34". */
-  var SESSIONS = ['Welcome session', '1.Family Narrative',
+  var SESSIONS = ['Welcome module', '1.Family Narrative',
     '2.The Importance of Early Stimulation & Play', '3.Building Early Communication Skills',
     '4.The Importance of Good Hygiene', '5.The Importance of Good Nutrition',
     '6.The Importance of Good Health', '7.Managing the Stresses of Parenting and Family Life',
@@ -35,8 +35,8 @@
     '10.Good Parenting is Better than Being Born Well',
     '11.Making the Home a Place Where a Baby’s Brain Can Grow',
     '12.With a United Family, Anything is Possible',
-    'Closing session', '3-Month Booster Session', '6-Month Booster Session',
-    '12-Month Booster Session'];
+    'Closing module', '3-Month Booster Module', '6-Month Booster Module',
+    '12-Month Booster Module'];
 
   /* The twelve numbered ones. A form that goes on every module goes on the
      curriculum, not on the welcome, the closing or a booster. */
@@ -46,7 +46,7 @@
      listed these as modules of their own, with the same names as the sessions
      they shadow — the programme written out twice so that supervisors had
      somewhere to hang two forms. */
-  var MONITORED = ['Welcome session', '1.Family Narrative',
+  var MONITORED = ['Welcome module', '1.Family Narrative',
     '4.The Importance of Good Hygiene', '6.The Importance of Good Health'];
 
   /* project, tab tag, flag, its sessions, and its forms —
@@ -57,12 +57,12 @@
      that nothing in the app names is not in this list. */
   var P = [
     ['Household Module Tracking', 'tablet', null, SESSIONS, [
-      ['Family Enrollment and Composition Form', 'Ifishi yo kubarura Abagize Urugo', 24, 2210, 'Active', ['Welcome session'], 'IZU at Village'],
-      ['Anthropometric measurement', 'Gupima imikurire y’abana', 9, 1884, 'Active', ['Welcome session', '6.The Importance of Good Health'], 'IZU at Village'],
+      ['Family Enrollment and Composition Form', 'Ifishi yo kubarura Abagize Urugo', 24, 2210, 'Active', ['Welcome module'], 'IZU at Village'],
+      ['Anthropometric measurement', 'Gupima imikurire y’abana', 9, 1884, 'Active', ['Welcome module', '6.The Importance of Good Health'], 'IZU at Village'],
       ['Flash weekly report on every module', 'Raporo yihuse ya buri kiganiro', 11, 986, 'Active', EVERY_SESSION, 'IZU at Village'],
       ['General Questions-Self report', 'Ibibazo Rusange ku biganiro byose', 18, 412, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
       ['Family-Specific Competencies-Self-report', 'Ibibazo ku bushobozi bwo gutanga ikiganiro', 16, 388, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
-      ['Household Module Tracking Form', 'Inyandiko y’uruzinduko', 30, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
+      ['Household Module Tracking Form', 'Inyandiko y’uruzinduko', 30, 1842, 'Active', EVERY_SESSION, 'IZU at Village'],
       ['Caregiver observation', 'Igenzura ry’umurezi', 12, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
       ['Supervisor spot-check', 'Igenzura rya superviseri', 8, 141, 'Active', ['6.The Importance of Good Health'], 'Sector lead (SLA)'],
       ['Managing the Stresses of Parenting form', '', 34, 0, 'Draft', ['7.Managing the Stresses of Parenting and Family Life'], 'IZU at Village'],
@@ -71,11 +71,11 @@
          imported into the four sessions that are monitored, like any other
          form, and the column that says who fills them in is what makes them
          monitoring forms. */
-      ['Session in action', 'Ikiganiro mu bikorwa', 22, 412, 'Active', MONITORED, 'IZU Cell Coordinator'],
+      ['Module in action', 'Ikiganiro mu bikorwa', 22, 412, 'Active', MONITORED, 'IZU Cell Coordinator'],
       ['IZU quality score', 'Amanota y’ubuziranenge bwa IZU', 16, 344, 'Active', MONITORED, 'IZU Cell Coordinator']
     ]],
-    ['Household Tracking Project', 'tablet', 'near-duplicate', ['Welcome session', '1.Family Narrative'], [
-      ['Household Module Tracking Form — version 0', '', 30, 0, 'Archived', ['Welcome session'], 'IZU at Village'],
+    ['Household Tracking Project', 'tablet', 'near-duplicate', ['Welcome module', '1.Family Narrative'], [
+      ['Household Module Tracking Form — version 0', '', 30, 0, 'Archived', ['Welcome module'], 'IZU at Village'],
       ['Household Module Tracking Form — version 1', '', 30, 0, 'Archived', ['1.Family Narrative'], 'IZU at Village']
     ]],
     ['Household Enrollment', 'tablet', null, [], [
@@ -83,14 +83,14 @@
       ['Caregiver observation (pilot)', '', 12, 412, 'Archived', [], 'IZU at Village']
     ]],
     ['Risk of Harm/other family problems Management', 'tablet', null, [], [
-      ['Risk of Harm management — intake', '', 28, 344, 'Active', [], 'IZU at Village'],
-      ['Risk of Harm management — supervisor review', '', 9, 318, 'Active', [], 'Sector lead (SLA)']
+      ['Risk of Harm management — intake', '', 28, 34, 'Active', [], 'IZU at Village'],
+      ['Risk of Harm management — follow-up', '', 9, 61, 'Active', [], 'Sector lead (SLA)']
     ]],
     ['FCG participation and interaction form', 'tablet', null, [], [
       ['FCG participation and interaction', '', 14, 1204, 'Active', [], 'IZU at Village']
     ]],
     ['Play Collaborative Meetings', 'tablet', null, [], [
-      ['Play session attendance', '', 10, 876, 'Active', [], 'IZU at Village'],
+      ['Play module attendance', '', 10, 876, 'Active', [], 'IZU at Village'],
       ['Sector supervision in action', '', 19, 212, 'Active', [], 'IZU Sector Coordinator']
     ]],
     ['IZU at Village Demographics', 'tablet', null, [], [
@@ -521,7 +521,7 @@
          app says Module 6, and the full title on the row pushed every other
          column off the card. It is on the tooltip. */
       var used = el('td', 'mut');
-      used.textContent = !f.project ? '\u2014' : !f.sessions.length ? 'The project itself'
+      used.textContent = !f.project ? '\u2014' : !f.sessions.length ? 'The whole project'
         : f.sessions.length === 1 ? shortSession(f.sessions[0])
           : f.sessions.length + ' modules';
       if (f.sessions.length > 1 || shortSession(f.sessions[0]) !== f.sessions[0]) {
@@ -572,7 +572,7 @@
        and the explanation belongs on the info button. */
     span.innerHTML = library.length + ' forms across ' + projects.length
       + ' projects · ' + fmt(library.reduce(function (a, f) { return a + f.responses; }, 0))
-      + ' responses · 3 from the monitoring programme';
+      + ' responses';
     foot.appendChild(span);
     host.appendChild(foot);
   }
@@ -595,23 +595,482 @@
      project carries yet, and the list is drawn again from the library so the
      new row is a row like any other: selectable, sortable, counted. */
   window.SugiraForms = {
-    add: function (name, rw, questions) {
+    add: function (name, rw, questions, extra) {
       library.unshift({ name: name, rw: rw || '', questions: questions || 0, responses: 0, status: 'Draft',
-        sessions: [], by: 'IZU at Village', project: '', bySupervisor: false });
-      var host = document.getElementById('formLib');
-      if (!host) return;
+        sessions: [], by: 'IZU at Village', project: '', bySupervisor: false,
+        created: 'A. Gahimana · FXB Rwanda · 6 November 2026', edited: 'Today by A. Gahimana',
+        strings: extra && extra.questions, rules: extra && extra.rules, required: extra && extra.required });
+      redraw();
+    }
+  };
+
+  /* ==================== the pages behind a row ====================
+     A project, a module and a form each have one page, and the row clicked
+     decides whose it is. Every figure on them is read from the lists above,
+     so the module that a form says it is in is the module that lists it,
+     and archiving, importing or removing a form changes every place that
+     shows it. */
+
+  /* Kinyarwanda names of the modules, as the project's Modules tab gives them. */
+  var RW = {
+    'Welcome module': 'Guhana ikaze', '1.Family Narrative': 'Amateka y’umuryango',
+    '2.The Importance of Early Stimulation & Play': 'Akamaro ko gukangura ubwonko hakiri kare no gukina',
+    '3.Building Early Communication Skills': 'Kubaka ubumenyi bwo kuvuga kakiri kare',
+    '4.The Importance of Good Hygiene': 'Akamaro k’isuku n’isukura', '5.The Importance of Good Nutrition': 'Akamaro k’imirire myiza',
+    '6.The Importance of Good Health': 'Akamaro k’ubuzima bwiza', '7.Managing the Stresses of Parenting and Family Life': 'Guhangana n’ imihangayiko yo kurera',
+    '8.Resolving Conflicts in the Home': 'Gukemura amakimbirane mu rugo', '9.The Important Role that Everyone Plays in Raising a Baby Well': 'Akamaro buri wese agira mu kurera neza umwana',
+    '10.Good Parenting is Better than Being Born Well': 'Uburere bwiza', '11.Making the Home a Place Where a Baby’s Brain Can Grow': 'Guhindura mu rugo nk’ahantu hatekanye',
+    '12.With a United Family, Anything is Possible': 'Umuryango ushyizehamwe nta kiwunanira', 'Closing module': 'Gusoza ibiganiro',
+    '3-Month Booster Module': 'Ikiganiro Nshimangira cya Nyuma y’amezi 3', '6-Month Booster Module': 'Ikiganiro Nshimangirabiganiro cya Nyuma y’amezi 6',
+    '12-Month Booster Module': 'Ikiganiro Nshimangirabiganiro cya Nyuma y’amezi 12'
+  };
+  /* What the app calls a module where it is named: "Module 6", "Welcome module". */
+  function modName(s) {
+    var m = /^(\d+)\.(.*)$/.exec(s);
+    if (m) return m[2];
+    return s.replace(/ ?[Ss]ession$/, ' module').replace(/Booster module/, 'Booster module');
+  }
+  function modShort(s) {
+    var m = /^(\d+)\./.exec(s);
+    return m ? 'Module ' + m[1] : modName(s);
+  }
+  /* Forms taken out of a module, kept there under Archived forms. */
+  var archivedIn = {
+    'Household Module Tracking|6.The Importance of Good Health': [
+      { name: 'Household Module Tracking Form — version 2', responses: 412, when: '3 Aug 2026', by: 'A. Gahimana' },
+      { name: 'Growth check (pilot)', responses: 96, when: '19 Jun 2026', by: 'C. Uwimana' }
+    ]
+  };
+  function archOf(p, s) { var k = p.name + '|' + s; return archivedIn[k] || (archivedIn[k] = []); }
+
+  var cur = { project: projects[0], session: '6.The Importance of Good Health', form: null };
+  function formByName(n) {
+    n = String(n || '').replace(/\s+/g, ' ').trim();
+    var hit = library.filter(function (f) { return f.name === n; })[0];
+    if (hit) return hit;
+    return library.filter(function (f) { return n.indexOf(f.name) === 0; })
+      .sort(function (a, b) { return b.name.length - a.name.length; })[0] || null;
+  }
+  /* A form keeps the number it was given, whatever is added after it. */
+  var lastId = 3;
+  library.forEach(function (f) { f.id = 'FORM-' + (++lastId); });
+  function formId(f) { if (!f.id) f.id = 'FORM-' + (++lastId); return f.id; }
+  function projectOf(f) { return projects.filter(function (p) { return p.name === f.project; })[0] || null; }
+  function projectByName(n) {
+    n = String(n || '').replace(/\s+/g, ' ').trim();
+    return projects.filter(function (p) { return n === p.name || n.indexOf(p.name) === 0; })
+      .sort(function (a, b) { return b.name.length - a.name.length; })[0] || null;
+  }
+  function sessionByText(p, t) {
+    t = String(t || '').replace(/\s+/g, ' ').trim();
+    var all = p ? p.sessions : SESSIONS;
+    var exact = all.filter(function (s) { return t.indexOf(s) > -1; }).sort(function (a, b) { return b.length - a.length; })[0];
+    if (exact) return exact;
+    var m = /Module (\d+)/.exec(t);
+    if (m) return all.filter(function (s) { return s.indexOf(m[1] + '.') === 0; })[0] || null;
+    return null;
+  }
+  function h(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function ic(id) { return '<svg aria-hidden="true"><use href="#i-' + id + '"/></svg>'; }
+  function rel(go, icon, text, recid, view) {
+    return '<button class="rel" type="button" data-go="' + go + '"' + (recid ? ' data-recid="' + h(recid) + '"' : '')
+      + (view ? ' data-view="' + view + '"' : '') + '>' + ic(icon) + h(text) + '</button>';
+  }
+  function chipH(text, kind) { return '<span class="chip' + (kind ? ' ' + kind : '') + '"><i></i>' + h(text) + '</span>'; }
+  function stChip(st) { return chipH(st, st === 'Active' ? 'ok' : st === 'Draft' ? 'warn' : ''); }
+  function field(sc, label, html) {
+    Array.prototype.forEach.call(sc.querySelectorAll('.pg .pgr'), function (row) {
+      var k = row.querySelector('.k > span:last-child') || row.querySelector('.k span');
+      if (!k || k.textContent.trim().toLowerCase() !== label.toLowerCase()) return;
+      var v = row.querySelector('.v');
+      var empty = html == null || html === '';
+      v.innerHTML = empty ? '&mdash;' : html;
+      v.classList.toggle('empty', empty);
+      row.classList.toggle('is-empty', empty);
+    });
+  }
+  function panel(sc, id, html) { var p = sc.querySelector('[data-panelid="' + id + '"]'); if (p) p.innerHTML = html; return p; }
+  function tabChip(sc, id, n) {
+    var t = sc.querySelector('.tab[data-panel="' + id + '"]');
+    if (!t) return;
+    var c = t.querySelector('.chip');
+    if (n == null) { if (c) c.remove(); return; }
+    if (!c) { c = el('span', 'chip'); c.style.marginLeft = 'var(--space-2)'; t.appendChild(c); }
+    c.textContent = String(n);
+  }
+  function head(sc, key, id, title, alt) {
+    var rid = sc.querySelector('.rec-id'), was = rid ? rid.textContent : '';
+    if (rid) rid.textContent = id;
+    var h1 = sc.querySelector('h1');
+    if (h1) h1.textContent = title;
+    var a = sc.querySelector('.rec-alt');
+    if (a) { a.textContent = alt || ''; a.hidden = !alt; }
+    var sd = window.SugiraScreens && window.SugiraScreens[key];
+    if (sd && sd.crumbs && sd.crumbs.length) sd.crumbs[sd.crumbs.length - 1][0] = id;
+    Array.prototype.forEach.call(document.querySelectorAll('#dwCrumbs *, #crumbs *'), function (n) {
+      if (n.children.length === 0 && n.textContent.trim() === was) n.textContent = id;
+    });
+  }
+  /* The Fields section under a record holds its names in both languages;
+     it follows the record like everything else on the page. */
+  function fieldsOf(sc, vals) {
+    Array.prototype.forEach.call(sc.querySelectorAll('.fields .fld'), function (r) {
+      var k = r.querySelector('.fld-k span:last-child');
+      if (!k || !(k.textContent in vals)) return;
+      var v = vals[k.textContent];
+      var cells = r.querySelectorAll('.v');
+      var put = function (c, t) { c.textContent = t || 'Empty'; c.classList.toggle('empty', !t); };
+      if (v && typeof v === 'object') { if (cells[0]) put(cells[0], v.en); if (cells[1]) put(cells[1], v.rw); }
+      else if (cells[0]) put(cells[0], v);
+    });
+  }
+  /* Where a form sits says the way back to it: its project and module,
+     or the Forms page for one no project carries yet. */
+  function crumbsFor(f) {
+    var sd = window.SugiraScreens && window.SugiraScreens.form;
+    if (!sd) return;
+    var p = projectOf(f);
+    sd.crumbs = !p ? [['Forms', 'forms'], [formId(f), null]]
+      : [['Projects', 'programme'], [p.name, 'project']].concat(f.sessions.length === 1 ? [[modName(f.sessions[0]), 'module']] : []).concat([[formId(f), null]]);
+  }
+  function usedIn(f) {
+    if (!f.project) return 'Not in a project yet';
+    if (!f.sessions.length) return 'The whole project';
+    if (f.sessions.length >= 12) return 'Every module';
+    return f.sessions.map(modShort).join(', ');
+  }
+
+  /* ---- the form ---- */
+  function fillForm(f) {
+    var sc = document.getElementById('s-form');
+    if (!sc || !f) return;
+    cur.form = f;
+    var p = projectOf(f);
+    head(sc, 'form', formId(f), f.name, f.rw);
+    fieldsOf(sc, { 'Form name': { en: f.name, rw: f.rw }, 'Version': f.status === 'Draft' ? '1' : '4', 'Archived': f.status === 'Archived' ? 'Yes' : 'No' });
+    field(sc, 'Status', '<span class="pg-badge ' + (f.status === 'Active' ? 'ok' : f.status === 'Draft' ? 'warn' : '') + '">' + h(f.status) + '</span>');
+    field(sc, 'Used in', !f.project ? 'Not in a project yet' : !f.sessions.length ? 'The whole project'
+      : f.sessions.slice(0, 4).map(function (s) { return rel('module', 'programme', modShort(s), s); }).join('')
+        + (f.sessions.length > 4 ? '<span class="conseq">and ' + (f.sessions.length - 4) + ' more</span>' : ''));
+    field(sc, 'Project', p ? rel('project', 'project', p.name, p.name) : '');
+    var req = f.required != null ? f.required : Math.round(f.questions * 0.37);
+    field(sc, 'Questions', f.questions ? f.questions + ' <span class="chip">' + req + ' required</span>' : '');
+    field(sc, 'Time expected', Math.max(5, Math.round(f.questions * 1.33)) + ' minutes');
+    field(sc, 'Languages', f.rw ? chipH('EN · RW', 'ok') : chipH('EN only', 'warn'));
+    if (f.created) field(sc, 'Created by', h(f.created));
+    if (f.edited) field(sc, 'Last edited', h(f.edited));
+    tabChip(sc, 'data', f.responses);
+    /* where the responses are read, the form, project and module they belong to */
+    Array.prototype.forEach.call(sc.querySelectorAll('.dhead'), function (d, i) {
+      d.innerHTML = i === 0
+        ? chipH('Form · ' + f.name) + (p ? chipH('Project · ' + p.name) : '') + (f.sessions.length === 1 ? chipH('Module · ' + modShort(f.sessions[0])) : '')
+        : chipH(f.name) + (p ? chipH('in ' + p.name) : '');
+    });
+    var dataP = sc.querySelector('[data-panelid="data"]');
+    if (dataP) {
+      var foot = dataP.querySelector('.tfoot span:not(.pg)');
+      Array.prototype.forEach.call(dataP.querySelectorAll('table.tbl tbody tr'), function (r) { r.classList.toggle('f-none', !f.responses); });
+      if (foot) foot.textContent = f.responses ? 'Showing 1–' + Math.min(4, f.responses) + ' of ' + fmt(f.responses) : 'No response yet';
+      var rt = dataP.querySelector('.rt');
+      if (rt) rt.innerHTML = '<i></i>' + fmt(f.responses) + ' responses';
+    }
+    var trf = sc.querySelector('#trTable');
+    if (trf && f.strings) {
+      var strs = [{ en: f.name, rw: f.rw }];
+      f.strings.forEach(function (q) {
+        strs.push({ en: q.en, rw: q.rw });
+        (q.opts || []).forEach(function (o) { strs.push(o === 'Yego' ? { en: 'Yes', rw: 'Yego' } : o === 'Oya' ? { en: 'No', rw: 'Oya' } : { en: o, rw: '' }); });
+      });
+      if (!trf._static) trf._static = trf.tBodies[0].innerHTML;
+      trf.tBodies[0].innerHTML = strs.map(function (x, i) {
+        return '<tr><td class="mut">' + (i + 1) + '</td><td>' + h(x.en) + '</td><td><span class="v' + (x.rw ? '' : ' mut') + '" data-ftype="text">' + h(x.rw || 'Not translated')
+          + '</span></td><td>' + (x.rw ? 'A. Gahimana' : '—') + '</td><td class="num mut">' + (x.rw ? 'Today' : '—') + '</td></tr>';
+      }).join('');
+      f.questions = Math.max(f.questions, f.strings.length);
+      var tf2 = trf.closest('.card').querySelector('.tfoot span:not(.pg)');
+      if (tf2) tf2.textContent = strs.filter(function (x) { return x.rw; }).length + ' of ' + strs.length + ' in Kinyarwanda';
+      var pg2 = trf.closest('.card').querySelector('.tfoot .pg');
+      if (pg2) pg2.hidden = true;
+    } else if (trf && trf._static) {
+      trf.tBodies[0].innerHTML = trf._static;
+      var pg3 = trf.closest('.card').querySelector('.tfoot .pg');
+      if (pg3) pg3.hidden = false;
+    }
+    var np = sc.querySelector('[data-panelid="notify"] .card');
+    if (np) {
+      if (!np._static) np._static = np.innerHTML;
+      if (f.rules) {
+        np.innerHTML = '<div class="card-h"><h3>When a response is sent in</h3><span class="side"><button class="btn sec sm" type="button" data-modal="fnotify"><svg aria-hidden="true"><use href="#i-plus"/></svg>Add a rule</button></span></div>'
+          + (f.rules.length ? f.rules.map(function (r) {
+            return '<div class="lr"><span class="t">' + h(r.q + ' ' + r.op + ' ' + r.v) + '</span><span class="s">' + (r.msg ? '“' + h(r.msg) + '” → ' : '') + h(r.who.join(', '))
+              + '</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-toast="Rule removed">Remove</a></span></div>';
+          }).join('') : '<p class="empty-line">No rule yet</p>');
+      } else np.innerHTML = np._static;
+    }
+    if (trf && !f.strings) {
+      trf.setAttribute('data-total', String(f.questions));
+      var tf = trf.closest('.card').querySelector('.tfoot span:not(.pg)');
+      if (tf) tf.textContent = 'Showing ' + Math.min(5, f.questions) + ' of ' + f.questions;
+    }
+    if (window.SugiraFormStats) window.SugiraFormStats(f);
+    var arch = sc.querySelector('[data-modal="archive"]');
+    if (arch) arch.hidden = f.status === 'Archived';
+  }
+
+  /* ---- the module ---- */
+  function fillModule(p, s) {
+    var sc = document.getElementById('s-module');
+    if (!sc || !p || !s) return;
+    cur.project = p; cur.session = s;
+    var i = p.sessions.indexOf(s);
+    head(sc, 'module', 'MOD-' + (17 + i), modName(s), RW[s] ? RW[s].replace(/^\d+\.\s*/, '') : '');
+    fieldsOf(sc, { 'Module name': { en: modName(s), rw: (RW[s] || '').replace(/^\d+\.\s*/, '') }, 'Booster module': /Booster/.test(s) ? 'Yes' : 'No' });
+    var fs = formsOf(p, s), ar = archOf(p, s);
+    tabChip(sc, 'forms', fs.length);
+    tabChip(sc, 'marchived', ar.length);
+    panel(sc, 'forms', '<div class="card flush plainsurface"><div class="tblwrap"><table class="tbl"><thead><tr><th>Form</th><th class="num">Questions</th><th class="num">Responses</th><th>Languages</th><th>Status</th><th class="ract">Actions</th></tr></thead><tbody>'
+      + (fs.map(function (f) {
+        return '<tr data-go="form" data-recid="' + h(f.name) + '"><td class="nm">' + h(f.name) + '</td><td class="num">' + f.questions + '</td><td class="num">'
+          + (f.responses ? rel('form', 'reports', fmt(f.responses), f.name, 'tab:Data') : '0') + '</td><td>' + (f.rw ? chipH('EN · RW', 'ok') : chipH('EN only', 'warn'))
+          + '</td><td>' + stChip(f.status) + '</td><td class="rowacts"><a data-go="form" data-recid="' + h(f.name) + '">Open</a><a data-go="form" data-recid="' + h(f.name) + '" data-view="tab:Data">View data</a>'
+          + '<a data-mremove="' + h(f.name) + '">Remove</a></td></tr>';
+      }).join('') || '<tr><td colspan="6" class="mut">No form in this module yet</td></tr>')
+      + '</tbody></table></div><div class="tfoot"><span>' + fs.length + (fs.length === 1 ? ' form' : ' forms') + '</span></div></div>');
+    panel(sc, 'marchived', '<div class="card flush plainsurface"><div class="tblwrap"><table class="tbl"><thead><tr><th>Form</th><th class="num">Responses</th><th>Archived</th><th data-person>Archived by</th><th class="ract">Actions</th></tr></thead><tbody>'
+      + (ar.map(function (a) {
+        var known = formByName(a.name) && formByName(a.name).name === a.name;
+        return '<tr><td class="nm">' + h(a.name) + '</td><td class="num">' + fmt(a.responses) + '</td><td class="mut">' + h(a.when) + '</td><td>' + h(a.by) + '</td><td class="rowacts">'
+          + (known ? '<a data-go="form" data-recid="' + h(a.name) + '" data-view="tab:Data">View data</a><a data-mrestore="' + h(a.name) + '">Restore</a>' : '<a data-go="data">View data</a>') + '</td></tr>';
+      }).join('') || '<tr><td colspan="5" class="mut">Nothing archived</td></tr>')
+      + '</tbody></table></div><div class="tfoot"><span>' + ar.length + ' archived</span></div></div>');
+  }
+
+  /* ---- the project ---- */
+  function fillProject(p) {
+    var sc = document.getElementById('s-project');
+    if (!sc || !p) return;
+    cur.project = p;
+    head(sc, 'project', 'PRJ-' + (projects.indexOf(p) + 1), p.name);
+    fieldsOf(sc, { 'Project name': { en: p.name, rw: p === projects[0] ? 'Gukurikirana amasomo y’umuryango' : '' },
+      'Description': { en: p === projects[0] ? 'The core home-visiting curriculum: twelve fortnightly modules, a welcome, a closing and three boosters.' : '', rw: '' } });
+    var live = p.forms.filter(function (f) { return f.status !== 'Archived'; });
+    field(sc, 'Status', '<span class="pg-badge ' + (live.some(function (f) { return f.status === 'Active'; }) ? 'ok">Active' : '">Archived') + '</span>');
+    field(sc, 'Modules', p.sessions.length ? p.sessions.length + (p.sessions.length === 1 ? ' module' : ' modules') : 'Forms only, no modules');
+    field(sc, 'Forms', live.length + (live.length === 1 ? ' form' : ' forms'));
+    field(sc, 'Translation', live.filter(function (f) { return f.rw; }).length + ' of ' + live.length + ' forms');
+    field(sc, 'Mobile app', p.tags === 'tablet' ? 'Yes' : 'No');
+    tabChip(sc, 'modules', p.sessions.length || null);
+    tabChip(sc, 'forms', live.length);
+    var tm = sc.querySelector('.tab[data-panel="modules"]');
+    if (tm) tm.hidden = !p.sessions.length;
+    var mp = panel(sc, 'modules', '<div class="card flush plainsurface"><div class="tblwrap"><table class="tbl"><thead><tr><th style="width:3rem">#</th><th>Module</th><th>Kinyarwanda</th><th>Status</th><th class="num">Forms</th></tr></thead><tbody>'
+      + p.sessions.map(function (s) {
+        var fs = formsOf(p, s), n = /^(\d+)\./.exec(s);
+        return '<tr data-go="module" data-recid="' + h(s) + '"><td class="mut">' + (n ? n[1] : '—') + '</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module">' + ic('chevronRight') + '</button>'
+          + h(modName(s)) + '</td><td class="mut">' + h((RW[s] || '').replace(/^\d+\.\s*/, '')) + '</td><td>' + chipH('Active', 'ok') + '</td><td class="num">' + fs.length + '</td></tr>'
+          + '<tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>' + fs.length + (fs.length === 1 ? ' form' : ' forms') + '</b><button class="btn sec sm" type="button" data-modal="addform" data-session="' + h(s) + '">' + ic('plus') + ' Add a form</button></div>'
+          + fs.map(function (f) {
+            return '<div class="lr"><span class="t">' + h(f.name) + '</span><span class="c rowacts"><a data-go="form" data-recid="' + h(f.name) + '">Open</a><a data-go="form" data-recid="' + h(f.name) + '" data-view="tab:Data">View data</a></span></div>';
+          }).join('') + '</div></td></tr>';
+      }).join('') + '</tbody></table></div><div class="tfoot"><span>' + p.sessions.length + ' modules</span></div></div>');
+    if (!p.sessions.length && tm && tm.classList.contains('on')) {
+      var tf = sc.querySelector('.tab[data-panel="forms"]');
+      if (tf) tf.click();
+    }
+    panel(sc, 'forms', '<div class="filters"><span class="side" style="margin-left:auto"><button class="btn sm" type="button" data-modal="addform">' + ic('plus') + ' Add a form</button></span></div>'
+      + '<div class="card flush plainsurface"><div class="tblwrap"><table class="tbl"><thead><tr><th>Form</th><th>Kinyarwanda</th><th>Used in</th><th class="num">Responses</th><th>Status</th></tr></thead><tbody>'
+      + live.map(function (f) {
+        return '<tr data-go="form" data-recid="' + h(f.name) + '"><td class="nm">' + h(f.name) + '</td><td>' + (f.rw ? h(f.rw) : rel('translations', 'alert', 'Not translated'))
+          + '</td><td class="mut">' + h(usedIn(f)) + '</td><td class="num">' + (f.responses ? rel('form', 'reports', fmt(f.responses), f.name, 'tab:Data') : '0') + '</td><td>' + stChip(f.status) + '</td></tr>';
+      }).join('') + '</tbody></table></div><div class="tfoot"><span>' + live.length + (live.length === 1 ? ' form' : ' forms') + ' in this project</span></div></div>');
+    var arch = p.forms.filter(function (f) { return f.status === 'Archived'; }).map(function (f) {
+      return { name: f.name, module: f.sessions.length ? modShort(f.sessions[0]) : '—', by: f.archivedBy || 'A. Gahimana', when: f.archivedWhen || '22 Nov 2025', responses: f.responses };
+    });
+    p.sessions.forEach(function (s) {
+      archOf(p, s).forEach(function (a) { arch.push({ name: a.name, module: modShort(s), by: a.by, when: a.when, responses: a.responses }); });
+    });
+    tabChip(sc, 'archive', arch.length || null);
+    panel(sc, 'archive', '<div class="card flush plainsurface"><div class="tblwrap"><table class="tbl"><thead><tr><th>Form</th><th>Module</th><th data-person>Archived by</th><th class="num">Archived</th><th class="num">Responses kept</th></tr></thead><tbody>'
+      + (arch.map(function (a) {
+        return '<tr><td class="nm">' + h(a.name) + '</td><td class="mut">' + h(a.module) + '</td><td class="mut">' + h(a.by) + '</td><td class="num mut">' + h(a.when) + '</td><td class="num">' + fmt(a.responses) + '</td></tr>';
+      }).join('') || '<tr><td colspan="5" class="mut">Nothing archived</td></tr>')
+      + '</tbody></table></div><div class="tfoot"><span>' + arch.length + ' archived</span></div></div>');
+  }
+
+  /* Everything that shows the library is drawn again after a change. */
+  function redraw() {
+    var host = document.getElementById('formLib');
+    if (host) {
       var page = host.closest('.screen');
       Array.prototype.forEach.call(page ? page.querySelectorAll('.tq') : [], function (b) { b.remove(); });
       host.innerHTML = '';
       mountList();
-      mountCounts();
-      /* The new toolbar lands after the page's own button; put the button back
-         at the end of the row, where every list keeps its primary action. */
       setTimeout(function () {
         var acts = page && page.querySelector('.filters .acts');
         var end = acts && (acts.closest('.end') || acts);
         if (end) end.parentNode.appendChild(end);
       }, 60);
+    }
+    mountCounts();
+    projects.forEach(function (p) {
+      p.responses = p.forms.reduce(function (a, f) { return a + f.responses; }, 0);
+    });
+    var live = function (id) { var s = document.getElementById(id); return s && (s.classList.contains('live') || s.closest('#dw')); };
+    if (live('s-module')) fillModule(cur.project, cur.session);
+    if (live('s-project')) fillProject(cur.project);
+    if (live('s-form') && cur.form) fillForm(cur.form);
+  }
+
+  /* ---- which page a click opens ---- */
+  function rowText(el) {
+    var tr = el.closest('tr');
+    if (!tr) return '';
+    var nm = tr.querySelector('.nm') || tr.cells[0];
+    return nm ? nm.textContent : '';
+  }
+  var pend = null;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-go="form"], [data-go="module"], [data-go="project"]');
+    if (!a) return;
+    var key = a.getAttribute('data-go');
+    var own = a.getAttribute('data-recid') || '';
+    var txt = own || (a.tagName === 'TR' ? rowText(a) : (a.textContent.trim() || rowText(a)));
+    var lr = a.closest('.lr');
+    if (!own && lr && a.closest('.rowacts')) txt = (lr.querySelector('.t') || {}).textContent || txt;
+    if (!own && a.closest('.rowacts') && a.closest('tr')) txt = rowText(a);
+    var job = null;
+    if (key === 'form') {
+      var f = formByName(txt) || formByName(rowText(a));
+      if (f) { crumbsFor(f); job = function () { fillForm(f); }; }
+    } else if (key === 'project') {
+      var p = projectByName(txt) || projectByName(rowText(a));
+      if (p) job = function () { fillProject(p); };
+    } else {
+      var inProj = a.closest('#s-project') ? cur.project : null;
+      var tree = a.closest('#s-programme');
+      var pj = inProj;
+      if (tree) {
+        var at = a.closest('tr');
+        while (at && at.classList.contains('prow-kid')) at = at.previousElementSibling;
+        if (at) pj = projectByName(rowText(at));
+      }
+      pj = pj || projects[0];
+      var s = sessionByText(pj, txt) || sessionByText(pj, rowText(a));
+      if (s) job = function () { fillModule(pj, s); };
+    }
+    if (!job) return;
+    pend = job;
+    setTimeout(function () { if (pend) { var j = pend; pend = null; j(); } }, 0);
+  }, true);
+
+  /* ---- taking a form out of a module, and putting it back ---- */
+  document.addEventListener('click', function (e) {
+    var rm = e.target.closest('[data-mremove]'), rs = e.target.closest('[data-mrestore]');
+    if (!rm && !rs) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var p = cur.project, s = cur.session;
+    if (rs) {
+      var nm = rs.getAttribute('data-mrestore'), f0 = formByName(nm);
+      var list = archOf(p, s);
+      archivedIn[p.name + '|' + s] = list.filter(function (x) { return x.name !== nm; });
+      if (f0 && f0.sessions.indexOf(s) === -1) f0.sessions.push(s);
+      redraw();
+      if (window.SugiraToast) window.SugiraToast.say('“' + nm + '” is back in ' + modShort(s));
+      return;
+    }
+    var f = formByName(rm.getAttribute('data-mremove'));
+    if (!f || !window.SugiraModal) return;
+    window.SugiraModal.ask({
+      title: 'Remove “' + f.name + '” from ' + modShort(s) + '?', ok: 'Remove', body: '',
+      onOk: function () {
+        f.sessions = f.sessions.filter(function (x) { return x !== s; });
+        archOf(p, s).unshift({ name: f.name, responses: f.responses, when: '6 Nov 2026', by: 'A. Gahimana' });
+        redraw();
+      },
+      done: '“' + f.name + '” removed from ' + modShort(s) + ' · under Archived forms'
+    });
+  }, true);
+
+  window.SugiraProg = {
+    /* What Add form is adding to, and what is already there. */
+    context: function (from) {
+      var sxs = from && from.getAttribute && from.getAttribute('data-session');
+      if (from && from.closest && from.closest('#s-module')) return { kind: 'module', project: cur.project, session: cur.session };
+      if (sxs) return { kind: 'module', project: cur.project, session: sxs };
+      if (from && from.closest && from.closest('#s-project')) return { kind: 'project', project: cur.project };
+      return { kind: 'module', project: cur.project, session: cur.session };
+    },
+    has: function (ctx) {
+      return ctx.kind === 'project'
+        ? ctx.project.forms.filter(function (f) { return f.status !== 'Archived'; }).map(function (f) { return f.name; })
+        : formsOf(ctx.project, ctx.session).map(function (f) { return f.name; });
+    },
+    offer: function (ctx) {
+      var have = this.has(ctx);
+      return library.filter(function (f) { return f.status !== 'Archived' && have.indexOf(f.name) === -1; });
+    },
+    importInto: function (ctx, names) {
+      names.forEach(function (n) {
+        var f = formByName(n);
+        if (!f) return;
+        if (!f.project || ctx.kind === 'project' && f.project !== ctx.project.name) {
+          /* a form made on the Forms page joins the project it is imported into */
+          if (!f.project) {
+            f.project = ctx.project.name;
+            if (ctx.project.forms.indexOf(f) === -1) ctx.project.forms.push(f);
+          } else if (ctx.project.forms.indexOf(f) === -1) {
+            var copy = {};
+            Object.keys(f).forEach(function (k) { copy[k] = f[k]; });
+            copy.project = ctx.project.name; copy.sessions = [];
+            ctx.project.forms.push(copy);
+            library.push(copy);
+            f = copy;
+          }
+        }
+        if (ctx.kind === 'module' && f.sessions.indexOf(ctx.session) === -1) {
+          if (f.project !== ctx.project.name && ctx.project.forms.indexOf(f) === -1) ctx.project.forms.push(f);
+          f.sessions.push(ctx.session);
+        }
+      });
+      redraw();
+    },
+    archive: function (name) {
+      var f = formByName(name);
+      if (!f) return;
+      f.status = 'Archived';
+      f.archivedBy = 'A. Gahimana';
+      f.archivedWhen = '6 Nov 2026';
+      redraw();
+    },
+    current: cur,
+    modName: modShort,
+    /* Open a form's page, on one of its tabs. */
+    open: function (name, tab) {
+      var f = formByName(name);
+      if (!f || !window.SugiraGo) return;
+      crumbsFor(f);
+      window.SugiraGo('form');
+      setTimeout(function () {
+        fillForm(f);
+        var sc = document.getElementById('s-form');
+        var t = sc && sc.querySelector('.tab[data-panel="' + tab + '"]');
+        if (t) t.click();
+      }, 80);
+    },
+    addModule: function (name, rw, booster) {
+      var p = cur.project;
+      var n = p.sessions.filter(function (s) { return /^\d+\./.test(s); }).length + 1;
+      var key = booster ? name : n + '.' + name;
+      p.sessions.push(key);
+      if (rw) RW[key] = rw;
+      redraw();
+      var live = document.getElementById('s-project');
+      if (live) fillProject(p);
     }
   };
 
@@ -621,4 +1080,10 @@
      columns to build the toolbar. Waiting for the same event would hand it a
      four-column table and then add three more behind its back. */
   mount();
+  /* The pages open on these until a row says otherwise. */
+  document.addEventListener('DOMContentLoaded', function () {
+    fillProject(projects[0]);
+    fillModule(projects[0], '6.The Importance of Good Health');
+    fillForm(formByName('Household Module Tracking Form'));
+  });
 })();

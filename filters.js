@@ -24,7 +24,7 @@
   };
 
   var SESSIONS = [
-    'Welcome session', '1.Family Narrative',
+    'Welcome module', '1.Family Narrative',
     '2.The Importance of Early Stimulation & Play',
     '3.Building Early Communication Skills', '4.The Importance of Good Hygiene',
     '5.The Importance of Good Nutrition', '6.The Importance of Good Health',
@@ -33,8 +33,8 @@
     '9.The Important Role that Everyone Plays in Raising a Baby Well',
     '10.Good Parenting is Better than Being Born Well',
     "11.Making the Home a Place Where a Baby's Brain Can Grow",
-    '12.With a United Family, Anything is Possible', 'Closing session',
-    '3-Month Booster Session', '6-Month Booster Session', '12-Month Booster Session'
+    '12.With a United Family, Anything is Possible', 'Closing module',
+    '3-Month Booster Module', '6-Month Booster Module', '12-Month Booster Module'
   ];
 
   var ROLES = [
@@ -132,7 +132,7 @@
   /* National staff belong to no district, so they count only nationally. */
   var NATIONAL_USERS = 28;
   var COHORT_SHARE = { '1': 0.55, '2': 0.45, '3': 0, '4': 0 };
-  var PERIOD_SHARE = { 'Today': 0.012, 'This week': 0.08, 'This month': 0.31,
+  var PERIOD_SHARE = { 'Today': 0.0168, 'This week': 0.08, 'This month': 0.31,
                        'This year': 1, 'This cohort': 1, 'All time': 1,
                        'Date range\u2026': 0.31 };
 
@@ -286,16 +286,20 @@
     var year = get('year');
     if (year && year !== '2026') cs = 0;
     var ps = PERIOD_SHARE[period] === undefined ? 1 : PERIOD_SHARE[period];
+    /* A year with nothing in it yet has no activity to count. */
+    var live = year && year !== '2026' ? 0 : 1;
+    var share = cohort ? cs : (live ? 1 : 0);
 
     var t = { hh: 0, visits: 0, behind: 0, izu: 0, izuOn: 0, said: 0, calls: 0, maleW: 0,
               users: ds.length === Object.keys(BOARD).length ? NATIONAL_USERS : 0, roh: 0, rohOpen: 0 };
     ds.forEach(function (d) {
       var b = BOARD[d];
-      t.users += b.users; t.roh += b.roh * (cs ? 1 : 0) * Math.min(1, ps * 1.5); t.rohOpen += b.rohOpen * (cs ? 1 : 0);
+      t.users += b.users; t.roh += b.roh * share * Math.min(1, ps * 1.5); t.rohOpen += b.rohOpen * share;
       t.hh += b.hh * cs; t.visits += b.visits * cs * ps; t.behind += b.behind * cs;
-      t.izu += b.izu; t.izuOn += b.izuOn; t.said += b.said;
-      t.calls += b.calls * ps; t.maleW += b.male * b.visits * cs * ps;
+      t.izu += b.izu; t.izuOn += b.izuOn * live; t.said += b.said * live;
+      t.calls += b.calls * ps * live; t.maleW += b.male * b.visits * cs * ps;
     });
+    t.roh = Math.round(t.roh); t.rohOpen = Math.round(t.rohOpen);
     var male = t.visits ? t.maleW / t.visits : 0;
     var pct = function (a, b) { return b ? Math.round(a / b * 100) : 0; };
 
@@ -323,11 +327,19 @@
       }
       if (k === 'supervision') {
         var sd = el.querySelector('.d');
-        if (sd) sd.textContent = x.pct + '% of this month’s expected calls';
+        if (sd) sd.textContent = x.pct + '% of expected calls';
       }
       if (k === 'roh') {
         var rd = el.querySelector('.d');
         if (rd) rd.textContent = fmt(Math.max(0, x.slash - x.v)) + ' inactive';
+      }
+      if (k === 'izu') {
+        var zd = el.querySelector('.d');
+        if (zd) zd.textContent = fmt(Math.max(0, t.izu - t.izuOn)) + ' not active';
+      }
+      if (k === 'male') {
+        var md = el.querySelector('.d');
+        if (md) md.textContent = 'of ' + fmt(t.hh) + ' households';
       }
       var trk = el.querySelector('.trk i');
       if (trk) trk.style.width = Math.min(100, x.pct) + '%';
@@ -337,6 +349,20 @@
 
     drawTrend(period);
     donuts(t, male);
+    /* Needs attention: the active cases in the place filtered to, the latest two shown. */
+    var al = document.querySelector('#s-dashboard .al');
+    if (al) {
+      var rowsA = $$('.al-row', al), shownA = 0;
+      rowsA.forEach(function (r) {
+        var txt = (r.textContent || '').toLowerCase();
+        var ok = live && ds.some(function (d) { return txt.indexOf(d.toLowerCase()) > -1; });
+        r.hidden = !ok;
+        if (ok) shownA++;
+      });
+      var ct = al.querySelector('.al-hd .ct');
+      if (ct) ct.textContent = t.rohOpen + ' active risk of harm ' + (t.rohOpen === 1 ? 'case' : 'cases');
+      al.hidden = !t.rohOpen;
+    }
 
     var where = place || 'Rwanda';
     var bits = [where === 'Rwanda' ? 'All five districts' : where];
@@ -347,7 +373,7 @@
     if (sub) {
       if (!sub.dataset.base) sub.dataset.base = sub.textContent;
       sub.textContent = bits.join(' · ') +
-        (cs === 0 ? ' — this cohort has no districts yet' : '');
+        '';
     }
   }
 
@@ -481,7 +507,7 @@
      say about. A filter now applies to a table only when that table has one of
      its columns, and then it reads that column alone. */
   var COLUMN_FOR = {
-    place:    ['place', 'where', 'district'],
+    place:    ['place', 'where', 'district', 'how far it went'],
     district: ['place', 'where', 'district'],
     cohort:   ['cohort'],
     cell:     ['=cell'],
@@ -635,6 +661,16 @@
         if (v && v !== '\u2014' && seen.indexOf(v) < 0) seen.push(v);
       });
     });
+    /* Once another filter on the bar is set, what is left is the answer,
+       even when it is one value or none: falling back to the whole list
+       offered modules a project does not have. */
+    var bar = btn.closest('.filters'), others = false;
+    if (bar) $$('.fl', bar).forEach(function (o) {
+      if (o === btn) return;
+      var d = DIMENSIONS[keyOf(o)];
+      if (d && valueOf(o) !== d.all) others = true;
+    });
+    if (others && narrow) return seen.sort();
     return seen.length > 1 ? seen.sort() : dim.options;
   }
 
@@ -662,11 +698,22 @@
     /* A table that spells a place out across Village, Cell, Sector and
        District columns is matched on the whole row, and on the province the
        row carries, so any level of the place tree finds it. */
-    if (key === 'place' && headerText(row, idx) !== 'place') {
-      var all = ((row.innerText || '') + ' ' + (row.getAttribute('data-find') || '')).toLowerCase();
-      return all.indexOf(v.replace(/ province$/, '')) > -1 || districtsFor(value).some(function (d) {
-        return all.indexOf(d.toLowerCase()) > -1;
+    /* A province is matched by its districts, since no cell names a province;
+       a district or a sector by its own name, so picking Jarama does not
+       bring back the rest of Ngoma. */
+    if (key === 'place') {
+      var all = headerText(row, idx) === 'place' ? t
+        : ((row.innerText || '') + ' ' + (row.getAttribute('data-find') || '')).toLowerCase();
+      /* The names a place goes by further down: a province by its districts
+         and their sectors, a district by its sectors. */
+      var names = [value];
+      Object.keys(PLACES).forEach(function (prov) {
+        Object.keys(PLACES[prov]).forEach(function (d) {
+          if (prov === value) names = names.concat([d], PLACES[prov][d]);
+          else if (d === value) names = names.concat(PLACES[prov][d]);
+        });
       });
+      return names.some(function (n) { return all.indexOf(n.toLowerCase().replace(/ province$/, '')) > -1; });
     }
     return t === v || (v.length >= 3 && t.indexOf(v) > -1);
   }
@@ -694,7 +741,10 @@
         $$('tbody tr', table).forEach(function (r) { r.classList.remove('f-out'); });
         return;
       }
-      var rows = $$('tbody tr', table).filter(function (r) { return !r.classList.contains('t-out'); });
+      /* A search looks through every tab: an ID typed in should be found
+         whichever tab happens to be open. */
+      table.classList.toggle('q-all', !!q);
+      var rows = $$('tbody tr', table).filter(function (r) { return q || !r.classList.contains('t-out'); });
       total += rows.length;
       rows.forEach(function (row) {
         var keep = cols.every(function (c) { return cellMatches(row, c.i, c.f.value, c.f.key); });
@@ -881,6 +931,27 @@
      and it must go through the same path a click does, so the two can never
      hold different ideas of what the screen is showing. */
   window.SugiraFilters = {
+    /* How many a filtered list really holds, where the place is all that is
+       set: the rows on screen are a sample of the place, and the dashboard
+       already knows its size. */
+    whole: function (table) {
+      var screen = table.closest('.screen');
+      if (!screen || !/^s-(households|visits)$/.test(screen.id)) return 0;
+      var bar = screen.querySelector('.filters');
+      var on = bar ? activeOn(bar) : [];
+      var q = bar && bar.querySelector('.search input') && bar.querySelector('.search input').value.trim();
+      if (q || on.length !== 1 || on[0].key !== 'place') return 0;
+      var v = on[0].value, ds = districtsFor(v);
+      var isSector = !PLACES[v] && !BOARD[v] && v !== 'Rwanda';
+      var field = screen.id === 's-households' ? 'hh' : 'visits';
+      var n = ds.reduce(function (a, d) { return a + (BOARD[d] ? BOARD[d][field] : 0); }, 0);
+      if (isSector) {
+        var secs = 0;
+        Object.keys(PLACES).forEach(function (p) { Object.keys(PLACES[p]).forEach(function (d) { if (ds.indexOf(d) > -1) secs = PLACES[p][d].length; }); });
+        n = Math.round(n / (secs || 1));
+      }
+      return n;
+    },
     /* For the table's Filters panel, which holds these chips as its rows. */
     open: function (btn, anchor) { openAt(btn, anchor || btn); },
     isOn: function (btn) { var d = DIMENSIONS[keyOf(btn)]; return !!d && valueOf(btn) !== d.all; },

@@ -270,6 +270,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .rb-ind{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--space-2) var(--space-4)}
 .rb-ck{display:flex;align-items:center;gap:var(--space-2);font-size:.875rem;color:var(--color-content-secondary)}
 .rb-conds{display:grid;gap:var(--space-2)}
+/* "Every response" has nothing to compare, so the rest of the row goes */
+.rb-cond.every > :not(:first-child){display:none}
 .rb-cond{display:grid;grid-template-columns:1.4fr 1fr 1.4fr auto;gap:var(--space-2);align-items:center}
 .rb-row>.btn{justify-self:start}
 .rb-pair{display:grid;grid-template-columns:1fr auto;gap:var(--space-2)}
@@ -2100,7 +2102,8 @@ td .conseq{margin-left:var(--space-2)}
   font-size:12px;cursor:pointer;text-decoration:underline;padding:var(--space-1) var(--space-1)}
 .flclear:hover{color:var(--color-content-primary)}
 /* filtering and paging each own a flag, so neither can reveal what the other hid */
-tr.f-out,tr.p-out,tr.t-out,tr.q-out,.tr.f-out{display:none}
+tr.f-out,tr.p-out,tr.t-out,tr.q-out,.tr.f-out,tr.r-gone,tr.f-none{display:none}
+.tbl.q-all tbody tr.t-out:not(.f-out):not(.r-gone):not(.q-out){display:table-row}
 .pg button[hidden]{display:none}
 .pg button:disabled{opacity:.4;cursor:default}
 /* The account menu was the one that had drifted furthest: a hairline border
@@ -2766,6 +2769,9 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .modal .fb > .fb-pane > *,.modal .fb .fb-body > *{flex:none}
 .modal .fb-form > .fb-h{margin-top:var(--space-3)}
 .modal .fb-kind{padding:var(--space-2) var(--space-3)}
+.fb-kind.dragging{opacity:.5}
+.fb-kind[draggable="true"]{cursor:grab}
+.fb-empty.is-drop,.fb-list.is-drop{outline:2px dashed var(--color-bg-primary-default);outline-offset:var(--space-1);border-radius:var(--radius-lg)}
 /* the form's name, as its first card */
 .fb-name{display:grid;gap:var(--space-1);padding:var(--space-5) var(--space-6);border-radius:var(--radius-lg);background:var(--color-bg-surface);box-shadow:var(--x-clickup-elevation-border-1);border-top:4px solid var(--color-bg-primary-default)}
 .modal .fb-name input{height:auto;padding:0;border:0;border-radius:0;background:none;box-shadow:0 1px 0 transparent}
@@ -2783,7 +2789,12 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .modal .fb label.fb-sw{display:inline-flex;margin:0;font-size:12px;font-weight:400;color:var(--color-content-secondary)}
 .modal .fb .fb-empty{align-items:center;justify-content:center;min-height:var(--dimension-200);border:1px dashed var(--color-border-strong);border-radius:var(--radius-lg);background:var(--color-bg-surface)}
 /* what every form like this carries, under the pieces */
-.nf-side{display:flex;flex-direction:column;margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--color-border-subtle)}
+.modal #x-link .acc-p{min-width:0}
+.modal #x-link .acc-pn{white-space:normal;overflow-wrap:anywhere}
+.nf-side{display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--color-border-subtle)}
+.modal .nf-ck{display:flex;align-items:center;gap:var(--space-2);margin:0;font-size:13px;font-weight:400;color:var(--color-content-primary)}
+.modal .nf-ck input{width:auto;height:auto;padding:0;accent-color:var(--color-bg-primary-default)}
+.nf-ck svg{width:var(--space-4);height:var(--space-4);flex:none;color:var(--color-content-secondary)}
 .modal .nf-sw{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);min-height:var(--size-control-md);margin:0;position:relative;font-size:13px;font-weight:400;color:var(--color-content-primary);cursor:pointer}
 .nf-swl{display:flex;align-items:center;gap:var(--space-2);min-width:0}
 .nf-swl svg{width:var(--space-4);height:var(--space-4);flex:none;color:var(--color-content-secondary)}
@@ -2804,7 +2815,18 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .nf-rows .nf-sw + .nf-sw{border-top:1px solid var(--color-border-subtle)}
 .nf-rows .empty-line{padding:var(--space-2) 0}
 .nf-cond{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:var(--space-2);padding:0 var(--space-5)}
-.nf-msg{padding:var(--space-4) var(--space-5) var(--space-5)}
+.nf-msg{padding:var(--space-4) var(--space-5) 0}
+.nf-msg:last-child{padding-bottom:var(--space-5)}
+.nf-rules{display:flex;flex-direction:column;gap:var(--space-4)}
+.nf-rules.none{display:none}
+.nf-rule .nf-ch{justify-content:space-between}
+.nf-x{display:flex;align-items:center;justify-content:center;width:var(--size-control-xs);height:var(--size-control-xs);border:0;border-radius:var(--radius-sm);background:none;color:var(--color-content-secondary);cursor:pointer}
+.nf-x:hover{background:var(--color-bg-hover);color:var(--color-content-primary)}
+.nf-x svg{width:var(--space-4);height:var(--space-4)}
+.nf-pos{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);padding-top:var(--space-2)}
+.modal .nf-pos .rb-ck{display:flex;align-items:center;gap:var(--space-2);margin:0;font-size:13px;font-weight:400;color:var(--color-content-primary)}
+.modal .nf-pos input{width:auto;height:auto;padding:0;accent-color:var(--color-bg-primary-default)}
+.nf-add{align-self:flex-start}
 .nf-mx{width:100%;border-collapse:collapse;font-size:14px}
 .nf-mx th,.nf-mx td{height:var(--dimension-45);padding:0 var(--space-3);border-bottom:1px solid var(--color-border-subtle);text-align:center;white-space:nowrap}
 .nf-mx thead th{height:var(--size-control-lg);font-size:12px;font-weight:500;color:var(--color-content-secondary);background:var(--x-clickup-color-background-on-main)}
@@ -2816,3 +2838,4 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .modal .nf-mx input{width:var(--space-4);height:var(--space-4);padding:0;accent-color:var(--color-bg-primary-default);cursor:pointer;vertical-align:middle}
 @media (max-width:1100px){.modal .fb{grid-template-columns:var(--dimension-240) minmax(0,1fr)}.modal .fb > .fb-prev{display:none}}
 @media (max-width:760px){.scrim.xl{padding:0}.modal.xl{border-radius:0}.modal .fb{grid-template-columns:1fr}.modal .fb > .fb-kinds{display:none}.nf-steps{position:static;transform:none}.nf-sep{display:none}}
+#s-reports .tbl td.nm{min-width:var(--dimension-240)}

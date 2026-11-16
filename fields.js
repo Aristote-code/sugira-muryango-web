@@ -37,7 +37,7 @@
     module: [
       ['Module name', 'text', { en: 'The Importance of Good Health',
         rw: 'Akamaro k’ubuzima bwiza' }],
-      ['Booster session', 'choice:Yes,No', 'No']
+      ['Booster module', 'choice:Yes,No', 'No']
     ],
     form: [
       ['Form name', 'text', { en: 'Household Module Tracking Form', rw: 'Inyandiko y’uruzinduko' }],

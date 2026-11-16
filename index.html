@@ -57,7 +57,7 @@
         <span class="tx">Forms</span><span class="ct" id="formCountRail">—</span></button>
       <button class="ni" type="button" data-go="cohorts">
         <svg aria-hidden="true"><use href="#i-visits"/></svg>
-        <span class="tx">Cohorts</span><span class="ct">4</span></button>
+        <span class="tx">Cohorts</span><span class="ct">2</span></button>
       <button class="ni" type="button" data-go="reports">
         <svg aria-hidden="true"><use href="#i-reports"/></svg>
         <span class="tx">Reports</span><svg class="cr" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
@@ -79,6 +79,7 @@
       <ul class="subs" id="g-ad" hidden>
         <li><button class="si" type="button" data-go="people"><span class="tx">People</span><span class="ct">539</span></button></li>
         <li><button class="si" type="button" data-go="permissions"><span class="tx">Positions &amp; access</span><span class="ct" data-count="{positions}">8</span></button></li>
+        <li><button class="si" type="button" data-go="orgs"><span class="tx">Organisations</span></button></li>
         <li><button class="si" type="button" data-go="activity"><span class="tx">Activity</span></button></li>
       </ul>
     </div>
@@ -123,8 +124,7 @@
         <div class="acts" data-for="reports" hidden>
 <button class="btn sec" type="button" data-modal="report"><svg aria-hidden="true"><use href="#i-project"/></svg>Build one in a project</button></div>
         <div class="acts" data-for="programme" hidden>
-              <button class="btn sec" type="button" data-modal="dataexport"><svg aria-hidden="true"><use href="#i-download"/></svg>Export</button>
-              <button class="btn" type="button" data-modal="project"><svg aria-hidden="true"><use href="#i-plus"/></svg>New project</button></div>
+              <button class="btn" type="button" data-modal="project" data-offpanel="filter"><svg aria-hidden="true"><use href="#i-plus"/></svg>New project</button></div>
         <div class="acts" data-for="forms" hidden>
               <button class="btn" type="button" data-modal="form"><svg aria-hidden="true"><use href="#i-plus"/></svg>Create form</button></div>
         <div class="acts" data-for="cohorts" hidden><button class="btn" type="button" data-modal="cohort"><svg aria-hidden="true"><use href="#i-plus"/></svg>New cohort year</button></div>
@@ -178,12 +178,12 @@
                   <svg aria-hidden="true"><use href="#i-alert"/></svg><span>Needs attention</span><span class="ct">3 active risk of harm cases</span><svg class="cv" aria-hidden="true"><use href="#i-chevronRight"/></svg></button>
                 <div class="al-bd" id="al-1">
                   <div class="al-row">
-                    <span class="al-what"><span class="lb">RH-0044 &middot; Neglect</span><span class="nm" data-hold="RH-0044">I-534-107 Mukamana</span><span class="lb">Kibungo &middot; Ngoma</span></span>
-                    <span class="al-act"><span class="chip warn"><i></i>Active &middot; raised 28 Oct</span><button class="btn sec sm" type="button" data-go="case" data-recid="RH-0044">Open case</button></span>
+                    <span class="al-what"><span class="lb">RH-0045 &middot; Physical harm</span><span class="nm" data-hold="RH-0045">I-221-142 Nshimiyimana</span><span class="lb">Kigoma &middot; Nyanza</span></span>
+                    <span class="al-act"><span class="chip warn"><i></i>Active &middot; raised 6 Nov</span><button class="btn sec sm" type="button" data-go="case" data-recid="RH-0045">Open case</button></span>
                   </div>
                   <div class="al-row">
-                    <span class="al-what"><span class="lb">RH-0045 &middot; Physical harm</span><span class="nm" data-hold="RH-0045">I-221-142 Nshimiyimana</span><span class="lb">Kigoma &middot; Nyanza</span></span>
-                    <span class="al-act"><span class="chip warn"><i></i>Active &middot; raised 6 Nov</span><button class="btn sec sm" type="button" data-go="case" data-recid="RH-0045" data-title="Physical harm &mdash; child 5&ndash;17">Open case</button></span>
+                    <span class="al-what"><span class="lb">RH-0041 &middot; Neglect</span><span class="nm" data-hold="RH-0041">I-531-988 Uwase</span><span class="lb">Jarama &middot; Ngoma</span></span>
+                    <span class="al-act"><span class="chip warn"><i></i>Active &middot; raised 29 Oct</span><button class="btn sec sm" type="button" data-go="case" data-recid="RH-0041">Open case</button></span>
                   </div>
                   <div class="al-more"><button class="btn sec sm" type="button" data-go="safeguarding" data-view="tab:Open">See everything that needs attention<svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button></div>
                 </div>
@@ -219,7 +219,7 @@
               <div class="legend"><span><i class="lg pri"></i>Active 85%</span><span><i class="lg mute"></i>Resigned 15%</span></div>
             </div>
             <div class="card dnc">
-              <div class="card-h"><h3>Male caregiver session attendance</h3></div>
+              <div class="card-h"><h3>Male caregiver attendance</h3></div>
               <div class="dn" data-donut="male"><svg viewBox="0 0 42 42" role="img" aria-label="Male caregiver: 38% attended, 62% not attended"><circle class="dn-bg" cx="21" cy="21" r="15.915"/><circle class="dn-s pri" cx="21" cy="21" r="15.915" stroke-dasharray="38 62" stroke-dashoffset="25"/><circle class="dn-s warn" cx="21" cy="21" r="15.915" stroke-dasharray="62 38" stroke-dashoffset="-13"/></svg><span class="dn-c"><b>1 842</b><span>Visits</span></span></div>
               <div class="legend"><span><i class="lg pri"></i>Attended 38%</span><span><i class="lg warn"></i>Not attended 62%</span></div>
             </div>
@@ -257,7 +257,7 @@
             </div>
           </div>
 
-          <div class="sect"><div><h2>Coverage and participation<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="All thirteen programme statistics, re-scoped whenever you change the filters above."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h2></div>
+          <div class="sect"><div><h2>Coverage and participation<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="All thirteen statistics, re-scoped whenever you change the filters above."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h2></div>
             <span class="side"><span class="seg"><button type="button" class="on">This week</button><button type="button">Month</button><button type="button">Cohort</button></span></span></div>
           <div class="cols c2e">
             <div class="card">
@@ -286,7 +286,7 @@
                 <div class="hr"><span class="l">Ngoma</span><span class="t"><i style="width:41%"></i></span><span class="v">41%</span></div>
                 <div class="hr"><span class="l">Musanze</span><span class="t"><i style="width:46%"></i></span><span class="v">46%</span></div>
               </div>
-              <div class="legend"><span><i style="background:var(--amber)"></i>Below the 30% threshold</span></div>
+              <div class="legend"><span><i style="background:var(--amber)"></i>Below 30%</span></div>
             </div>
             <div class="card lg wide">
               <div class="card-h"><h3>Households reached, district &times; module</h3></div>
@@ -308,29 +308,28 @@
             </div>
           </div>
 
-          <div class="sect"><div><h2>Quality, safeguarding and needs<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The remaining programme statistics, on the same scope as everything above."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h2></div></div>
+          <div class="sect"><div><h2>Quality, safeguarding and needs<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The remaining statistics, on the same scope as everything above."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h2></div></div>
 
           <div class="stats">
             <div class="st" data-tile="reported"><div class="l" data-tip="Villages that have synced at least one record since midnight, of the 412 with a home visitor. A tablet syncs when it next finds a signal.">Reported today</div>
               <div class="vrow"><div class="v">371 <small>of 412</small></div><span class="delta down">19 silent</span></div>
-              <div class="d">Figures provisional until they sync</div><div class="trk"><i style="width:90%"></i></div></div>
+              <div class="d">Provisional</div><div class="trk"><i style="width:90%"></i></div></div>
             <div class="st" data-tile="izu"><div class="l" data-tip="Home visitors who have submitted at least one record in the last 30 days, of the 412 on the system."><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> active</div>
               <div class="vrow"><div class="v">350 <small>of 412</small></div><span class="delta up">85%</span></div>
-              <div class="d">62 dormant this quarter</div><div class="trk"><i style="width:85%"></i></div></div>
+              <div class="d">28 not active</div><div class="trk"><i style="width:85%"></i></div></div>
             <div class="st" data-tile="male"><div class="l" data-tip="Visits where the male caregiver was recorded present, as a share of all visits in the cohort window — not of households.">Male caregiver attendance</div>
               <div class="vrow"><div class="v">38<small>%</small></div><span class="delta up">&uarr; 4</span></div>
-              <div class="d">of 2 210 households &middot; up from 34%</div><div class="trk"><i style="width:38%"></i></div></div>
+              <div class="d">of 2 210 households</div><div class="trk"><i style="width:38%"></i></div></div>
             <div class="st" data-tile="supervision"><div class="l" data-tip="Telephone supervision calls logged this month against the 412 expected, one for each home visitor. Sitting in on a module is counted on IZU performance.">Supervision calls done</div>
               <div class="vrow"><div class="v">366 <small>of 412</small></div><span class="delta down">9 days left</span></div>
-              <div class="d">89% of this month&rsquo;s expected calls</div><div class="trk"><i style="width:89%"></i></div></div>
+              <div class="d">89% of expected calls</div><div class="trk"><i style="width:89%"></i></div></div>
           </div>
 
           <div class="cols c2e">
             <div class="card">
-              <div class="card-h"><h3>Average minutes per module</h3>
+              <div class="card-h"><h3>Average minutes per module<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Measured from when the form is opened to when it is sent"><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3>
                 <span class="side"><span class="chip warn">Needs validating</span></span></div>
               <div class="bars"><div class="bc"><span class="tk"><i style="height:88%"></i></span><u>1</u></div><div class="bc"><span class="tk"><i style="height:81%"></i></span><u>2</u></div><div class="bc"><span class="tk"><i style="height:91%"></i></span><u>3</u></div><div class="bc"><span class="tk"><i style="height:100%"></i></span><u>4</u></div><div class="bc"><span class="tk"><i style="height:85%"></i></span><u>5</u></div><div class="bc"><span class="tk"><i style="height:72%"></i></span><u>6</u></div><div class="bc"><span class="tk"><i style="height:77%"></i></span><u>7</u></div><div class="bc"><span class="tk"><i style="height:58%"></i></span><u>8</u></div><div class="bc"><span class="tk"><i style="height:64%"></i></span><u>9</u></div><div class="bc"><span class="tk"><i style="height:54%"></i></span><u>10</u></div><div class="bc"><span class="tk"><i style="height:47%"></i></span><u>11</u></div><div class="bc"><span class="tk"><i style="height:51%"></i></span><u>12</u></div></div>
-              <div class="legend"><span>Measured from form-open to submit</span></div>
             </div>
             <div class="card">
               <div class="card-h"><h3>Why <abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> Telephone Supervision did not happen</h3>
@@ -398,13 +397,13 @@
               </tr></thead>
               <tbody>
                 <tr data-tags="risk" data-go="household" data-find="1 1987 8 0054312 0 78 1198780054312078"><td class="nm">I-534-107</td><td>Mukamana Jeanne</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">1</td><td>6 of 12</td><td class="num mut">9 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
-                <tr data-tags="risk" data-go="household" data-find="1 1990 8 0071245 1 12 1199080071245112"><td class="nm">I-221-142</td><td>Nshimiyimana Claude</td><td class="mut">Kigoma &middot; Nyanza</td><td class="mut">2</td><td>4 of 12</td><td class="num mut">9 days ago</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
-                <tr data-tags="behind risk" data-go="household" data-find="1 1985 8 0032871 0 45 1198580032871045"><td class="nm">I-531-988</td><td>Uwase Marie</td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">1</td><td>3 of 12</td><td class="num mut">21 days ago</td><td><span class="chip warn"><i></i>Behind &middot; last visit 16 Oct</span></td></tr>
-                <tr data-tags="" data-go="household" data-find="1 1979 8 0011902 1 33 1197980011902133"><td class="nm">I-535-133</td><td>Habimana Eric</td><td class="mut">Mahama &middot; Kirehe</td><td class="mut">1</td><td>7 of 12</td><td class="num mut">2 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
-                <tr data-tags="" data-go="household" data-find="1 1993 7 0088410 0 04 1199370088410004"><td class="nm">I-224-204</td><td>Ingabire Alice</td><td class="mut">Busasamana &middot; Nyanza</td><td class="mut">2</td><td>5 of 12</td><td class="num mut">Yesterday</td><td><span class="chip ok"><i></i>On track</span></td></tr>
-                <tr data-tags="behind stale" data-go="household" data-find="1 1988 8 0040013 1 71 1198880040013171"><td class="nm">I-351-871</td><td>Niyonsenga Paul</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="mut">2</td><td>2 of 12</td><td class="num mut">34 days ago</td><td><span class="chip warn"><i></i>Behind &middot; last visit 3 Oct</span></td></tr>
-                <tr data-tags="" data-go="household" data-find="1 1996 7 0002319 0 19 1199670002319019"><td class="nm">I-413-319</td><td>Mukandayisenga Rose</td><td class="mut">Kinigi &middot; Musanze</td><td class="mut">1</td><td>9 of 12</td><td class="num mut">Today</td><td><span class="chip ok"><i></i>On track</span></td></tr>
-                <tr data-tags="behind" data-go="household" data-find="1 1991 8 0064456 0 56 1199180064456056"><td class="nm">I-538-456</td><td>Bizimana Jean</td><td class="mut">Sake &middot; Ngoma</td><td class="mut">2</td><td>1 of 12</td><td class="num mut">&mdash;</td><td><span class="chip">Not started &middot; no visit yet</span></td></tr>
+                <tr data-tags="risk" data-go="household" data-find="1 1990 8 0071245 1 12 1199080071245112"><td class="nm">I-221-142</td><td>Nshimiyimana Claude</td><td class="mut">Kigoma &middot; Nyanza</td><td class="mut">2</td><td>5 of 12</td><td class="num mut">Today</td><td><span class="chip bad"><i></i>Risk of harm</span></td></tr>
+                <tr data-tags="behind risk" data-go="household" data-find="1 1985 8 0032871 0 45 1198580032871045"><td class="nm">I-531-988</td><td>Uwase Marie</td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">1</td><td>2 of 12</td><td class="num mut">21 days ago</td><td><span class="chip warn"><i></i>Behind &middot; last visit 16 Oct</span></td></tr>
+                <tr data-tags="" data-go="household" data-find="1 1979 8 0011902 1 33 1197980011902133"><td class="nm">I-535-133</td><td>Habimana Eric</td><td class="mut">Mahama &middot; Kirehe</td><td class="mut">1</td><td>6 of 12</td><td class="num mut">2 days ago</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-tags="" data-go="household" data-find="1 1993 7 0088410 0 04 1199370088410004"><td class="nm">I-224-204</td><td>Ingabire Alice</td><td class="mut">Busasamana &middot; Nyanza</td><td class="mut">2</td><td>4 of 12</td><td class="num mut">Yesterday</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-tags="behind stale" data-go="household" data-find="1 1988 8 0040013 1 71 1198880040013171"><td class="nm">I-351-871</td><td>Niyonsenga Paul</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="mut">2</td><td>1 of 12</td><td class="num mut">34 days ago</td><td><span class="chip warn"><i></i>Behind &middot; last visit 3 Oct</span></td></tr>
+                <tr data-tags="" data-go="household" data-find="1 1996 7 0002319 0 19 1199670002319019"><td class="nm">I-413-319</td><td>Mukandayisenga Rose</td><td class="mut">Kinigi &middot; Musanze</td><td class="mut">1</td><td>8 of 12</td><td class="num mut">Today</td><td><span class="chip ok"><i></i>On track</span></td></tr>
+                <tr data-tags="behind" data-go="household" data-find="1 1991 8 0064456 0 56 1199180064456056"><td class="nm">I-538-456</td><td>Bizimana Jean</td><td class="mut">Sake &middot; Ngoma</td><td class="mut">2</td><td>0 of 12</td><td class="num mut">&mdash;</td><td><span class="chip">Not started &middot; no visit yet</span></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot">
@@ -475,7 +474,7 @@
               <div class="card">
                 <div class="card-h"><h3>Module progress</h3><span class="side"><span class="chip">Due 11 Nov</span></span></div>
                 <div class="mods">
-                  <div class="mod done"><span class="dot"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="nm">Welcome session</span><span class="wh">12 Jun</span></div>
+                  <div class="mod done"><span class="dot"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="nm">Welcome module</span><span class="wh">12 Jun</span></div>
                   <div class="mod done"><span class="dot"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="nm">1 &mdash; Family Narrative</span><span class="wh">19 Aug</span></div>
                   <div class="mod done"><span class="dot"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="nm">2 &mdash; Early Stimulation &amp; Play</span><span class="wh">2 Sep</span></div>
                   <div class="mod done"><span class="dot"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span class="nm">3 &mdash; Building Early Communication Skills</span><span class="wh">16 Sep</span></div>
@@ -616,14 +615,14 @@
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl" data-bulk="assign">
-              <thead><tr><th>Date</th><th>Household</th><th data-person>Caregiver</th><th>Place</th><th>Module</th><th>Form</th><th data-person><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr></th><th class="num">Minutes</th><th data-off="on the form">Male caregiver present</th><th data-off="on the form">Activities completed</th><th data-off="on the form">Risk of harm</th><th data-off="on the form">Insurance card</th><th class="gap"></th></tr></thead>
+              <thead><tr><th>Visit</th><th>Date</th><th>Household</th><th data-person>Caregiver</th><th>Place</th><th>Module</th><th>Form</th><th data-person><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr></th><th class="num">Minutes</th><th data-off="on the form">Male caregiver present</th><th data-off="on the form">Activities completed</th><th data-off="on the form">Risk of harm</th><th data-off="on the form">Insurance card</th><th class="gap"></th></tr></thead>
               <tbody>
-                <tr data-tags="done today week" data-go="visit" data-find="VIS-8846 I-2010-433"><td class="mut">Today</td><td class="nm">I-413-319</td><td>Mukandayisenga Rose</td><td class="mut">Kinigi &middot; Musanze</td><td>8 &mdash; Resolving Conflicts in the Home</td><td><a>Caregiver observation</a></td><td>B. Uwamahoro</td><td class="num">47</td><td class="mut">Yes</td><td class="mut">4 of 5</td><td class="mut">No</td><td class="mut">No</td><td class="gap"></td></tr>
-                <tr data-tags="done week" data-go="visit" data-find="VIS-8845 I-1903-391"><td class="mut">5 Nov</td><td class="nm">I-224-204</td><td>Ingabire Alice</td><td class="mut">Busasamana &middot; Nyanza</td><td>4 &mdash; The Importance of Good Hygiene</td><td><a>Household Module Tracking Form</a></td><td>A. Nyirahabimana</td><td class="num">53</td><td class="mut">No</td><td class="mut">5 of 5</td><td class="mut">No</td><td class="mut">Yes</td><td class="gap"></td></tr>
-                <tr data-tags="missed week" data-go="visit" data-find="VIS-8844 I-2101-260"><td class="mut">3 Nov</td><td class="nm">I-351-871</td><td>Niyonsenga Paul</td><td class="mut">Gisenyi &middot; Rubavu</td><td>2 &mdash; Early Stimulation &amp; Play</td><td><a>Household Module Tracking Form</a></td><td>F. Uwase</td><td class="num">&mdash;</td><td class="mut">No male caregiver</td><td class="mut">3 of 5</td><td class="mut">No</td><td class="mut">Yes</td><td class="gap"></td></tr>
-                <tr data-tags="done week" data-go="visit" data-find="VIS-8843 I-2101-208"><td class="mut">4 Nov</td><td class="nm">I-535-133</td><td>Habimana Eric</td><td class="mut">Mahama &middot; Kirehe</td><td>6 &mdash; The Importance of Good Health</td><td><a>Household Module Tracking Form</a></td><td>J. Kamanzi</td><td class="num">38</td><td class="mut">Yes</td><td class="mut">5 of 5</td><td class="mut">No</td><td class="mut">No</td><td class="gap"></td></tr>
-                <tr data-tags="done" data-go="visit" data-find="VIS-8841 I-2101-142"><td class="mut">28 Oct</td><td class="nm">I-534-107</td><td>Mukamana Jeanne</td><td class="mut">Kibungo &middot; Ngoma</td><td>6 &mdash; The Importance of Good Health</td><td><a>Household Module Tracking Form</a></td><td>M. Dusabe</td><td class="num">42</td><td class="mut">No</td><td class="mut">4 of 5</td><td class="mut" data-hold="RH-0044">Yes &middot; neglect</td><td class="mut">No</td><td class="gap"></td></tr>
-                <tr data-tags="missed" data-go="visit" data-find="VIS-8840 I-2101-117"><td class="mut">28 Oct</td><td class="nm">I-531-988</td><td>Uwase Marie</td><td class="mut">Jarama &middot; Ngoma</td><td>3 &mdash; Building Early Communication Skills</td><td><a>Household Module Tracking Form</a></td><td>E. Mutesi</td><td class="num">&mdash;</td><td class="mut">Yes</td><td class="mut">4 of 5</td><td class="mut">No</td><td class="mut">Yes</td><td class="gap"></td></tr>
+                <tr data-tags="done today week" data-go="visit" data-find="VIS-8846 I-2010-433"><td class="nm">VIS-8846</td><td class="mut">Today</td><td class="nm">I-413-319</td><td>Mukandayisenga Rose</td><td class="mut">Kinigi &middot; Musanze</td><td>8 &mdash; Resolving Conflicts in the Home</td><td><a>Flash weekly report on every module</a></td><td>B. Uwamahoro</td><td class="num">47</td><td class="mut">Yes</td><td class="mut">4 of 5</td><td class="mut">No</td><td class="mut">No</td><td class="gap"></td></tr>
+                <tr data-tags="done week" data-go="visit" data-find="VIS-8845 I-1903-391"><td class="nm">VIS-8845</td><td class="mut">5 Nov</td><td class="nm">I-224-204</td><td>Ingabire Alice</td><td class="mut">Busasamana &middot; Nyanza</td><td>4 &mdash; The Importance of Good Hygiene</td><td><a>Household Module Tracking Form</a></td><td>A. Nyirahabimana</td><td class="num">53</td><td class="mut">No</td><td class="mut">5 of 5</td><td class="mut">No</td><td class="mut">Yes</td><td class="gap"></td></tr>
+                                <tr data-tags="done week" data-go="visit" data-find="VIS-8843 I-2101-208"><td class="nm">VIS-8843</td><td class="mut">4 Nov</td><td class="nm">I-535-133</td><td>Habimana Eric</td><td class="mut">Mahama &middot; Kirehe</td><td>6 &mdash; The Importance of Good Health</td><td><a>Household Module Tracking Form</a></td><td>D. Niyonsaba</td><td class="num">38</td><td class="mut">Yes</td><td class="mut">5 of 5</td><td class="mut">No</td><td class="mut">No</td><td class="gap"></td></tr>
+                <tr data-tags="missed week" data-go="visit" data-find="VIS-8844 I-2101-260"><td class="nm">VIS-8844</td><td class="mut">3 Nov</td><td class="nm">I-351-871</td><td>Niyonsenga Paul</td><td class="mut">Gisenyi &middot; Rubavu</td><td>2 &mdash; Early Stimulation &amp; Play</td><td><a>Household Module Tracking Form</a></td><td>F. Uwase</td><td class="num">&mdash;</td><td class="mut">No male caregiver</td><td class="mut">3 of 5</td><td class="mut">No</td><td class="mut">Yes</td><td class="gap"></td></tr>
+                <tr data-tags="done" data-go="visit" data-find="VIS-8841 I-2101-142"><td class="nm">VIS-8841</td><td class="mut">28 Oct</td><td class="nm">I-534-107</td><td>Mukamana Jeanne</td><td class="mut">Kibungo &middot; Ngoma</td><td>6 &mdash; The Importance of Good Health</td><td><a>Household Module Tracking Form</a></td><td>M. Dusabe</td><td class="num">42</td><td class="mut">No</td><td class="mut">4 of 5</td><td class="mut" data-hold="RH-0044">Yes &middot; neglect</td><td class="mut">No</td><td class="gap"></td></tr>
+                <tr data-tags="missed" data-go="visit" data-find="VIS-8840 I-2101-117"><td class="nm">VIS-8840</td><td class="mut">28 Oct</td><td class="nm">I-531-988</td><td>Uwase Marie</td><td class="mut">Jarama &middot; Ngoma</td><td>3 &mdash; Building Early Communication Skills</td><td><a>Household Module Tracking Form</a></td><td>V. Nyiraneza</td><td class="num">&mdash;</td><td class="mut">Yes</td><td class="mut">4 of 5</td><td class="mut">No</td><td class="mut">Yes</td><td class="gap"></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 1&ndash;6 of 1 842</span>
@@ -641,7 +640,7 @@
             
           </div>
           <div class="card">
-            <div class="card-h"><h3>Visits done by district<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The same cohort, one level down. Kirehe is the only district below 80 per cent, and it holds the oldest missed visits."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><span class="chip">This cohort</span></span></div>
+            <div class="card-h"><h3>Visits done by district<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The same cohort, one level down. Kirehe is the only district below 80 per cent, and it has the most visits not completed."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><span class="chip">This cohort</span></span></div>
             <div class="cmp">
             <div class="cmpr"><span class="cmpl">Ngoma</span><span class="cmpb"><i style="width:100%"></i></span><b>470</b><em>84%</em></div>
             <div class="cmpr"><span class="cmpl">Nyanza</span><span class="cmpb"><i style="width:83%"></i></span><b>392</b><em>87%</em></div>
@@ -690,7 +689,6 @@
             <span class="rec-id">VIS-8841</span>
             <span class="acts">
               <button class="btn sec sm" type="button" data-toast="A copy of this visit, as it was sent in, downloaded"><svg aria-hidden="true"><use href="#i-download"/></svg> Download</button>
-              <button class="btn sec sm" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> Open the case</button>
             </span>
           </div>
           <h1>6 &mdash; The Importance of Good Health</h1>
@@ -764,26 +762,28 @@
       <!-- ============ SAFEGUARDING ============ -->
       <section class="screen" id="s-safeguarding">
                 <div class="tabs">
-          <button class="tab on" type="button" data-tab="open">Open<span class="chip" style="margin-left:var(--space-2)">3</span></button>
-          <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:var(--space-2)">31</span></button>
+          <button class="tab on" type="button" data-tab="open">Open<span class="chip" style="margin-left:var(--space-2)">5</span></button>
+          <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:var(--space-2)">29</span></button>
           </div>
         <div class="pad">
           <div class="filters">
           <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by household, case ID or type" aria-label="Search cases"></div>
+          <button class="fl" type="button"><span class="k">Place</span><b>Rwanda</b><span class="cv">&#9660;</span></button>
+          <button class="fl" type="button"><span class="k">When</span><b>Any time</b><span class="cv">&#9660;</span></button>
         </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl" data-bulk="assign" data-group="Status">
               <thead>
-                <tr><th>Case</th><th>Household<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The household and what was reported about the family are withheld until you open the case and say why. Everything else is open to everyone who reaches this place. Opening lasts as long as you ask for, is written to the audit trail, and is shown to the sector lead and to the home visitor who raised the flag."><svg aria-hidden="true"><use href="#i-info"/></svg></button></th><th>Type</th><th>Who</th><th data-person>Raised by</th><th class="num">Raised</th><th>Status</th></tr></thead>
+                <tr><th>Case</th><th>Household</th><th>Place</th><th>Type</th><th>Who</th><th data-person>Raised by</th><th class="num">Raised</th><th>Status</th></tr></thead>
               <tbody>
-                <tr data-tags="open" data-go="case"><td class="nm">RH-0044</td><td data-hold="RH-0044">I-534-107 Mukamana</td><td>Neglect</td><td>Child under 5</td><td>M. Dusabe</td><td class="num">28 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
-                <tr data-tags="open" data-go="case"><td class="nm">RH-0045</td><td data-hold="RH-0045">I-221-142 Nshimiyimana</td><td>Physical</td><td>Child 5&ndash;17</td><td>J. Kamanzi</td><td class="num">6 Nov</td><td><span class="chip warn"><i></i>Active</span></td></tr>
-                <tr data-tags="open" data-go="case"><td class="nm">RH-0041</td><td data-hold="RH-0041">I-531-988 Uwase</td><td>Neglect</td><td>Child under 5</td><td>M. Dusabe</td><td class="num">29 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
-                <tr data-tags="closed" data-go="case"><td class="nm">RH-0038</td><td data-hold="RH-0038">I-224-204 Ingabire</td><td>Physical</td><td>Child 5&ndash;17</td><td>J. Kamanzi</td><td class="num">24 Oct</td><td><span class="chip"><i></i>Stabilized</span></td></tr>
-                <tr data-tags="closed" data-go="case"><td class="nm">RH-0035</td><td data-hold="RH-0035">I-535-133 Habimana</td><td>Neglect</td><td>Child under 5</td><td>E. Mutesi</td><td class="num">18 Oct</td><td><span class="chip"><i></i>Stabilized</span></td></tr>
+                <tr data-tags="open" data-go="case"><td class="nm">RH-0044</td><td data-hold="RH-0044">I-534-107 Mukamana</td><td class="mut">Kibungo &middot; Ngoma</td><td>Neglect</td><td>Child under 5</td><td>M. Dusabe</td><td class="num">28 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
+                <tr data-tags="open" data-go="case"><td class="nm">RH-0045</td><td data-hold="RH-0045">I-221-142 Nshimiyimana</td><td class="mut">Kigoma &middot; Nyanza</td><td>Physical</td><td>Child 5&ndash;17</td><td>J. Kamanzi</td><td class="num">6 Nov</td><td><span class="chip warn"><i></i>Active</span></td></tr>
+                <tr data-tags="open" data-go="case"><td class="nm">RH-0041</td><td data-hold="RH-0041">I-531-988 Uwase</td><td class="mut">Jarama &middot; Ngoma</td><td>Neglect</td><td>Child under 5</td><td>M. Dusabe</td><td class="num">29 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
+                <tr data-tags="open" data-go="case"><td class="nm">RH-0038</td><td data-hold="RH-0038">I-224-204 Ingabire</td><td class="mut">Busasamana &middot; Nyanza</td><td>Physical</td><td>Child 5&ndash;17</td><td>J. Kamanzi</td><td class="num">24 Oct</td><td><span class="chip"><i></i>Stabilized</span></td></tr>
+                <tr data-tags="open" data-go="case"><td class="nm">RH-0035</td><td data-hold="RH-0035">I-535-133 Habimana</td><td class="mut">Mahama &middot; Kirehe</td><td>Neglect</td><td>Child under 5</td><td>E. Mutesi</td><td class="num">18 Oct</td><td><span class="chip"><i></i>Stabilized</span></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span><b>3 open cases</b> &middot; 1 not yet synced</span></div>
+            <div class="tfoot"><span><b>5 open cases</b> &middot; 3 active</span></div>
           </div>
         </div>
       </section>
@@ -792,24 +792,26 @@
       <section class="screen" id="s-referrals">
                 <div class="tabs">
           <button class="tab on" type="button" data-tab="open">Open<span class="chip" style="margin-left:var(--space-2)">3</span></button>
-          <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:var(--space-2)">3</span></button>
+          <button class="tab" type="button" data-tab="closed">Closed<span class="chip" style="margin-left:var(--space-2)">4</span></button>
           </div>
         <div class="pad">
           <div class="filters">
           <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search by referral, case or where it was sent" aria-label="Search referrals"></div>
+          <button class="fl" type="button"><span class="k">Place</span><b>Rwanda</b><span class="cv">&#9660;</span></button>
           <button class="fl" type="button"><span class="k">When</span><b>Any time</b><span class="cv">&#9660;</span></button>
         </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl" data-group="Status">
               <thead>
-                <tr><th>Referral</th><th>Household<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The household and what was reported about the family are withheld until you open the case and say why. A referral carries the same rule as the case it came out of."><svg aria-hidden="true"><use href="#i-info"/></svg></button></th><th>Out of</th><th>Type</th><th>Referred to</th><th class="num">Sent</th><th>Status</th></tr></thead>
+                <tr><th>Referral</th><th>Household</th><th>Place</th><th>Out of</th><th>Type</th><th>Referred to</th><th class="num">Sent</th><th>Status</th></tr></thead>
               <tbody>
-                <tr data-tags="open" data-go="referral"><td class="nm">RF-0112</td><td data-hold="RH-0044">I-534-107 Mukamana</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button></td><td>Health &middot; growth faltering</td><td class="mut">Kabare health centre &middot; Kibungo</td><td class="num">31 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
-                <tr data-tags="open" data-go="referral"><td class="nm">RF-0109</td><td data-hold="RH-0038">I-224-204 Ingabire</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0038</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Ngoma</td><td class="num">27 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
-                <tr data-tags="open" data-go="referral"><td class="nm">RF-0107</td><td data-hold="RH-0041">I-531-988 Uwase</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0041</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Ngoma</td><td class="num">24 Oct</td><td><span class="chip"><i></i>Stabilized</span></td></tr>
-                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0104</td><td data-hold="RH-0035">I-535-133 Habimana</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0035</button></td><td>Health &middot; immunisation</td><td class="mut">Mahama health post &middot; Kirehe</td><td class="num">16 Oct</td><td><span class="chip ok"><i></i>Closed</span></td></tr>
-                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0101</td><td data-hold="RH-0029">I-413-319 Mukandayisenga</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0029</button></td><td>Social protection &middot; insurance</td><td class="mut">Sector social worker &middot; Kinigi</td><td class="num">9 Oct</td><td><span class="chip ok"><i></i>Closed</span></td></tr>
-                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0098</td><td data-hold="RH-0024">I-351-871 Niyonsenga</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0024</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Rubavu</td><td class="num">2 Oct</td><td><span class="chip ok"><i></i>Closed</span></td></tr>
+                <tr data-tags="open" data-go="referral"><td class="nm">RF-0112</td><td data-hold="RH-0044">I-534-107 Mukamana</td><td class="mut">Kibungo &middot; Ngoma</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button></td><td>Health &middot; growth faltering</td><td class="mut">Kabare health centre &middot; Kibungo</td><td class="num">31 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
+                <tr data-tags="open" data-go="referral"><td class="nm">RF-0109</td><td data-hold="RH-0038">I-224-204 Ingabire</td><td class="mut">Busasamana &middot; Nyanza</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0038</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Nyanza</td><td class="num">27 Oct</td><td><span class="chip warn"><i></i>Active</span></td></tr>
+                <tr data-tags="open" data-go="referral"><td class="nm">RF-0107</td><td data-hold="RH-0041">I-531-988 Uwase</td><td class="mut">Jarama &middot; Ngoma</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0041</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Ngoma</td><td class="num">30 Oct</td><td><span class="chip"><i></i>Stabilized</span></td></tr>
+                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0104</td><td data-hold="RH-0035">I-535-133 Habimana</td><td class="mut">Mahama &middot; Kirehe</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0035</button></td><td>Health &middot; immunisation</td><td class="mut">Mahama health post &middot; Kirehe</td><td class="num">20 Oct</td><td><span class="chip ok"><i></i>Closed</span></td></tr>
+                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0101</td><td data-hold="RH-0029">I-413-319 Mukandayisenga</td><td class="mut">Kinigi &middot; Musanze</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0029</button></td><td>Social protection &middot; insurance</td><td class="mut">Sector social worker &middot; Kinigi</td><td class="num">9 Oct</td><td><span class="chip ok"><i></i>Closed</span></td></tr>
+                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0098</td><td data-hold="RH-0024">I-351-871 Niyonsenga</td><td class="mut">Gisenyi &middot; Rubavu</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0024</button></td><td>Child protection</td><td class="mut">District <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr> &middot; Rubavu</td><td class="num">2 Oct</td><td><span class="chip ok"><i></i>Closed</span></td></tr>
+                <tr data-tags="closed" data-go="referral"><td class="nm">RF-0087</td><td data-hold="RF-0087">I-534-107 Mukamana</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">Module 2 visit</td><td>Social protection &middot; health insurance</td><td class="mut">Kibungo sector office</td><td class="num">2 Sep</td><td><span class="chip ok"><i></i>Closed</span></td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span><b>3 open referrals</b></span></div>
@@ -828,7 +830,7 @@
           <h1>Growth faltering &mdash; child under five</h1>
           <div class="pg" id="pg-referral">
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Status</span></span><span class="v"><span class="pg-badge warn">Active</span></span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Household</span><button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The household and what was reported about the family are withheld until you open the case and say why. A referral carries the same rule as the case it came out of."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="v" data-hold="RH-0044" data-holdwhen><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>I-534-107 Mukamana</button></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Household</span></span><span class="v" data-hold="RH-0044" data-holdwhen><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>I-534-107 Mukamana</button></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg><span>Out of</span></span><span class="v"><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button><span class="conseq">neglect, child under five</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Place</span></span><span class="v">Kibungo &middot; Ngoma</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Type</span></span><span class="v">Health &middot; growth faltering</span></div>
@@ -868,14 +870,12 @@
             <span class="rec-type"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> Risk of harm</span>
             <span class="rec-id">RH-0044</span>
             <span class="acts">
-              <button class="btn sm" type="button" data-modal="rohopen" data-rohoff><svg aria-hidden="true"><use href="#i-safeguarding"/></svg> Open in full</button>
-              <button class="btn sm" type="button" data-modal="review" data-rohon hidden><svg aria-hidden="true"><use href="#i-check"/></svg> Record review</button>
             </span>
           </div>
           <h1>Neglect &mdash; child under five</h1>
           <div class="pg" id="pg-case">
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg><span>Status</span></span><span class="v"><span class="pg-badge bad">Active</span></span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Household</span><button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The household and what was reported about the family are withheld until you open the case and say why. Everything else is open to everyone who reaches this place. Opening lasts as long as you ask for, is written to the audit trail, and is shown to the sector lead and to the home visitor who raised the flag."><svg aria-hidden="true"><use href="#i-info"/></svg></button></span><span class="v" data-hold="RH-0044" data-holdwhen><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>I-534-107 Mukamana</button></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-households"/></svg><span>Household</span></span><span class="v" data-hold="RH-0044" data-holdwhen><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>I-534-107 Mukamana</button></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Place</span></span><span class="v">Kibungo &middot; Ngoma</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-person"/></svg><span>Raised by</span></span><span class="v"><button class="rel" type="button" data-go="people"><svg aria-hidden="true"><use href="#i-person"/></svg>M. Dusabe</button><span class="conseq plain"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</span></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-clock"/></svg><span>Raised</span></span><span class="v">28 October 2026</span></div>
@@ -983,19 +983,19 @@
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Report</th><th>Project</th><th>Module</th><th>Form</th><th data-person>Owner</th><th class="num">Last run</th><th class="ract">Actions</th></tr></thead>
               <tbody>
-                <tr><td class="nm">Male caregiver attendance by district</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Every module</td><td>Household Module Tracking Form</td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td class="rowacts"><a data-toast="Opened Male caregiver attendance by district">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Risk of harm &mdash; type and victim</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Risk of Harm/other family problems Management</button></td><td class="mut">&mdash;</td><td>Risk of Harm/Emergency Case Form</td><td class="mut">C. Uwimana</td><td class="num mut">1 Nov</td><td class="rowacts"><a data-toast="Opened Risk of harm - type and victim">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Household needs breakdown</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Welcome session</td><td>Family Enrollment and Composition Form</td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td class="rowacts"><a data-toast="Opened Household needs breakdown">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">IZU status and supervision</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>IZU Cell Coordinator Telephone Supervision management</button></td><td class="mut">&mdash;</td><td>IZU Telephone Supervision Form</td><td class="mut">M&amp;E team</td><td class="num mut">27 Oct</td><td class="rowacts"><a data-toast="Opened IZU status and supervision">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Average minutes per module</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Every module</td><td>Household Module Tracking Form</td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td class="rowacts"><a data-toast="Opened Average minutes per module">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Reasons IZU Telephone Supervision missed</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>IZU Cell Coordinator Telephone Supervision management</button></td><td class="mut">&mdash;</td><td>IZU Telephone Supervision Form</td><td class="mut">M&amp;E team</td><td class="num mut">14 Oct</td><td class="rowacts"><a data-toast="Opened Reasons IZU Telephone Supervision missed">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Activities completed, by module</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">6.The Importance of Good Health</td><td>Household Module Tracking Form</td><td class="mut">A. Gahimana</td><td class="num mut">1 Nov</td><td class="rowacts"><a data-toast="Opened Activities completed, by module">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Minutes per visit, by home visitor</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Every module</td><td>Caregiver observation</td><td class="mut">C. Uwimana</td><td class="num mut">30 Oct</td><td class="rowacts"><a data-toast="Opened Minutes per visit, by home visitor">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Households flagged at module 6</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">6.The Importance of Good Health</td><td>Household Module Tracking Form</td><td class="mut">C. Uwimana</td><td class="num mut">2 Nov</td><td class="rowacts"><a data-toast="Opened Households flagged at module 6">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
-                <tr><td class="nm">Families enrolled by sector</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Enrollment</button></td><td class="mut">&mdash;</td><td>Family Enrollment and Composition Form</td><td class="mut">J. Kamanzi</td><td class="num mut">29 Oct</td><td class="rowacts"><a data-toast="Opened Families enrolled by sector">Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Male caregiver attendance by district</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Every module</td><td>Household Module Tracking Form</td><td class="mut">A. Gahimana</td><td class="num mut">Today 06:00</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Risk of harm &mdash; type and victim</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Risk of Harm/other family problems Management</button></td><td class="mut">&mdash;</td><td>Risk of Harm/Emergency Case Form</td><td class="mut">C. Uwimana</td><td class="num mut">1 Nov</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Household needs breakdown</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Welcome module</td><td>Family Enrollment and Composition Form</td><td class="mut">A. Gahimana</td><td class="num mut">28 Oct</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">IZU status and supervision</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>IZU Cell Coordinator Telephone Supervision management</button></td><td class="mut">&mdash;</td><td>IZU Telephone Supervision Form</td><td class="mut">M&amp;E team</td><td class="num mut">27 Oct</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Average minutes per module</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Every module</td><td>Household Module Tracking Form</td><td class="mut">Boston College</td><td class="num mut">21 Oct</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Reasons IZU Telephone Supervision missed</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>IZU Cell Coordinator Telephone Supervision management</button></td><td class="mut">&mdash;</td><td>IZU Telephone Supervision Form</td><td class="mut">M&amp;E team</td><td class="num mut">14 Oct</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Activities completed, by module</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">6.The Importance of Good Health</td><td>Household Module Tracking Form</td><td class="mut">A. Gahimana</td><td class="num mut">1 Nov</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Minutes per visit, by home visitor</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">Every module</td><td>Caregiver observation</td><td class="mut">C. Uwimana</td><td class="num mut">30 Oct</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Households flagged at module 6</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Module Tracking</button></td><td class="mut">6.The Importance of Good Health</td><td>Household Module Tracking Form</td><td class="mut">C. Uwimana</td><td class="num mut">2 Nov</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
+                <tr><td class="nm">Families enrolled by sector</td><td><button class="rel" type="button" data-go="project"><svg aria-hidden="true"><use href="#i-project"/></svg>Household Enrollment</button></td><td class="mut">&mdash;</td><td>Family Enrollment and Composition Form</td><td class="mut">J. Kamanzi</td><td class="num mut">29 Oct</td><td class="rowacts"><a data-ropen>Open</a><a data-modal="report">Edit</a><a data-rowdel>Delete</a></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>10 reports, from every project</span></div>
+            <div class="tfoot"><span>10 reports</span></div>
           </div>
         </div>
       </section>
@@ -1038,7 +1038,7 @@
                 <tr><td class="nm">Think Aloud testing without Module &mdash; 2025 <span class="chip warn"><i></i>test</span></td><td class="mut">2 Aug 2026</td><td>A. Gahimana &middot; FXB Rwanda</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="Think Aloud testing restored">Restore</a></td></tr>
                 <tr><td class="nm">SM PROGRAM REPORTS v1</td><td class="mut">19 Jul 2026</td><td>C. Uwimana &middot; Sector lead</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="SM PROGRAM REPORTS v1 restored">Restore</a></td></tr>
                 <tr><td class="nm">Women Economic Empowerment &mdash; pilot</td><td class="mut">3 Jul 2026</td><td>A. Gahimana &middot; FXB Rwanda</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="Women Economic Empowerment pilot restored">Restore</a></td></tr>
-                <tr><td class="nm"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> Self-Efficacy &mdash; draft</td><td class="mut">28 Jun 2026</td><td>J. Kamanzi &middot; Sector lead</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="IZU Self-Efficacy draft restored">Restore</a></td></tr>
+                <tr><td class="nm"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> Self-Efficacy &mdash; draft</td><td class="mut">28 Jun 2026</td><td>C. Uwimana &middot; Sector lead</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="IZU Self-Efficacy draft restored">Restore</a></td></tr>
                 <tr><td class="nm">Play Collaborative Meetings 2025</td><td class="mut">11 Jun 2026</td><td>C. Uwimana &middot; Sector lead</td><td class="rowacts"><a data-go="project">Details</a><a data-toast="Play Collaborative Meetings 2025 restored">Restore</a></td></tr>
               </tbody>
             </table></div>
@@ -1058,19 +1058,19 @@
               <thead><tr><th>Form</th><th>Project</th><th>Module</th><th>Household</th><th class="num">Submitted</th><th data-person>Filled in by</th><th>Place</th></tr></thead>
               <tbody>
 <tr><td class="nm">Household Module Tracking Form</td><td>Household Module Tracking</td><td class="mut">6 The Importance of Good Health</td><td>I-534-107</td><td class="num mut">28 Oct 2026</td><td>M. Dusabe</td><td class="mut">Kibungo &middot; Ngoma</td></tr>
-<tr><td class="nm">Household Module Tracking Form</td><td>Household Module Tracking</td><td class="mut">8 Resolving Conflicts in the Home</td><td>I-413-319</td><td class="num mut">31 Oct 2026</td><td>B. Uwamahoro</td><td class="mut">Kinigi &middot; Musanze</td></tr>
-<tr><td class="nm">Caregiver observation</td><td>Household Module Tracking</td><td class="mut">6 The Importance of Good Health</td><td>I-535-133</td><td class="num mut">30 Oct 2026</td><td>J. Kamanzi</td><td class="mut">Mahama &middot; Kirehe</td></tr>
-<tr><td class="nm">Family Enrollment and Composition Form</td><td>Household Enrollment</td><td class="mut">&mdash;</td><td>I-538-456</td><td class="num mut">29 Oct 2026</td><td>E. Mutesi</td><td class="mut">Sake &middot; Ngoma</td></tr>
-<tr><td class="nm">Risk of Harm/Emergency Case Form</td><td>Risk of Harm/other family problems Management</td><td class="mut">&mdash;</td><td>I-221-142</td><td class="num mut">6 Nov 2026</td><td>J. Kamanzi</td><td class="mut">Kigoma &middot; Nyanza</td></tr>
+<tr><td class="nm">Flash weekly report on every module</td><td>Household Module Tracking</td><td class="mut">8 Resolving Conflicts in the Home</td><td>I-413-319</td><td class="num mut">6 Nov 2026</td><td>B. Uwamahoro</td><td class="mut">Kinigi &middot; Musanze</td></tr>
+<tr><td class="nm">Caregiver observation</td><td>Household Module Tracking</td><td class="mut">6 The Importance of Good Health</td><td>I-535-133</td><td class="num mut">4 Nov 2026</td><td>D. Niyonsaba</td><td class="mut">Mahama &middot; Kirehe</td></tr>
+<tr><td class="nm">Family Enrollment and Composition Form</td><td>Household Module Tracking</td><td class="mut">Welcome module</td><td>I-538-456</td><td class="num mut">20 Oct 2026</td><td>G. Uwimbabazi</td><td class="mut">Sake &middot; Ngoma</td></tr>
+<tr><td class="nm">Risk of Harm management — intake</td><td>Risk of Harm/other family problems Management</td><td class="mut">&mdash;</td><td>I-221-142</td><td class="num mut">6 Nov 2026</td><td>P. Mukamurenzi</td><td class="mut">Kigoma &middot; Nyanza</td></tr>
 <tr><td class="nm">FCG participation and interaction form</td><td>FCG participation and interaction form</td><td class="mut">&mdash;</td><td>I-224-204</td><td class="num mut">31 Oct 2026</td><td>A. Nyirahabimana</td><td class="mut">Busasamana &middot; Nyanza</td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Showing 1&ndash;6 of 5 386 responses across every project</span></div>
+            <div class="tfoot"><span>Showing 1&ndash;6 of 17 333 responses</span></div>
           </div>
         </div>
         <div class="pad" data-panelid="list">
           <div class="filters">
-            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search projects, modules and forms" aria-label="Search the programme"></div>
+            <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search projects, modules and forms" aria-label="Search projects"></div>
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
@@ -1140,7 +1140,7 @@
               <thead>
                 <tr><th style="width:3rem">#</th><th>Module</th><th>Kinyarwanda</th><th>Status</th><th class="num">Forms</th></tr></thead>
               <tbody>
-                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>Welcome session</td><td class="mut">Guhana ikaze</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>Welcome module</td><td class="mut">Guhana ikaze</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Family Enrollment and Composition Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
                 <tr data-go="module"><td class="mut">1</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>1.Family Narrative</td><td class="mut">1.Amateka y&rsquo;umuryango</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Household Module Tracking Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
@@ -1166,13 +1166,13 @@
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Household Module Tracking Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
                 <tr data-go="module"><td class="mut">12</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>12.With a United Family, Anything is Possible</td><td class="mut">12.Umuryango ushyizehamwe nta kiwunanira <span class="chip warn"><i></i>stub</span></td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Household Module Tracking Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
-                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>Closing session</td><td class="mut">Gusoza ibiganiro</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>Closing module</td><td class="mut">Gusoza ibiganiro</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Household Module Tracking Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
-                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>3-Month Booster Session</td><td class="mut">Ikiganiro Nshimangira cya Nyuma y&rsquo;amezi 3</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>3-Month Booster Module</td><td class="mut">Ikiganiro Nshimangira cya Nyuma y&rsquo;amezi 3</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Household Module Tracking Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
-                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>6-Month Booster Session</td><td class="mut">Ikiganiro Nshimangirabiganiro cya Nyuma y&rsquo;amezi 6</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>6-Month Booster Module</td><td class="mut">Ikiganiro Nshimangirabiganiro cya Nyuma y&rsquo;amezi 6</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Household Module Tracking Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
-                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>12-Month Booster Session</td><td class="mut">Ikiganiro Nshimangirabiganiro cya Nyuma y&rsquo;amezi 12</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
+                <tr data-go="module"><td class="mut">&mdash;</td><td class="nm"><button class="sx" type="button" aria-expanded="false" aria-label="Show the forms in this module"><svg aria-hidden="true"><use href="#i-chevronRight"/></svg></button>12-Month Booster Module</td><td class="mut">Ikiganiro Nshimangirabiganiro cya Nyuma y&rsquo;amezi 12</td><td><span class="chip ok"><i></i>Active</span></td><td class="num">1</td></tr>
                 <tr class="sxr" hidden><td colspan="5"><div class="sxb"><div class="sxh"><b>1 form in this module</b><button class="btn sec sm" type="button" data-modal="addform"><svg aria-hidden="true"><use href="#i-plus"/></svg> Add a form</button></div><div class="lr"><span class="t">Household Module Tracking Form</span><span class="c rowacts"><a data-go="form">Open</a><a data-go="form" data-view="tab:Data">View data</a><a data-modal="archive">Archive</a></span></div></div></td></tr>
               
               </tbody>
@@ -1186,8 +1186,8 @@
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Form</th><th>Kinyarwanda</th><th>Used in</th><th>Access here</th><th class="num">Responses</th><th>Status</th><th class="gap"></th></tr></thead>
               <tbody>
-                <tr><td>Family Enrollment and Composition Form</td><td>Ifishi yo kubarura Abagize Urugo</td><td class="mut">Welcome session</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 4 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">2&#8239;210</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
-                <tr><td>Anthropometric measurement</td><td>Gupima imikurire y'abana</td><td class="mut">Welcome session &middot; Module 6</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 4 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">1&#8239;884</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
+                <tr><td>Family Enrollment and Composition Form</td><td>Ifishi yo kubarura Abagize Urugo</td><td class="mut">Welcome module</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 4 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">2&#8239;210</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
+                <tr><td>Anthropometric measurement</td><td>Gupima imikurire y'abana</td><td class="mut">Welcome module &middot; Module 6</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 4 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">1&#8239;884</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
                 <tr><td>Flash weekly report on every module</td><td>Raporo yihuse ya buri kiganiro</td><td class="mut">Every module</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 3 &middot; Report 3 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">986</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
                 <tr><td>General Questions-Self report</td><td>Ibibazo Rusange ku biganiro byose</td><td class="mut">Every module</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 2 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">412</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
                 <tr><td>Family-Specific Competencies-Self-report</td><td>Ibibazo ku bushobozi bwo gutanga ikiganiro</td><td class="mut">Every module</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 2 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">388</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
@@ -1196,7 +1196,7 @@
                 <tr data-go="form"><td>Supervisor spot-check</td><td><button class="rel" type="button" data-go="translations"><svg aria-hidden="true"><use href="#i-alert"/></svg>Not translated</button></td><td class="mut">6.The Importance of Good Health</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 2 &middot; Report 3 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">141</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
                 <tr data-go="form"><td>Managing the Stresses of Parenting form</td><td><button class="rel" type="button" data-go="translations"><svg aria-hidden="true"><use href="#i-alert"/></svg>Not translated</button></td><td class="mut">7.Managing the Stresses of Parenting and Family Life</td><td><span class="rd" data-tip="Nobody can put data in or take a report out of a draft form">Not open yet</span></td><td class="num">0</td><td><span class="chip warn"><i></i>Draft</span></td><td class="gap"></td></tr>
                 <tr data-go="form"><td>Resolving Conflicts in the Home form</td><td><button class="rel" type="button" data-go="translations"><svg aria-hidden="true"><use href="#i-alert"/></svg>Not translated</button></td><td class="mut">8.Resolving Conflicts in the Home</td><td><span class="rd" data-tip="Nobody can put data in or take a report out of a draft form">Not open yet</span></td><td class="num">0</td><td><span class="chip warn"><i></i>Draft</span></td><td class="gap"></td></tr>
-                <tr data-go="form"><td>Session in action</td><td><button class="rel" type="button" data-go="translations"><svg aria-hidden="true"><use href="#i-alert"/></svg>Not translated</button></td><td class="mut">4 monitored modules</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 3 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">412</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
+                <tr data-go="form"><td>Module in action</td><td><button class="rel" type="button" data-go="translations"><svg aria-hidden="true"><use href="#i-alert"/></svg>Not translated</button></td><td class="mut">4 monitored modules</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 3 &middot; Report 2 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">412</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
                 <tr data-go="form"><td>IZU quality score</td><td><button class="rel" type="button" data-go="translations"><svg aria-hidden="true"><use href="#i-alert"/></svg>Not translated</button></td><td class="mut">4 monitored modules</td><td class="mut"><span data-tip="How many positions hold each kind of access to this form, in this project">Data 2 &middot; Report 3 &middot; Edit 1</span></td><td class="num"><button class="rel" type="button" data-go="form" data-view="tab:Data" data-tip="Open these responses, where they can be filtered and exported">344</button></td><td><span class="chip ok"><i></i>Active</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
@@ -1255,7 +1255,7 @@
                 <tr><td class="nm">Growth check (pilot)</td><td class="mut">Form</td><td class="mut">Module 6</td><td class="mut">C. Uwimana</td><td class="num mut">19 Jun 2026</td><td>96</td></tr>
                 <tr><td class="nm">Caregiver observation (pilot)</td><td class="mut">Form</td><td class="mut">Module 4</td><td class="mut">C. Uwimana</td><td class="num mut">18 Jan 2026</td><td>412</td></tr>
                 <tr><td class="nm">Think Aloud testing without Module</td><td class="mut">Module</td><td class="mut">—</td><td class="mut">A. Gahimana</td><td class="num mut">9 Dec 2025</td><td>38</td></tr>
-                <tr><td class="nm">Enrollment of Beneficiaries in WEE</td><td class="mut">Form</td><td class="mut">Welcome session</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="num mut">22 Nov 2025</td><td>166</td></tr>
+                <tr><td class="nm">Enrollment of Beneficiaries in WEE</td><td class="mut">Form</td><td class="mut">Welcome module</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="num mut">22 Nov 2025</td><td>166</td></tr>
                 <tr><td class="nm">Get Stakeholders</td><td class="mut">Form</td><td class="mut">—</td><td class="mut"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="num mut">22 Nov 2025</td><td>74</td></tr>
                 <tr><td class="nm">Gender Questionnaire Form (draft)</td><td class="mut">Form</td><td class="mut">Module 9</td><td class="mut">C. Uwimana</td><td class="num mut">4 Oct 2025</td><td>0</td></tr>
               </tbody>
@@ -1276,8 +1276,6 @@
           <h1>The Importance of Good Health</h1>
           <p class="rec-alt" lang="rw">Akamaro k&rsquo;Ubuzima Bwiza</p>
           <div class="pg" id="pg-module">
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-programme"/></svg><span>Module</span></span><span class="v">6 of 12</span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-reports"/></svg><span>Forms</span></span><span class="v">3 <span class="conseq">2 archived</span></span></div>
           </div>
           <button class="pg-collapse" type="button" data-pg="pg-module">Collapse empty fields</button>
 </div>
@@ -1367,14 +1365,6 @@
         </div>
 
         <div class="pad" data-panelid="translate" hidden>
-          <div class="stats">
-            <div class="st"><div class="l">Translated</div>
-              <div class="vrow"><div class="v">30 <small>of 30</small></div><span class="delta up">100%</span></div>
-              <div class="d">Kinyarwanda</div><div class="trk"><i style="width:100%"></i></div></div>
-            <div class="st"><div class="l">Last change</div>
-              <div class="vrow"><div class="v">14 <small>Oct</small></div></div>
-              <div class="d">C. Uwimana</div></div>
-          </div>
           <div class="cols">
           <!-- app.js puts the table's Filter/Columns/Export bar in front of the
                card, so the card needs a column of its own to be put in front
@@ -1411,12 +1401,12 @@
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
-              <thead><tr><th>Household</th><th data-person>Filled in by</th><th data-person>Recorded by</th><th class="num">Date</th><th class="num">Minutes</th><th>Male caregiver</th><th>Flag</th></tr></thead>
+              <thead><tr><th>Response</th><th>Household</th><th data-person>Recorded by</th><th class="num">Date</th><th class="num">Minutes</th><th>Male caregiver</th><th>Flag</th></tr></thead>
               <tbody>
-                <tr data-go="household"><td class="nm">I-534-107</td><td class="mut">M. Dusabe</td><td class="mut">M. Dusabe</td><td class="num mut">28 Oct</td><td class="num">42</td><td><span class="chip">Absent</span></td><td><span class="chip bad"><i></i>Risk raised</span></td></tr>
-                <tr data-go="household"><td class="nm">I-535-133</td><td class="mut">E. Mutesi</td><td class="mut">E. Mutesi</td><td class="num mut">30 Oct</td><td class="num">38</td><td><span class="chip ok"><i></i>Present</span></td><td class="mut">&mdash;</td></tr>
-                <tr data-go="household"><td class="nm">I-413-319</td><td class="mut">E. Mutesi</td><td class="mut">E. Mutesi</td><td class="num mut">31 Oct</td><td class="num">47</td><td><span class="chip ok"><i></i>Present</span></td><td class="mut">&mdash;</td></tr>
-                <tr data-go="household"><td class="nm">I-224-204</td><td class="mut">J. Kamanzi</td><td class="mut">J. Kamanzi</td><td class="num mut">31 Oct</td><td class="num">53</td><td><span class="chip">Absent</span></td><td class="mut">&mdash;</td></tr>
+                <tr data-go="visit" data-recid="VIS-8841"><td class="nm">VIS-8841</td><td>I-534-107</td><td class="mut">M. Dusabe</td><td class="num mut">28 Oct</td><td class="num">42</td><td><span class="chip">Absent</span></td><td><span class="chip bad"><i></i>Risk raised</span></td></tr>
+                <tr data-go="visit" data-recid="VIS-8843"><td class="nm">VIS-8843</td><td>I-535-133</td><td class="mut">D. Niyonsaba</td><td class="num mut">4 Nov</td><td class="num">38</td><td><span class="chip ok"><i></i>Present</span></td><td class="mut">&mdash;</td></tr>
+                <tr data-go="visit" data-recid="VIS-8845"><td class="nm">VIS-8845</td><td>I-224-204</td><td class="mut">A. Nyirahabimana</td><td class="num mut">5 Nov</td><td class="num">53</td><td><span class="chip">Absent</span></td><td class="mut">&mdash;</td></tr>
+                <tr data-go="visit" data-recid="VIS-8424"><td class="nm">VIS-8424</td><td>I-221-142</td><td class="mut">P. Mukamurenzi</td><td class="num mut">28 Oct</td><td class="num">46</td><td><span class="chip ok"><i></i>Present</span></td><td class="mut">&mdash;</td></tr>
               </tbody>
             </table></div>
             <div class="tfoot"><span>Showing 1&ndash;4 of 986</span></div>
@@ -1455,9 +1445,8 @@
         <div class="pad" data-panelid="notify" hidden>
           <div class="card">
             <div class="card-h"><h3>When a response is sent in</h3><span class="side"><button class="btn sec sm" type="button" data-modal="fnotify"><svg aria-hidden="true"><use href="#i-plus"/></svg>Add a rule</button></span></div>
-            <div class="lr"><span class="t">Every response</span><span class="s">Sector lead (SLA) of that sector</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-toast="Rule removed">Remove</a></span></div>
-            <div class="lr"><span class="t">Q5 Any sign of harm or neglect? is Yes</span><span class="s">&ldquo;A risk of harm was raised in your sector&rdquo; &rarr; Sector lead (SLA), District CPWO</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-toast="Rule removed">Remove</a></span></div>
-            <div class="lr"><span class="t">Q8 Referred to the health post is Yes</span><span class="s">&ldquo;A referral needs following up&rdquo; &rarr; IZU Cell Coordinator</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-toast="Rule removed">Remove</a></span></div>
+            <div class="lr"><span class="t">Q5 Any sign of harm or neglect? is Yes</span><span class="s">&ldquo;A risk of harm was raised in your sector&rdquo; &rarr; Sugira Muryango Sector lead (SLA), District NCDA Child protection and Welfare Officer (CPWO)</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-toast="Rule removed">Remove</a></span></div>
+            <div class="lr"><span class="t">Q8 Referred to the health post is Yes</span><span class="s">&ldquo;A referral needs following up&rdquo; &rarr; IZU Cell Coordinator (ICC)</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-toast="Rule removed">Remove</a></span></div>
           </div>
         </div>
         <div class="pad" data-panelid="freports" hidden></div>
@@ -1546,16 +1535,19 @@
               <tbody>
                 <tr data-tags="active" data-go="person"><td class="nm">A. Gahimana</td><td><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</td><td class="mut">National</td><td class="mut">All projects</td><td class="num mut">now</td><td><span class="chip ok"><i></i>Active</span></td></tr>
                 <tr data-tags="active" data-go="person"><td class="nm">C. Uwimana</td><td>Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">Tracking, Enrollment, Risk of harm</td><td class="num mut">1 hour</td><td><span class="chip ok"><i></i>Active</span></td></tr>
-                <tr data-tags="active" data-go="person"><td class="nm">M. Dusabe</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">Household Module Tracking</td><td class="num mut">Today</td><td><span class="chip ok"><i></i>Active</span></td></tr>
-                <tr data-tags="active" data-go="person"><td class="nm">E. Mutesi</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">Household Module Tracking</td><td class="num mut">Today</td><td><span class="chip ok"><i></i>Active</span></td></tr>
-                <tr data-tags="active" data-go="person"><td class="nm">J. Kamanzi</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="mut">Kigoma &middot; Nyanza</td><td class="mut">Household Module Tracking</td><td class="num mut">3 days</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-tags="active" data-go="person"><td class="nm">M. Dusabe</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="mut">Kabare &middot; Kibungo</td><td class="mut">Household Module Tracking</td><td class="num mut">Today</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-tags="active" data-go="person"><td class="nm">E. Mutesi</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> Cell Coordinator (<abbr data-tip="ICC — IZU Cell Coordinator">ICC</abbr>)</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">Household Module Tracking</td><td class="num mut">Today</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-tags="active" data-go="person"><td class="nm">J. Kamanzi</td><td>Sector social worker</td><td class="mut">Kibungo &middot; Ngoma</td><td class="mut">Risk of Harm/other family problems Management</td><td class="num mut">3 days</td><td><span class="chip ok"><i></i>Active</span></td></tr>
                 <tr data-tags="active" data-go="person"><td class="nm">P. Niyonkuru</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> Cell Coordinator (<abbr data-tip="ICC — IZU Cell Coordinator">ICC</abbr>)</td><td class="mut">Kabare cell &middot; Kibungo</td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> Telephone Supervision</td><td class="num mut">4 hours</td><td><span class="chip ok"><i></i>Active</span></td></tr>
-                <tr data-tags="active" data-go="person"><td class="nm">Social worker, Ngoma</td><td>District <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr> <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr></td><td class="mut">Ngoma district</td><td class="mut">On referral only</td><td class="num mut">yesterday</td><td><span class="chip ok"><i></i>Active</span></td></tr>
+                <tr data-tags="active" data-go="person"><td class="nm">B. Nkurunziza</td><td>District <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr> <abbr data-tip="CPWO — District NCDA Child Protection and Welfare Officer">CPWO</abbr></td><td class="mut">Ngoma district</td><td class="mut">Risk of Harm/other family problems Management</td><td class="num mut">yesterday</td><td><span class="chip ok"><i></i>Active</span></td></tr>
               
+                <tr data-go="person" data-tags="off"><td class="nm">T. Mukamana</td><td>Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="mut">&mdash;</td><td class="num mut">2 months</td><td><span class="chip"><i></i>Deactivated</span></td></tr>
+                <tr data-go="person" data-tags="off"><td class="nm">S. Habimana</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="mut">Rugarama &middot; Busasamana</td><td class="mut">&mdash;</td><td class="num mut">5 months</td><td><span class="chip"><i></i>Deactivated</span></td></tr>
+                <tr data-go="person" data-tags="off"><td class="nm">D. Uwera</td><td><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> Cell Coordinator (<abbr data-tip="ICC — IZU Cell Coordinator">ICC</abbr>)</td><td class="mut">Kinigi &middot; Musanze</td><td class="mut">&mdash;</td><td class="num mut">1 month</td><td><span class="chip"><i></i>Deactivated</span></td></tr>
                 <tr data-go="person" data-tags="off"><td class="nm">R. Mugisha</td><td>Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</td><td class="mut">Jarama &middot; Ngoma</td><td class="mut">&mdash;</td><td class="num mut">3 months</td><td><span class="chip"><i></i>Deactivated</span></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Showing 9 of 539 &middot; 3 invitations outstanding</span>
+            <div class="tfoot"><span>Showing 8 of 539</span>
               <span class="pg"><button type="button" class="on">1</button><button type="button">2</button><button type="button">&rsaquo;</button></span></div>
           </div>
         </div>
@@ -1570,12 +1562,11 @@
             <span class="rec-id">USR-0042</span>
             <span class="acts"></span>
           </div>
-          <h1>C. Uwimana</h1>
+          <h1>Claudine Uwimana</h1>
           <div class="pg" id="pg-person" data-visible="9">
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-check"/></svg><span>Status</span></span><span class="v"><span class="pg-badge ok">Active</span></span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-person"/></svg><span>Full name</span></span><span class="v">Claudine Uwimana</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-call"/></svg><span>Phone</span></span><span class="v">+250 78 812 4410</span></div>
-            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-role"/></svg><span>Position</span></span><span class="v"><button class="rel" type="button" data-go="permissions"><svg aria-hidden="true"><use href="#i-role"/></svg>Sugira Muryango Sector lead (SLA)</button></span></div>
+            <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-role"/></svg><span>Position</span></span><span class="v"><button class="rel" type="button" data-go="position" data-pos-id="SLA"><svg aria-hidden="true"><use href="#i-role"/></svg>Sugira Muryango Sector lead (SLA)</button></span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-location"/></svg><span>Where</span></span><span class="v">Kibungo sector &middot; Ngoma</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Email</span></span><span class="v">c.uwimana@fxbrwanda.org</span></div>
             <div class="pgr"><span class="k"><svg aria-hidden="true"><use href="#i-message"/></svg><span>Email alerts</span></span><span class="v">Yes</span></div>
@@ -1602,7 +1593,7 @@
               <thead><tr><th>When</th><th>What they did</th><th>Where</th><th>Record</th></tr></thead>
               <tbody>
                 <tr><td class="mut">Today 08:41</td><td>Opened a risk-of-harm case</td><td class="mut">Kibungo &middot; Ngoma</td><td><a data-go="case">RH-0044</a></td></tr>
-                <tr><td class="mut">Today 08:38</td><td>Recorded a supervisor review</td><td class="mut">Kibungo &middot; Ngoma</td><td><a data-go="case">RH-0041</a></td></tr>
+                <tr><td class="mut">Today 08:38</td><td>Added a follow-up</td><td class="mut">Kibungo &middot; Ngoma</td><td><a data-go="case">RH-0041</a></td></tr>
                 <tr><td class="mut">Yesterday 16:02</td><td>Exported a report</td><td class="mut">Kibungo &middot; Ngoma</td><td><a data-go="reports">Visits by village</a></td></tr>
                 <tr><td class="mut">Yesterday 11:20</td><td>Changed a household&rsquo;s cohort</td><td class="mut">Kibungo &middot; Ngoma</td><td><a data-go="household">I-534-107</a></td></tr>
                 <tr><td class="mut">2 Nov 09:14</td><td>Was refused a case outside their sector</td><td class="mut">Rubavu</td><td><span class="mut">RH-0024</span></td></tr>
@@ -1663,6 +1654,27 @@
       </section>
 
       <!-- ============ ROLE EDITOR ============ -->
+
+      <!-- ============ ORGANISATIONS ============
+           15 November: "Organization page: remove Department entirely". The
+           organisations, where each reaches and what it sees outside that. -->
+      <section class="screen" id="s-orgs">
+        <div class="pad">
+          <div class="card flush plainsurface">
+            <div class="card-h"><h3>Organisations<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="An organisation reaches the places its own projects run in and sees nothing outside them. That is the default and it is not a setting, so anything that crosses the line has to be named in the last column but one."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
+            <div class="tblwrap"><table class="tbl">
+              <thead><tr><th>Organisation</th><th>What it runs</th><th>Where it reaches</th><th>What it sees outside that</th><th>Administers the platform</th><th class="gap"></th></tr></thead>
+              <tbody>
+                <tr><td class="nm">FXB Rwanda</td><td>SUGIRA Muryango<span class="conseq">19 projects</span></td><td class="mut">Kirehe, Musanze, Ngoma, Nyanza, Rubavu</td><td class="mut"><span class="rd">Nothing</span></td><td>S. Habyarimana<span class="conseq">this deployment</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">Boston College</td><td class="mut">Nothing &middot; research partner</td><td class="mut">The same five districts</td><td>Exports with no names in them<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="The partner evaluates the programme, which needs the answers and not the families. An export to this organisation drops the household, the caregiver and the home visitor, and the export dialog cannot be made to put them back."><svg aria-hidden="true"><use href="#i-info"/></svg></button></td><td class="mut"><span class="rd">No</span></td><td class="gap"></td></tr>
+                <tr><td class="nm">University of Rwanda</td><td class="mut">Nothing &middot; research partner</td><td class="mut">The same five districts</td><td>Exports with no names in them</td><td class="mut"><span class="rd">No</span></td><td class="gap"></td></tr>
+                <tr><td class="nm"><abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></td><td class="mut">Nothing</td><td class="mut">National</td><td>A risk-of-harm case, once it is referred<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Referral is the only thing that moves a record across this line, and it moves one record, not a list. The district child-protection officer is an NCDA post, so a referral is how the agency comes to hold a case at all."><svg aria-hidden="true"><use href="#i-info"/></svg></button></td><td class="mut"><span class="rd">No</span></td><td class="gap"></td></tr>
+              </tbody>
+            </table></div>
+            <div class="tfoot"><span>4 organisations</span></div>
+          </div>
+        </div>
+      </section>
       <section class="screen" id="s-places">
         <div class="pad">
           <div class="filters">
@@ -1753,7 +1765,7 @@
 
         <div class="pad" data-panelid="paccess" hidden>
           <div class="card">
-            <div class="card-h"><h3>Your position<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A person holds a position at a place, within a programme. Yours applies everywhere, which is why nothing on your screens is hidden by scope. Someone holding the same position in one district would see the same screens with fewer rows."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="rel" type="button" data-go="permissions" data-perms="role" data-perms-role="HQ officer">See the position</button></span></div>
+            <div class="card-h"><h3>Your position<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A person holds a position at a place, within a project. Yours applies everywhere, which is why nothing on your screens is hidden by scope. Someone holding the same position in one district would see the same screens with fewer rows."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="rel" type="button" data-go="permissions" data-perms="role" data-perms-role="HQ officer">See the position</button></span></div>
             <div class="lr"><span class="t"><abbr data-tip="HQ — the FXB Rwanda head office team">HQ</abbr> officer</span><span class="s">National &middot; all 19 projects</span><span class="c"><span class="chip brand">Your only position</span></span></div>
             
           </div>
@@ -1769,13 +1781,13 @@
                 <tr><td class="nm">People &amp; access</td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip ok"><i></i>Yes</span></td><td><span class="chip">No</span></td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Case detail withheld</span></div>
+            <div class="tfoot"><span>What your position gives you</span></div>
           </div>
         </div>
 
         <div class="pad" data-panelid="pnotify" hidden>
           <div class="card">
-            <div class="card-h"><h3>Where you are notified<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Your position is notified at National level, so you receive anything raised anywhere in the programme. Narrowing this does not narrow what you can open — that is the position’s scope, on the previous tab."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
+            <div class="card-h"><h3>Where you are notified<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Your position is notified at National level, so you receive anything raised anywhere in the project. Narrowing this does not narrow what you can open — that is the position’s scope, on the previous tab."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
             
             <div class="levels">
               <button class="lvl on" type="button"><span class="dot"></span>National<span class="n">everything</span></button>
@@ -1814,8 +1826,8 @@
             <div class="tl">
               <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-edit"/></svg></span><div><h4>Changed a position</h4><p>Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</p></div><span class="when">08:12</span></div>
               <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-reports"/></svg></span><div><h4>Ran a report</h4><p>Male caregiver attendance by district</p></div><span class="when">08:15</span></div>
-              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-person"/></svg></span><div><h4>Invited someone</h4><p>T. Mukamana &middot; Sector lead, Rubavu</p></div><span class="when">31 Oct</span></div>
-              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-programme"/></svg></span><div><h4>Published a form</h4><p>Household Module Tracking Form &middot; to the tablet</p></div><span class="when">14 Oct</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-person"/></svg></span><div><h4>Created a user</h4><p>T. Mukamana &middot; Sector lead, Rubavu</p></div><span class="when">31 Oct</span></div>
+              <div class="te"><span class="ic"><svg aria-hidden="true"><use href="#i-programme"/></svg></span><div><h4>Published a form</h4><p>Household Module Tracking Form &middot; version 4</p></div><span class="when">14 Oct</span></div>
             </div>
           </div>
         </div>
@@ -1836,14 +1848,14 @@
       </section>
       <section class="screen" id="s-settings">
         <div class="tabs">
-          <button class="tab on" type="button" data-panel="sprog">Programme</button>
+          <button class="tab on" type="button" data-panel="sprog">Project</button>
           <button class="tab" type="button" data-panel="sdata">Data</button>
         </div>
 
         <div class="pad" data-panelid="sprog">
           <div class="cols c2e">
             <div class="card">
-              <div class="card-h"><h3>The programme</h3></div>
+              <div class="card-h"><h3>The project</h3></div>
               <div class="lr"><span class="t">Name</span><span class="s">SUGIRA Muryango</span></div>
               <div class="lr"><span class="t">Run by</span><span class="s">FXB Rwanda, with Boston College</span></div>
               <div class="lr"><span class="t">Districts</span><span class="s">Kirehe, Musanze, Ngoma, Nyanza, Rubavu</span></div>
@@ -1852,9 +1864,9 @@
             <div class="card">
               <div class="card-h"><h3>How a visit is scheduled<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Moving the interval reschedules every household that has not yet had its next module. Cohort 1 is past module 6, so only the modules after it would move."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
               <div class="lr"><span class="t">Interval between modules</span><span class="s">Two weeks</span><span class="c"><button class="rel" type="button" data-modal="setint">Change</button></span></div>
-              <div class="lr"><span class="t">Counts as behind after</span><span class="s">One missed interval</span></div>
-              <div class="lr"><span class="t">Counts as a missed visit after</span><span class="s">30 days with no module</span></div>
-              <div class="lr"><span class="t">Booster sessions at</span><span class="s">3, 6 and 12 months after closing</span></div>
+              <div class="lr"><span class="t">Counts as behind after</span><span class="s">One interval without a visit</span></div>
+              <div class="lr"><span class="t">Counts as not completed after</span><span class="s">30 days with no module</span></div>
+              <div class="lr"><span class="t">Booster modules at</span><span class="s">3, 6 and 12 months after closing</span></div>
               
             </div>
           </div>
@@ -1864,10 +1876,10 @@
           <div class="cols c2e">
             <div class="card">
               <div class="card-h"><h3>Keeping and removing</h3></div>
-              <div class="lr"><span class="t">Deleted responses</span><span class="s">Recoverable for 30 days, then gone</span><span class="c"><span class="lnk-off">Recycle bin</span></span></div>
+              <div class="lr"><span class="t">Deleted responses</span><span class="s">Kept until deleted for good</span><span class="c"><span class="lnk-off">Recycle bin</span></span></div>
               <div class="lr"><span class="t">Training data</span><span class="s">By the list of who was trained</span><span class="c"><button class="rel" type="button" data-modal="training">Clean up</button></span></div>
               <div class="lr"><span class="t">A household that leaves</span><span class="s">Archived with its visits, never deleted</span></div>
-              <div class="lr"><span class="t">Audit trail</span><span class="s">Kept for the life of the programme</span></div>
+              <div class="lr"><span class="t">Audit trail</span><span class="s">Kept for the life of the project</span></div>
             </div>
             <div class="card">
               <div class="card-h"><h3>Getting data out</h3></div>
@@ -1916,7 +1928,7 @@
                 <tr data-tags="all signin"><td class="mut">Today 09:40</td><td>C. Uwimana</td><td class="nm">Signed in</td><td class="mut">Web &middot; Kibungo</td><td class="mut">&mdash;</td><td class="gap"></td></tr>
                 <tr data-tags="access"><td class="mut">Today 09:12</td><td>A. Gahimana</td><td class="nm">Changed what a position can do</td><td><button class="rel" type="button" data-go="position" data-pos-id="NCDA"><svg aria-hidden="true"><use href="#i-hierarchy"/></svg>National NCDA Government Official</button></td><td><span class="chip warn"><i></i>2 people</span></td><td class="gap"></td></tr>
                 <tr data-tags="all"><td class="mut">Today 08:41</td><td>C. Uwimana</td><td class="nm">Opened a risk-of-harm case</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
-                <tr data-tags="all"><td class="mut">Today 08:38</td><td>C. Uwimana</td><td class="nm">Recorded a supervisor review</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0041</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
+                <tr data-tags="all"><td class="mut">Today 08:38</td><td>C. Uwimana</td><td class="nm">Added a follow-up</td><td><button class="rel" type="button" data-go="case"><svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0041</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
                 <tr data-tags="all"><td class="mut">Today 07:55</td><td>M. Dusabe</td><td class="nm">Recorded a visit</td><td><button class="rel" type="button" data-go="household"><svg aria-hidden="true"><use href="#i-households"/></svg>I-413-319 Mukandayisenga</button></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
                 <tr data-tags="all signin"><td class="mut">Today 08:02</td><td>A. Gahimana</td><td class="nm">Signed in</td><td class="mut">Web &middot; this browser</td><td class="mut">National</td><td class="gap"></td></tr>
                 <tr data-tags="all signin"><td class="mut">Today 07:12</td><td>M. Dusabe</td><td class="nm">Signed in</td><td class="mut">Tablet &middot; I-142-007</td><td class="mut">&mdash;</td><td class="gap"></td></tr>
@@ -1927,7 +1939,7 @@
                 <tr data-tags="all signin"><td class="mut">Yesterday 06:58</td><td>A. Gahimana</td><td class="nm">Signed in</td><td class="mut">Web &middot; Kigali</td><td class="mut">&mdash;</td><td class="gap"></td></tr>
                 <tr data-tags="access"><td class="mut">3 Nov 14:05</td><td>A. Gahimana</td><td class="nm">Added a permission for one person</td><td><button class="rel" type="button" data-go="person"><svg aria-hidden="true"><use href="#i-person"/></svg>Export data &rarr; C. Uwimana</button></td><td>1 person</td><td class="gap"></td></tr>
                 <tr data-tags="refused"><td class="mut">2 Nov 09:14</td><td>C. Uwimana</td><td class="nm">Was refused a case outside their sector</td><td><span class="mut">RH-0024 &middot; Rubavu</span></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
-                <tr data-tags="access"><td class="mut">2 Nov 08:30</td><td>P. Habimana</td><td class="nm">Invited someone</td><td><button class="rel" type="button" data-go="person"><svg aria-hidden="true"><use href="#i-person"/></svg>T. Mukamana &middot; IZU</button></td><td>1 person</td><td class="gap"></td></tr>
+                <tr data-tags="access"><td class="mut">2 Nov 08:30</td><td>P. Habimana</td><td class="nm">Created a user</td><td><button class="rel" type="button" data-go="person"><svg aria-hidden="true"><use href="#i-person"/></svg>T. Mukamana &middot; IZU</button></td><td>1 person</td><td class="gap"></td></tr>
                 <tr data-tags="out"><td class="mut">1 Nov 10:18</td><td>A. Gahimana</td><td class="nm">Exported a report</td><td><button class="rel" type="button" data-go="reports"><svg aria-hidden="true"><use href="#i-reports"/></svg>Male caregiver attendance by district</button></td><td><span class="chip warn"><i></i>2 210 households</span></td><td class="gap"></td></tr>
                 <tr data-tags="refused"><td class="mut">31 Oct 15:47</td><td>M. Dusabe</td><td class="nm">Was refused an export</td><td><span class="mut">Household Module Tracking Form &middot; 986 responses</span></td><td class="mut">&mdash;</td><td class="gap"></td></tr>
                 <tr data-tags="access"><td class="mut">14 Oct 11:02</td><td>A. Gahimana</td><td class="nm">Published a form to the mobile app</td><td><button class="rel" type="button" data-go="form"><svg aria-hidden="true"><use href="#i-reports"/></svg>Household Module Tracking Form</button></td><td><span class="chip warn"><i></i>193 villages</span></td><td class="gap"></td></tr>
@@ -1955,7 +1967,7 @@
           <div class="cols c2">
             <div class="card">
               <div class="card-h"><h3>Activity</h3><span class="side"><button class="rel" type="button" data-go="activity">See all</button></span></div>
-              <div class="lr"><span class="t">C. Uwimana recorded a review</span><span class="s">RH-0044</span><span class="c">09:41</span></div>
+              <div class="lr"><span class="t">C. Uwimana added a follow-up</span><span class="s">RH-0044</span><span class="c">09:41</span></div>
               <div class="lr"><span class="t">A. Gahimana changed a position</span><span class="s">Sugira Muryango Sector lead (<abbr data-tip="SLA — Sugira Muryango Sector lead">SLA</abbr>)</span><span class="c">08:12</span></div>
               <div class="lr"><span class="t">T. Mukamana was invited</span><span class="s">Sake &middot; Ngoma</span><span class="c">yesterday</span></div>
               <div class="lr"><span class="t">Form published to the mobile app</span><span class="s">Household Module Tracking Form</span><span class="c">14 Oct</span></div>
@@ -2027,32 +2039,36 @@
               <div><label for="fur-a">From</label><input id="fur-a" type="date" value="2026-01-01"></div>
               <div><label for="fur-b">To</label><input id="fur-b" type="date" value="2026-11-06"></div>
               <div><label for="fur-form">Form <b class="req">*</b></label><select id="fur-form"><option>Risk of Harm/Emergency Case Form</option><option>Household Referral Checklist</option></select></div>
-              <div><label for="fur-p">Province</label><select id="fur-p"><option>All provinces</option><option>Iburasirazuba</option><option>Amajyepfo</option><option>Iburengerazuba</option><option>Amajyaruguru</option></select></div>
+              <div><label for="fur-p">Province</label><select id="fur-p"><option>All provinces</option><option>Eastern Province</option><option>Southern Province</option><option>Western Province</option><option>Northern Province</option></select></div>
               <div><label for="fur-d">District</label><select id="fur-d"><option>All districts</option><option>Kirehe</option><option>Ngoma</option><option>Nyanza</option><option>Rubavu</option><option>Musanze</option></select></div>
-              <div><label for="fur-s">Sector</label><select id="fur-s"><option>All sectors</option><option>Busasamana</option><option>Kibungo</option><option>Kigarama</option><option>Kinigi</option><option>Mugesera</option><option>Nyamugari</option><option>Nyamyumba</option><option>Nyarubuye</option></select></div>
+              <div><label for="fur-s">Sector</label><select id="fur-s"><option>All sectors</option></select></div>
             </div>
             <div class="fur-go"><button class="btn" type="button" id="fur-apply">Apply</button></div>
           </div>
           <div class="card flush plainsurface">
             <div class="card-h vres-h"><h3 id="fur-n">Found 538 results between 1 Jan 2026 and 6 Nov 2026</h3><span class="side">
-              <button class="btn sec sm" type="button" data-toast="538 follow-ups exported as CSV"><svg aria-hidden="true"><use href="#i-download"/></svg>Export CSV</button>
-              <button class="btn sec sm" type="button" data-toast="538 follow-ups exported as Excel"><svg aria-hidden="true"><use href="#i-download"/></svg>Export Excel</button></span></div>
+              <button class="btn sec sm" type="button" data-fur-export="CSV"><svg aria-hidden="true"><use href="#i-download"/></svg>Export CSV</button>
+              <button class="btn sec sm" type="button" data-fur-export="Excel"><svg aria-hidden="true"><use href="#i-download"/></svg>Export Excel</button></span></div>
             <div class="tblwrap"><table class="tbl" id="fur-t">
-              <thead><tr><th>Family ID</th><th>Province</th><th>District</th><th>Sector</th><th>Follow-up status</th><th>Created</th><th>Emergency case in the family</th><th class="num">Date IZU identified it</th><th class="num">Date IZU reported it</th><th>How it was identified</th><th>Who is experiencing it</th><th>Type for a child 0&ndash;5</th></tr></thead>
+              <thead><tr><th>Family ID</th><th>Province</th><th>District</th><th>Sector</th><th>Follow-up status</th><th>Created</th><th>Emergency case in the family</th><th class="num">Date IZU identified it</th><th class="num">Date IZU reported it</th><th>How it was identified</th><th>Who is experiencing it</th><th>Type</th></tr></thead>
               <tbody>
-                <tr><td class="nm">F-551102-21634</td><td class="mut">Iburasirazuba</td><td>Kirehe</td><td>Nyamugari</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-10-09 10:15</td><td>yes</td><td class="num mut">2026-01-02</td><td class="num mut">2026-01-02</td><td>discussWithFamilyMember</td><td>Child 0-5 years</td><td>SevereMalnutrition</td></tr>
-                <tr><td class="nm">F-551203-21256</td><td class="mut">Iburasirazuba</td><td>Kirehe</td><td>Nyarubuye</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-10-08 12:21</td><td>yes</td><td class="num mut">2026-05-02</td><td class="num mut">2026-06-02</td><td>discussWithFamilyMember</td><td>Child 0-18 years</td><td>&mdash;</td></tr>
-                <tr><td class="nm">F-550305-20166</td><td class="mut">Iburasirazuba</td><td>Kirehe</td><td>Kigarama</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-10-05 11:53</td><td>yes</td><td class="num mut">2026-04-20</td><td class="num mut">2026-04-20</td><td>observational</td><td>Not at risk, needs support</td><td>&mdash;</td></tr>
-                <tr><td class="nm">F-550303-28956</td><td class="mut">Iburasirazuba</td><td>Kirehe</td><td>Kigarama</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-09-15 09:18</td><td>yes</td><td class="num mut">2026-09-14</td><td class="num mut">2026-09-15</td><td>observational</td><td>Child 0-5 years</td><td>DeathOfAChild</td></tr>
-                <tr><td class="nm">F-560601-91192</td><td class="mut">Iburasirazuba</td><td>Ngoma</td><td>Mugesera</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-09-14 05:37</td><td>yes</td><td class="num mut">2026-09-28</td><td class="num mut">2026-06-28</td><td>discussWithFamilyMember</td><td>Caregiver</td><td>&mdash;</td></tr>
-                <tr><td class="nm">F-210102-57497</td><td class="mut">Amajyepfo</td><td>Nyanza</td><td>Busasamana</td><td><span class="chip ok"><i></i>Byarakemutse</span></td><td class="mut">2026-09-10 12:18</td><td>yes</td><td class="num mut">2026-07-10</td><td class="num mut">2026-09-10</td><td>spontaneousReports</td><td>Child 0-5 years</td><td>&mdash;</td></tr>
-                <tr><td class="nm">F-560501-33286</td><td class="mut">Iburasirazuba</td><td>Ngoma</td><td>Kibungo</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-09-10 10:36</td><td>yes</td><td class="num mut">2026-04-10</td><td class="num mut">2026-05-03</td><td>spontaneousReports</td><td>Child 0-5 years</td><td>SevereMalnutrition</td></tr>
-                <tr><td class="nm">F-430705-33287</td><td class="mut">Amajyaruguru</td><td>Musanze</td><td>Kinigi</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-09-10 10:31</td><td>yes</td><td class="num mut">2026-09-10</td><td class="num mut">2026-09-10</td><td>discussWithFamilyMember</td><td>Child 0-5 years</td><td>ChildPhysicalViolenceOrAbuse</td></tr>
-                <tr><td class="nm">F-330906-33295</td><td class="mut">Iburengerazuba</td><td>Rubavu</td><td>Nyamyumba</td><td><span class="chip warn"><i></i>Biracyategereje</span></td><td class="mut">2026-09-10 10:04</td><td>yes</td><td class="num mut">2026-09-12</td><td class="num mut">2026-09-12</td><td>discussWithFamilyMember</td><td>Child 0-5 years</td><td>SevereMalnutrition</td></tr>
-                <tr><td class="nm">F-210105-33282</td><td class="mut">Amajyepfo</td><td>Nyanza</td><td>Busasamana</td><td><span class="chip ok"><i></i>Byarakemutse</span></td><td class="mut">2026-09-10 10:00</td><td>yes</td><td class="num mut">2026-01-01</td><td class="num mut">2026-09-01</td><td>observational</td><td>Caregiver</td><td>&mdash;</td></tr>
+                <tr data-form="roh"><td class="nm">F-551102-21634</td><td class="mut">Eastern Province</td><td>Kirehe</td><td>Nyarubuye</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-10-09 10:15</td><td>Yes</td><td class="num mut">2026-10-02</td><td class="num mut">2026-10-03</td><td>Talking with a family member</td><td>Child 0–5</td><td>Severe malnutrition</td></tr>
+                <tr data-form="roh"><td class="nm">F-551203-21256</td><td class="mut">Eastern Province</td><td>Kirehe</td><td>Nyarubuye</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-10-08 12:21</td><td>Yes</td><td class="num mut">2026-10-05</td><td class="num mut">2026-10-06</td><td>Talking with a family member</td><td>Child 0–18</td><td>&mdash;</td></tr>
+                <tr data-form="roh"><td class="nm">F-550305-20166</td><td class="mut">Eastern Province</td><td>Kirehe</td><td>Mahama</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-10-05 11:53</td><td>No</td><td class="num mut">2026-10-01</td><td class="num mut">2026-10-01</td><td>Seen at the visit</td><td>Needs support, not at risk</td><td>&mdash;</td></tr>
+                <tr data-form="roh"><td class="nm">F-550303-28956</td><td class="mut">Eastern Province</td><td>Kirehe</td><td>Mahama</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-09-15 09:18</td><td>Yes</td><td class="num mut">2026-09-14</td><td class="num mut">2026-09-15</td><td>Seen at the visit</td><td>Child 0–5</td><td>Death of a child</td></tr>
+                <tr data-form="roh"><td class="nm">F-560601-91192</td><td class="mut">Eastern Province</td><td>Ngoma</td><td>Jarama</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-09-14 05:37</td><td>Yes</td><td class="num mut">2026-09-12</td><td class="num mut">2026-09-13</td><td>Talking with a family member</td><td>Caregiver</td><td>&mdash;</td></tr>
+                <tr data-form="roh"><td class="nm">F-210102-57497</td><td class="mut">Southern Province</td><td>Nyanza</td><td>Busasamana</td><td><span class="chip ok"><i></i>Closed</span></td><td class="mut">2026-09-10 12:18</td><td>Yes</td><td class="num mut">2026-09-08</td><td class="num mut">2026-09-09</td><td>Reported by someone else</td><td>Child 0–5</td><td>&mdash;</td></tr>
+                <tr data-form="roh"><td class="nm">F-560501-33286</td><td class="mut">Eastern Province</td><td>Ngoma</td><td>Kibungo</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-09-10 10:36</td><td>Yes</td><td class="num mut">2026-09-07</td><td class="num mut">2026-09-08</td><td>Reported by someone else</td><td>Child 0–5</td><td>Severe malnutrition</td></tr>
+                <tr data-form="roh"><td class="nm">F-430705-33287</td><td class="mut">Northern Province</td><td>Musanze</td><td>Kinigi</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-09-10 10:31</td><td>Yes</td><td class="num mut">2026-09-10</td><td class="num mut">2026-09-10</td><td>Talking with a family member</td><td>Child 0–5</td><td>Physical violence</td></tr>
+                <tr data-form="roh"><td class="nm">F-330906-33295</td><td class="mut">Western Province</td><td>Rubavu</td><td>Gisenyi</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-09-10 10:04</td><td>Yes</td><td class="num mut">2026-09-08</td><td class="num mut">2026-09-09</td><td>Talking with a family member</td><td>Child 0–5</td><td>Severe malnutrition</td></tr>
+                <tr data-form="roh"><td class="nm">F-210105-33282</td><td class="mut">Southern Province</td><td>Nyanza</td><td>Busasamana</td><td><span class="chip ok"><i></i>Closed</span></td><td class="mut">2026-09-10 10:00</td><td>No</td><td class="num mut">2026-09-01</td><td class="num mut">2026-09-02</td><td>Seen at the visit</td><td>Caregiver</td><td>&mdash;</td></tr>
+                <tr data-form="ref" hidden><td class="nm">F-560502-41120</td><td class="mut">Eastern Province</td><td>Ngoma</td><td>Kibungo</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-10-31 10:15</td><td>No</td><td class="num mut">2026-10-28</td><td class="num mut">2026-10-31</td><td>Referral after a visit</td><td>Child 0–5</td><td>Health centre</td></tr>
+                <tr data-form="ref" hidden><td class="nm">F-210104-41077</td><td class="mut">Southern Province</td><td>Nyanza</td><td>Busasamana</td><td><span class="chip warn"><i></i>Active</span></td><td class="mut">2026-10-27 08:30</td><td>No</td><td class="num mut">2026-10-24</td><td class="num mut">2026-10-27</td><td>Referral after a visit</td><td>Child 0–18</td><td>District CPWO</td></tr>
+                <tr data-form="ref" hidden><td class="nm">F-551101-40988</td><td class="mut">Eastern Province</td><td>Kirehe</td><td>Mahama</td><td><span class="chip ok"><i></i>Closed</span></td><td class="mut">2026-10-20 09:02</td><td>No</td><td class="num mut">2026-10-18</td><td class="num mut">2026-10-20</td><td>Referral after a visit</td><td>Child 0–5</td><td>Health post</td></tr>
+                <tr data-form="ref" hidden><td class="nm">F-430702-40871</td><td class="mut">Northern Province</td><td>Musanze</td><td>Kinigi</td><td><span class="chip ok"><i></i>Closed</span></td><td class="mut">2026-10-09 14:40</td><td>No</td><td class="num mut">2026-09-23</td><td class="num mut">2026-10-09</td><td>Referral after a visit</td><td>Caregiver</td><td>Sector social worker</td></tr>
               </tbody>
             </table></div>
-            <div class="tfoot"><span>Showing 1&ndash;10 of 538</span></div>
+            <div class="tfoot"><span id="fur-foot">Showing 1&ndash;10 of 538</span></div>
           </div>
         </div>
       </section>
@@ -2078,8 +2094,8 @@
                 <tr data-tags="all flag" data-go="copost"><td class="nm">M. Dusabe</td><td class="mut">Today 07:20</td><td>A caregiver asked me what to do when a child refuses every food&hellip;</td><td class="mut">Jarama &middot; Ngoma</td><td class="num">14</td><td class="num">31</td><td><span class="chip bad"><i></i>Reported &times;2</span></td><td class="gap"></td></tr>
                 <tr data-tags="all flag" data-go="copost"><td class="nm">J. Kamanzi</td><td class="mut">Yesterday 15:04</td><td>Photo of a household&rsquo;s play corner</td><td class="mut">Kigoma &middot; Nyanza</td><td class="num">6</td><td class="num">22</td><td><span class="chip bad" data-tip="Reported: shows a child’s face"><i></i>Reported</span></td><td class="gap"></td></tr>
                 <tr data-tags="all flag" data-go="copost"><td class="nm">E. Mutesi</td><td class="mut">3 Nov</td><td>Asking for a lift to Mahama on Thursday</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">2</td><td class="num">1</td><td><span class="chip bad" data-tip="Reported as off topic"><i></i>Reported</span></td><td class="gap"></td></tr>
-                <tr data-tags="all" data-go="copost"><td class="nm">C. Uwimana</td><td class="mut">1 Nov</td><td>Reminder: the booster session needs the growth card present</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">9</td><td class="num">48</td><td><span class="chip ok"><i></i>Visible</span></td><td class="gap"></td></tr>
-                <tr data-tags="all" data-go="copost"><td class="nm">P. Niyonkuru</td><td class="mut">28 Oct</td><td>How I explain the hand-washing session to fathers</td><td class="mut">Kabare cell &middot; Kibungo</td><td class="num">17</td><td class="num">63</td><td><span class="chip ok"><i></i>Visible</span></td><td class="gap"></td></tr>
+                <tr data-tags="all" data-go="copost"><td class="nm">C. Uwimana</td><td class="mut">1 Nov</td><td>Reminder: the booster module needs the growth card present</td><td class="mut">Kibungo &middot; Ngoma</td><td class="num">9</td><td class="num">48</td><td><span class="chip ok"><i></i>Visible</span></td><td class="gap"></td></tr>
+                <tr data-tags="all" data-go="copost"><td class="nm">P. Niyonkuru</td><td class="mut">28 Oct</td><td>How I explain the hand-washing module to fathers</td><td class="mut">Kabare cell &middot; Kibungo</td><td class="num">17</td><td class="num">63</td><td><span class="chip ok"><i></i>Visible</span></td><td class="gap"></td></tr>
                 <tr data-tags="hidden"><td class="nm">T. Mukamana</td><td class="mut">18 Oct</td><td class="mut">Hidden on 18 October</td><td class="mut">Gisenyi &middot; Rubavu</td><td class="num">0</td><td class="num">4</td><td><span class="chip"><i></i>Hidden &mdash; named a household</span></td><td class="gap"></td></tr>
               </tbody>
             </table></div>
@@ -2115,11 +2131,11 @@
           </div>
           <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl izt">
-              <thead><tr><th>IZU code</th><th data-person>IZU name</th><th>Village</th><th>Cell</th><th>Sector</th><th>District</th><th>Module</th><th class="num">Cohort</th><th class="num">Date recorded</th><th class="num">Cross-module questions</th><th class="num">Play session questions</th><th class="num">Family-specific questions</th><th class="num">Module-specific questions</th><th class="num">Fidelity grade<button class="ihelp" type="button" aria-expanded="false" aria-label="How it is worked out" data-tip="The play session score"><svg aria-hidden="true"><use href="#i-info"/></svg></button></th><th class="num">Competence grade<button class="ihelp" type="button" aria-expanded="false" aria-label="How it is worked out" data-tip="Cross-module + family-specific + module-specific"><svg aria-hidden="true"><use href="#i-info"/></svg></button></th><th class="num">Quality grade<button class="ihelp" type="button" aria-expanded="false" aria-label="How it is worked out" data-tip="Fidelity + competence"><svg aria-hidden="true"><use href="#i-info"/></svg></button></th></tr></thead>
+              <thead><tr><th>IZU code</th><th data-person>IZU name</th><th>Village</th><th>Cell</th><th>Sector</th><th>District</th><th>Module</th><th class="num">Cohort</th><th class="num">Date recorded</th><th class="num">Cross-module questions</th><th class="num">Play module questions</th><th class="num">Family-specific questions</th><th class="num">Module-specific questions</th><th class="num">Fidelity grade<button class="ihelp" type="button" aria-expanded="false" aria-label="How it is worked out" data-tip="The play module score"><svg aria-hidden="true"><use href="#i-info"/></svg></button></th><th class="num">Competence grade<button class="ihelp" type="button" aria-expanded="false" aria-label="How it is worked out" data-tip="Cross-module + family-specific + module-specific"><svg aria-hidden="true"><use href="#i-info"/></svg></button></th><th class="num">Quality grade<button class="ihelp" type="button" aria-expanded="false" aria-label="How it is worked out" data-tip="Fidelity + competence"><svg aria-hidden="true"><use href="#i-info"/></svg></button></th></tr></thead>
               <tbody>
                 <tr data-tags="all high" data-find="Iburasirazuba I-2101-142"><td class="nm">I-2101-142</td><td>M. Dusabe</td><td class="mut">Kabare</td><td class="mut">Kabare</td><td class="mut">Kibungo</td><td class="mut">Ngoma</td><td class="mut">6.The Importance of Good Health</td><td class="num">1</td><td class="num mut">2026-10-28</td><td class="num">30</td><td class="num">27</td><td class="num">28</td><td class="num">0.00</td><td class="num">27.00</td><td class="num">58.00</td><td class="num"><b>85.00</b></td></tr>
-                <tr data-tags="all high" data-find="Iburasirazuba I-2101-208"><td class="nm">I-2101-208</td><td>J. Kamanzi</td><td class="mut">Rwinkwavu</td><td class="mut">Mahama</td><td class="mut">Mahama</td><td class="mut">Kirehe</td><td class="mut">5.The Importance of Good Nutrition</td><td class="num">1</td><td class="num mut">2026-10-22</td><td class="num">33</td><td class="num">27</td><td class="num">28</td><td class="num">0.00</td><td class="num">27.00</td><td class="num">61.00</td><td class="num"><b>88.00</b></td></tr>
-                <tr data-tags="all high" data-find="Iburasirazuba I-2101-117"><td class="nm">I-2101-117</td><td>E. Mutesi</td><td class="mut">Gahima</td><td class="mut">Jarama</td><td class="mut">Jarama</td><td class="mut">Ngoma</td><td class="mut">9.The Important Role that Everyone Plays</td><td class="num">2</td><td class="num mut">2026-10-15</td><td class="num">32</td><td class="num">26</td><td class="num">27</td><td class="num">0.00</td><td class="num">26.00</td><td class="num">59.00</td><td class="num"><b>85.00</b></td></tr>
+                <tr data-tags="all high" data-find="Iburasirazuba I-2101-208"><td class="nm">I-2101-208</td><td>D. Niyonsaba</td><td class="mut">Rwinkwavu</td><td class="mut">Mahama</td><td class="mut">Mahama</td><td class="mut">Kirehe</td><td class="mut">5.The Importance of Good Nutrition</td><td class="num">1</td><td class="num mut">2026-10-22</td><td class="num">33</td><td class="num">27</td><td class="num">28</td><td class="num">0.00</td><td class="num">27.00</td><td class="num">61.00</td><td class="num"><b>88.00</b></td></tr>
+                <tr data-tags="all high" data-find="Iburasirazuba I-2101-117"><td class="nm">I-2101-117</td><td>V. Nyiraneza</td><td class="mut">Gahima</td><td class="mut">Jarama</td><td class="mut">Jarama</td><td class="mut">Ngoma</td><td class="mut">9.The Important Role that Everyone Plays</td><td class="num">2</td><td class="num mut">2026-10-15</td><td class="num">32</td><td class="num">26</td><td class="num">27</td><td class="num">0.00</td><td class="num">26.00</td><td class="num">59.00</td><td class="num"><b>85.00</b></td></tr>
                 <tr data-tags="all" data-find="Amajyepfo I-1903-391"><td class="nm">I-1903-391</td><td>A. Nyirahabimana</td><td class="mut">Nyakwibereka</td><td class="mut">Gahondo</td><td class="mut">Busasamana</td><td class="mut">Nyanza</td><td class="mut">3.Building Early Communication Skills</td><td class="num">1</td><td class="num mut">2026-07-23</td><td class="num">20</td><td class="num">26</td><td class="num">24</td><td class="num">0.00</td><td class="num">26.00</td><td class="num">44.00</td><td class="num"><b>70.00</b></td></tr>
                 <tr data-tags="all low" data-find="Amajyaruguru I-2010-433"><td class="nm">I-2010-433</td><td>B. Uwamahoro</td><td class="mut">Rwamushumba</td><td class="mut">Gishike</td><td class="mut">Kinigi</td><td class="mut">Musanze</td><td class="mut">2.The Importance of Early Stimulation &amp; Play</td><td class="num">2</td><td class="num mut">2026-09-15</td><td class="num">12</td><td class="num">0</td><td class="num">0</td><td class="num">0.00</td><td class="num">0.00</td><td class="num">12.00</td><td class="num"><b>12.00</b></td></tr>
                 <tr data-tags="all" data-find="Iburengerazuba I-2101-260"><td class="nm">I-2101-260</td><td>F. Uwase</td><td class="mut">Rugerero</td><td class="mut">Rugerero</td><td class="mut">Gisenyi</td><td class="mut">Rubavu</td><td class="mut">4.The Importance of Good Hygiene</td><td class="num">1</td><td class="num mut">2026-08-22</td><td class="num">30</td><td class="num">26</td><td class="num">27</td><td class="num">0.00</td><td class="num">26.00</td><td class="num">57.00</td><td class="num"><b>83.00</b></td></tr>
@@ -2130,7 +2146,7 @@
                 <tr><td class="nm" colspan="9">Average score per module (/12 modules)</td><td class="num">13.08</td><td class="num">11.00</td><td class="num">11.17</td><td class="num">0.00</td><td class="num">11.00</td><td class="num">24.25</td><td class="num">35.25</td></tr>
               </tfoot>
             </table></div>
-            <div class="tfoot"><span>Showing 1&ndash;6 of 15 208 supervisions</span></div>
+            <div class="tfoot"><span id="izuFoot">Showing 1&ndash;6 of 15 208 supervisions</span></div>
           </div>
           <div class="cols c2">
           <div class="card">
@@ -2199,7 +2215,7 @@
             </div>
             <div style="display:grid;gap:var(--space-4);align-content:start">
               <div class="card">
-                <div class="card-h"><h3>This person<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A post is read by every home visitor in the programme, so who wrote it and what else they have written is part of judging it."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
+                <div class="card-h"><h3>This person<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="A post is read by every home visitor in the project, so who wrote it and what else they have written is part of judging it."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3></div>
                 <div class="lr"><span class="t">M. Dusabe</span><span class="s">IZU &middot; Kibungo, Ngoma</span><span class="c"><button class="rel" type="button" data-go="person">Open</button></span></div>
                 <div class="lr"><span class="t">Posts</span><span class="s">31 since January</span><span class="c">1 reported</span></div>
                 <div class="lr"><span class="t">Everything they did</span><span class="s">Sign-ins, visits, posts</span><span class="c"><button class="rel" type="button" data-go="person" data-view="tab:What they did">Activity</button></span></div>
@@ -2239,7 +2255,7 @@
           <div class="filters">
           <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input type="text" placeholder="Search guidance, videos and documents" aria-label="Search field support"></div>
         </div>
-          <div class="filters"><button class="fl" type="button"><span class="k">Kind</span><b>Any</b><span class="cv">&#9660;</span></button></div>
+          <div class="filters grouped" hidden><button class="fl" type="button"><span class="k">Kind</span><b>Any</b><span class="cv">&#9660;</span></button></div>
 <div class="cols c2e" style="grid-template-columns:minmax(0,17rem) minmax(0,1fr)">
             <div class="card">
               <div class="card-h"><h3>Folders<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Two kinds, because different people watch them: a help video is shown to a caregiver in their own home, a tutorial is how the app works."><svg aria-hidden="true"><use href="#i-info"/></svg></button></h3><span class="side"><button class="btn sec sm" type="button" data-modal="doctype"><svg aria-hidden="true"><use href="#i-plus"/></svg> New</button></span></div>
@@ -2247,7 +2263,6 @@
               <div class="lr click" data-folder="Kind" data-value="Any" aria-current="true"><span class="t" data-tip="Both kinds">All</span><span class="c">24</span><span class="ch">&rsaquo;</span></div>
               <div class="lr click" data-folder="Kind" data-value="Help"><span class="t" data-tip="Shown to a caregiver">Help</span><span class="c">17</span><span class="ch">&rsaquo;</span></div>
               <div class="lr click" data-folder="Kind" data-value="Tutorial"><span class="t" data-tip="How the app works">Tutorial</span><span class="c">7</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="t mut">Nothing is outside a folder</span></div>
             </div>
             <div>
             <div class="card flush plainsurface">
@@ -2279,14 +2294,13 @@
               <div class="lr click" data-folder="Type" data-value="Policy"><span class="t" data-tip="Protocols and guidance">Policy</span><span class="c">11</span><span class="ch">&rsaquo;</span></div>
               <div class="lr click" data-folder="Type" data-value="Training"><span class="t" data-tip="Module materials">Training</span><span class="c">7</span><span class="ch">&rsaquo;</span></div>
               <div class="lr click" data-folder="Type" data-value="Reporting"><span class="t" data-tip="What goes to NCDA">Reporting</span><span class="c">6</span><span class="ch">&rsaquo;</span></div>
-              <div class="lr"><span class="t mut">Nothing is outside a folder</span></div>
             </div>
             <div>
             <div class="card flush plainsurface">
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th>Document</th><th>Type</th><th>Visible to</th><th class="num">Size</th><th class="num">Updated</th><th class="ract">Actions</th></tr></thead>
               <tbody>
-                <tr><td class="nm">Safeguarding protocol</td><td class="mut">Policy</td><td><span class="chip bad"><i></i>Supervisors, social workers</span></td><td class="num mut">1.2 MB</td><td class="num mut">12 Sep</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Safeguarding protocol downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
+                <tr><td class="nm">Risk of harm protocol</td><td class="mut">Policy</td><td><span class="chip bad"><i></i>Supervisors, social workers</span></td><td class="num mut">1.2 MB</td><td class="num mut">12 Sep</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Safeguarding protocol downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
                 <tr><td class="nm">Home visit checklist</td><td class="mut">Field</td><td class="mut">Everyone</td><td class="num mut">240 KB</td><td class="num mut">3 Oct</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Home visit checklist downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
                 <tr><td class="nm">Referral form &mdash; health post</td><td class="mut">Field</td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village, sector leads</td><td class="num mut">88 KB</td><td class="num mut">21 Aug</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Referral form &mdash; health post downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
                 <tr><td class="nm">Quarterly report to <abbr data-tip="NCDA — National Child Development Agency">NCDA</abbr></td><td class="mut">Reporting</td><td><span class="chip warn"><i></i><abbr data-tip="M&amp;E — monitoring and evaluation">M&amp;E</abbr> only</span></td><td class="num mut">3.4 MB</td><td class="num mut">1 Oct</td><td class="rowacts"><a data-modal="vedit">Edit</a><a data-toast="Quarterly report to NCDA downloaded">Download</a><a data-modal="vdelete">Delete</a></td></tr>
@@ -2317,7 +2331,7 @@
             <div class="tblwrap"><table class="tbl">
               <thead><tr><th data-person>From</th><th>About</th><th class="num">Sent</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td class="nm">M. Dusabe</td><td>Session 6 form takes too long on a slow tablet</td><td class="num mut">2 days</td><td><span class="chip warn"><i></i>Unread</span></td></tr>
+                <tr><td class="nm">M. Dusabe</td><td>Module 6 form takes too long on a slow tablet</td><td class="num mut">2 days</td><td><span class="chip warn"><i></i>Unread</span></td></tr>
                 <tr><td class="nm">E. Mutesi</td><td>Kinyarwanda wording on question 14 is unclear</td><td class="num mut">4 days</td><td><span class="chip warn"><i></i>Unread</span></td></tr>
                 <tr><td class="nm">J. Kamanzi</td><td>Cannot download the referral form offline</td><td class="num mut">1 week</td><td><span class="chip ok"><i></i>Answered</span></td></tr>
               </tbody>
@@ -2333,7 +2347,7 @@
                 <tr><td class="nm">Before you start a module</td><td class="mut">Opening any module on the tablet</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num mut">14 Oct</td><td class="gap"></td></tr>
                 <tr><td class="nm">What counts as a risk of harm</td><td class="mut">Above the risk question</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut">Everyone</td><td class="num mut">2 Oct</td><td class="gap"></td></tr>
                 <tr><td class="nm">Measuring a child correctly</td><td class="mut">Anthropometric form</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num mut">21 Sep</td><td class="gap"></td></tr>
-                <tr><td class="nm">When a household is absent</td><td class="mut">Session did not occur form</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num mut">21 Sep</td><td class="gap"></td></tr>
+                <tr><td class="nm">When a household is absent</td><td class="mut">Visit did not happen form</td><td><span class="chip ok"><i></i>EN &middot; RW</span></td><td class="mut"><abbr data-tip="IZU — the home visitor at village level. A village has two, and the biggest three">IZU</abbr> at Village</td><td class="num mut">21 Sep</td><td class="gap"></td></tr>
                 <tr><td class="nm">Posting to the community</td><td class="mut">Above the composer</td><td><span class="chip warn"><i></i>EN only</span></td><td class="mut">Everyone</td><td class="num mut">4 Aug</td><td class="gap"></td></tr>
               </tbody>
             </table></div>
@@ -2411,5 +2425,7 @@
 <script src="builder.js" defer></script>
 <script src="command.js" defer></script>
 <script src="records.js" defer></script>
+<script src="recdata.js" defer></script>
+<script src="admin.js" defer></script>
 </body>
 </html>

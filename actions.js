@@ -35,7 +35,7 @@
     if (!body) return;
     var real = $$('tr', body).filter(function (r) { return !r.classList.contains('t-empty'); });
     var shown = real.filter(function (r) {
-      return !r.classList.contains('f-out') && !r.classList.contains('t-out') && !r.classList.contains('p-out');
+      return !r.classList.contains('f-out') && !r.classList.contains('t-out') && !r.classList.contains('p-out') && !r.classList.contains('r-gone');
     });
     var row = body.querySelector('tr.t-empty');
     var screen = table.closest('.screen');
@@ -56,7 +56,7 @@
     var td = document.createElement('td');
     td.colSpan = cols;
     var p = document.createElement('p');
-    p.textContent = 'Nothing here matches what you have narrowed to.';
+    p.textContent = 'Nothing matches';
     td.appendChild(p);
     if (bar) {
       var b = document.createElement('button');
@@ -121,7 +121,7 @@
           /* A panel opened under a row is not a row of the table: it belongs
              to the one above it and is paged, sorted and counted with it. */
           if (r.classList.contains('sxr')) return false;
-          return !r.classList.contains('f-out') && !r.classList.contains('t-out');
+          return !r.classList.contains('f-out') && !r.classList.contains('t-out') && !r.classList.contains('r-gone');
         });
       }
 
@@ -129,7 +129,10 @@
          count. The rows loaded are a sample of it. Once a filter is on, the
          rows are the set. */
       function wholeOf(list) {
-        if (filtered(table)) return list.length;
+        if (filtered(table)) {
+          var est = window.SugiraFilters && window.SugiraFilters.whole ? window.SugiraFilters.whole(table) : 0;
+          return est && list.length ? Math.max(est, list.length) : list.length;
+        }
         var declared = parseInt(table.getAttribute('data-total') || '', 10);
         if (!isNaN(declared) && declared >= list.length) return declared;
         var sc = table.closest('.screen');
@@ -232,6 +235,8 @@
   $$('button').forEach(function (b) {
     var t = b.textContent.trim();
     if (!/^Export( CSV| strings)?$/.test(t)) return;
+    /* An Export that opens the export dialog leaves the exporting to it. */
+    if (b.hasAttribute('data-modal') || b.hasAttribute('data-fur-export')) return;
     b.addEventListener('click', function () {
       var screen = b.closest('.screen');
       exportTable(tableNear(b), (screen ? screen.id.replace('s-', '') : 'sugira'));
@@ -327,7 +332,6 @@
          it, rather than this menu keeping its own idea of how to navigate. */
       window.SugiraMenu.show(chip, [
         ['Your profile', 'profile', null],
-        ['Switch role…', null, function () { say('A person holds one role per place'); }],
         ['Sign out', 'login', null]
       ].map(function (row) {
         return {

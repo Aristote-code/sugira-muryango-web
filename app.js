@@ -25,6 +25,7 @@
     person:       { crumbs: [['People', 'people'], ['C. Uwimana', null]],                 nav: 'people' },
     permissions:  { crumbs: [['Positions & access', null]],                               nav: 'permissions' },
     activity:     { crumbs: [['Activity', null]],                                         nav: 'activity' },
+    orgs:         { crumbs: [['Organisations', null]],                                    nav: 'orgs' },
     position:     { crumbs: [['Positions & access', 'permissions'], ['Position', null]],  nav: 'permissions' },
     rolecard:     { crumbs: [['Positions & access', 'permissions'], ['Position', null]],  nav: 'permissions' },
     settings:     { crumbs: [['Settings', null]],                                        nav: 'settings' },
@@ -56,7 +57,7 @@
     cohorts:       'A cohort decides which households get which module, and when. Changing one moves real families’ schedules. Five districts run the programme: Kirehe, Musanze, Ngoma, Nyanza and Rubavu.',
     community:     'Home visitors post to each other from the tablet. Anything a reader reports arrives here, and nothing is removed without a reason being recorded.',
     content:       'What a home visitor can open on the tablet: the module videos, the written guidance, the answers to common questions. Each item is visible to the roles you choose. A document is filed in a folder somebody made, and opening one downloads it rather than showing it here.',
-    dashboard:     'Coverage, safeguarding and reporting across every district SUGIRA Muryango works in.',
+    dashboard:     'Coverage, risk of harm and reporting across every district SUGIRA Muryango works in.',
     field:         '371 of 412 home visitors have reported today. Until the rest sync, every figure on the dashboard is provisional.',
     followups:     'An answer on a form can oblige someone to go back. These are the obligations that are open, who owns each one, and how long it has been waiting.',
     households:    '2 210 enrolled across five districts. 148 are behind their cohort schedule.',
@@ -70,7 +71,7 @@
     reports:       'Every report built in a project, by project, module and form.',
     roles:         'The positions as the live system stores them, kept until FXB has seen both. A position that duplicates another is one to merge, not one to keep.',
     referrals:     'A referral is a risk-of-harm case sent somewhere. It stays open here until the place it was sent to answers, because a case can look handled when nothing has happened.',
-    safeguarding:  'Three open cases. Two of them are not reviewed; one of those is past the 72-hour window.',
+    safeguarding:  'Every risk of harm raised at a visit, with its follow-ups. Open holds active and stabilized cases.',
     settings:      'The rules the whole programme runs on. Changing one here changes it for every district, every tablet and every household at once, so each says what it will move.',
     system:        'Who did what, and the housekeeping that keeps the data honest. The rules themselves live in Settings.',
     translations:  'Thirteen of the thirty-seven forms that carry text are not fully translated. Anything still English-only reaches a home visitor in a language the household may not read.',
@@ -93,7 +94,8 @@
     ['Edit', 'Who can change the questions'],
     ['Archive', 'Who can take it off the tablets']
   ];
-  var FORM_ORGS = ['FXB Rwanda · Head office', 'FXB Rwanda · Monitoring & evaluation', 'FXB Rwanda · Field delivery', 'NCDA · Child protection'];
+  var FORM_ORGS = ['FXB Rwanda · Head office', 'FXB Rwanda · Monitoring & evaluation', 'FXB Rwanda · Field delivery', 'NCDA · Child protection',
+    'University of Rwanda · Research', 'Boston College · Research'];
 
   var MODALS = {
     setint: {
@@ -148,7 +150,7 @@
       title: 'Post to everyone',
       ok: 'Post',
       body: '<div><label for="f-pow">Who sees it</label><select id="f-pow"><option>Every home visitor</option><option>One district</option><option>One sector</option></select></div>' +
-            '<div><label for="f-pot">Your post</label><textarea id="f-pot" placeholder="Do not name a household or a child. Posts are visible to every home visitor in the programme."></textarea></div>',
+            '<div><label for="f-pot">Your post</label><textarea id="f-pot" placeholder="Do not name a household or a child. Every home visitor reads it."></textarea></div>',
       done: 'Posted — it appears on the tablet at the next sync'
     },
     score: {
@@ -157,7 +159,7 @@
       body: '<div><label for="f-sci">IZU</label><select id="f-sci"><option>M. Dusabe — I-2101-142</option><option>E. Mutesi — I-2101-117</option><option>J. Kamanzi — I-2101-208</option></select></div>' +
             '<div><label for="f-scm">Module you sat in on</label><select id="f-scm"><option>6. The Importance of Good Health</option><option>5. The Importance of Good Nutrition</option><option>4. The Importance of Good Hygiene</option></select></div>' +
             '<div class="cols c2e"><div><label for="f-sc1">Cross-module questions</label><input id="f-sc1" type="number" min="0" max="40"></div>'
-            + '<div><label for="f-sc2">Play session questions</label><input id="f-sc2" type="number" min="0" max="30"></div>'
+            + '<div><label for="f-sc2">Play module questions</label><input id="f-sc2" type="number" min="0" max="30"></div>'
             + '<div><label for="f-sc3">Family-specific questions</label><input id="f-sc3" type="number" min="0" max="30"></div>'
             + '<div><label for="f-sc4">Module-specific questions</label><input id="f-sc4" type="number" min="0" max="30"></div></div>' +
             '<div><label for="f-scn">What you saw</label><textarea id="f-scn" placeholder="The score is a training signal. Say what would help, not what went wrong."></textarea></div>',
@@ -171,42 +173,48 @@
       title: 'Notification rule',
       ok: 'Save rule',
       body: '<div><span class="rb-l">When</span><div class="rb-cond">'
-          + '<select aria-label="Question"><option>Every response</option><option>Q5 Any sign of harm or neglect?</option><option>Q8 Referred to the health post?</option></select>'
+          + '<select aria-label="Question"><option>Q5 Any sign of harm or neglect?</option><option>Q8 Referred to the health post?</option></select>'
           + '<select aria-label="Operator"><option>is</option><option>is not</option></select>'
           + '<input type="text" aria-label="Value" value="Yes"><span></span></div></div>'
           + '<div><label for="f-rm">Message</label><input id="f-rm" type="text" value="A risk of harm was raised in your sector"></div>'
-          + '<div><span class="rb-l">Send it to</span><div class="wz-x">'
-          + '<label class="rb-ck"><input type="checkbox" checked>Sector lead (SLA)</label>'
-          + '<label class="rb-ck"><input type="checkbox" checked>District CPWO</label>'
-          + '<label class="rb-ck"><input type="checkbox">IZU Cell Coordinator</label>'
-          + '<label class="rb-ck"><input type="checkbox">District lead</label></div></div>',
+          + '<div><span class="rb-l">Notify these positions</span><div class="wz-x" id="f-rto"></div></div>',
       /* Change opens the rule it sits on; Add a rule opens a blank one. */
       init: function (body, from) {
         var row = from && from.closest('.lr');
         var q = body.querySelector('select[aria-label="Question"]'), v = body.querySelector('input[aria-label="Value"]');
         var op = body.querySelector('select[aria-label="Operator"]');
         var msg = body.querySelector('#f-rm');
+        /* As at creation: a condition tells one or more positions. */
+        var can = window.SugiraPerms ? window.SugiraPerms.positions().map(function (p) { return p.name; }) : [];
+        body.querySelector('#f-rto').innerHTML = can.map(function (o) {
+          return '<label class="rb-ck"><input type="checkbox">' + esc(o) + '</label>';
+        }).join('');
         var who = $$('.wz-x input', body);
         mTitle.textContent = row ? 'Change this rule' : 'New notification rule';
         if (!row) {
-          q.value = 'Every response'; v.value = ''; msg.value = '';
+          v.value = ''; msg.value = '';
           who.forEach(function (c) { c.checked = false; });
         } else {
           var t = row.querySelector('.t').textContent.trim(), sx = row.querySelector('.s').textContent.trim();
           var m = /^(.*?)(?: is (.+))?$/.exec(t);
           var opt = [].filter.call(q.options, function (o) { return m[1].indexOf(o.text.replace(/\?$/, '')) === 0; })[0];
-          q.value = opt ? opt.text : 'Every response';
+          if (opt) q.value = opt.text;
           v.value = m[2] || '';
           var mm = /[“"](.*?)[”"]/.exec(sx);
           msg.value = mm ? mm[1] : '';
           var to = sx.split('→').pop();
           who.forEach(function (c) { c.checked = to.indexOf(c.parentNode.textContent.trim().replace(/ \(.*\)$/, '')) > -1; });
         }
-        var every = q.value === 'Every response';
-        op.closest('.rb-cond').classList.toggle('every', every);
-        v.disabled = every; op.disabled = every;
+        var cond = op.closest('.rb-cond');
+        function every() {
+          var e = q.value === 'Every response';
+          cond.classList.toggle('every', e);
+          v.disabled = e; op.disabled = e;
+          if (e) v.value = '';
+        }
         [q, op].forEach(function (x) { x.dispatchEvent(new Event('change')); });
-        q.addEventListener('change', function () { var e = q.value === 'Every response'; v.disabled = e; op.disabled = e; if (e) v.value = ''; });
+        every();
+        q.addEventListener('change', every);
       },
       done: 'Rule saved'
     },
@@ -215,12 +223,19 @@
       init: function (body, from) {
         var row = from && from.closest('tr, .lr');
         var nm = row && (row.querySelector('.nm, .t, td') || {}).textContent;
+        var onForm = from && from.closest('#s-form');
+        if (onForm) nm = ($('h1', onForm) || {}).textContent;
         var isProject = from && from.closest('[data-panelid]') === null && from.closest('#s-programme');
+        MODALS.archive.what = nm ? nm.trim() : '';
+        MODALS.archive.form = !!onForm;
         mTitle.textContent = 'Archive ' + (nm ? '“' + nm.trim() + '”' : isProject ? 'this project' : 'this form');
       },
       ok: 'Archive',
       body: '',
-      done: 'Archived — it leaves the tablet at the next sync'
+      onOk: function () {
+        if (MODALS.archive.form && window.SugiraProg) window.SugiraProg.archive(MODALS.archive.what);
+      },
+      done: function () { return (MODALS.archive.what ? '“' + MODALS.archive.what + '”' : 'It') + ' archived'; }
     },
     /* The default is the design. Continue marks the batch as training; a
        real visit takes a deliberate second click. gp1 48:30. */
@@ -373,6 +388,22 @@
           + '<div><label for="f-tell">Who is told, as you open it</label>'
           + '<select id="f-tell" disabled><option>C. Uwimana, and M. Dusabe who raised the flag</option>'
           + '</select></div>',
+      /* The case on screen, and the two people on it. */
+      init: function (body) {
+        var sc = document.getElementById('s-case');
+        var id = $('.rec-id', sc).textContent.trim();
+        mTitle.textContent = 'Open ' + id + ' in full';
+        function who(label) {
+          var r = $$('.pgr', sc).filter(function (x) { return $('.k', x).textContent.trim() === label; })[0];
+          var b = r && $('.rel', r);
+          return b ? b.textContent.trim() : '';
+        }
+        var sel = body.querySelector('#f-tell');
+        if (sel && sel.options[0]) {
+          sel.options[0].textContent = who('Supervisor') + ', and ' + who('Raised by') + ' who raised the flag';
+          sel.dispatchEvent(new Event('change'));
+        }
+      },
       /* Nothing here is granted, so there is nothing to wait for: the dialog
          closes onto an open case and two new lines in the audit trail. */
       done: function (body) {
@@ -418,7 +449,7 @@
       title: 'Enrol a household',
       ok: 'Enrol',
       body: '<div><label for="f-care">Primary caregiver</label><input id="f-care" type="text" placeholder="Full name"></div>' +
-            '<div><label for="f-vill">Village</label><select id="f-vill"><option>Kabare — Kibungo — Ngoma</option><option>Gatare — Kibungo — Ngoma</option><option>Mpare — Sake — Ngoma</option></select></div>' +
+            '<div><label for="f-vill">Village</label><select id="f-vill"><option>Kabare — Kibungo — Ngoma</option><option>Kibimba — Jarama — Ngoma</option><option>Rukoma — Sake — Ngoma</option><option>Munini — Mahama — Kirehe</option><option>Rwesero — Kigoma — Nyanza</option><option>Rugarama — Busasamana — Nyanza</option><option>Bugoyi — Gisenyi — Rubavu</option><option>Nyonirima — Kinigi — Musanze</option></select></div>' +
             '<div><label for="f-coh">Cohort</label><select id="f-coh"><option>Cohort 2 · 2026</option><option>Cohort 1 · 2026</option><option>Cohort 3 · 2026 (not started)</option></select></div>',
       done: 'Household enrolled in Cohort 4'
     },
@@ -456,21 +487,32 @@
           + '<option>A copy of Household Module Tracking</option></select></div>'
           + '<div class="cols c2">'
           + '<div><label for="f-ps">Status</label><select id="f-ps">'
-          + '<option>Draft \u2014 nobody sees it yet</option><option>Active</option></select></div>'
+          + '<option>Draft</option><option>Active</option></select></div>'
           + '<div><label for="f-pl">Level</label><select id="f-pl">'
           + '<option>National</option><option>District</option><option>Sector</option>'
           + '</select></div></div>'
           + '<div id="f-pwrap"><label for="f-pw">Where it runs</label>'
           + '<select id="f-pw"></select></div>'
           + '<div><label for="f-pmob">On the mobile app</label><select id="f-pmob">'
-          + '<option>No \u2014 web only</option>'
-          + '<option>Yes \u2014 its forms reach the tablet</option></select></div>'
+          + '<option>No</option>'
+          + '<option>Yes</option></select></div>'
           + '<div><label for="f-pmd">Does it have modules</label><select id="f-pmd">'
-          + '<option>No \u2014 forms go straight into the project</option>'
+          + '<option>No</option>'
           + '<option>Yes \u2014 choose them now</option></select></div>'
           + '<div id="f-pmdw" hidden><label for="f-pmods">Which modules</label>'
           + '<select id="f-pmods" multiple size="4"></select></div>',
-      init: function (body) {
+      init: function (body, from) {
+        var mine = from && from.closest && from.closest('#s-project');
+        MODALS.project.settings = !!mine;
+        if (mine) {
+          mTitle.textContent = 'Project settings';
+          mOk.textContent = 'Save';
+          body.querySelector('#f-pn').value = (mine.querySelector('h1') || {}).textContent || '';
+          var sf = body.querySelector('#f-pm');
+          if (sf) sf.closest('div').hidden = true;
+          body.querySelector('#f-ps').selectedIndex = 1;
+          body.querySelector('#f-pmob').selectedIndex = /Yes/.test(mine.textContent.match(/Mobile app\s*(Yes|No)/) ? mine.textContent.match(/Mobile app\s*(Yes|No)/)[1] : 'Yes') ? 1 : 0;
+        }
         var lvl = body.querySelector('#f-pl');
         var where = body.querySelector('#f-pw');
         var wrap = body.querySelector('#f-pwrap');
@@ -511,23 +553,27 @@
         drawMods();
       },
       done: function (body) {
+        if (MODALS.project.settings) return 'Project settings saved';
         var lvl = (body.querySelector('#f-pl') || {}).value || 'National';
         var st = (body.querySelector('#f-ps') || {}).selectedIndex;
         return 'Project created at ' + lvl.toLowerCase() + ' level'
-          + (st === 0 ? ' \u2014 a draft, so nobody sees it yet' : '');
+          + (st === 0 ? ' as a draft' : '');
       }
     },
     module: {
       title: 'Add a module',
       ok: 'Add module',
       body: '<div><label for="f-mn">Module name</label><input id="f-mn" type="text" placeholder="e.g. The Importance of Good Nutrition"></div>' +
-            '<div><label for="f-mo">Position in the sequence</label><select id="f-mo"><option>After module 9</option><option>At the end</option><option>As a booster, outside the sequence</option></select></div>',
-      done: 'Module added \u2014 it is not on the mobile app until you publish'
+            '<div><label for="f-mnr">Module name in Kinyarwanda</label><input id="f-mnr" type="text" lang="rw"></div>' +
+            '<div><label for="f-mo">Position in the sequence</label><select id="f-mo"><option>At the end</option><option>As a booster, outside the sequence</option></select></div>',
+      onOk: function (body) {
+        var n = body.querySelector('#f-mn').value.trim();
+        if (!n) { say('Give the module a name'); body.querySelector('#f-mn').focus(); return false; }
+        if (window.SugiraProg) window.SugiraProg.addModule(n, body.querySelector('#f-mnr').value.trim(), body.querySelector('#f-mo').selectedIndex === 1);
+        MODALS.module.added = n;
+      },
+      done: function () { return '“' + MODALS.module.added + '” added'; }
     },
-    /* The partners' own order, kept: build the form, then say who may do
-       what with it, then who hears when it is sent in — and only people who
-       can read the data are offered for that. Made here, once; projects and
-       modules import it, already set up. */
     /* The partners' own order, kept: build the form, then say who may do
        what with it, then who hears when it is sent in — and only people who
        can read the data are offered for that. Made here, once; projects and
@@ -559,14 +605,8 @@
           +   '</tbody></table></div>'
           + '</div></div>'
           + '<div class="nf-p nf-pane" data-wzp="2" hidden><div class="nf-col">'
-          +   '<section class="nf-card"><header class="nf-ch"><h4>When a response is sent in, tell</h4>'
-          +     '<button class="ihelp" type="button" aria-expanded="false" aria-label="What this is" data-tip="Only organisations with data access can be told"><svg aria-hidden="true"><use href="#i-info"/></svg></button></header>'
-          +     '<div class="nf-rows" id="f-nw"></div></section>'
-          +   '<section class="nf-card"><header class="nf-ch"><h4>And when an answer says</h4></header>'
-          +     '<div class="nf-cond"><select id="f-nq" aria-label="Question"><option>No question yet</option></select>'
-          +     '<select aria-label="Operator"><option>is</option><option>is not</option></select>'
-          +     '<input type="text" aria-label="Value" value="Yego"></div>'
-          +     '<div class="nf-msg"><label for="f-nm">Send this message</label><input id="f-nm" type="text" value="A risk of harm was raised in your area"></div></section>'
+          +   '<div id="f-rules" class="nf-rules"></div>'
+          +   '<button type="button" class="btn sec nf-add" id="f-radd"><svg aria-hidden="true"><use href="#i-plus"/></svg>Add a condition</button>'
           + '</div></div>',
       init: function (body) {
         var at = 0;
@@ -590,8 +630,8 @@
         side.className = 'nf-side';
         side.innerHTML = '<div class="fb-h"><h3>On every form like this</h3></div>'
           + FORM_FIXED.map(function (x) {
-              return '<label class="nf-sw"><span class="nf-swl"><svg aria-hidden="true"><use href="#i-' + x[2] + '"/></svg>' + x[1] + '</span>'
-                + '<input type="checkbox" role="switch" data-fixed="' + x[0] + '"' + (x[3] ? ' checked' : '') + '><i aria-hidden="true"></i></label>';
+              return '<label class="rb-ck nf-ck"><input type="checkbox" data-fixed="' + x[0] + '"' + (x[3] ? ' checked' : '') + '>'
+                + '<svg aria-hidden="true"><use href="#i-' + x[2] + '"/></svg>' + x[1] + '</label>';
             }).join('');
         var B = window.SugiraBuilder;
         if (B && B.mount) B.mount(body.querySelector('#f-build'), { name: '', rw: '', q: [] }, side);
@@ -612,21 +652,64 @@
 
         /* Only the organisations that can read the data can be told about it,
            and the answer to watch is one of this form's own questions. */
-        function notify() {
-          var can = Array.prototype.filter.call(body.querySelectorAll('[data-perm="1"]'), function (c) { return c.checked; })
-            .map(function (c) { return c.value; });
-          body.querySelector('#f-nw').innerHTML = can.length ? can.map(function (o) {
-            return '<label class="nf-sw"><span class="nf-swl">' + esc(o) + '</span><input type="checkbox" role="switch" checked><i aria-hidden="true"></i></label>';
-          }).join('') : '<p class="empty-line">Nobody has data access yet</p>';
-          var sel = body.querySelector('#f-nq');
-          var asked = (B ? B.form().q : []).map(function (q, i) { return 'Q' + (i + 1) + ' ' + q.en; });
-          sel.innerHTML = asked.length ? asked.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('')
-            : '<option>No question yet</option>';
-          sel.disabled = !asked.length;
+        /* A condition: when an answer says something, these positions are
+           sent this message. As many as the form needs, each added by hand. */
+        var rules = body.querySelector('#f-rules');
+        var POS = window.SugiraPerms ? window.SugiraPerms.positions().map(function (p) { return p.name; }) : [];
+        function asked() {
+          return (B ? B.form().q : []).map(function (q, i) { return 'Q' + (i + 1) + ' ' + q.en; });
+        }
+        function fillQuestions(sel) {
+          var a = asked(), was = sel.value;
+          sel.innerHTML = a.length ? a.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('') : '<option>No question yet</option>';
+          if (a.indexOf(was) > -1) sel.value = was;
+          sel.disabled = !a.length;
           var trig = sel.parentNode.querySelector('.cselect');
-          if (trig) trig.disabled = !asked.length;
+          if (trig) trig.disabled = !a.length;
           sel.dispatchEvent(new Event('change'));
         }
+        function number() {
+          Array.prototype.forEach.call(rules.querySelectorAll('.nf-rule'), function (r, i) {
+            r.querySelector('h4').textContent = 'Condition ' + (i + 1);
+          });
+          rules.classList.toggle('none', !rules.children.length);
+        }
+        function addRule() {
+          var n = rules.children.length;
+          var sec = document.createElement('section');
+          sec.className = 'nf-card nf-rule';
+          sec.innerHTML = '<header class="nf-ch"><h4>Condition</h4><button type="button" class="nf-x" aria-label="Remove this condition"><svg aria-hidden="true"><use href="#i-cross"/></svg></button></header>'
+            + '<div class="nf-cond"><select aria-label="Question" data-r="q"></select>'
+            + '<select aria-label="Operator" data-r="op"><option>is</option><option>is not</option></select>'
+            + '<input type="text" aria-label="Value" placeholder="Answer" data-r="v"></div>'
+            + '<div class="nf-msg"><span class="rb-l">Notify these positions</span><div class="nf-pos">'
+            + POS.map(function (p) { return '<label class="rb-ck"><input type="checkbox" value="' + esc(p) + '">' + esc(p) + '</label>'; }).join('')
+            + '</div></div>'
+            + '<div class="nf-msg"><label for="f-rm' + n + '">Send this message</label><input id="f-rm' + n + '" type="text" data-r="m"></div>';
+          rules.appendChild(sec);
+          if (window.SugiraMenu) window.SugiraMenu.enhance(sec);
+          fillQuestions(sec.querySelector('[data-r="q"]'));
+          sec.querySelector('.nf-x').onclick = function () { sec.remove(); number(); };
+          number();
+          return sec;
+        }
+        body.querySelector('#f-radd').addEventListener('click', function () {
+          var sec = addRule();
+          var v = sec.querySelector('[data-r="v"]');
+          if (v) v.focus();
+        });
+        addRule();
+        function notify() {
+          Array.prototype.forEach.call(rules.querySelectorAll('[data-r="q"]'), fillQuestions);
+        }
+        /* What the conditions say, to be kept with the form. */
+        body._rules = function () {
+          return Array.prototype.map.call(rules.querySelectorAll('.nf-rule'), function (r) {
+            return { q: r.querySelector('[data-r="q"]').value, op: r.querySelector('[data-r="op"]').value, v: r.querySelector('[data-r="v"]').value.trim(),
+              who: Array.prototype.map.call(r.querySelectorAll('.nf-pos input:checked'), function (c) { return c.value; }),
+              msg: r.querySelector('[data-r="m"]').value.trim() };
+          }).filter(function (x) { return x.v && x.who.length && !/^No question/.test(x.q); });
+        };
 
         body._wzStep = step;
         step(0);
@@ -638,11 +721,16 @@
         if (body._wzAt < 2) { body._wzStep(body._wzAt + 1); return false; }
         /* The new form arrives on the Forms page as a draft, not yet in any project. */
         var built = window.SugiraBuilder && window.SugiraBuilder.form();
-        if (window.SugiraForms) window.SugiraForms.add(nm.value.trim(), body.querySelector('#f-fnr').value.trim(), built ? built.q.length : 0);
+        var name = nm.value.trim();
+        if (window.SugiraForms) window.SugiraForms.add(name, body.querySelector('#f-fnr').value.trim(), built ? built.q.length : 0,
+          { questions: built ? built.q.map(function (q) { return { en: q.en, rw: q.rw || '', opts: q.opts || [] }; }) : [], rules: body._rules(),
+            required: built ? built.q.filter(function (q) { return q.req; }).length : 0 });
+        /* Next comes its Kinyarwanda, so the form opens where that is written. */
+        setTimeout(function () { if (window.SugiraProg) window.SugiraProg.open(name, 'translate'); }, 60);
       },
       done: function (body) {
         var n = body.querySelector('#f-fn').value.trim();
-        return (n ? '“' + n + '”' : 'The form') + ' created — import it into a project or module';
+        return (n ? '“' + n + '”' : 'The form') + ' created';
       }
     },
     /* "Cohort 1 2026 ... it won't just be numbers, it will be what happened in
@@ -667,9 +755,22 @@
           if (v > 12) r.value = 12;
           if (v < 1) r.value = 1;
         });
+        /* Only the years that do not exist yet. */
+        var have = window.SugiraCohorts ? window.SugiraCohorts.years() : [];
+        var y = body.querySelector('#f-cy');
+        y.innerHTML = [2027, 2028, 2029, 2030].filter(function (x) { return have.indexOf(x) === -1; })
+          .map(function (x) { return '<option>' + x + '</option>'; }).join('');
+        y.dispatchEvent(new Event('change'));
+      },
+      onOk: function (body) {
+        var y = parseInt(body.querySelector('#f-cy').value, 10);
+        var n = Math.max(1, Math.min(12, parseInt(body.querySelector('#f-cn').value, 10) || 1));
+        var m = Math.max(1, Math.min(12, parseInt(body.querySelector('#f-cr').value, 10) || 1));
+        if (n * m > 12) { say('That many cohorts of that length do not fit in a year'); return false; }
+        if (window.SugiraCohorts) window.SugiraCohorts.addYear(y, n, m);
       },
       done: function (body) {
-        return body.querySelector('#f-cy').value + ' created — add its districts next';
+        return body.querySelector('#f-cy').value + ' created';
       }
     },
     /* Several districts at once when they start together; the cohorts after
@@ -689,21 +790,37 @@
         var start = body.querySelector('#f-cds'), num = body.querySelector('#f-cdn'), out = body.querySelector('#f-cdl');
         /* The year the button sits in says how many cohorts it holds and how
            long each runs; the later ones are laid out from that. */
-        var yr = from && from.closest('tr.sxr') && from.closest('tr.sxr').previousElementSibling;
-        var count = yr ? parseInt(yr.cells[1].textContent, 10) || 3 : 3;
-        var runs = yr ? parseInt(yr.cells[2].textContent, 10) || 4 : 4;
-        var year = yr ? parseInt(yr.cells[0].textContent, 10) : 2027;
-        if (year) { start.value = year + '-01-11'; mTitle.textContent = 'Add districts to ' + year; }
+        var C = window.SugiraCohorts;
+        var year = from ? parseInt(from.getAttribute('data-year'), 10) : 0;
+        var Y = C && C.year(year) || (C && C.year(2027)) || { y: 2027, n: 3, months: 4, rows: [] };
+        year = Y.y;
+        var count = Y.n, runs = Y.months;
+        MODALS.cdistricts.year = year;
+        start.value = year + '-01-01';
+        mTitle.textContent = 'Add districts to ' + year;
+        /* Change: one district's cohort, as it stands */
+        var ch = from && from.getAttribute('data-change');
+        MODALS.cdistricts.change = !!ch;
+        if (ch) {
+          var bits = ch.split('|'), row = Y.rows.filter(function (r) { return r[0] === bits[0] && r[1] === +bits[1]; })[0];
+          mTitle.textContent = 'Change ' + bits[0] + ' cohort ' + bits[1] + ' in ' + year;
+          Array.prototype.forEach.call(body.querySelectorAll('input[type=checkbox]'), function (c) { c.checked = c.value === bits[0]; c.disabled = true; });
+          num.value = bits[1];
+          if (row) {
+            var sd = new Date(row[2]);
+            start.value = sd.getFullYear() + '-' + ('0' + (sd.getMonth() + 1)).slice(-2) + '-' + ('0' + sd.getDate()).slice(-2);
+          }
+          mOk.textContent = 'Save';
+        }
         num.max = String(count);
         body.querySelector('#f-cdh').textContent = 'Then, every ' + runs + ' months';
         function draw() {
-          var d = new Date((start.value || '2027-01-11') + 'T00:00:00'), n = parseInt(num.value, 10) || 1, html = '';
+          var d = new Date((start.value || year + '-01-11') + 'T00:00:00'), n = parseInt(num.value, 10) || 1, html = '';
           for (var k = n; k <= count; k++) {
-            var e = new Date(d); e.setMonth(e.getMonth() + runs);
+            var e = C ? C.end(d, runs) : new Date(d);
             html += '<div class="lr"><span class="t">Cohort ' + k + '</span><span class="s">' + d.getDate() + ' ' + M[d.getMonth()]
-              + ' to ' + e.getDate() + ' ' + M[e.getMonth()] + ' ' + e.getFullYear() + '</span>'
-              + (k === n ? '' : '<span class="c"><span class="chip">Made for you</span></span>') + '</div>';
-            d = e;
+              + ' to ' + e.getDate() + ' ' + M[e.getMonth()] + ' ' + e.getFullYear() + '</span></div>';
+            d = new Date(e); d.setDate(d.getDate() + 1);
           }
           out.innerHTML = html;
         }
@@ -711,10 +828,18 @@
         num.addEventListener('input', draw);
         draw();
       },
-      done: function (body) {
+      onOk: function (body) {
         var picked = Array.prototype.filter.call(body.querySelectorAll('input[type=checkbox]'), function (c) { return c.checked; })
           .map(function (c) { return c.value; });
-        return picked.length ? picked.join(', ') + ' added, with the cohorts after it laid out' : 'No district picked';
+        if (!picked.length) { say('Pick at least one district'); return false; }
+        var n = parseInt(body.querySelector('#f-cdn').value, 10) || 1;
+        if (window.SugiraCohorts) window.SugiraCohorts.add(MODALS.cdistricts.year, picked, n, body.querySelector('#f-cds').value);
+        MODALS.cdistricts.picked = picked;
+      },
+      done: function () {
+        var p = MODALS.cdistricts.picked || [];
+        if (MODALS.cdistricts.change) return p[0] + ' changed in ' + MODALS.cdistricts.year;
+        return p.join(', ').replace(/, ([^,]*)$/, ' and $1') + ' added to ' + MODALS.cdistricts.year;
       }
     },
     /* "Add form then will bring a list of forms, then they check, then they
@@ -726,34 +851,25 @@
       wide: true,
       body: '<div class="search imp-s"><svg aria-hidden="true"><use href="#i-search"/></svg>'
           + '<input type="text" id="f-imps" placeholder="Search forms" aria-label="Search forms"></div>'
-          + '<div class="imp" id="f-imp" role="group" aria-label="Forms you can import"></div>'
-          + '<p class="m-lead" id="f-impn">Nothing picked yet</p>',
+          + '<div class="imp" id="f-imp" role="group" aria-label="Forms you can import"></div>',
       init: function (body, from) {
-        var list = body.querySelector('#f-imp'), n = body.querySelector('#f-impn');
-        var prog = window.SUGIRA_PROGRAMME, seen = {}, forms = [];
-        /* A form the module already carries is not offered again. */
-        var scope = from && (from.closest('.sxb') || from.closest('.screen'));
-        if (scope) {
-          var have = scope.classList.contains('sxb') ? scope.querySelectorAll('.lr .t')
-            : scope.querySelectorAll('[data-panelid="forms"] tbody td.nm');
-          Array.prototype.forEach.call(have, function (c) { seen[c.textContent.trim()] = 1; });
-        }
-        (prog ? prog.projects : []).forEach(function (pj) {
-          pj.forms.forEach(function (f) {
-            if (seen[f.name] || f.status !== 'Active') return;
-            seen[f.name] = 1;
-            forms.push([f.name, pj.name, f.questions]);
-          });
+        var list = body.querySelector('#f-imp');
+        var P = window.SugiraProg;
+        var ctx = P ? P.context(from) : null;
+        MODALS.addform.ctx = ctx;
+        /* What it is adding to is in the title; what is already there is not offered. */
+        if (ctx) mTitle.textContent = ctx.kind === 'project' ? 'Add forms to ' + ctx.project.name : 'Add forms to ' + P.modName(ctx.session);
+        var forms = (P ? P.offer(ctx) : []).map(function (f) {
+          return [f.name, f.project || 'Not in a project yet', f.questions, f.status];
         });
-        if (!forms.length) forms = [['Household Module Tracking Form', 'Household Module Tracking', 30],
-          ['Caregiver observation', 'Household Module Tracking', 12], ['Anthropometric measurement', 'Household Enrollment', 9]];
-        list.innerHTML = forms.map(function (f, i) {
-          return '<label class="imp-r"><input type="checkbox" value="' + i + '"><span class="imp-n">' + esc(f[0])
-            + '</span><span class="imp-m">' + esc(f[1]) + ' &middot; ' + f[2] + ' questions</span></label>';
-        }).join('');
+        list.innerHTML = forms.length ? forms.map(function (f, i) {
+          return '<label class="imp-r"><input type="checkbox" value="' + esc(f[0]) + '"><span class="imp-n">' + esc(f[0])
+            + '</span><span class="imp-m">' + esc(f[1]) + ' &middot; ' + f[2] + ' questions' + (f[3] === 'Draft' ? ' &middot; draft' : '') + '</span></label>';
+        }).join('') : '<p class="empty-line">Every form is already here</p>';
         function count() {
           var k = list.querySelectorAll('input:checked').length;
-          n.textContent = k ? k + ' form' + (k === 1 ? '' : 's') + ' to import, with the access they were made with' : 'Nothing picked yet';
+          mOk.textContent = k ? 'Import ' + k : 'Import';
+          mOk.disabled = !k;
           MODALS.addform.picked = k;
         }
         list.addEventListener('change', count);
@@ -765,9 +881,14 @@
         });
         count();
       },
+      onOk: function (body) {
+        var names = Array.prototype.map.call(body.querySelectorAll('#f-imp input:checked'), function (c) { return c.value; });
+        if (window.SugiraProg && MODALS.addform.ctx) window.SugiraProg.importInto(MODALS.addform.ctx, names);
+      },
       done: function () {
-        var k = MODALS.addform.picked || 0;
-        return k ? k + ' form' + (k === 1 ? '' : 's') + ' imported into this module' : 'Nothing imported';
+        var k = MODALS.addform.picked || 0, ctx = MODALS.addform.ctx;
+        var where = !ctx ? 'here' : ctx.kind === 'project' ? ctx.project.name : window.SugiraProg.modName(ctx.session);
+        return k ? k + ' form' + (k === 1 ? '' : 's') + ' imported into ' + where : 'Nothing imported';
       }
     },
     /* A conflict left open has to be reachable, or "1 conflict open" is a
@@ -927,7 +1048,7 @@
       body: '<div><label for="f-et">Title</label><input id="f-et" type="text" value="Playing with everyday objects"></div>' +
             '<div><label for="f-ef">Replace the file</label><input id="f-ef" type="file"></div>' +
             '<p class="mhint">Leave empty to keep the file that is published now.</p>' +
-            '<div><label for="f-ed">Folder</label><select id="f-ed"><option>Using the tablet</option><option>Safeguarding</option><option>Module guidance</option><option>Forms and reporting</option></select></div>' +
+            '<div><label for="f-ed">Folder</label><select id="f-ed"><option>Using the tablet</option><option>Risk of harm</option><option>Module guidance</option><option>Forms and reporting</option></select></div>' +
             '<div><label for="f-el">Language</label><select id="f-el"><option>Kinyarwanda</option><option>English</option><option selected>Both</option></select></div>' +
             '<div><label for="f-ev">Visible to</label><select id="f-ev"><option>Everyone</option><option selected>Home visitors</option><option>Supervisors and above</option><option>Social workers only</option></select></div>',
       done: 'Saved \u2014 the tablet picks it up at the next sync'
@@ -955,8 +1076,8 @@
       done: 'Access changed \u2014 it takes effect the next time they sign in'
     },
     exception: {
-      title: 'Add an exception',
-      ok: 'Grant exception',
+      title: 'Add a permission for a while',
+      ok: 'Add it',
       body: '<div><label for="f-xw">The one thing they get</label><select id="f-xw"></select></div>' +
             '<div><label for="f-xu">Until</label><input id="f-xu" type="date" value="2026-12-31"></div>' +
             '<div><label for="f-xr">Why</label><textarea id="f-xr" rows="2"></textarea></div>',
@@ -974,7 +1095,7 @@
         }).join('');
         body.querySelector('#f-xw').dispatchEvent(new Event('change'));
       },
-      done: 'Exception granted — it ends on its own'
+      done: 'Permission added until the date you set'
     },
     /* "Invite is removed because we are creating a user." A person gets one
        position and a place; what the position gives is folded away until an
@@ -988,11 +1109,11 @@
           + '<div class="cols c2e"><div><label for="f-ie">Email</label><input id="f-ie" type="email" placeholder="name@fxbrwanda.org"></div>'
           + '<div><label for="f-ipw">Password</label><input id="f-ipw" type="password" autocomplete="new-password"></div></div>'
           + '<div><label for="f-ir">Position</label><select id="f-ir"></select></div>'
-          + '<div class="cols c3"><div><label for="f-ipv">Province</label><select id="f-ipv"><option>All provinces</option><option>Eastern</option><option>Southern</option><option>Western</option><option>Northern</option></select></div>'
-          + '<div><label for="f-idi">District</label><select id="f-idi"><option>All districts</option><option>Ngoma</option><option>Kirehe</option><option>Nyanza</option><option>Rubavu</option><option>Musanze</option></select></div>'
-          + '<div><label for="f-ise">Sector</label><select id="f-ise"><option>All sectors</option><option>Kibungo</option><option>Jarama</option><option>Sake</option><option>Kigoma</option><option>Busasamana</option></select></div></div>'
-          + '<div class="cols c2e"><div><label for="f-ice">Cell</label><select id="f-ice"><option>All cells</option><option>Kabare</option><option>Gahima</option></select></div>'
-          + '<div><label for="f-ivi">Village</label><select id="f-ivi"><option>All villages</option><option>Kabare</option><option>Rugarama</option></select></div></div>'
+          + '<div class="cols c3"><div><label for="f-ipv">Province</label><select id="f-ipv"></select></div>'
+          + '<div><label for="f-idi">District</label><select id="f-idi"></select></div>'
+          + '<div><label for="f-ise">Sector</label><select id="f-ise"></select></div></div>'
+          + '<div class="cols c2e"><div><label for="f-ice">Cell</label><select id="f-ice"></select></div>'
+          + '<div><label for="f-ivi">Village</label><select id="f-ivi"></select></div></div>'
           + '<details class="pfold"><summary>Permissions this position gives <span class="chip" id="f-ipn"></span></summary>'
           + '<div class="pblock" id="f-iperm"></div></details>',
       init: function (body) {
@@ -1007,6 +1128,52 @@
         }
         sel.addEventListener('change', draw);
         sel.dispatchEvent(new Event('change'));
+        /* Each level offers only what is inside the one above it. */
+        var TREE = { Eastern: { Ngoma: { Kibungo: { Kabare: ['Kabare', 'Rugarama'], Gahima: ['Gahima', 'Nyakabungo'] }, Jarama: { Ihanika: ['Kibimba', 'Kigabiro'] }, Sake: { Gafunzo: ['Rukoma'] } },
+            Kirehe: { Mahama: { Kwayi: ['Munini', 'Kankobwa'] } } },
+          Southern: { Nyanza: { Kigoma: { Butansinda: ['Rwesero'] }, Busasamana: { Kavumu: ['Rugarama'] } } },
+          Western: { Rubavu: { Gisenyi: { Nengo: ['Bugoyi'] } } },
+          Northern: { Musanze: { Kinigi: { Kaguhu: ['Nyonirima'] } } } };
+        var lv = ['#f-ipv', '#f-idi', '#f-ise', '#f-ice', '#f-ivi'].map(function (q) { return body.querySelector(q); });
+        var ALL = ['All provinces', 'All districts', 'All sectors', 'All cells', 'All villages'];
+        function under(i) {
+          var node = TREE;
+          for (var k = 0; k < i; k++) {
+            if (/^All /.test(lv[k].value)) return null;
+            node = node[lv[k].value];
+            if (!node) return null;
+          }
+          return Array.isArray(node) ? node : Object.keys(node);
+        }
+        function cascade(from) {
+          for (var i = from; i < lv.length; i++) {
+            var items = under(i);
+            lv[i].innerHTML = '<option>' + ALL[i] + '</option>' + (items || []).map(function (x) { return '<option>' + esc(x) + '</option>'; }).join('');
+            lv[i].disabled = !items;
+            lv[i].dispatchEvent(new Event('change'));
+            var trig = lv[i].parentNode.querySelector('.cselect');
+            if (trig) trig.disabled = !items;
+          }
+        }
+        lv.forEach(function (s, i) { s.addEventListener('change', function (e) { if (e.isTrusted || !e.detail) cascade(i + 1); }); });
+        cascade(0);
+        MODALS.invite.where = function () {
+          var picked = lv.filter(function (s) { return !s.disabled && !/^All /.test(s.value); }).map(function (s) { return s.value; });
+          if (!picked.length) return 'National';
+          if (picked.length === 1) return picked[0] + ' Province';
+          if (picked.length === 2) return picked[1] + ' district';
+          return picked[picked.length - 1] + ' · ' + picked[picked.length - 2];
+        };
+      },
+      onOk: function (body) {
+        var need = [['#f-iname', 'a full name'], ['#f-iph', 'a phone number'], ['#f-ie', 'an email'], ['#f-ipw', 'a password']];
+        for (var i = 0; i < need.length; i++) {
+          var f = body.querySelector(need[i][0]);
+          if (!f.value.trim()) { say('The user needs ' + need[i][1]); f.focus(); return false; }
+        }
+        var sel = body.querySelector('#f-ir');
+        if (window.SugiraPeople) window.SugiraPeople.add({ name: body.querySelector('#f-iname').value.trim(),
+          position: sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '', where: MODALS.invite.where() });
       },
       done: function (body) {
         var n = body.querySelector('#f-iname').value.trim() || 'The user';
@@ -1038,7 +1205,7 @@
             '<li><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Module 6</button><span class="w"><b>986</b> responses already recorded</span></li>' +
             '<li><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Module 9</button><span class="w"><b>0</b> responses yet</span></li>' +
             '</ul>' +
-            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Question 5 opens safeguarding cases. 2 are still open against the current wording.</span></p>' +
+            '<p class="m-note"><svg aria-hidden="true"><use href="#i-alert"/></svg><span>Question 5 opens risk-of-harm cases. 2 are still open against the current wording.</span></p>' +
             /* Where it reaches is half the answer. In a system built for
                villages with no signal, when it reaches them is the other
                half, and the old wording — "live" — skipped it. */
@@ -1140,7 +1307,13 @@
         sel.innerHTML = (P ? P.groups : []).map(function (g) { return '<option>' + esc(g.name) + '</option>'; }).join('');
         sel.dispatchEvent(new Event('change'));
       },
-      done: 'Permission added — no position has it until you tick it there'
+      onOk: function (body) {
+        var n = body.querySelector('#f-pn').value.trim();
+        if (!n) { say('Say what it allows'); body.querySelector('#f-pn').focus(); return false; }
+        MODALS.permnew.added = n;
+        if (window.SugiraPerms && window.SugiraPerms.addPerm) window.SugiraPerms.addPerm(n, body.querySelector('#f-pd').value.trim(), body.querySelector('#f-pg').value);
+      },
+      done: function () { return '“' + MODALS.permnew.added + '” added'; }
     },
     rolenew: {
       title: 'New role',
@@ -1173,6 +1346,12 @@
           + '</div></div>'
           + '<div><span class="rb-l">Permissions</span><div class="pblock" id="f-rperm"></div></div>',
       init: function (body) { permBlock(body.querySelector('#f-rperm'), {}); },
+      onOk: function (body) {
+        var n = body.querySelector('#f-rn').value.trim();
+        if (!n) { say('Give the position a name'); body.querySelector('#f-rn').focus(); return false; }
+        var perms = Array.prototype.map.call(body.querySelectorAll('#f-rperm input:checked'), function (c) { return c.value; });
+        if (window.SugiraPerms && window.SugiraPerms.addPosition) window.SugiraPerms.addPosition(n, body.querySelector('#f-rw').value.trim(), perms);
+      },
       done: function (body) {
         var n = body.querySelector('#f-rn').value.trim();
         var k = body.querySelectorAll('#f-rperm input:checked').length;
@@ -1202,13 +1381,10 @@
           + '<option>Households reached</option><option>Minutes per visit</option>'
           + '<option>Risk-of-harm cases</option><option>Referrals made</option></select></div>'
           + '<div><label for="f-group">Grouped by</label><select id="f-group">'
-          + '<option>District</option><option>Sector</option><option>Session</option>'
+          + '<option>District</option><option>Sector</option><option>Module</option>'
           + '<option>Home visitor</option><option>Cohort</option><option>Month</option></select></div>'
           + '<div><label for="f-sc">Where</label><select id="f-sc"></select></div>'
-          + '<div><label for="f-rn">Name</label><input id="f-rn" type="text"></div>'
-          + '<div><label for="f-sch">Send it</label><select id="f-sch">'
-          + '<option>Don’t send, just show me</option><option>Weekly, Monday 06:00</option>'
-          + '<option>Monthly, 1st at 06:00</option></select></div>',
+          + '<div><label for="f-rn">Name</label><input id="f-rn" type="text"></div>',
       init: function (body, from) {
         var proj = body.querySelector('#f-proj'), form = body.querySelector('#f-form');
         var measure = body.querySelector('#f-measure'), group = body.querySelector('#f-group');
@@ -1265,8 +1441,26 @@
           .concat(places ? places.provinces : [])
           .concat(places ? places.districts.map(function (d) { return d + ' district'; }) : []));
         rename();
+        /* Edit: the report clicked, as it was saved. */
+        var row = from && from.closest('#s-reports tbody tr');
+        MODALS.report.editing = !!row;
+        if (row) {
+          var rn = row.querySelector('.nm').textContent.trim();
+          mTitle.textContent = 'Edit “' + rn + '”';
+          var pj = row.cells[1].textContent.trim();
+          if (live.some(function (p) { return p.name === pj; })) { proj.value = pj; proj.dispatchEvent(new Event('change', { bubbles: true })); }
+          var fm = row.cells[3].textContent.trim();
+          Array.prototype.some.call(form.options, function (o) {
+            if (o.text.indexOf(fm) === 0) { form.value = o.value; form.dispatchEvent(new Event('change', { bubbles: true })); return true; }
+            return false;
+          });
+          var g = /by (district|sector|module|home visitor|cohort|month)/i.exec(rn);
+          if (g) { group.value = g[1].charAt(0).toUpperCase() + g[1].slice(1).toLowerCase(); group.dispatchEvent(new Event('change', { bubbles: true })); }
+          name.value = rn; typed = true;
+          mOk.textContent = 'Save';
+        }
       },
-      done: 'Report saved and queued'
+      done: function () { return MODALS.report.editing ? 'Report saved' : 'Report saved and run'; }
     },
     /* The client described this one step by step and we had not built it.
 
@@ -1340,13 +1534,13 @@
           'izu-refresher-november.csv': {
             total: 41,
             rows: [
-              ['m.dusabe@fxbrwanda.org', 'M. Dusabe', 'Safeguarding refresher', '28 Oct', 31, 'del'],
-              ['+250 78 555 0117', 'E. Mutesi', 'Safeguarding refresher', '28 Oct', 44, 'del'],
-              ['j.kamanzi@fxbrwanda.org', 'J. Kamanzi', 'Safeguarding refresher', '29 Oct', 26, 'del'],
-              ['b.uwamahoro@fxbrwanda.org', 'B. Uwamahoro', 'Safeguarding refresher', '29 Oct', 0, 'none'],
-              ['a.nyirahabimna@fxbrwanda.org', null, 'Safeguarding refresher', '29 Oct', 0, 'skip'],
-              ['+250 78 555 0144', 'F. Uwase', 'Safeguarding refresher', '30 Oct', 18, 'del'],
-              ['', null, 'Safeguarding refresher', '30 Oct', 0, 'skip']
+              ['m.dusabe@fxbrwanda.org', 'M. Dusabe', 'Risk of harm refresher', '28 Oct', 31, 'del'],
+              ['+250 78 555 0117', 'E. Mutesi', 'Risk of harm refresher', '28 Oct', 44, 'del'],
+              ['j.kamanzi@fxbrwanda.org', 'J. Kamanzi', 'Risk of harm refresher', '29 Oct', 26, 'del'],
+              ['b.uwamahoro@fxbrwanda.org', 'B. Uwamahoro', 'Risk of harm refresher', '29 Oct', 0, 'none'],
+              ['a.nyirahabimna@fxbrwanda.org', null, 'Risk of harm refresher', '29 Oct', 0, 'skip'],
+              ['+250 78 555 0144', 'F. Uwase', 'Risk of harm refresher', '30 Oct', 18, 'del'],
+              ['', null, 'Risk of harm refresher', '30 Oct', 0, 'skip']
             ],
             del: 186, people: 38, none: 1, skip: 2, cases: 4
           },
@@ -1591,13 +1785,31 @@
         form.addEventListener('change', drawCols);
 
         fill(proj, live.map(function (p) { return p.name; }));
-        /* Opened from a project, that project is already answered. */
-        if (from) {
-          var want = from.getAttribute && from.getAttribute('data-export-project');
-          if (want && live.some(function (p) { return p.name === want; })) {
-            proj.value = want;
-            proj.dispatchEvent(new Event('change', { bubbles: true }));
-          }
+        /* It starts on the data of the page it was opened from: a visit list
+           exports visits, a form's Data tab that form. */
+        var here = from && from.closest ? from.closest('.screen') : null;
+        var sid = here ? here.id.replace(/^s-/, '') : '';
+        var cf = window.SugiraProg && window.SugiraProg.current.form;
+        var PREF = {
+          visits: ['Household Module Tracking', 'Household Module Tracking Form'],
+          safeguarding: ['Risk of Harm/other family problems Management', 'Risk of Harm management — intake'],
+          referrals: ['Risk of Harm/other family problems Management', 'Risk of Harm management — intake'],
+          followups: ['Risk of Harm/other family problems Management', 'Risk of Harm management — intake'],
+          form: cf ? [cf.project, cf.name] : null
+        }[sid];
+        var want = from && from.getAttribute && from.getAttribute('data-export-project');
+        if (PREF && PREF[0]) want = PREF[0];
+        if (want && live.some(function (p) { return p.name === want; })) {
+          proj.value = want;
+          proj.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        if (PREF && PREF[1]) {
+          Array.prototype.some.call(form.options, function (o) {
+            if (o.text.indexOf(PREF[1]) !== 0) return false;
+            form.value = o.value;
+            form.dispatchEvent(new Event('change', { bubbles: true }));
+            return true;
+          });
         }
         function opts(sel, all, list) {
           sel.innerHTML = '';
@@ -1842,7 +2054,7 @@
   function dwSibs() {
     if (!dwRow || !dwRow.parentNode) return [];
     return [].filter.call(dwRow.parentNode.rows, function (r) {
-      return !r.classList.contains('sxr') && !r.classList.contains('q-out')
+      return !r.classList.contains('sxr') && !r.classList.contains('q-out') && !r.classList.contains('r-gone')
         && !r.classList.contains('f-out') && !r.classList.contains('t-out')
         && !r.classList.contains('p-out');
     });
@@ -2234,7 +2446,7 @@
      had nothing to draw and were asking the reader to go and find it. */
   var SUBMISSION = [
     ['Visit date', '28 October 2026', ''],
-    ['Household ID', 'I-534-107', '', 1],
+    ['Household ID', 'I-534-107', ''],
     ['Module', '6 — The Importance of Good Health', ''],
     ['Was the module delivered in full?', 'Partly', 'one activity left for the next visit'],
     ['Who took part?', 'Caregiver', 'male caregiver absent'],
@@ -2250,9 +2462,9 @@
     ['Is there a handwashing station?', 'Yes', ''],
     /* The two that name a child. Held wherever this is drawn, including
        on the visit, because the visit is one click from the case. */
-    ['Is any child in this household at risk of harm?', 'CASE', 'opened RH-0044', 1],
-    ['Which child?', 'Mukamana Alice', '2 years', 1],
-    ['What was seen?', 'Signs of inadequate feeding', '', 1],
+    ['Is any child in this household at risk of harm?', 'CASE', 'RH-0044', 'RH-0044'],
+    ['Which child?', 'Mukamana Alice', '2 years', 'RH-0044'],
+    ['What was seen?', 'Signs of inadequate feeding', '', 'RH-0044'],
     ['Has the household a health insurance card?', 'No', 'expired August'],
     ['Was a referral made?', 'Yes', 'Kabare health centre'],
     ['Referral reason', 'Growth check', ''],
@@ -2268,26 +2480,31 @@
      'The grandmother has moved in and was present for most of the module.']
   ];
 
-  function submissionTable() {
-    var rows = SUBMISSION.map(function (q, i) {
+  /* Any record's answers: [question, answer, note, the case that holds it].
+     An answer that names a child is held by the case it opened. */
+  function submissionTable(list, form) {
+    list = list || SUBMISSION;
+    form = form || 'Household Module Tracking Form';
+    var rows = list.map(function (q, i) {
       var answer = q[1] === 'CASE'
-        ? '<span class="chip bad"><i></i>Yes · neglect</span> '
-          + '<button class="rel" type="button" data-go="case">'
-          + '<svg aria-hidden="true"><use href="#i-safeguarding"/></svg>RH-0044</button>'
+        ? '<span class="chip bad"><i></i>Yes</span> '
+          + '<button class="rel" type="button" data-go="case" data-recid="' + esc(q[2]) + '">'
+          + '<svg aria-hidden="true"><use href="#i-safeguarding"/></svg>' + esc(q[2]) + '</button>'
         : esc(q[1]);
-      var note = q[2] ? '<span class="mut">' + (q[1] ? '· ' : '') + esc(q[2]) + '</span>' : '';
+      var note = q[2] && q[1] !== 'CASE' ? '<span class="mut">' + (q[1] ? '· ' : '') + esc(q[2]) + '</span>' : '';
       return '<tr><td class="num mut">' + (i + 1) + '</td><td class="nm">' + esc(q[0])
-        + '</td><td' + (q[3] ? ' data-hold="RH-0044"' : '') + '>' + answer + ' ' + note
+        + '</td><td' + (q[3] ? ' data-hold="' + esc(q[3]) + '"' : '') + '>' + answer + ' ' + note
         + '</td><td class="gap"></td></tr>';
     }).join('');
     return '<div class="tblwrap"><table class="tbl">'
       + '<thead><tr><th style="width:3rem" class="num">#</th><th>Question</th>'
       + '<th>Answer</th><th class="gap"></th></tr></thead><tbody>' + rows + '</tbody></table></div>'
-      + '<div class="tfoot"><span>' + SUBMISSION.length + ' answers · '
-      + '<button class="rel" type="button" data-go="form">'
-      + '<svg aria-hidden="true"><use href="#i-reports"/></svg>Household Module Tracking Form, version 4</button>'
+      + '<div class="tfoot"><span>' + list.length + ' answers · '
+      + '<button class="rel" type="button" data-go="form" data-recid="' + esc(form) + '">'
+      + '<svg aria-hidden="true"><use href="#i-reports"/></svg>' + esc(form) + '</button>'
       + '</span></div>';
   }
+  window.SugiraSubmission = submissionTable;
 
   $$('[data-submission]').forEach(function (host) { host.innerHTML = submissionTable(); });
   /* The cells inside are written after this file's own markup pass, so
@@ -2311,40 +2528,19 @@
   var rohOpened = {};
 
   function rohApply() {
+    /* 16 November: "Open in full" is gone, and with it the withholding it
+       opened. A case shows its household and what was reported to whoever
+       can see the case. */
     $$('[data-hold]').forEach(function (el) {
-      var until = rohOpened[el.getAttribute('data-hold')];
-      if (!until) {
-        if (!el.hasAttribute('data-was')) {
-          el.setAttribute('data-was', el.innerHTML);
-          el.innerHTML = '<span class="rd">withheld</span>';
-        }
-      } else if (el.hasAttribute('data-was')) {
-        el.innerHTML = el.getAttribute('data-was');
-        el.removeAttribute('data-was');
-        /* A grant with an end date has to say it where the fact is, or the
-           end date is something you would have to go and look up. */
-        if (el.hasAttribute('data-holdwhen')) {
-          el.insertAdjacentHTML('beforeend',
-            '<span class="conseq">open to you ' + esc(until) + '</span>');
-        }
-      }
+      if (el.hasAttribute('data-was')) { el.innerHTML = el.getAttribute('data-was'); el.removeAttribute('data-was'); }
     });
-    var mine = !!rohOpened['RH-0044'];
-    $$('[data-rohoff]').forEach(function (x) { x.hidden = mine; });
-    $$('[data-rohon]').forEach(function (x) { x.hidden = !mine; });
-    var who = document.getElementById('rohWho');
-    if (who) {
-      who.innerHTML = !mine ? ''
-        : '<div class="lr"><span class="t">A. Gahimana</span>'
-        + '<span class="s"><abbr data-tip="HQ \u2014 the FXB Rwanda head office team">HQ</abbr>'
-        + ' officer \u00b7 opened it today</span></div>';
-    }
   }
 
   /* Opening writes two entries, not one. The second is the point: a name was
      read by somebody who is not on the case, and the people who are were told. */
   function rohOpen(why, until) {
-    rohOpened['RH-0044'] = until;
+    var cur = $('#s-case .rec-id');
+    rohOpened[cur ? cur.textContent.trim() : 'RH-0044'] = until;
     var tl = $('#s-case [data-panelid="audit"] .tl');
     if (tl) {
       tl.insertAdjacentHTML('beforeend',
@@ -2367,6 +2563,7 @@
   }
 
   rohApply();
+  window.SugiraHold = rohApply;
 
 
   /* ---- field support: the questions, and the answers behind them ----
@@ -2418,20 +2615,19 @@
       ['Can I visit on a different day?',
        'Yes. The schedule is two weeks between modules, not a fixed day of the week.']
     ]],
-    ['Raising a safeguarding concern', 11, [
+    ['Raising a risk of harm', 11, [
       ['What happens after I answer yes to question 5?',
-       'A case opens, your supervisor is told the same day, and a supervisor review is due '
-       + 'within 72 hours.'],
+       'A case opens and your supervisor and the people on the case are told the same day. '
+       + 'Each follow-up after that is added to the case, with its date, status and comment.'],
       ['Who sees what I wrote?',
-       'The people on the case. Everybody else sees that a case exists and when its review is '
-       + 'due; the household and what you reported open only when somebody says why, and you '
-       + 'are told the moment they do.'],
+       'The people on the case. Everybody else sees that a case exists; the household and what '
+       + 'you reported open only when somebody says why, and you are told the moment they do.'],
       ['I raised it by mistake',
-       'Say so at the review and it is recorded as not substantiated. A case is never deleted, '
-       + 'because a record that can be deleted is not a record.'],
-      ['Nothing has happened and the review is late',
-       'The district lead is told automatically when the 72 hours pass, and again 24 hours '
-       + 'after that. The clock is on the case where you can see it.']
+       'Add a follow-up saying so and close it. A case is never deleted, because a record that '
+       + 'can be deleted is not a record.'],
+      ['Nothing has happened since I raised it',
+       'Add a follow-up with what you see now. Your supervisor and the sector social worker '
+       + 'are told each time one is added.']
     ]]
   ];
   var faqAt = 0;
@@ -2455,8 +2651,7 @@
       return '<div class="lr click" data-faqq="' + i + '" aria-expanded="false">'
         + '<span class="t">' + esc(q[0]) + '</span><span class="ch">›</span></div>'
         + '<p class="faq-a" hidden>' + esc(q[1]) + '</p>';
-    }).join('') + '<div class="lr"><span class="t mut">'
-      + (c[1] - c[2].length) + ' more not written yet</span></div>';
+    }).join('');
   }
 
   document.addEventListener('click', function (e) {
@@ -2545,7 +2740,8 @@
       $$('[data-forpanel]', screen).forEach(function (x) {
         x.hidden = x.getAttribute('data-forpanel').split(' ').indexOf(panel) === -1;
       });
-      $$('[data-offpanel]', screen).forEach(function (x) {
+      var acts = screen ? '.acts[data-for="' + screen.id.replace(/^s-/, '') + '"] [data-offpanel]' : null;
+      $$('[data-offpanel]', screen).concat(acts ? $$(acts) : []).forEach(function (x) {
         x.hidden = x.getAttribute('data-offpanel').split(' ').indexOf(panel) !== -1;
       });
       var sc = document.getElementById('scroll');
@@ -2672,6 +2868,8 @@
      count standing in for a person — and putting those in a dialog would show
      somebody what the table is deliberately not showing them. */
   function saidIn(el) {
+    var named = el.querySelector && el.querySelector('.vtt');
+    if (named) return named.textContent.replace(/\s+/g, ' ').trim();
     var out = '';
     [].forEach.call(el.childNodes, function (n) {
       if (n.nodeType === 3) { out += n.nodeValue; return; }
@@ -2930,6 +3128,18 @@
        goes under the fields at the width the drawer gives it. */
     var media = /^(video|document)/i.test(heads[nameAt] || '');
     extra.innerHTML = media ? '<div class="prev sk"></div>' : '';
+    /* A follow-up in the partners' report opens the way a case does: its
+       history, and Add follow-up, both there. */
+    if (tr.closest('#fur-t') && window.SugiraFU) {
+      var fid = 'FU-' + tr.cells[0].textContent.trim();
+      var stx = tr.cells[4].textContent.trim();
+      if (!window.SugiraFU.data[fid]) {
+        window.SugiraFU.data[fid] = [['IZU at Village', tr.cells[8].textContent.trim(), 'Active', 'Reported by the IZU · ' + tr.cells[9].textContent.trim().toLowerCase() + '.']];
+        if (stx === 'Closed') window.SugiraFU.data[fid].push(['Sector social worker', tr.cells[5].textContent.trim().slice(0, 10), 'Closed', 'Resolved with the family.']);
+      }
+      extra.innerHTML = '<div class="cols c2e" data-fu="' + fid + '"></div>';
+      window.SugiraFU.mount(extra.firstChild);
+    }
     var frame = extra.querySelector('.prev');
     var isVideo = /^video/i.test(heads[nameAt] || '');
 
@@ -3264,10 +3474,8 @@
         body: '<p class="m-lead">They move to Recycled data, where they can be restored.</p>',
         onOk: function () {
           var scr = sel.table.closest('.screen');
-          if (window.SugiraRecycle) window.SugiraRecycle.add(scr ? scr.id : '', gone.map(function (r) {
-            return [(r.querySelector('.nm') || r.cells[0]).textContent.trim(), (r.cells[2] || r.cells[1] || {}).textContent || ''];
-          }));
-          gone.forEach(function (r) { r.hidden = true; r.classList.add('q-out'); });
+          if (window.SugiraRows) gone.forEach(function (r) { window.SugiraRows.remove(r, scr ? scr.id : '', 'Deleted from the list'); });
+          else gone.forEach(function (r) { r.hidden = true; r.classList.add('q-out'); });
           sel.clear();
         },
         done: gone.length + ' record' + many2 + ' moved to Recycled data'
@@ -3367,6 +3575,7 @@
   }
 
   function enhance(table) {
+    if (table.id === 'fur-t') return;
     var head = table.tHead, body = table.tBodies[0];
     if (!head || !body || !body.rows.length) return;
     var ths = Array.prototype.slice.call(head.rows[0].cells);
@@ -3873,7 +4082,7 @@
            a row is out if either says so, which is what someone narrowing by
            place and then by a condition expects. */
         r.classList.toggle('q-out', !ok);
-        if (ok && !r.classList.contains('f-out')) shown++;
+        if (ok && !r.classList.contains('f-out') && !r.classList.contains('r-gone')) shown++;
       });
       if (state.sort) {
         var c = cols[state.sort.col], sign = state.sort.dir === 'asc' ? 1 : -1;
@@ -4002,7 +4211,7 @@
        means the ones you can see, never the ones you cannot. */
     function liveRows() {
       return rows.filter(function (r) {
-        return !r.classList.contains('q-out') && !r.classList.contains('f-out')
+        return !r.classList.contains('q-out') && !r.classList.contains('f-out') && !r.classList.contains('r-gone')
           && !r.classList.contains('t-out') && !r.classList.contains('p-out');
       });
     }
@@ -4032,7 +4241,8 @@
     }
     var selAll = null;
     var firstTh = head.rows[0].cells[0];
-    if (firstTh && rows.every(function (r) { return r.cells[0]; })) {
+    var answers = table.closest('[data-submission], [data-panelid="casesub"], [data-panelid="answers"], [data-panelid="rfanswers"]');
+    if (firstTh && !answers && rows.every(function (r) { return r.cells[0]; })) {
       selAll = box('Select every row you can see');
       selAll.classList.add('selall');
       selAll.onclick = function (e) {
@@ -4239,7 +4449,7 @@
 
   var KIND = {
     's-households': 'i-households', 's-household': 'i-visits', 's-visits': 'i-visits',
-    's-safeguarding': 'i-safeguarding', 's-people': 'i-admin', 's-places': 'i-location',
+    's-safeguarding': 'i-safeguarding', 's-people': 'i-admin', 's-places': 'i-location', 's-orgs': 'i-admin',
     's-reports': 'i-reports', 's-programme': 'i-programme', 's-project': 'i-programme',
     's-module': 'i-reports', 's-cohorts': 'i-visits', 's-translations': 'i-message',
     's-followups': 'i-clock', 's-community': 'i-message', 's-izu': 'i-admin',

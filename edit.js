@@ -194,8 +194,11 @@
     if (opts) pick(cell, opts); else typeIn(cell);
   }
 
+  /* 15 November: "only Edit and Delete are added, no inline editing". A
+     record's fields change through its Edit dialog; what still edits where
+     it stands is a translation, which is a cell of text and nothing else. */
   document.addEventListener('click', function (e) {
-    var cell = e.target.closest ? e.target.closest('.pgr .v, .fld .v, td .v[data-ftype]') : null;
+    var cell = e.target.closest ? e.target.closest('.fld .v, td .v[data-ftype]') : null;
     /* a link or chip inside the value keeps its own job */
     if (!cell || cell.classList.contains('editing')) return;
     if (e.target.closest('.rel, button:not(.cmenu-i), a')) return;
@@ -207,8 +210,7 @@
     if (e.key !== 'Enter' && e.key !== ' ') return;
     var cell = document.activeElement;
     if (!cell || !cell.classList || !cell.classList.contains('v')) return;
-    if (!cell.closest('.pgr') && !cell.closest('.fld')
-      && !cell.hasAttribute('data-ftype')) return;
+    if (!cell.closest('.fld') && !cell.hasAttribute('data-ftype')) return;
     e.preventDefault();
     start(cell);
   });
@@ -255,9 +257,7 @@
   }
 
   function mount() {
-    $$('.pgr .v, .fld .v, td .v[data-ftype]').forEach(editable);
-    $$('.rec h1').forEach(function (h) { inPlace(h, 'title'); });
-    $$('.rec-desc').forEach(function (d) { inPlace(d, 'description'); });
+    $$('.fld .v, td .v[data-ftype]').forEach(editable);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);

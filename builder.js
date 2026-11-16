@@ -360,8 +360,8 @@
     var pane = el('div', 'fb-pane fb-kinds');
     var h = el('div', 'fb-h');
     var ht = el('h3', null, 'Add a question');
-    ht.appendChild(tip('A question joins the end of the form. Drag its handle to '
-      + 'move it, or hold the handle and use the arrow keys.'));
+    ht.appendChild(tip('Drag a kind of question into the form, or click it to add it at the end. '
+      + 'Drag a question’s handle to move it, or hold the handle and use the arrow keys.'));
     h.appendChild(ht);
     pane.appendChild(h);
 
@@ -371,25 +371,43 @@
       b.appendChild(svg(k.icon, 'fb-kind-i'));
       var m = el('span', 'fb-kind-m');
       m.appendChild(el('span', 'fb-kind-n', k.label));
-      m.appendChild(el('span', 'fb-kind-h', k.hint));
+      if (mode === 'page') m.appendChild(el('span', 'fb-kind-h', k.hint));
       b.appendChild(m);
-      b.onclick = function () {
-        var q = { id: 'q' + (Date.now() % 100000), en: k.label, rw: '', kind: k.id,
-          opts: k.id === 'yesno' ? ['Yego', 'Oya']
-            : (k.id === 'single' || k.id === 'multi' || k.id === 'check')
-            ? ['Option 1', 'Option 2'] : undefined };
-        FORM.q.push(q);
-        picked = q.id;
-        changed();
-        draw();
-        var row = host.querySelector('[data-q="' + q.id + '"] .fb-q');
-        if (row) { row.focus(); row.select(); }
+      /* Dragged into the form, it lands where it is let go; clicked, at the end. */
+      b.draggable = true;
+      b.ondragstart = function (e) {
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData('text/x-kind', k.id);
+        b.classList.add('dragging');
       };
+      b.ondragend = function () { b.classList.remove('dragging'); clearOver(); };
+      b.onclick = function () { addKind(k.id, FORM.q.length); };
       pane.appendChild(b);
     });
 
     if (aside) pane.appendChild(aside);
     return pane;
+  }
+
+  function addKind(kid, at) {
+    var k = kindOf(kid);
+    var q = { id: 'q' + (Date.now() % 100000), en: k.label, rw: '', kind: k.id,
+      opts: k.id === 'yesno' ? ['Yego', 'Oya']
+        : (k.id === 'single' || k.id === 'multi' || k.id === 'check')
+        ? ['Option 1', 'Option 2'] : undefined };
+    FORM.q.splice(Math.max(0, Math.min(at, FORM.q.length)), 0, q);
+    picked = q.id;
+    changed();
+    draw();
+    var row = host.querySelector('[data-q="' + q.id + '"] .fb-q');
+    if (row) { row.focus(); row.select(); }
+  }
+  function isKind(e) { return [].indexOf.call(e.dataTransfer.types, 'text/x-kind') > -1; }
+  function clearOver() {
+    if (!host) return;
+    [].forEach.call(host.querySelectorAll('.is-over-top, .is-over-bottom, .is-drop'), function (n) {
+      n.classList.remove('is-over-top', 'is-over-bottom', 'is-drop');
+    });
   }
 
   /* ---- the form, in the middle ---- */
@@ -436,7 +454,7 @@
       return (e.clientY - r.top) < r.height / 2 ? 'before' : 'after';
     }
     li.ondragover = function (e) {
-      if ([].indexOf.call(e.dataTransfer.types, 'text/x-q') < 0) return;
+      if ([].indexOf.call(e.dataTransfer.types, 'text/x-q') < 0 && !isKind(e)) return;
       e.preventDefault();
       var s = side(e);
       li.classList.toggle('is-over-top', s === 'before');
@@ -447,7 +465,10 @@
     };
     li.ondrop = function (e) {
       e.preventDefault();
+      e.stopPropagation();
       li.classList.remove('is-over-top', 'is-over-bottom');
+      var kid = e.dataTransfer.getData('text/x-kind');
+      if (kid) { addKind(kid, FORM.q.indexOf(q) + (side(e) === 'after' ? 1 : 0)); return; }
       var from = e.dataTransfer.getData('text/x-q');
       if (!from || from === q.id) return;
       var s = side(e);
@@ -657,6 +678,20 @@
 
   function canvas() {
     var pane = el('div', 'fb-pane fb-form');
+    pane.ondragover = function (e) {
+      if (!isKind(e)) return;
+      e.preventDefault();
+      var zone = pane.querySelector('.fb-empty') || pane.querySelector('.fb-list');
+      if (zone && !e.target.closest('.fb-f')) zone.classList.add('is-drop');
+    };
+    pane.ondragleave = function (e) { if (!pane.contains(e.relatedTarget)) clearOver(); };
+    pane.ondrop = function (e) {
+      var kid = e.dataTransfer.getData('text/x-kind');
+      if (!kid) return;
+      e.preventDefault();
+      clearOver();
+      addKind(kid, FORM.q.length);
+    };
     if (mode !== 'page') pane.appendChild(naming());
     var h = el('div', 'fb-h');
     h.appendChild(el('h3', null, mode === 'page' ? FORM.name : 'Questions'));

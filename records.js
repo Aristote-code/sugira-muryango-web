@@ -46,7 +46,7 @@
       ],
       bin: [
         ['I-534-212', 'Mukeshimana Grace', 'J. Kamanzi', '2 Nov 2026', 'Enrolled twice'],
-        ['I-413-090', 'Ndayisaba Pierre', 'C. Uwimana', '24 Oct 2026', 'Moved out of the programme area'],
+        ['I-413-090', 'Ndayisaba Pierre', 'C. Uwimana', '24 Oct 2026', 'Moved out of the project area'],
         ['I-351-433', 'Uwera Claudine', 'A. Gahimana', '19 Oct 2026', 'Test record']
       ],
       reports: [
@@ -80,7 +80,7 @@
                'District', 'Sector', 'Status', 'Latest follow-up'],
       stats: [['Active', 3, 'bad'], ['Inactive', 31], ['Total', 34], ['Raised this month', 1]],
       charts: [
-        { t: 'Risk of harm by type', rows: [['Neglect', 14], ['Physical', 9], ['Emotional', 6], ['Sexual', 3], ['Other', 2]] },
+        { t: 'Risk of harm by type', rows: [['Neglect', 10], ['Severe malnutrition', 9], ['Physical', 8], ['Emotional', 4], ['Sexual', 2], ['Other', 1]] },
         { t: 'Who is at risk', rows: [['Child under 5', 21], ['Child 5–17', 8], ['Caregiver', 4], ['Other adult', 1]] }
       ],
       bin: [['RH-0040', 'withheld · Neglect', 'C. Uwimana', '27 Oct 2026', 'Raised twice for the same visit']],
@@ -112,7 +112,7 @@
         { t: 'Responses by district', rows: [['Ngoma', 470], ['Rubavu', 400], ['Nyanza', 392], ['Kirehe', 330], ['Musanze', 250]] }
       ],
       bin: [['R-55120', 'I-534-107 · 30 Oct', 'M. Dusabe', '31 Oct 2026', 'Sent twice']],
-      reports: [['Visits where a risk of harm was seen', 'A. Gahimana', 'Q5 Risk of harm seen is Yes', '2 Nov 2026', 34]]
+      reports: [['Visits where a risk of harm was seen', 'A. Gahimana', 'Q5 Any sign of harm or neglect is Yes', '2 Nov 2026', 34]]
     }
   };
 
@@ -190,6 +190,62 @@
     }).join('') + '</div>';
   }
 
+  /* ---- a row leaves its list, and can come back ----
+     Deleting hides a row with its own mark, which no tab, filter or pager
+     undoes, takes one off every count the row was part of, and leaves an
+     entry in Recycled data that knows the row, so Restore puts it back. */
+  var rows = {
+    find: function (listKey, id) {
+      var sc = document.getElementById('s-' + listKey);
+      if (!sc || !id) return null;
+      return $$('tbody tr', sc).filter(function (tr) {
+        var first = tr.cells[0] ? tr.cells[0].textContent.trim() : '';
+        var nm = tr.querySelector('.nm');
+        return first === id || (nm && nm.textContent.trim() === id) || (tr.getAttribute('data-find') || '').split(' ')[0] === id;
+      })[0] || null;
+    },
+    count: function (tr, d) {
+      var sc = tr.closest('.screen');
+      if (!sc) return;
+      var tags = (tr.getAttribute('data-tags') || '').split(' ');
+      $$('.tabs .tab[data-tab]', sc).forEach(function (t) {
+        var k = t.getAttribute('data-tab');
+        if (k !== 'all' && tags.indexOf(k) === -1) return;
+        var c = $('.chip', t);
+        if (!c) return;
+        var n = parseInt(c.textContent.replace(/[^\d]/g, ''), 10);
+        if (isNaN(n)) return;
+        n = Math.max(0, n + d);
+        c.textContent = fmt(n).replace(/ /g, '\u202f');
+      });
+      var tbl = tr.closest('table');
+      if (tbl) tbl.dispatchEvent(new Event('filtered'));
+    },
+    remove: function (tr, screenId, why, what) {
+      if (!tr || tr.classList.contains('r-gone')) return null;
+      tr.classList.add('r-gone');
+      rows.count(tr, -1);
+      var key = String(screenId || '').replace(/^s-/, '');
+      var nm = tr.querySelector('.nm') || tr.cells[0];
+      var id = nm ? nm.textContent.trim() : '';
+      var vid = (tr.getAttribute('data-find') || '').split(' ')[0];
+      if (/^VIS-/.test(vid)) id = vid;
+      var entry = [id, what || (tr.cells[2] || tr.cells[1] || {}).textContent || '', ME, today(), why];
+      entry.tr = tr;
+      if (CFG[key]) CFG[key].bin.unshift(entry);
+      return entry;
+    },
+    restore: function (entry) {
+      if (!entry || !entry.tr) return;
+      entry.tr.classList.remove('r-gone');
+      rows.count(entry.tr, 1);
+      Object.keys(CFG).forEach(function (k) {
+        var i = CFG[k].bin.indexOf(entry);
+        if (i > -1) CFG[k].bin.splice(i, 1);
+      });
+    }
+  };
+
   /* ---- recycled data ---- */
   function drawBin(key, panel) {
     var c = CFG[key];
@@ -217,7 +273,10 @@
         drawBin(key, panel);
       };
       if (act.indexOf('restore') === 0) {
-        finish();
+        var back = idx.map(function (i) { return c.bin[i]; });
+        back.forEach(function (en) { if (en.tr) rows.restore(en); });
+        c.bin = c.bin.filter(function (en) { return back.indexOf(en) === -1; });
+        drawBin(key, panel);
         say(names.join(', ') + ' restored');
         return;
       }
@@ -282,8 +341,10 @@
   function result(key, r, host) {
     var c = CFG[key];
     var cols = (r[5] || c.fields.slice(0, 6));
+    var real = window.SugiraRecData && window.SugiraRecData.rows(key, cols, r[2]);
     var rows = [];
-    for (var n = 0; n < Math.min(5, r[4]); n++) {
+    if (real) rows = real.slice(0, 5);
+    else for (var n = 0; n < Math.min(5, r[4]); n++) {
       rows.push(cols.map(function (f, j) { return sample(key, f, n, j); }));
     }
     host.innerHTML = '<div class="card flush plainsurface"><div class="card-h vres-h"><h3>' + esc(r[0]) + '</h3>'
@@ -293,7 +354,8 @@
       + '<div class="tblwrap"><table class="tbl vt"><thead><tr>' + cols.map(function (f) { return '<th>' + esc(f) + '</th>'; }).join('')
       + '</tr></thead><tbody>' + rows.map(function (rw) {
         return '<tr>' + rw.map(function (v) { return '<td>' + esc(v) + '</td>'; }).join('') + '</tr>';
-      }).join('') + '</tbody></table></div><div class="tfoot"><span>Showing ' + rows.length + ' of ' + fmt(r[4]) + '</span></div></div>';
+      }).join('') + (rows.length ? '' : '<tr><td class="mut" colspan="' + cols.length + '">Nothing matches</td></tr>')
+      + '</tbody></table></div><div class="tfoot"><span>' + (rows.length ? 'Showing ' + rows.length + ' of ' + fmt(Math.max(r[4], rows.length)) : 'Nothing matches') + '</span></div></div>';
     host.querySelector('[data-x="csv"]').onclick = function () { say(fmt(r[4]) + ' rows exported as CSV'); };
     host.querySelector('[data-x="xls"]').onclick = function () { say(fmt(r[4]) + ' rows exported as Excel'); };
     host.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -304,12 +366,12 @@
     who: ['Mukamana Jeanne', 'Nshimiyimana Claude', 'Uwase Marie', 'Habimana Eric', 'Ingabire Alice'],
     district: ['Ngoma', 'Nyanza', 'Ngoma', 'Kirehe', 'Nyanza'],
     sector: ['Kibungo', 'Kigoma', 'Jarama', 'Mahama', 'Busasamana'],
-    izu: ['M. Dusabe', 'J. Kamanzi', 'E. Mutesi', 'J. Kamanzi', 'A. Nyirahabimana'],
+    izu: ['M. Dusabe', 'P. Mukamurenzi', 'V. Nyiraneza', 'D. Niyonsaba', 'A. Nyirahabimana'],
     date: ['28 Oct 2026', '27 Oct 2026', '24 Oct 2026', '22 Oct 2026', '20 Oct 2026']
   };
   function sample(key, f, n, j) {
     var t = f.toLowerCase();
-    if (/household id|^record/.test(t)) return SAMPLE.id[n];
+    if (/household id|^record$/.test(t)) return SAMPLE.id[n];
     if (/visit id/.test(t)) return 'VIS-88' + (41 - n);
     if (/case id/.test(t)) return ['RH-0044', 'RH-0045', 'RH-0041', 'RH-0038', 'RH-0035'][n];
     if (/referral id/.test(t)) return ['RF-0112', 'RF-0109', 'RF-0107', 'RF-0104', 'RF-0101'][n];
@@ -393,19 +455,9 @@
   /* ---- follow-ups ----
      The partners' own screen: Add follow up (date, status, comment, Submit)
      and Follow up history underneath, both open. */
-  var FU = {
-    'RH-0044': [
-      ['M. Dusabe', '28 Oct 2026 14:38', 'Active', 'Flag raised at the Module 6 visit. The youngest child, aged 2, showed signs of inadequate feeding.'],
-      ['C. Uwimana', '29 Oct 2026 09:10', 'Active', 'Mother contacted by phone. Agreed to a growth check at Kabare health centre.']
-    ],
-    'RH-0041': [['M. Dusabe', '24 Oct 2026 11:02', 'Active', 'Raised at the Module 3 visit.'],
-      ['B. Nkurunziza', '29 Oct 2026 15:20', 'Stabilized', 'Seen by the district CPWO. Family supported with food.']],
-    'RF-0112': [
-      ['J. Kamanzi', '31 Oct 2026 10:15', 'Active', 'Referral sent to Kabare health centre for a growth check.'],
-      ['M. Dusabe', '3 Nov 2026 16:40', 'Active', 'Mother says the appointment is on 10 November.']
-    ],
-    'RF-0109': [['J. Kamanzi', '27 Oct 2026 08:30', 'Active', 'Sent to the district CPWO, Ngoma.']]
-  };
+  /* Each case's history is written with the case, in recdata.js, which
+     fills this in as a record opens. */
+  var FU = {};
   var FU_STATUS = ['Active', 'Stabilized', 'Closed'];
 
   function initials(n) { return n.replace(/[^A-Z]/g, '').slice(0, 2); }
@@ -454,7 +506,10 @@
           body: '<div><label for="f-fes">Status</label><select id="f-fes">' + FU_STATUS.map(function (s) {
             return '<option' + (s === x[2] ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select></div>'
             + '<div><label for="f-fet">Comment</label><textarea id="f-fet" rows="3">' + esc(x[3]) + '</textarea></div>',
-          onOk: function (body) { x[2] = body.querySelector('#f-fes').value; x[3] = body.querySelector('#f-fet').value; draw(); },
+          onOk: function (body) {
+            x[2] = body.querySelector('#f-fes').value; x[3] = body.querySelector('#f-fet').value; draw();
+            if (x === list[list.length - 1]) document.dispatchEvent(new CustomEvent('fu:added', { detail: { id: id, status: x[2] } }));
+          },
           done: 'Follow-up changed'
         });
         return;
@@ -468,65 +523,8 @@
       $('[data-f="text"]', host).value = '';
       draw();
       say('Follow-up added · ' + s);
+      document.dispatchEvent(new CustomEvent('fu:added', { detail: { id: id, status: s } }));
     });
-  }
-
-
-  /* ---- a row opens its own record ----
-     One risk-of-harm screen and one referral screen stand for all of them;
-     the row clicked says which one is being read. */
-  function carryIdentity() {
-    var pending = null;
-    document.addEventListener('click', function (e) {
-      var tr = e.target.closest('tr[data-go="case"], tr[data-go="referral"]');
-      if (!tr || e.target.closest('button.rel, a')) return;
-      var key = tr.getAttribute('data-go');
-      var first = tr.cells[0] ? tr.cells[0].textContent.trim() : '';
-      var id = tr.getAttribute('data-recid') || (/^(RH|RF)-\d+$/.test(first) ? first : '');
-      if (!id) return;
-      var title = tr.getAttribute('data-title') || (/^(RH|RF)-/.test(first) ? '' : first);
-      var chip = tr.querySelector('.chip');
-      var heads = tr.closest('table') ? [].map.call(tr.closest('table').querySelectorAll('thead th'), function (h) { return h.textContent.trim().toLowerCase(); }) : [];
-      var pi = heads.indexOf('place');
-      pending = { key: key, id: id, title: title, status: chip ? chip.textContent.trim().replace('Stabilised', 'Stabilized') : '',
-        place: pi > -1 && tr.cells[pi] ? tr.cells[pi].textContent.trim() : '' };
-      setTimeout(apply, 0);
-    }, true);
-    document.addEventListener('click', function (e) {
-      var b = e.target.closest('button.rel[data-go="case"], button.rel[data-go="referral"], button[data-recid]');
-      if (!b) return;
-      var id = b.getAttribute('data-recid') || b.textContent.trim();
-      if (!/^(RH|RF)-\d+$/.test(id)) return;
-      pending = { key: b.getAttribute('data-go'), id: id, title: b.getAttribute('data-title') || '', status: '' };
-      setTimeout(apply, 0);
-    }, true);
-    function apply() {
-      if (!pending) return;
-      var p = pending; pending = null;
-      var sc = document.getElementById('s-' + p.key);
-      if (!sc) return;
-      var rid = $('.rec-id', sc), was = rid ? rid.textContent : '';
-      if (rid) rid.textContent = p.id;
-      /* the crumbs name the record too */
-      var sd = window.SugiraScreens && window.SugiraScreens[p.key];
-      if (sd && sd.crumbs && sd.crumbs.length) sd.crumbs[sd.crumbs.length - 1][0] = p.id;
-      $$('#dwCrumbs *, #crumbs *').forEach(function (n) {
-        if (n.children.length === 0 && n.textContent.trim() === was) n.textContent = p.id;
-      });
-      if (p.place) {
-        $$('.pg .pgr', sc).forEach(function (row) {
-          var k = $('.k', row), v = $('.v', row);
-          if (k && v && k.textContent.trim() === 'Place' && !$('.rel, .lnk-off', v)) v.textContent = p.place;
-        });
-      }
-      if (p.title) { var h = $('h1', sc); if (h) h.textContent = p.title; }
-      if (p.status) { var bd = $('.pg .pg-badge', sc); if (bd) bd.textContent = p.status; }
-      $$('[data-fu]', sc).forEach(function (host) {
-        if (host.getAttribute('data-fu') === p.id) return;
-        host.setAttribute('data-fu', p.id);
-        followups(host);
-      });
-    }
   }
 
 
@@ -657,12 +655,19 @@
     var from = heads.indexOf('Cross-module questions');
     if (from < 0) return;
     function redo() {
-      var rows = $$('tbody tr', t).filter(function (r) { return !r.classList.contains('t-out') && !r.classList.contains('f-out'); });
+      var rows = $$('tbody tr', t).filter(function (r) { return !r.classList.contains('t-out') && !r.classList.contains('f-out') && !r.classList.contains('r-gone'); });
       var sums = [];
       for (var c = from; c < heads.length; c++) {
         sums.push(rows.reduce(function (a, r) { return a + (parseFloat((r.cells[c] || {}).textContent) || 0); }, 0));
       }
       var fr = t.tFoot.rows, n = rows.length || 1;
+      /* Narrowed, the footer counts what is left rather than the whole year. */
+      var foot = document.getElementById('izuFoot');
+      if (foot) {
+        var narrowed = $$('tbody tr', t).some(function (r) { return r.classList.contains('f-out'); });
+        foot.textContent = narrowed ? (rows.length ? rows.length + (rows.length === 1 ? ' supervision' : ' supervisions') : 'Nothing matches')
+          : 'Showing 1–' + rows.length + ' of 15 208 supervisions';
+      }
       [[sums, 0], [sums.map(function (v) { return v / n; }), 2], [sums.map(function (v) { return v / 12; }), 2]].forEach(function (set, k) {
         if (!fr[k]) return;
         var cells = [].slice.call(fr[k].cells, 1);
@@ -671,6 +676,7 @@
     }
     t.addEventListener('table:applied', redo);
     t.addEventListener('filtered', redo);
+    document.addEventListener('filters:applied', function () { setTimeout(redo, 0); });
     document.getElementById('s-izu').addEventListener('click', function () { setTimeout(redo, 30); });
     redo();
   }
@@ -687,9 +693,9 @@
       window.SugiraModal.ask({
         title: 'Delete “' + name + '”?', ok: 'Delete', danger: true, body: '',
         onOk: function () {
-          tr.hidden = true;
-          tr.classList.add('q-out');
-          say('“' + name + '” deleted', { label: 'Undo', onClick: function () { tr.hidden = false; tr.classList.remove('q-out'); } });
+          var sc = tr.closest('.screen');
+          var entry = rows.remove(tr, sc ? sc.id : '', 'Deleted from the list');
+          say('“' + name + '” deleted', { label: 'Undo', onClick: function () { rows.restore(entry); } });
         }
       });
     }, true);
@@ -710,29 +716,31 @@
   }
 
   /* ---- Edit and Delete on every record ---- */
-  var MODS = ['Welcome session'].concat(Array.apply(null, Array(12)).map(function (_, i) { return 'Module ' + (i + 1); }), ['Closing session']);
+  var MODS = ['Welcome module'].concat(Array.apply(null, Array(12)).map(function (_, i) { return 'Module ' + (i + 1); }), ['Closing module']);
   var PICK = {
     cohort: ['Cohort 1 · 2026', 'Cohort 2 · 2026', 'Cohort 3 · 2026', 'Cohort 4 · 2026'],
-    village: ['Kabare', 'Rugarama', 'Nyakabungo', 'Kigabiro', 'Gahima'],
-    place: ['Kabare village', 'Rugarama village', 'Nyakabungo village', 'Kigabiro village', 'Gahima village'],
+    village: ['Kabare', 'Kibimba', 'Rukoma', 'Munini', 'Rwesero', 'Rugarama', 'Bugoyi', 'Nyonirima'],
+    place: ['Kibungo · Ngoma', 'Jarama · Ngoma', 'Sake · Ngoma', 'Mahama · Kirehe', 'Kigoma · Nyanza', 'Busasamana · Nyanza', 'Gisenyi · Rubavu', 'Kinigi · Musanze'],
     sector: ['Kibungo', 'Jarama', 'Sake', 'Kigoma', 'Busasamana', 'Mahama', 'Gisenyi', 'Kinigi'],
     district: ['Ngoma', 'Kirehe', 'Nyanza', 'Rubavu', 'Musanze'],
-    izu: ['M. Dusabe', 'J. Kamanzi', 'B. Uwamahoro', 'A. Mukeshimana', 'D. Niyonsaba'],
-    supervisor: ['C. Uwimana', 'E. Mutesi', 'P. Hakizimana'],
+    izu: ['M. Dusabe', 'V. Nyiraneza', 'G. Uwimbabazi', 'D. Niyonsaba', 'P. Mukamurenzi', 'A. Nyirahabimana', 'F. Uwase', 'B. Uwamahoro'],
+    supervisor: ['C. Uwimana', 'A. Uwera', 'F. Kayitesi', 'S. Ingabire', 'P. Hakizimana'],
     module: MODS,
     'family type': ['Single mother-headed household', 'Two-parent household', 'Grandparent-headed household', 'Child-headed household'],
-    'booster session': ['No', 'Yes']
+    'booster module': ['No', 'Yes']
   };
   var STATUS = {
     household: ['On track', 'Behind', 'Risk of harm'],
-    visit: ['Completed', 'Not completed', 'Missed'],
+    visit: ['Completed', 'Not completed'],
     'case': ['Active', 'Stabilized', 'Closed'],
     referral: ['Active', 'Stabilized', 'Closed'],
-    person: ['Active', 'Inactive']
+    person: ['Active', 'Inactive'],
+    form: ['Draft', 'Active', 'Archived']
   };
   /* worked out by the system, never typed */
-  var FIXED = /^(minutes|sent in|when|form|forms|enrolled|joined|last active|created|created by|time expected|latest module|recorded by|raised at|review due|translated|submitted|opened|version|household|head of household|members|visits)$/i;
+  var FIXED = /^(minutes|sent in|when|form|forms|enrolled|joined|last active|created|created by|time expected|latest module|recorded by|raised at|review due|translated|submitted|opened|version|household|head of household|members|visits|used in|project|questions|languages|last edited|out of|full name)$/i;
   function pickFor(label, key) {
+    if (/^izu\b/i.test(label)) return PICK.izu;
     var l = label.toLowerCase().replace(/^izu at /, '');
     if (l === 'status') return STATUS[key] || null;
     if (PICK[l]) return PICK[l];
@@ -743,6 +751,10 @@
     if (/village/.test(l)) return PICK.village;
     if (/^place|location/.test(l)) return PICK.place;
     if (/sector/.test(l)) return PICK.sector;
+    if (l === 'position' && window.SugiraPerms) return window.SugiraPerms.positions().map(function (p) { return p.name; });
+    if (l === 'where') return ['National', 'Ngoma district', 'Kirehe district', 'Nyanza district', 'Rubavu district', 'Musanze district',
+      'Kibungo · Ngoma', 'Jarama · Ngoma', 'Sake · Ngoma', 'Mahama · Kirehe', 'Kigoma · Nyanza', 'Busasamana · Nyanza', 'Gisenyi · Rubavu', 'Kinigi · Musanze'];
+    if (l === 'email alerts') return ['Yes', 'No'];
     if (/district/.test(l)) return PICK.district;
     return null;
   }
@@ -762,8 +774,8 @@
       return;
     }
     var first = Array.prototype.filter.call(v.childNodes, function (n) { return n.nodeType === 3; })[0];
-    if (!val) { v.innerHTML = '&mdash;'; v.classList.add('empty'); v.closest('.pgr').classList.add('is-empty'); return; }
-    v.classList.remove('empty'); v.closest('.pgr').classList.remove('is-empty');
+    if (!val) { v.innerHTML = '&mdash;'; v.classList.add('empty'); var r0 = v.closest('.pgr'); if (r0) r0.classList.add('is-empty'); return; }
+    v.classList.remove('empty'); var r1 = v.closest('.pgr'); if (r1) r1.classList.remove('is-empty');
     if (first && v.textContent.trim() !== '—') first.textContent = val + ' ';
     else v.textContent = val;
   }
@@ -777,9 +789,15 @@
     if (key === 'module') {
       fields.push({ label: 'Module name', el: h1, val: h1.textContent.trim() });
       if (alt) fields.push({ label: 'Module name in Kinyarwanda', el: alt, val: alt.textContent.trim() });
-      fields.push({ label: 'Booster session', el: null, val: rec.getAttribute('data-booster') || 'No', list: PICK['booster session'] });
-    } else if (key === 'person' || key === 'form') {
-      fields.push({ label: key === 'form' ? 'Form name' : 'Full name', el: h1, val: h1.textContent.trim() });
+      /* the booster mark lives in the Fields section, under the names */
+      var bst = $$('.fields .fld', screen).filter(function (r) { return /Booster/.test(r.textContent); })[0];
+      var bv = bst && $('.v', bst);
+      if (bv) fields.push({ label: 'Booster module', el: bv, val: bv.textContent.trim(), list: PICK['booster module'] });
+    } else if (key === 'form') {
+      fields.push({ label: 'Form name', el: h1, val: h1.textContent.trim() });
+      if (alt) fields.push({ label: 'Form name in Kinyarwanda', el: alt, val: alt.textContent.trim() });
+    } else if (key === 'person') {
+      fields.push({ label: 'Full name', el: h1, val: h1.textContent.trim() });
     }
     $$('.pg .pgr', rec).forEach(function (row) {
       var k = $('.k > span:last-child', row) || $('.k span', row), v = $('.v', row);
@@ -808,8 +826,13 @@
           if (!inp) return;
           var val = inp.value.trim();
           if (val === f.val) return;
-          if (!f.el) { rec.setAttribute('data-booster', val); return; }
-          if (f.el === h1 || f.el === alt) { f.el.textContent = val; return; }
+          if (f.el === h1 || f.el === alt) { f.el.textContent = val; alt && (alt.hidden = !alt.textContent); return; }
+          if (/booster/i.test(f.label)) { rec.setAttribute('data-booster', val); rec.setAttribute('data-booster-set', '1'); }
+          if (/^village$/i.test(f.label) && window.SugiraRecData) {
+            var H = window.SugiraRecData.households, at = Object.keys(H).filter(function (k) { return H[k].village === val; })[0];
+            var cq = f.el.querySelector('.conseq');
+            if (at && cq) cq.textContent = H[at].cell + ' cell · ' + H[at].sector + ' · ' + H[at].district;
+          }
           setValue(f.el, val);
         });
       },
@@ -827,10 +850,9 @@
       title: 'Delete ' + id + '?', ok: 'Delete', danger: true,
       body: '<p class="m-lead">It moves to Recycled data, where it can be restored.</p>',
       onOk: function () {
-        if (listKey && CFG[listKey]) CFG[listKey].bin.unshift([id, title, ME, today(), 'Deleted from its record']);
-        /* A row opened as a record goes from its list too. */
-        var row = key === 'record' && window.SugiraRecordRow;
-        if (row) { row.hidden = true; row.classList.add('q-out'); }
+        var row = key === 'record' ? window.SugiraRecordRow : rows.find(listKey, id);
+        if (row) rows.remove(row, listKey, 'Deleted from its record', title);
+        else if (listKey && CFG[listKey]) CFG[listKey].bin.unshift([id, title, ME, today(), 'Deleted from its record']);
         var close = document.querySelector('#dw:not([hidden]) [data-dw="close"]');
         if (close) close.click();
         if (listKey && window.SugiraGo) window.SugiraGo(listKey);
@@ -919,7 +941,7 @@
       return '<div class="pgrp"><b>' + esc(g.name) + '</b>' + perms.map(function (x) {
         var on = !!held[x.id] !== !!own[x.id];
         return '<label class="rb-ck"><input type="checkbox" value="' + esc(x.id) + '"' + (on ? ' checked' : '')
-          + ' data-base="' + (held[x.id] ? 1 : 0) + '">' + esc(x.label) + '<span class="pp-x"></span></label>';
+          + ' data-base="' + (held[x.id] ? 1 : 0) + '" data-was="' + (on ? 1 : 0) + '">' + esc(x.label) + '<span class="pp-x"></span></label>';
       }).join('') + '</div>';
     }).join('');
     function mark(inp) {
@@ -928,35 +950,90 @@
       x.className = 'pp-x' + (inp.checked === base ? '' : inp.checked ? ' add' : ' rm');
     }
     $$('input', host).forEach(mark);
+    if (host._bound) return;
+    host._bound = true;
     host.addEventListener('change', function (e) { if (e.target.matches('input')) mark(e.target); });
     var save = document.querySelector('[data-pp="save"]');
+    /* What was changed since the page opened, not every difference from the position. */
     if (save) save.addEventListener('click', function () {
-      var n = $$('.pp-x.add, .pp-x.rm', host).length;
-      say(n ? n + ' change' + (n === 1 ? '' : 's') + ' to their position saved, for them only' : 'Nothing changed');
+      var changed = $$('input', host).filter(function (i) { return (i.checked ? '1' : '0') !== i.getAttribute('data-was'); });
+      changed.forEach(function (i) { i.setAttribute('data-was', i.checked ? '1' : '0'); });
+      var n = changed.length;
+      say(n ? n + ' change' + (n === 1 ? '' : 's') + ' saved, for them only' : 'Nothing changed');
     });
   }
+  window.SugiraPersonPerms = personPerms;
 
   /* ---- the partners' follow-up report: Apply narrows it ---- */
   function followupReport() {
     var go = document.getElementById('fur-apply'), t = document.getElementById('fur-t');
     if (!go || !t) return;
-    go.addEventListener('click', function () {
-      var pv = $('#fur-p').value, d = $('#fur-d').value, sc = $('#fur-s').value;
+    /* Province narrows District, District narrows Sector. */
+    var TREE = { 'Eastern Province': { Ngoma: ['Kibungo', 'Jarama', 'Sake', 'Zaza'], Kirehe: ['Kirehe', 'Mahama', 'Nyarubuye'] },
+      'Southern Province': { Nyanza: ['Busasamana', 'Kigoma', 'Mukingo'] }, 'Western Province': { Rubavu: ['Gisenyi', 'Nyundo', 'Rugerero'] },
+      'Northern Province': { Musanze: ['Kinigi', 'Busogo', 'Cyuve'] } };
+    var P = $('#fur-p'), D = $('#fur-d'), S = $('#fur-s'), F = $('#fur-form');
+    function opts(sel, first, list) {
+      var was = sel.value;
+      sel.innerHTML = '<option>' + first + '</option>' + list.map(function (x) { return '<option>' + esc(x) + '</option>'; }).join('');
+      if (list.indexOf(was) > -1) sel.value = was;
+      sel.dispatchEvent(new Event('change'));
+    }
+    function districts() {
+      var provs = /^All/.test(P.value) ? Object.keys(TREE) : [P.value];
+      return provs.reduce(function (a, p) { return a.concat(Object.keys(TREE[p] || {})); }, []);
+    }
+    function sectors() {
+      var ds = /^All/.test(D.value) ? districts() : [D.value];
+      return Object.keys(TREE).reduce(function (a, p) {
+        ds.forEach(function (d) { if (TREE[p][d]) a = a.concat(TREE[p][d]); });
+        return a;
+      }, []);
+    }
+    P.addEventListener('change', function () { opts(D, 'All districts', districts()); });
+    D.addEventListener('change', function () { opts(S, 'All sectors', sectors()); });
+    opts(D, 'All districts', districts());
+    var total = 538;
+    function run() {
+      var pv = P.value, d = D.value, sc = S.value, form = F.selectedIndex === 1 ? 'ref' : 'roh';
       var n = 0;
       $$('tbody tr', t).forEach(function (tr) {
         var c = tr.cells;
-        var keep = (/^All/.test(pv) || c[1].textContent === pv) && (/^All/.test(d) || c[2].textContent === d)
+        var keep = tr.getAttribute('data-form') === form && (/^All/.test(pv) || c[1].textContent === pv) && (/^All/.test(d) || c[2].textContent === d)
           && (/^All/.test(sc) || c[3].textContent === sc);
         tr.hidden = !keep;
         if (keep) n++;
       });
+      var all = /^All/.test(pv) && /^All/.test(d) && /^All/.test(sc);
+      total = all ? (form === 'ref' ? 212 : 538) : n;
       var show = function (v) { var x = new Date(v + 'T00:00:00'); return x.getDate() + ' ' + MONTHS[x.getMonth()] + ' ' + x.getFullYear(); };
-      var total = /^All/.test(pv) && /^All/.test(d) && /^All/.test(sc) ? 538 : n * 7 + 3;
-      $('#fur-n').textContent = 'Found ' + total + ' results between ' + show($('#fur-a').value) + ' and ' + show($('#fur-b').value);
+      $('#fur-n').textContent = 'Found ' + total + (total === 1 ? ' result' : ' results') + ' between ' + show($('#fur-a').value) + ' and ' + show($('#fur-b').value);
+      var foot = $('#fur-foot');
+      if (foot) foot.textContent = n ? 'Showing 1–' + n + ' of ' + fmt(total) : 'Nothing matches';
+    }
+    go.addEventListener('click', run);
+    document.addEventListener('click', function (e) {
+      var x = e.target.closest('[data-fur-export]');
+      if (!x) return;
+      say(fmt(total) + ' follow-ups exported as ' + x.getAttribute('data-fur-export'));
     });
   }
 
   /* Rows deleted from a list's selection bar land in the same bin. */
+  window.SugiraFU = { data: FU, mount: followups };
+  window.SugiraFormStats = function (f) {
+    var c = CFG.form, n = f.responses;
+    c.stats = [['Responses', n], ['This week', Math.round(n * 0.08)], ['Flagged', Math.round(n * 0.012), 'warn'], ['Median minutes', Math.max(5, Math.round(f.questions * 1.4))]];
+    var mods = f.sessions.length ? f.sessions : ['The whole project'];
+    var share = mods.length ? Math.floor(n / mods.length) : n;
+    c.charts[0] = { t: 'Responses by module', rows: mods.slice(0, 12).map(function (s, i) {
+      var m = /^(\d+)\./.exec(s);
+      return [m ? 'Module ' + m[1] : s.replace(/ ?session$/i, ' module'), i === mods.length - 1 ? n - share * (mods.length - 1) : share];
+    }) };
+    var d = [0.26, 0.22, 0.21, 0.18, 0.13];
+    c.charts[1] = { t: 'Responses by district', rows: ['Ngoma', 'Rubavu', 'Nyanza', 'Kirehe', 'Musanze'].map(function (x, i) { return [x, Math.round(n * d[i])]; }) };
+  };
+  window.SugiraRows = rows;
   window.SugiraRecycle = {
     add: function (screenId, rows) {
       var key = String(screenId).replace(/^s-/, '');
@@ -979,8 +1056,7 @@
     access();
     personPerms();
     followupReport();
-    $$('[data-fu]').forEach(followups);
-    carryIdentity();
+    /* recdata.js fills each record, follow-ups included, as it opens. */
     rowDelete();
     drill();
     izuTotals();

@@ -107,7 +107,7 @@
       ['family-list', 'familymember-list', 'familymodule-list', 'admittedfamily-list',
         'householdenrollment-list']],
     ['hh-enrol', 'households', 'Enrol a household',
-      'Put a household on the programme and record who is in it.',
+      'Enrol a household in a project and record who is in it.',
       ['family-create', 'familymember-create', 'familymodule-create', 'admittedfamily-create',
         'householdenrollment-create']],
     ['hh-change', 'households', 'Change a household’s details',
@@ -115,9 +115,9 @@
       ['family-edit', 'familymember-edit', 'familymodule-edit', 'admittedfamily-edit',
         'householdenrollment-edit']],
     ['hh-remove', 'households', 'Remove a household',
-      'Take a household off the programme. Today this deletes it outright rather than archiving it.',
+      'Delete a household entered by mistake. It goes to Recycled data and can be restored.',
       ['family-delete', 'familymember-delete', 'familymodule-delete', 'admittedfamily-delete',
-        'householdenrollment-delete'], { risk: 'Deletes the record and everything collected against it.' }],
+        'householdenrollment-delete']],
 
     ['visit-see', 'visits', 'See recorded visits',
       'See visits, and read the answers people gave.',
@@ -171,14 +171,14 @@
     ['prog-translate', 'programme', 'Translate',
       'Write the Kinyarwanda for a form and its questions.', ['can-translate-forms']],
     ['prog-cohorts', 'programme', 'Manage cohorts',
-      'Decide which households get which module, and when.', ['manage-cohort']],
+      'Set each year’s cohorts and the districts that run them.', ['manage-cohort']],
 
 
     ['rep-see', 'reports', 'See reports',
       'Open reports and indicators someone has already built.',
       ['reports-list', 'generalreport-list', 'indicator-list', 'customreport-list']],
     ['rep-build', 'reports', 'Build a report',
-      'Ask a question of the collected data, save it, and put it on a schedule.',
+      'Ask a question of the collected data and save it as a report.',
       ['reports-create', 'reports-edit', 'reports-delete', 'generalreport-create',
         'generalreport-edit', 'generalreport-delete', 'indicator-create', 'indicator-edit',
         'indicator-delete', 'build-reports']],
@@ -293,10 +293,10 @@
       reach: 'district',
       adds: ['roh-open', 'roh-close'] },
 
-    { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 57,
+    { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'IZU', people: 57,
       what: 'Sits in on visits in one cell and scores how they were delivered.',
       reach: 'cell',
-      adds: ['hh-see', 'visit-see', 'visit-record', 'izu-see', 'izu-record'] },
+      adds: ['izu-see', 'izu-record'] },
 
     { id: 'ISC', name: 'IZU Sector Coordinator (ISC)', short: 'the Sector Coordinator', base: 'ICC', people: 27,
       what: 'Supervises the cell coordinators in one sector by telephone, and scores them.',
@@ -903,7 +903,6 @@
     add.setAttribute('data-modal', 'role');
     add.appendChild(icon('i-plus', 'rolec-i'));
     add.appendChild(el('span', 'rolec-n', 'New position'));
-    add.appendChild(el('p', 'rolec-w', 'A job, not a task.'));
     add.setAttribute('data-tip',
       'It starts from the nearest position below it and adds. If the new one would be an '
       + 'existing position plus one thing for one person, that belongs on their record as '
@@ -916,7 +915,7 @@
        on the toolbar, where an explanation can be asked for rather than read
        every time. What is left are the two things you can go and do. */
     var foot = el('p', 'pm-foot');
-    var undo = el('button', 'rel');
+    var undo = el('button', 'btn sec sm');
     undo.type = 'button';
     undo.setAttribute('data-perms-act', 'discard');
     undo.setAttribute('data-toast', 'The positions are back as they were');
@@ -945,6 +944,12 @@
     state.open = state.whoRole && byName(state.whoRole) ? byName(state.whoRole).id : null;
     setTimeout(render, 0);
   });
+
+  /* A position named anywhere else — the activity log, a person — opens that one. */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-go="position"][data-pos-id]');
+    if (a && byId(a.getAttribute('data-pos-id'))) state.open = a.getAttribute('data-pos-id');
+  }, true);
 
   /* The drawer moves the screen's markup into itself and then asks whoever
      owns it to fill it, which is how the other records do it too. */
@@ -1054,7 +1059,7 @@
     head.appendChild(hr);
     t.appendChild(head);
     var body = el('tbody');
-    ALL.forEach(function (perm) { body.appendChild(permRow(perm)); });
+    GROUPS.forEach(function (g) { g.perms.forEach(function (perm) { body.appendChild(permRow(perm)); }); });
     var none = el('tr', 't-empty');
     var td = el('td');
     td.colSpan = 4;
@@ -1158,6 +1163,20 @@
       renderOne();
       return true;
     },
-    reset: function () { state.pos = freshPositions(); state.open = null; cardOpen = {}; render(); }
+    reset: function () { state.pos = freshPositions(); state.open = null; cardOpen = {}; render(); },
+    addPosition: function (name, what, perms) {
+      var id = 'P' + (state.pos.length + 1);
+      state.pos.push({ id: id, name: name, short: name, base: null, people: 0, what: what || '', reach: 'sector',
+        heldBy: null, reaches: {}, adds: perms.slice() });
+      render();
+      return id;
+    },
+    addPerm: function (label, what, groupName) {
+      var g = GROUPS.filter(function (x) { return x.name === groupName; })[0] || GROUPS[GROUPS.length - 1];
+      var p = { id: 'new-' + (ALL.length + 1), group: g.key, label: label, what: what || '', replaces: [], risk: null };
+      ALL.push(p); BY_ID[p.id] = p; g.perms.push(p);
+      renderPerms();
+      return p.id;
+    }
   };
 })();
