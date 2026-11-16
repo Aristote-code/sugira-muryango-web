@@ -30,7 +30,7 @@
       ['Project name', 'text', { en: 'Household Module Tracking',
         rw: 'Gukurikirana amasomo y’umuryango' }],
       ['Description', 'text', { en: 'The core home-visiting curriculum: twelve '
-        + 'fortnightly modules plus two boosters.', rw: '' }],
+        + 'fortnightly modules, a welcome, a closing and three boosters.', rw: '' }],
       ['Project URL', 'text', ''],
       ['Archived', 'choice:Yes,No', 'No']
     ],

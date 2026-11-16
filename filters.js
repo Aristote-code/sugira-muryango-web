@@ -274,6 +274,7 @@
       return (keyOf(b) === 'dates' || keyOf(b) === 'period') && b.closest('#s-dashboard');
     })[0];
     var period = periodBtn ? valueOf(periodBtn) : 'This cohort';
+    var said = period;
     if (period === 'All dates') period = 'This cohort';
     /* A typed range scales like a month: the share is what moves the board,
        and the chip already says the exact span. */
@@ -341,7 +342,7 @@
     var bits = [where === 'Rwanda' ? 'All five districts' : where];
     if (year) bits.push(year);
     if (cohort) bits.push('Cohort ' + cohort);
-    bits.push(period);
+    bits.push(said);
     var sub = document.getElementById('dashScope');
     if (sub) {
       if (!sub.dataset.base) sub.dataset.base = sub.textContent;

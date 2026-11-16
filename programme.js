@@ -62,21 +62,21 @@
       ['Flash weekly report on every module', 'Raporo yihuse ya buri kiganiro', 11, 986, 'Active', EVERY_SESSION, 'IZU at Village'],
       ['General Questions-Self report', 'Ibibazo Rusange ku biganiro byose', 18, 412, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
       ['Family-Specific Competencies-Self-report', 'Ibibazo ku bushobozi bwo gutanga ikiganiro', 16, 388, 'Active', EVERY_SESSION, 'IZU Cell Coordinator'],
-      ['Household Module Tracking Form', '', 30, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
-      ['Caregiver observation', '', 12, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
-      ['Supervisor spot-check', '', 8, 141, 'Active', ['6.The Importance of Good Health'], 'Sector lead (SLA)'],
-      ['Managing the Stresses of Parenting — visit record', '', 34, 0, 'Draft', ['7.Managing the Stresses of Parenting and Family Life'], 'IZU at Village'],
-      ['Resolving Conflicts in the Home — visit record', '', 41, 0, 'Draft', ['8.Resolving Conflicts in the Home'], 'IZU at Village'],
+      ['Household Module Tracking Form', 'Inyandiko y’uruzinduko', 30, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
+      ['Caregiver observation', 'Igenzura ry’umurezi', 12, 986, 'Active', ['6.The Importance of Good Health'], 'IZU at Village'],
+      ['Supervisor spot-check', 'Igenzura rya superviseri', 8, 141, 'Active', ['6.The Importance of Good Health'], 'Sector lead (SLA)'],
+      ['Managing the Stresses of Parenting form', '', 34, 0, 'Draft', ['7.Managing the Stresses of Parenting and Family Life'], 'IZU at Village'],
+      ['Resolving Conflicts in the Home form', '', 41, 0, 'Draft', ['8.Resolving Conflicts in the Home'], 'IZU at Village'],
       /* The two that used to hang off the parallel monitoring tree. They are
          imported into the four sessions that are monitored, like any other
          form, and the column that says who fills them in is what makes them
          monitoring forms. */
-      ['Session in action', '', 22, 412, 'Active', MONITORED, 'IZU Cell Coordinator'],
-      ['IZU quality score', '', 16, 344, 'Active', MONITORED, 'IZU Cell Coordinator']
+      ['Session in action', 'Ikiganiro mu bikorwa', 22, 412, 'Active', MONITORED, 'IZU Cell Coordinator'],
+      ['IZU quality score', 'Amanota y’ubuziranenge bwa IZU', 16, 344, 'Active', MONITORED, 'IZU Cell Coordinator']
     ]],
     ['Household Tracking Project', 'tablet', 'near-duplicate', ['Welcome session', '1.Family Narrative'], [
-      ['Household visit record v1', '', 30, 0, 'Archived', ['Welcome session'], 'IZU at Village'],
-      ['Household visit record v2', '', 30, 0, 'Archived', ['1.Family Narrative'], 'IZU at Village']
+      ['Household Module Tracking Form — version 0', '', 30, 0, 'Archived', ['Welcome session'], 'IZU at Village'],
+      ['Household Module Tracking Form — version 1', '', 30, 0, 'Archived', ['1.Family Narrative'], 'IZU at Village']
     ]],
     ['Household Enrollment', 'tablet', null, [], [
       ['Enrollment of Beneficiaries', '', 24, 2210, 'Active', [], 'IZU at Village'],
@@ -183,7 +183,7 @@
     }).length;
     var ns = (p.sessions || []).length, nf = p.forms.length;
     var val = {
-      sessions: ns + (ns === 1 ? ' module' : ' modules'),
+      modules: ns + (ns === 1 ? ' module' : ' modules'),
       shared: shared + ' shared with other projects',
       forms: nf + (nf === 1 ? ' form' : ' forms')
     };

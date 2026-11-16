@@ -125,62 +125,70 @@
         });
       }
 
+      /* How big the set really is: a declared total, else the open tab's own
+         count. The rows loaded are a sample of it. Once a filter is on, the
+         rows are the set. */
+      function wholeOf(list) {
+        if (filtered(table)) return list.length;
+        var declared = parseInt(table.getAttribute('data-total') || '', 10);
+        if (!isNaN(declared) && declared >= list.length) return declared;
+        var sc = table.closest('.screen');
+        var panel = table.closest('[data-panelid]');
+        var tab = sc && sc.querySelector('.tab.on[data-tab], .tab[aria-selected="true"][data-tab]');
+        if (tab && panel && tab.getAttribute('data-panel') && tab.getAttribute('data-panel') !== panel.getAttribute('data-panelid')) tab = null;
+        var m = tab && /([\d][\d\s\u00a0\u202f.,]*)\s*$/.exec(tab.textContent.replace(/\s+/g, ' ').trim());
+        var n = m ? parseInt(m[1].replace(/[^\d]/g, ''), 10) : NaN;
+        return !isNaN(n) && n >= list.length ? n : list.length;
+      }
+
       function render() {
         var list = rows();
-        var pages = Math.max(1, Math.ceil(list.length / PAGE));
+        var whole = wholeOf(list);
+        var have = Math.max(1, Math.ceil(list.length / PAGE));
+        /* The pages are the pages of the whole set. Past the rows loaded, a
+           page shows the sample again — this is a prototype — but its numbers,
+           its buttons and its footer all agree with each other. */
+        var pages = Math.max(1, Math.ceil(whole / PAGE));
         if (state.page > pages) state.page = pages;
-        var from = (state.page - 1) * PAGE;
+        var local = ((state.page - 1) % have);
+        var from = local * PAGE;
         var to = Math.min(from + PAGE, list.length);
-
         list.forEach(function (r, i) {
           r.classList.toggle('p-out', !(i >= from && i < to));
         });
 
-        $$('button', pg).forEach(function (b) {
-          var t = b.textContent.trim();
-          if (t === '›' || t === '‹') {
-            b.disabled = (t === '›') ? state.page >= pages : state.page <= 1;
-            b.hidden = false;
-            return;
-          }
-          var n = parseInt(t, 10);
-          b.hidden = isNaN(n) || n > pages;      // never offer a page that isn't there
-          b.classList.toggle('on', n === state.page);
-        });
+        var show = [];
+        if (pages <= 5) { for (var i = 1; i <= pages; i++) show.push(i); }
+        else {
+          show.push(1);
+          if (state.page > 3) show.push('…');
+          for (var j = Math.max(2, state.page - 1); j <= Math.min(pages - 1, state.page + 1); j++) show.push(j);
+          if (state.page < pages - 2) show.push('…');
+          show.push(pages);
+        }
+        pg.innerHTML = (pages > 1 ? '<button type="button" data-p="prev"' + (state.page <= 1 ? ' disabled' : '') + ' aria-label="Previous page">‹</button>' : '')
+          + show.map(function (x) {
+            return x === '…' ? '<span class="pg-gap">…</span>'
+              : '<button type="button" data-p="' + x + '"' + (x === state.page ? ' class="on" aria-current="page"' : '') + '>' + x + '</button>';
+          }).join('')
+          + (pages > 1 ? '<button type="button" data-p="next"' + (state.page >= pages ? ' disabled' : '') + ' aria-label="Next page">›</button>' : '');
+        pg.hidden = pages <= 1;
 
         syncEmpty(table);
         if (label) {
-          /* How big the set really is, in the app's own words: the count on
-             the tab that is open. The rows loaded here are a sample of it, so
-             counting them told the reader 6 where the tab said 344. Once a
-             filter is on, the rows are the set. */
-          var whole = null;
-          if (!filtered(table)) {
-            /* A table that knows its own size says so. The tab heuristic
-               below is for the lists that have a counted tab above them, and
-               it has nothing to read on a tab called "Translate". */
-            var declared = parseInt(table.getAttribute('data-total') || '', 10);
-            if (!isNaN(declared) && declared >= list.length) whole = declared;
-            var sc = table.closest('.screen');
-            var tab = sc && sc.querySelector('.tab.on, .tab[aria-selected="true"]');
-            var m = tab && /([\d][\d\s\u00a0\u202f.,]*)\s*$/.exec(
-              tab.textContent.replace(/\s+/g, ' ').trim());
-            var n = m ? parseInt(m[1].replace(/[^\d]/g, ''), 10) : NaN;
-            if (whole === null && !isNaN(n) && n >= list.length) whole = n;
-          }
+          var a = (state.page - 1) * PAGE + 1;
+          var bEnd = Math.min(a + (to - from) - 1, whole);
           label.textContent = !list.length ? 'Nothing matches these filters'
-            : whole !== null
-              ? 'Showing ' + (from + 1) + '\u2013' + to + ' of ' + group(whole)
-              : 'Showing ' + (from + 1) + '\u2013' + to + ' of ' + list.length;
+            : 'Showing ' + group(a) + '\u2013' + group(bEnd) + ' of ' + group(whole);
         }
       }
 
       pg.addEventListener('click', function (e) {
         var b = e.target.closest('button');
         if (!b || b.disabled) return;
-        var t = b.textContent.trim();
-        if (t === '›') state.page += 1;
-        else if (t === '‹') state.page -= 1;
+        var t = b.getAttribute('data-p');
+        if (t === 'next') state.page += 1;
+        else if (t === 'prev') state.page -= 1;
         else state.page = parseInt(t, 10) || 1;
         render();
       });
@@ -433,19 +441,33 @@
         if (!out) shown += 1;
       });
       syncEmpty(table);
-      var pg = screen.querySelector('.tfoot .pg');
-      if (pg && pg._render) { pg._render(); return; }
+      /* The footer is the one under this table, not the first on the screen:
+         Projects carries four tables behind its tabs. */
+      var near = table.closest('.card, .tblwrap') || scope, card = scope;
+      for (var up = near; up && up !== screen.parentNode; up = up.parentNode) {
+        if (up.querySelector && up.querySelector('.tfoot')) { card = up; break; }
+      }
+      var pg = card.querySelector('.tfoot .pg');
+      /* Other handlers react to the same click; the count is read once they
+         have all had their turn. */
+      if (pg && pg._render) { pg._render(); setTimeout(pg._render, 0); return; }
 
       /* A table without a pager still has a footer, and it used to keep
          announcing the figure for the first tab — "2 open cases" while the
          Closed tab was showing. */
-      var label = screen.querySelector('.tfoot span:not(.pg)');
+      var label = card.querySelector('.tfoot span:not(.pg)');
       if (label) {
         if (!label.dataset.base) label.dataset.base = label.innerHTML;
         /* The written footer describes the tab the screen opens on, so it
            stands until somebody moves off it. */
+        /* The tab's own count is the size of what it shows; the rows here
+           are a sample of it. */
+        var on = tabs.filter(function (x) { return x.classList.contains('on'); })[0];
+        var m = on && /(\d[\d\s\u00a0\u202f]*)\s*$/.exec(on.textContent.trim());
+        var whole = m ? parseInt(m[1].replace(/[^\d]/g, ''), 10) : shown;
+        if (whole < shown) whole = shown;
         label.innerHTML = (tag && !initial)
-          ? 'Showing ' + shown + ' of ' + total
+          ? (whole > shown ? 'Showing ' + shown + ' of ' + group(whole) : shown + ' shown')
           : label.dataset.base;
       }
     }

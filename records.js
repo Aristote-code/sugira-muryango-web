@@ -30,7 +30,7 @@
     });
   }
   function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
-  function today() { return '15 Nov 2026'; }
+  function today() { return '6 Nov 2026'; }
 
   /* ---- what each list holds ---- */
   var MODULES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
@@ -78,12 +78,12 @@
       noun: 'risk of harm', nouns: 'risks of harm',
       fields: ['Case ID', 'Household ID', 'Type', 'Who is at risk', 'Raised by', 'Raised', 'Province',
                'District', 'Sector', 'Status', 'Latest follow-up'],
-      stats: [['Active', 3, 'bad'], ['Inactive', 31], ['Total', 34], ['Raised this month', 4]],
+      stats: [['Active', 3, 'bad'], ['Inactive', 31], ['Total', 34], ['Raised this month', 1]],
       charts: [
         { t: 'Risk of harm by type', rows: [['Neglect', 14], ['Physical', 9], ['Emotional', 6], ['Sexual', 3], ['Other', 2]] },
         { t: 'Who is at risk', rows: [['Child under 5', 21], ['Child 5–17', 8], ['Caregiver', 4], ['Other adult', 1]] }
       ],
-      bin: [['RH-0040', 'I-531-988 · Neglect', 'C. Uwimana', '27 Oct 2026', 'Raised twice for the same visit']],
+      bin: [['RH-0040', 'withheld · Neglect', 'C. Uwimana', '27 Oct 2026', 'Raised twice for the same visit']],
       reports: [
         ['Open risk of harm by district', 'A. Gahimana', 'Status is Active · grouped by District', '5 Nov 2026', 3],
         ['Severe malnutrition cases, 2026', 'J. Kamanzi', 'Type is Severe malnutrition · Raised in 2026', '1 Nov 2026', 9]
@@ -93,18 +93,18 @@
       noun: 'referral', nouns: 'referrals',
       fields: ['Referral ID', 'Household ID', 'Out of case', 'Type', 'Referred to', 'Referred by', 'Sent',
                'District', 'Sector', 'Status', 'Latest follow-up'],
-      stats: [['Active', 3, 'bad'], ['Closed', 3], ['Total', 6], ['Sent this month', 2]],
+      stats: [['Active', 2, 'bad'], ['Stabilized', 1], ['Closed', 3], ['Total', 6]],
       charts: [
-        { t: 'Referrals by type', rows: [['Health', 3], ['Child protection', 2], ['Social protection', 1]] },
-        { t: 'Where they were sent', rows: [['Health centre', 3], ['District CPWO', 2], ['Sector social worker', 1]] }
+        { t: 'Referrals by type', rows: [['Child protection', 3], ['Health', 2], ['Social protection', 1]] },
+        { t: 'Where they were sent', rows: [['District CPWO', 3], ['Health centre', 1], ['Health post', 1], ['Sector social worker', 1]] }
       ],
-      bin: [['RF-0105', 'I-535-133 · Health', 'J. Kamanzi', '25 Oct 2026', 'Sent to the wrong health centre']],
-      reports: [['Referrals still open', 'A. Gahimana', 'Status is Active', '5 Nov 2026', 3]]
+      bin: [['RF-0105', 'Health · withheld', 'J. Kamanzi', '25 Oct 2026', 'Sent to the wrong health centre']],
+      reports: [['Referrals still open', 'A. Gahimana', 'Status is Active or Stabilized', '5 Nov 2026', 3]]
     },
     form: {
       noun: 'response', nouns: 'responses',
       fields: ['Response ID', 'Household ID', 'Submitted', 'Filled in by', 'Recorded by', 'District', 'Sector',
-               'Village', 'Module', 'Q1 Who was present', 'Q2 Minutes', 'Q5 Risk of harm seen', 'Q7 Insurance card', 'Q8 Health post'],
+               'Village', 'Module', 'Q1 Who was present', 'Q2 Minutes', 'Q5 Any sign of harm or neglect', 'Q7 Insurance card', 'Q8 Referred to the health post'],
       stats: [['Responses', 1842], ['This week', 147], ['Flagged', 12, 'warn'], ['Median minutes', 42]],
       charts: [
         { t: 'Responses by module', rows: MODULES.slice(0, 8).map(function (m, i) {
@@ -197,13 +197,11 @@
       panel.innerHTML = '<div class="card"><p class="empty-line">Nothing has been deleted</p></div>';
       return;
     }
-    panel.innerHTML = '<div class="card flush plainsurface"><div class="tq vtq">'
-      + '<button class="btn sec sm" type="button" data-bin="restore-all">Restore selected</button>'
-      + '<button class="btn sec sm danger" type="button" data-bin="purge-all">Delete selected for good</button></div>'
-      + '<div class="tblwrap"><table class="tbl vt"><thead><tr><th class="ck"></th><th>Record</th><th>What it was</th>'
+    panel.innerHTML = '<div class="card flush plainsurface">'
+      + '<div class="tblwrap"><table class="tbl vt" data-bulk="bin"><thead><tr><th>Record</th><th>What it was</th>'
       + '<th data-person>Deleted by</th><th>Deleted</th><th>Why</th><th class="acts-c"></th></tr></thead><tbody>'
       + c.bin.map(function (r, i) {
-        return '<tr data-i="' + i + '"><td class="ck"><input type="checkbox" aria-label="Select ' + esc(r[0]) + '"></td>'
+        return '<tr data-i="' + i + '">'
           + '<td class="nm">' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td class="mut">'
           + esc(r[3]) + '</td><td class="mut">' + esc(r[4]) + '</td><td class="acts-c">'
           + '<button class="btn sec sm" type="button" data-bin="restore">Restore</button>'
@@ -211,14 +209,7 @@
       }).join('') + '</tbody></table></div><div class="tfoot"><span>' + c.bin.length + ' deleted '
       + (c.bin.length === 1 ? c.noun : c.nouns) + '</span></div></div>';
 
-    panel.onclick = function (e) {
-      var b = e.target.closest('[data-bin]');
-      if (!b) return;
-      var act = b.getAttribute('data-bin');
-      var picked = act.indexOf('-all') > -1
-        ? $$('tbody tr', panel).filter(function (tr) { return tr.querySelector('input').checked; })
-        : [b.closest('tr')];
-      if (!picked.length) { say('Tick the records first'); return; }
+    function act(act, picked) {
       var idx = picked.map(function (tr) { return +tr.getAttribute('data-i'); });
       var names = idx.map(function (i) { return c.bin[i][0]; });
       var finish = function () {
@@ -237,7 +228,13 @@
         onOk: finish,
         done: names.length === 1 ? names[0] + ' deleted for good' : names.length + ' records deleted for good'
       });
+    }
+    panel.onclick = function (e) {
+      var b = e.target.closest('[data-bin]');
+      if (b) act(b.getAttribute('data-bin'), [b.closest('tr')]);
     };
+    var tbl = $('table', panel);
+    if (tbl) tbl.addEventListener('bulk:bin', function (e) { act(e.detail.act, e.detail.rows); });
   }
 
   /* ---- generated reports ---- */
@@ -252,7 +249,10 @@
           + '</td><td class="num">' + fmt(r[4]) + '</td><td class="acts-c">'
           + '<button class="btn sec sm" type="button" data-gen="open">Open</button>'
           + (r[1] === ME ? '<button class="btn sec sm" type="button" data-gen="edit">Edit</button>'
-            + '<button class="btn sec sm danger" type="button" data-gen="del">Delete</button>' : '')
+            + '<button class="btn sec sm danger" type="button" data-gen="del">Delete</button>'
+            /* Only the maker changes or removes a report. The places stay, so
+               every row's Open sits in the same column. */
+            : '<span class="gen-gap" aria-hidden="true"><button class="btn sec sm" type="button" tabindex="-1">Edit</button><button class="btn sec sm" type="button" tabindex="-1">Delete</button></span>')
           + '</td></tr>';
       }).join('') + '</tbody></table></div><div class="tfoot"><span>' + c.reports.length + (c.reports.length === 1 ? ' report' : ' reports') + '</span>'
       + '<button class="btn sm" type="button" data-gen="new"><svg aria-hidden="true"><use href="#i-plus"/></svg>New report</button></div></div>'
@@ -336,10 +336,12 @@
     };
     panel.innerHTML = '<div class="card rb">'
       + '<div class="rb-row"><label for="rb-name">Report name</label><input id="rb-name" type="text" value="'
-      + esc(editing ? editing[0] : '') + '" placeholder="Name it the way people will look for it"></div>'
+      + esc(editing ? editing[0] : '') + '" placeholder="Families behind schedule in Ngoma"></div>'
       + '<div class="rb-row"><span class="rb-l" id="rb-il">Indicators</span><div class="rb-ind" role="group" aria-labelledby="rb-il">'
       + c.fields.map(function (f, i) {
-        return '<label class="rb-ck"><input type="checkbox"' + (i < 6 ? ' checked' : '') + ' value="' + esc(f) + '">' + esc(f) + '</label>';
+        /* The household stays withheld on a case or a referral, here as everywhere. */
+        var tick = i < 6 && !(/^Household ID$/.test(f) && (key === 'safeguarding' || key === 'referrals'));
+        return '<label class="rb-ck"><input type="checkbox"' + (tick ? ' checked' : '') + ' value="' + esc(f) + '">' + esc(f) + '</label>';
       }).join('') + '</div></div>'
       + '<div class="rb-row"><span class="rb-l">Conditions</span><div class="rb-conds"></div>'
       + '<button class="btn sec sm" type="button" data-rb="cond"><svg aria-hidden="true"><use href="#i-plus"/></svg>Add a condition</button></div>'
@@ -358,7 +360,7 @@
       row.innerHTML = '<select aria-label="Field">' + opts(f) + '</select><select aria-label="Operator">'
         + ['is', 'is not', 'contains', 'is more than', 'is less than', 'is empty'].map(function (o) {
           return '<option' + (o === op ? ' selected' : '') + '>' + o + '</option>';
-        }).join('') + '</select><input type="text" aria-label="Value" value="' + esc(val || '') + '">'
+        }).join('') + '</select><input type="text" aria-label="Value" placeholder="Value" value="' + esc(val || '') + '">'
         + '<button class="btn sec sm" type="button" data-rb="rm" aria-label="Remove this condition"><svg aria-hidden="true"><use href="#i-cross"/></svg></button>';
       conds.appendChild(row);
     }
@@ -413,13 +415,13 @@
     var id = host.getAttribute('data-fu');
     var list = host._fuList = FU[id] || (FU[id] = []);
     host.classList.add('fu');
-    host.innerHTML = '<div class="card fu-add"><div class="card-h"><h3>Add follow up</h3></div>'
-      + '<div class="fu-form"><div><label><span>Date <b class="req">*</b></span><input type="date" value="2026-11-15" data-f="date"></label></div>'
+    host.innerHTML = '<div class="card fu-add"><div class="card-h"><h3>Add follow-up</h3></div>'
+      + '<div class="fu-form"><div><label><span>Date <b class="req">*</b></span><input type="date" value="2026-11-06" data-f="date"></label></div>'
       + '<div><label><span>Status <b class="req">*</b></span><select data-f="status">' + FU_STATUS.map(function (s) {
         return '<option>' + s + '</option>'; }).join('') + '</select></label></div>'
       + '<div><label><span>Comment <b class="req">*</b></span><textarea rows="3" data-f="text"></textarea></label></div>'
       + '<div><button class="btn" type="button" data-f="go">Submit</button></div></div></div>'
-      + '<div class="card fu-hist"><div class="card-h"><h3>Follow up history</h3><span class="side"><span class="chip">'
+      + '<div class="card fu-hist"><div class="card-h"><h3>Follow-up history</h3><span class="side"><span class="chip">'
       + list.length + '</span></span></div><div class="fu-list"></div></div>';
     function draw() {
       list = host._fuList;
@@ -527,6 +529,151 @@
     }
   }
 
+
+  /* ---- a chart opens the records behind it ----
+     ClickUp: click a slice and the tasks in it are listed. Each ring segment,
+     bar, district row and heatmap cell on the dashboard opens its list,
+     filtered to what it counted, in the place the dashboard is filtered to. */
+  function drill() {
+    var dash = document.getElementById('s-dashboard');
+    if (!dash) return;
+    function mark(el, target, tip) {
+      if (!el) return;
+      el.setAttribute('data-drill', JSON.stringify(target));
+      el.setAttribute('role', 'button');
+      el.tabIndex = 0;
+      el.classList.add('drill');
+      if (tip) el.setAttribute('aria-label', tip);
+    }
+    var RINGS = {
+      roh: [{ go: 'safeguarding', tab: 'Open' }, { go: 'safeguarding', tab: 'Closed' }],
+      visits: [{ go: 'visits', tab: 'Completed' }, { go: 'visits', tab: 'Not completed' }],
+      izu: [{ go: 'izu', tab: 'All' }, { go: 'people', tab: 'Deactivated' }],
+      male: [{ go: 'visits' }, { go: 'visits' }]
+    };
+    Object.keys(RINGS).forEach(function (k) {
+      var dn = $('[data-donut="' + k + '"]', dash);
+      if (!dn) return;
+      var segs = $$('.dn-s', dn), lg = $$('.legend span', dn.closest('.card'));
+      RINGS[k].forEach(function (t, i) {
+        mark(segs[i], t, 'Open these records');
+        mark(lg[i], t, 'Open these records');
+      });
+    });
+    function card(title) {
+      return $$('.card', dash).filter(function (c) {
+        var h = $('.card-h h3', c);
+        return h && h.textContent.trim().indexOf(title) === 0;
+      })[0];
+    }
+    var perModule = card('Visits conducted per module');
+    if (perModule) $$('.bc', perModule).forEach(function (b) {
+      var n = ($('u', b) || {}).textContent;
+      mark(b, { go: 'visits', module: n }, 'Open the visits for module ' + n);
+    });
+    var att = card('Male caregiver attendance by district');
+    if (att) $$('.hr', att).forEach(function (r) {
+      var d = ($('.l', r) || {}).textContent;
+      mark(r, { go: 'visits', place: d }, 'Open the visits in ' + d);
+    });
+    $$('.mx .mr', dash).forEach(function (r) {
+      var d = ($('.lb', r) || {}).textContent;
+      if (!d) return;
+      $$('b', r).forEach(function (cell, j) {
+        mark(cell, { go: 'visits', place: d, module: String(j + 1) }, 'Open the module ' + (j + 1) + ' visits in ' + d);
+      });
+    });
+    $$('.lr.click[data-go="households"]', dash).forEach(function (r) {
+      var s = ($('.t', r) || {}).textContent;
+      r.removeAttribute('data-go');
+      mark(r, { go: 'households', place: s }, 'Open the households in ' + s);
+    });
+
+    function moduleName(screen, n) {
+      var hit = null;
+      $$('tbody td', screen).some(function (td) {
+        var t = td.textContent.trim();
+        if (t.indexOf(n + ' — ') === 0) { hit = t; return true; }
+        return false;
+      });
+      return hit || ('Module ' + n);
+    }
+    function open(el) {
+      var t = JSON.parse(el.getAttribute('data-drill'));
+      var placeChip = $$('.filters .fl', dash).filter(function (b) { return ($('.k', b) || {}).textContent === 'Place'; })[0];
+      var place = t.place || (placeChip ? ($('b', placeChip) || {}).textContent : '');
+      window.SugiraGo(t.go);
+      setTimeout(function () {
+        var sc = document.getElementById('s-' + t.go);
+        if (!sc) return;
+        if (window.SugiraFilters) window.SugiraFilters.clear('s-' + t.go);
+        if (t.tab) {
+          var tab = $$('.tab', sc).filter(function (x) { return x.textContent.trim().indexOf(t.tab) === 0; })[0];
+          if (tab) tab.click();
+        }
+        if (place && place !== 'Rwanda' && window.SugiraFilters) window.SugiraFilters.set('s-' + t.go, 'place', place);
+        if (t.module && window.SugiraFilters) window.SugiraFilters.set('s-' + t.go, 'module', moduleName(sc, t.module));
+      }, 200);
+    }
+    dash.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-drill]');
+      if (el) open(el);
+    });
+    dash.addEventListener('keydown', function (e) {
+      var el = e.target.closest && e.target.closest('[data-drill]');
+      if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(el); }
+    });
+  }
+
+
+  /* ---- a table that does not fit wraps its words before it scrolls ----
+     Cells hold one line by default. When that makes a table wider than its
+     card, the long text cells take a second line; chips, numbers and names
+     stay whole. Only what still does not fit scrolls. */
+  function fitTables() {
+    $$('.tblwrap').forEach(function (w) {
+      if (!w.offsetParent) return;
+      var t = $('table.tbl', w);
+      if (!t || t.classList.contains('tight') || t.classList.contains('scrolls')) return;
+      if (w.scrollWidth <= w.clientWidth + 2) return;
+      /* Only prose wraps. A code, a date or a name stays on its line. */
+      $$('tbody td:not(.num):not(.rowacts):not(.acts-c)', t).forEach(function (td) {
+        if (td.querySelector('img, .who-c, .vth')) return;
+        if (td.textContent.trim().length > 24 && /\s/.test(td.textContent.trim())) td.classList.add('wrap');
+      });
+      t.classList.add('tight');
+    });
+  }
+  function fitSoon() { setTimeout(fitTables, 60); }
+
+
+  /* ---- IZU totals follow the rows on screen ----
+     The partners' footer sums the supervisions listed. A tab or a filter
+     changes which are listed, so the sums are worked out again each time. */
+  function izuTotals() {
+    var t = $('#s-izu table.izt');
+    if (!t || !t.tFoot) return;
+    var heads = $$('thead th', t).map(function (h) { return h.textContent.trim(); });
+    var from = heads.indexOf('Cross-module questions');
+    if (from < 0) return;
+    function redo() {
+      var rows = $$('tbody tr', t).filter(function (r) { return !r.classList.contains('t-out') && !r.classList.contains('f-out'); });
+      var sums = [];
+      for (var c = from; c < heads.length; c++) {
+        sums.push(rows.reduce(function (a, r) { return a + (parseFloat((r.cells[c] || {}).textContent) || 0); }, 0));
+      }
+      var fr = t.tFoot.rows, n = rows.length || 1;
+      [[sums, 0], [sums.map(function (v) { return v / n; }), 2], [sums.map(function (v) { return v / 12; }), 2]].forEach(function (set, k) {
+        if (!fr[k]) return;
+        var cells = [].slice.call(fr[k].cells, 1);
+        set[0].forEach(function (v, i) { if (cells[i]) cells[i].textContent = k === 0 && Number.isInteger(v) ? String(v) : v.toFixed(2); });
+      });
+    }
+    t.addEventListener('table:applied', redo);
+    t.addEventListener('filtered', redo);
+    document.getElementById('s-izu').addEventListener('click', function () { setTimeout(redo, 30); });
+    redo();
+  }
 
   /* ---- Delete on a list row ---- */
   function rowDelete() {
@@ -765,7 +912,7 @@
     if (!host || !P) return;
     var pos = P.positions().filter(function (p) { return p.id === host.getAttribute('data-position'); })[0];
     var held = pos ? P.held(pos) : {};
-    var own = { 'fs-community': true };
+    var own = { 'fs-community': true, 'rep-export': true };
     host.innerHTML = P.groups.map(function (g) {
       var perms = P.all.filter(function (x) { return x.group === g.key; });
       if (!perms.length) return '';
@@ -835,6 +982,13 @@
     $$('[data-fu]').forEach(followups);
     carryIdentity();
     rowDelete();
+    drill();
+    izuTotals();
+    fitSoon();
+    document.addEventListener('click', fitSoon);
+    var go0 = window.SugiraGo;
+    if (go0) window.SugiraGo = function () { var r = go0.apply(this, arguments); fitSoon(); return r; };
+    window.addEventListener('resize', function () { $$('table.tight, table.scrolls').forEach(function (t) { t.classList.remove('tight', 'scrolls'); }); fitSoon(); });
     caseLists();
     recordActions();
   }

@@ -284,7 +284,7 @@
     var text = el('span', 'cselect-t');
     var chev = el('span', 'cselect-c');
     chev.setAttribute('aria-hidden', 'true');
-    chev.textContent = '▾';
+    chev.innerHTML = '<svg><use href="#i-chevronDown"/></svg>';
     trigger.appendChild(text);
     trigger.appendChild(chev);
 

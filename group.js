@@ -235,7 +235,7 @@
 
   function init() {
     Array.prototype.slice.call(document.querySelectorAll('table.tbl'))
-      .forEach(function (t) { try { setup(t); } catch (e) { /* one table must not stop the rest */ } });
+      .forEach(function (t) { try { setup(t); } catch (e) { /* one table must not stop the rest, but it must be seen */ if (window.console) console.error(e); } });
   }
 
   /* After the tables have their toolbars — and only after.

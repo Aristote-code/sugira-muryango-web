@@ -117,9 +117,7 @@
         ['Permissions', 'i-settings', permCount, 'permissions', 'What the position opens'],
         ['Places', 'i-location', 'Any sector', null, 'The place is set when the position is given, not on the position']
       ],
-      ref: [
-        ['Escalation', 'i-alert', 'Unreviewed cases after 72 hours', 'settings', 'This position is who the clock runs against']
-      ]
+      ref: []
     }
   };
   R.profile = {
@@ -296,8 +294,9 @@
        — a form's tab is the only place that names the projects using it — and
        taking it off them would lose that with nowhere to put it. */
     Object.keys(R).forEach(function (k) {
-      /* The client fixed which tabs a person, a module and a form have. */
-      if (k === 'household' || k === 'person' || k === 'module' || k === 'form') return;
+      /* The client fixed which tabs a person (and so your own profile), a
+         module and a form have. */
+      if (k === 'household' || k === 'person' || k === 'profile' || k === 'module' || k === 'form') return;
       build(k, R[k]);
     });
     watch();

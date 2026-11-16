@@ -123,7 +123,7 @@
       'See visits, and read the answers people gave.',
       ['sessioninaction-list', 'View-collected-data']],
     ['visit-record', 'visits', 'Record a visit',
-      'Deliver a session and send the completed form in from the tablet.',
+      'Deliver a module and send the completed form in from the tablet.',
       ['sessioninaction-create', 'submit-form']],
     ['visit-change', 'visits', 'Change a visit',
       'Correct a visit already recorded, and set a follow-up.',
@@ -293,7 +293,7 @@
       reach: 'district',
       adds: ['roh-open', 'roh-close'] },
 
-    { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 84,
+    { id: 'ICC', name: 'IZU Cell Coordinator (ICC)', short: 'the Cell Coordinator', base: 'NCDA', people: 57,
       what: 'Sits in on visits in one cell and scores how they were delivered.',
       reach: 'cell',
       adds: ['hh-see', 'visit-see', 'visit-record', 'izu-see', 'izu-record'] },
@@ -315,7 +315,7 @@
              'prog-translate', 'prog-cohorts', 'rep-export',
              'fs-community', 'ppl-see', 'ref-make', 'izu-see', 'izu-export'] },
 
-    { id: 'Admin', name: 'admin', short: 'admin', base: 'HQ', people: 1,
+    { id: 'Admin', name: 'Admin', short: 'Admin', base: 'HQ', people: 1,
       what: 'Everything inside one organisation, including this screen.',
       reach: 'national',
       adds: ['hh-remove', 'visit-record', 'roh-open', 'roh-raise', 'roh-close',
@@ -684,7 +684,7 @@
     rtop.appendChild(who);
 
     var acts = el('span', 'acts');
-    var give = el('button', 'btn');
+    var give = el('button', 'btn sm');
     give.type = 'button';
     give.setAttribute('data-modal', 'posadd');
     give.innerHTML = '<svg aria-hidden="true"><use href="#i-plus"/></svg>';

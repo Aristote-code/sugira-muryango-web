@@ -383,7 +383,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;colo
 .filters .rt{display:flex;align-items:center;gap:var(--space-2);font-size:12px;color:var(--color-content-secondary)}
 .filters .rt i{width:var(--dimension-6);height:var(--dimension-6);border-radius:50%;background:var(--color-bg-success-default);flex:none}
 .search{display:flex;align-items:center;gap:var(--dimension-6);height:var(--size-control-xs);background:var(--color-bg-surface);border:1px solid var(--color-border-default);
-  border-radius:var(--x-clickup-radii-3);padding:0 var(--space-2);min-width:var(--dimension-180);flex:1;max-width:var(--dimension-300)}
+  border-radius:var(--x-clickup-radii-3);padding:0 var(--space-2);min-width:var(--dimension-136);flex:1;max-width:var(--dimension-300)}
 .search svg{width:var(--space-4);height:var(--space-4);color:var(--x-clickup-color-content-placeholder);flex:none}
 .search input{height:100%;border:0;background:none;outline:none;font-family:inherit;font-size:12px;color:var(--color-content-primary);width:100%;min-width:0}
 .search input::placeholder{color:var(--x-clickup-color-content-placeholder)}
@@ -692,6 +692,12 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
 .dn .dn-s.pri,.lg.pri{stroke:var(--color-bg-primary-default);background:var(--color-bg-primary-default)}
 .dn .dn-s.warn,.lg.warn{stroke:var(--color-bg-warning-default);background:var(--color-bg-warning-default)}
 .dn .dn-s.mute,.lg.mute{stroke:var(--color-content-tertiary);background:var(--color-content-tertiary)}
+/* A chart part that opens its records says so on hover and to the keyboard. */
+.drill{cursor:pointer}
+.drill:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:2px}
+.hr.drill:hover,.lr.drill:hover,.legend span.drill:hover{background:var(--color-bg-hover)}
+.bc.drill:hover .tk i,.dn-s.drill:hover{opacity:.75}
+.mx b.drill:hover{outline:1px solid var(--color-border-strong)}
 .dn-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
 .dn-c b{font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--color-content-primary)}
 .dn-c span{font-size:.75rem;color:var(--color-content-secondary)}
@@ -898,7 +904,7 @@ button.chip:focus-visible{outline:2px solid var(--color-bg-primary-default);outl
   .hr .l{white-space:normal;text-overflow:clip;text-align:left}
   .hr .t{margin-top:var(--space-1)}
 }
-.mx{display:grid;gap:var(--space-1);min-width:var(--dimension-520)}
+.mx{display:grid;gap:var(--space-1);min-width:var(--dimension-480)}
 .mr{display:grid;grid-template-columns:5.6rem repeat(12,1fr);gap:var(--space-1);align-items:center}
 .mr .lb{font-size:.75rem;color:var(--color-content-secondary);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mr .hd{font-size:11px;color:var(--color-content-secondary);text-align:center}
@@ -2174,8 +2180,11 @@ tr.f-out,tr.p-out,tr.t-out,tr.q-out,.tr.f-out{display:none}
 .cselect:focus-visible{outline:none;border-color:var(--x-clickup-color-border-primary-hover);box-shadow:0 0 0 3px var(--color-bg-primary-subtle)}
 .cselect[disabled]{opacity:.6;cursor:default;background:var(--x-clickup-color-background-on-main)}
 .cselect-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cselect-c{color:var(--color-content-secondary);font-size:11px;flex:none}
+.cselect-c{color:var(--color-content-secondary);flex:none;display:inline-flex}
+.cselect-c svg{width:var(--space-4);height:var(--space-4)}
 .cselect-native{position:absolute;width:var(--dimension-1);height:var(--dimension-1);opacity:0;pointer-events:none;margin:0}
+/* A field style that sets width:100% on selects must not stretch the hidden one. */
+select.cselect-native{max-width:var(--dimension-1);max-height:var(--dimension-1)}
 /* The section you are inside, marked on the group as well as the item. With
    the rail collapsed, or the group shut, the item was the only thing carrying
    the current place — so the rail showed nothing at all. */
@@ -2684,3 +2693,32 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 #mBody{min-width:0}
 #mBody>*{min-width:0;max-width:100%}
 #mBody .tblwrap{max-width:100%}
+
+/* ---- whole-platform pass, 15 Nov ---- */
+/* A person cell keeps its tick box on the same line as the face and name. */
+.tbl td .who-c{display:inline-flex;vertical-align:middle;max-width:100%}
+/* A table wider than its card scrolls, and says so: the bar is drawn, not
+   left to appear only on a trackpad swipe. */
+.tblwrap::-webkit-scrollbar{height:var(--space-2);width:var(--space-2)}
+.tblwrap::-webkit-scrollbar-thumb{background:var(--color-border-strong);border-radius:var(--radius-full)}
+.tblwrap::-webkit-scrollbar-track{background:transparent}
+/* The Kinyarwanda name under a record title gets its own line, not the title's. */
+.rec-alt{margin:var(--space-1) 0 var(--space-3)}
+/* Edit and Delete on a follow-up are two words, not one. */
+.fu-m .fu-acts{gap:var(--space-3)}
+.tfoot .pg .pg-gap{display:inline-flex;align-items:center;padding:0 var(--space-1);color:var(--color-content-tertiary)}
+.tfoot .pg button:disabled{opacity:.4;cursor:default}
+.tbl.tight td.wrap,.tbl.tight th{white-space:normal}
+.tbl.tight td .chip,.tbl.tight td .rel,.tbl.tight td .who-c{white-space:nowrap}
+.tbl tr>td.num:first-child,.tbl tr>th.num:first-child{text-align:left}
+/* An actions cell is a cell: laid out as a flex box it leaves its row. */
+.tbl td.rowacts{display:table-cell;text-align:right}
+.tbl td.rowacts>*+*{margin-left:var(--dimension-2)}
+.tbl.tight td.wrap{min-width:var(--dimension-120)}
+.tbl td .vtt{display:inline-block;vertical-align:middle;white-space:normal;width:var(--dimension-125)}
+.tbl .acts-c .gen-gap{visibility:hidden;margin-left:var(--space-2)}
+.tbl .acts-c .gen-gap .btn+.btn{margin-left:var(--space-2)}
+/* Removing an access or a rule is the red action in its row. */
+.rowacts a[data-acc="remove"],.rowacts a[data-toast="Rule removed"]{color:var(--color-content-danger)}
+/* Inside a dialog a long choice or status wraps rather than leaving the box. */
+.modal .acc-grid label,.modal .tbl .chip{white-space:normal}
