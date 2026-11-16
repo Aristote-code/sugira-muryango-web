@@ -2785,7 +2785,7 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 .modal .fb input.fb-q,.modal .fb input.fb-opts{height:var(--size-control-md);padding:0 var(--space-2);font-size:13px}
 .modal .fb input.fb-opts{width:calc(100% - var(--space-7));font-size:12px}
 .modal .fb input.fb-qrw{width:calc(100% - var(--space-7));margin-left:var(--space-7);font-size:12px;color:var(--color-content-secondary)}
-.modal .fb input[type=checkbox]{width:auto;height:auto;padding:0}
+.modal .fb input[type=checkbox]{padding:0}
 .modal .fb label.fb-sw{display:inline-flex;margin:0;font-size:12px;font-weight:400;color:var(--color-content-secondary)}
 .modal .fb .fb-empty{align-items:center;justify-content:center;min-height:var(--dimension-200);border:1px dashed var(--color-border-strong);border-radius:var(--radius-lg);background:var(--color-bg-surface)}
 /* what every form like this carries, under the pieces */
@@ -2839,3 +2839,25 @@ td.num>.rel::after{content:"";position:absolute;top:50%;left:50%;
 @media (max-width:1100px){.modal .fb{grid-template-columns:var(--dimension-240) minmax(0,1fr)}.modal .fb > .fb-prev{display:none}}
 @media (max-width:760px){.scrim.xl{padding:0}.modal.xl{border-radius:0}.modal .fb{grid-template-columns:1fr}.modal .fb > .fb-kinds{display:none}.nf-steps{position:static;transform:none}.nf-sep{display:none}}
 #s-reports .tbl td.nm{min-width:var(--dimension-240)}
+td.rowacts a + a{margin-left:var(--space-3)}
+/* ---- checkboxes ----
+   Every tick box in the app is the one the tables use: ClickUp's 16px square,
+   radius 4, a grey hairline, filled with the brand colour and a white tick
+   when on. The browser's own box was a different size, shape and colour on
+   every screen it appeared on. */
+input[type="checkbox"]:not([role="switch"]){-webkit-appearance:none;appearance:none;display:inline-grid;place-content:center;
+  width:var(--space-4);height:var(--space-4);min-width:var(--space-4);margin:0;padding:0;flex:none;box-sizing:border-box;
+  border:1px solid var(--color-primitive-grey-600);border-radius:var(--radius-xs);background:var(--color-bg-surface);
+  cursor:pointer;vertical-align:middle;transition:background 120ms ease,border-color 120ms ease}
+input[type="checkbox"]:not([role="switch"])::after{content:"";width:var(--dimension-10);height:var(--dimension-10);
+  background:var(--color-content-on-primary);transform:scale(0);transition:transform 120ms ease;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='m5 13 4 4L19 7' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='m5 13 4 4L19 7' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat}
+input[type="checkbox"]:not([role="switch"]):hover{border-color:var(--color-bg-primary-default)}
+input[type="checkbox"]:not([role="switch"]):checked{background:var(--color-bg-primary-default);border-color:var(--color-bg-primary-default)}
+input[type="checkbox"]:not([role="switch"]):checked::after{transform:scale(1)}
+input[type="checkbox"]:not([role="switch"]):focus-visible{outline:2px solid var(--x-clickup-color-effect-primary);outline-offset:1px}
+input[type="checkbox"]:not([role="switch"]):disabled{opacity:.5;cursor:default}
+input[type="checkbox"]:not([role="switch"]):disabled:hover{border-color:var(--color-primitive-grey-600)}
+/* a box beside its words sits on their line, 8 apart */
+label:has(> input[type="checkbox"]:not([role="switch"])){display:inline-flex;align-items:center;gap:var(--space-2);cursor:pointer}

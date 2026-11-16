@@ -149,9 +149,14 @@
     post: {
       title: 'Post to everyone',
       ok: 'Post',
-      body: '<div><label for="f-pow">Who sees it</label><select id="f-pow"><option>Every home visitor</option><option>One district</option><option>One sector</option></select></div>' +
-            '<div><label for="f-pot">Your post</label><textarea id="f-pot" placeholder="Do not name a household or a child. Every home visitor reads it."></textarea></div>',
-      done: 'Posted — it appears on the tablet at the next sync'
+      body: '<div><label for="f-pow">Who sees it</label><select id="f-pow"><option>Every IZU</option><option>One district</option><option>One sector</option></select></div>' +
+            '<div><label for="f-pot">Your post</label><textarea id="f-pot" placeholder="Do not name a household or a child"></textarea></div>',
+      onOk: function (body) {
+        var t = body.querySelector('#f-pot').value.trim();
+        if (!t) { say('Write the post first'); body.querySelector('#f-pot').focus(); return false; }
+        if (window.SugiraPost) window.SugiraPost(t, body.querySelector('#f-pow').value);
+      },
+      done: 'Posted'
     },
     score: {
       title: 'Record a supervision',
@@ -173,7 +178,7 @@
       title: 'Notification rule',
       ok: 'Save rule',
       body: '<div><span class="rb-l">When</span><div class="rb-cond">'
-          + '<select aria-label="Question"><option>Q5 Any sign of harm or neglect?</option><option>Q8 Referred to the health post?</option></select>'
+          + '<select aria-label="Question"></select>'
           + '<select aria-label="Operator"><option>is</option><option>is not</option></select>'
           + '<input type="text" aria-label="Value" value="Yes"><span></span></div></div>'
           + '<div><label for="f-rm">Message</label><input id="f-rm" type="text" value="A risk of harm was raised in your sector"></div>'
@@ -181,7 +186,9 @@
       /* Change opens the rule it sits on; Add a rule opens a blank one. */
       init: function (body, from) {
         var row = from && from.closest('.lr');
+        MODALS.fnotify.at = row && row.hasAttribute('data-rule') ? +row.getAttribute('data-rule') : -1;
         var q = body.querySelector('select[aria-label="Question"]'), v = body.querySelector('input[aria-label="Value"]');
+        q.innerHTML = (window.SugiraProg ? window.SugiraProg.questions() : []).map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
         var op = body.querySelector('select[aria-label="Operator"]');
         var msg = body.querySelector('#f-rm');
         /* As at creation: a condition tells one or more positions. */
@@ -215,6 +222,18 @@
         [q, op].forEach(function (x) { x.dispatchEvent(new Event('change')); });
         every();
         q.addEventListener('change', every);
+      },
+      onOk: function (body) {
+        var P = window.SugiraProg;
+        if (!P) return;
+        var rule = { q: body.querySelector('select[aria-label="Question"]').value, op: body.querySelector('select[aria-label="Operator"]').value,
+          v: body.querySelector('input[aria-label="Value"]').value.trim(), msg: body.querySelector('#f-rm').value.trim(),
+          who: $$('#f-rto input', body).filter(function (c) { return c.checked; }).map(function (c) { return c.parentNode.textContent.trim(); }) };
+        if (!rule.v) { say('Say which answer'); return false; }
+        if (!rule.who.length) { say('Pick at least one position'); return false; }
+        var list = P.rules();
+        if (MODALS.fnotify.at > -1) list[MODALS.fnotify.at] = rule; else list.push(rule);
+        P.redrawForm();
       },
       done: 'Rule saved'
     },
@@ -722,9 +741,14 @@
         /* The new form arrives on the Forms page as a draft, not yet in any project. */
         var built = window.SugiraBuilder && window.SugiraBuilder.form();
         var name = nm.value.trim();
+        var access = {};
+        FORM_ACCESS.forEach(function (k, i) {
+          access[k[0] + ' access'] = Array.prototype.filter.call(body.querySelectorAll('[data-perm="' + i + '"]'), function (c) { return c.checked; })
+            .map(function (c) { return c.value; });
+        });
         if (window.SugiraForms) window.SugiraForms.add(name, body.querySelector('#f-fnr').value.trim(), built ? built.q.length : 0,
           { questions: built ? built.q.map(function (q) { return { en: q.en, rw: q.rw || '', opts: q.opts || [] }; }) : [], rules: body._rules(),
-            required: built ? built.q.filter(function (q) { return q.req; }).length : 0 });
+            required: built ? built.q.filter(function (q) { return q.req; }).length : 0, access: access });
         /* Next comes its Kinyarwanda, so the form opens where that is written. */
         setTimeout(function () { if (window.SugiraProg) window.SugiraProg.open(name, 'translate'); }, 60);
       },
@@ -804,7 +828,11 @@
         if (ch) {
           var bits = ch.split('|'), row = Y.rows.filter(function (r) { return r[0] === bits[0] && r[1] === +bits[1]; })[0];
           mTitle.textContent = 'Change ' + bits[0] + ' cohort ' + bits[1] + ' in ' + year;
-          Array.prototype.forEach.call(body.querySelectorAll('input[type=checkbox]'), function (c) { c.checked = c.value === bits[0]; c.disabled = true; });
+          Array.prototype.forEach.call(body.querySelectorAll('input[type=checkbox]'), function (c) {
+            c.checked = c.value === bits[0];
+            c.disabled = true;
+            c.closest('label').hidden = c.value !== bits[0];
+          });
           num.value = bits[1];
           if (row) {
             var sd = new Date(row[2]);
@@ -833,6 +861,12 @@
           .map(function (c) { return c.value; });
         if (!picked.length) { say('Pick at least one district'); return false; }
         var n = parseInt(body.querySelector('#f-cdn').value, 10) || 1;
+        var C0 = window.SugiraCohorts, Y0 = C0 && C0.year(MODALS.cdistricts.year);
+        if (Y0) {
+          var s0 = new Date(body.querySelector('#f-cds').value + 'T00:00:00');
+          for (var k0 = n; k0 < Y0.n; k0++) { s0 = C0.end(s0, Y0.months); s0.setDate(s0.getDate() + 1); }
+          if (C0.end(s0, Y0.months).getFullYear() > Y0.y) { say('The last cohort would run past the end of ' + Y0.y + '; start earlier'); return false; }
+        }
         if (window.SugiraCohorts) window.SugiraCohorts.add(MODALS.cdistricts.year, picked, n, body.querySelector('#f-cds').value);
         MODALS.cdistricts.picked = picked;
       },
@@ -1172,8 +1206,12 @@
           if (!f.value.trim()) { say('The user needs ' + need[i][1]); f.focus(); return false; }
         }
         var sel = body.querySelector('#f-ir');
+        var P = window.SugiraPerms, pos = P ? P.positions().filter(function (x) { return x.id === sel.value; })[0] : null;
+        var held = pos && P ? P.held(pos) : {}, extra = {};
+        $$('#f-iperm input', body).forEach(function (c) { if (c.checked !== !!held[c.value]) extra[c.value] = true; });
         if (window.SugiraPeople) window.SugiraPeople.add({ name: body.querySelector('#f-iname').value.trim(),
-          position: sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '', where: MODALS.invite.where() });
+          position: sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '', where: MODALS.invite.where(),
+          phone: body.querySelector('#f-iph').value.trim(), extra: extra });
       },
       done: function (body) {
         var n = body.querySelector('#f-iname').value.trim() || 'The user';
@@ -1198,8 +1236,8 @@
       done: 'Saved \u2014 The Importance of Good Health changed in all 5 projects'
     },
     fpublish: {
-      title: 'Publish to 2 modules',
-      ok: 'Publish to both',
+      title: 'Publish changes',
+      ok: 'Publish',
       body: '<p class="m-lead">Household Module Tracking Form is not only Module 6\u2019s form. Publishing changes it everywhere it appears.</p>' +
             '<ul class="blast">' +
             '<li><button class="rel" type="button" data-go="module"><svg aria-hidden="true"><use href="#i-programme"/></svg>Module 6</button><span class="w"><b>986</b> responses already recorded</span></li>' +
@@ -1211,6 +1249,20 @@
                half, and the old wording — "live" — skipped it. */
             '<p class="m-note"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-reach>A tablet gets version 5 when it next syncs.</span></p>',
       init: function (body) {
+        var P = window.SugiraProg, f = P && P.current.form;
+        if (f) {
+          var mods = f.sessions.slice(0, 6);
+          mTitle.textContent = 'Publish “' + f.name + '”';
+          body.querySelector('.m-lead') && body.querySelector('.m-lead').remove();
+          var ul = body.querySelector('.blast');
+          if (ul) ul.innerHTML = mods.length ? mods.map(function (s) {
+            return '<li><button class="rel" type="button" data-go="module" data-recid="' + esc(s) + '"><svg aria-hidden="true"><use href="#i-programme"/></svg>' + esc(P.modName(s))
+              + '</button><span class="w"><b>' + Math.round(f.responses / Math.max(1, f.sessions.length)) + '</b> responses</span></li>';
+          }).join('') + (f.sessions.length > 6 ? '<li><span class="w">and ' + (f.sessions.length - 6) + ' more modules</span></li>' : '')
+            : '<li><span class="w">Not in a module yet</span></li>';
+          if (f.name !== 'Household Module Tracking Form') { var n5 = body.querySelector('.m-note'); if (n5) n5.remove(); }
+          MODALS.fpublish.what = f.name;
+        }
         var card = document.getElementById('fb-fleet');
         var slot = body.querySelector('[data-reach]');
         if (!card || !slot) return;
@@ -1222,7 +1274,7 @@
           + n + ' are still on version ' + (v - 1) + ' \u2014 the oldest has not synced for '
           + (card.getAttribute('data-oldest') || '6 days') + '.';
       },
-      done: 'Published to Module 6 and Module 9 \u2014 tablets take version 5 as they sync'
+      done: function () { return '“' + (MODALS.fpublish.what || 'The form') + '” published'; }
     },
     rsave: {
       title: 'Save Sugira Muryango Sector lead (SLA)',
@@ -1382,7 +1434,7 @@
           + '<option>Risk-of-harm cases</option><option>Referrals made</option></select></div>'
           + '<div><label for="f-group">Grouped by</label><select id="f-group">'
           + '<option>District</option><option>Sector</option><option>Module</option>'
-          + '<option>Home visitor</option><option>Cohort</option><option>Month</option></select></div>'
+          + '<option>IZU</option><option>Cohort</option><option>Month</option></select></div>'
           + '<div><label for="f-sc">Where</label><select id="f-sc"></select></div>'
           + '<div><label for="f-rn">Name</label><input id="f-rn" type="text"></div>',
       init: function (body, from) {
@@ -1454,11 +1506,24 @@
             if (o.text.indexOf(fm) === 0) { form.value = o.value; form.dispatchEvent(new Event('change', { bubbles: true })); return true; }
             return false;
           });
-          var g = /by (district|sector|module|home visitor|cohort|month)/i.exec(rn);
-          if (g) { group.value = g[1].charAt(0).toUpperCase() + g[1].slice(1).toLowerCase(); group.dispatchEvent(new Event('change', { bubbles: true })); }
+          var g = /by (district|sector|module|izu|cohort|month)/i.exec(rn);
+          if (g) { group.value = /izu/i.test(g[1]) ? 'IZU' : g[1].charAt(0).toUpperCase() + g[1].slice(1).toLowerCase(); group.dispatchEvent(new Event('change', { bubbles: true })); }
           name.value = rn; typed = true;
           mOk.textContent = 'Save';
+          MODALS.report.row = row;
         }
+      },
+      /* an edited report reads as edited on its row */
+      onOk: function (body) {
+        var row = MODALS.report.editing && MODALS.report.row;
+        if (!row) return;
+        var nm = body.querySelector('#f-rn').value.trim();
+        if (nm) row.querySelector('.nm').textContent = nm;
+        var pj = body.querySelector('#f-proj').value, fm = body.querySelector('#f-form').value.replace(/ — [\d\s]+ responses$/, '');
+        var pb = row.cells[1].querySelector('.rel');
+        if (pb) pb.lastChild.textContent = pj;
+        if (row.cells[3]) row.cells[3].textContent = fm;
+        if (row.cells[5]) row.cells[5].textContent = 'Today';
       },
       done: function () { return MODALS.report.editing ? 'Report saved' : 'Report saved and run'; }
     },
@@ -1652,7 +1717,7 @@
            twice and join the files by hand. */
         var LINKED = {
           'Family Enrollment and Composition Form': ['Head of household', 'Family type', 'Number of children', 'Children under 5', 'Consent given'],
-          'Risk of Harm/Emergency Case Form': ['Type of risk', 'Who is at risk', 'Date identified', 'Date reported', 'How it was identified']
+          'Risk of Harm management — intake': ['Type of risk', 'Who is at risk', 'Date identified', 'Date reported', 'How it was identified']
         };
         var cols = body.querySelector('#x-cols'), sum = body.querySelector('#x-sum');
         var prog = window.SUGIRA_PROGRAMME, places = window.SUGIRA_PLACES;
@@ -1716,7 +1781,7 @@
         }
         function chosenForm() {
           return formsIn(proj.value, mod.value).filter(function (f) {
-            return f.name === form.value.replace(/ — .*$/, '');
+            return f.name === form.value.replace(/ — [\d\s]+ responses$/, '');
           })[0] || null;
         }
 
@@ -1765,7 +1830,12 @@
         function drawCols() {
           var f = chosenForm();
           cols.innerHTML = '';
-          FIXED.forEach(function (c) { cols.appendChild(box(c[0], !!c[1], 1)); });
+          /* a case or a referral is not a visit, so the visit's own columns stay out */
+          var caseForm = f && f.project === 'Risk of Harm/other family problems Management';
+          FIXED.forEach(function (c) {
+            if (caseForm && /^(Visit date|Home visitor|Minutes|Who was present)$/.test(c[0])) return;
+            cols.appendChild(box(c[0], !!c[1], 1));
+          });
           if (f) cols.appendChild(box('All ' + f.questions + ' answers on this form', true, f.questions));
           link.innerHTML = '';
           var linked = Object.keys(LINKED).filter(function (k) { return !f || f.name !== k; });
@@ -1793,7 +1863,7 @@
         var PREF = {
           visits: ['Household Module Tracking', 'Household Module Tracking Form'],
           safeguarding: ['Risk of Harm/other family problems Management', 'Risk of Harm management — intake'],
-          referrals: ['Risk of Harm/other family problems Management', 'Risk of Harm management — intake'],
+          referrals: ['Risk of Harm/other family problems Management', 'Household Referral Checklist'],
           followups: ['Risk of Harm/other family problems Management', 'Risk of Harm management — intake'],
           form: cf ? [cf.project, cf.name] : null
         }[sid];
@@ -3268,7 +3338,7 @@
            Checking only the <tr>'s own attribute missed those — the reports,
            the roles and the project lists all carry data-go on the button
            inside the name cell, and they lost their drawers for it. */
-        if (tr.hasAttribute('data-go') || tr.hasAttribute('data-modal')) return;
+        if (tr.hasAttribute('data-go') || tr.hasAttribute('data-modal') || tr.hasAttribute('data-open')) return;
         var nm = tr.querySelector('.nm');
         if (!nm) return;
         /* A video or a document is the thing you came to look at, so the whole
@@ -3576,6 +3646,7 @@
 
   function enhance(table) {
     if (table.id === 'fur-t') return;
+    if (table.closest('[data-submission], [data-panelid="casesub"], [data-panelid="answers"], [data-panelid="rfanswers"], [data-caselist]')) return;
     var head = table.tHead, body = table.tBodies[0];
     if (!head || !body || !body.rows.length) return;
     var ths = Array.prototype.slice.call(head.rows[0].cells);

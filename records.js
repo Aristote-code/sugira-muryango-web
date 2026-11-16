@@ -93,10 +93,10 @@
       noun: 'referral', nouns: 'referrals',
       fields: ['Referral ID', 'Household ID', 'Out of case', 'Type', 'Referred to', 'Referred by', 'Sent',
                'District', 'Sector', 'Status', 'Latest follow-up'],
-      stats: [['Active', 2, 'bad'], ['Stabilized', 1], ['Closed', 3], ['Total', 6]],
+      stats: [['Active', 2, 'bad'], ['Stabilized', 1], ['Closed', 4], ['Total', 7]],
       charts: [
-        { t: 'Referrals by type', rows: [['Child protection', 3], ['Health', 2], ['Social protection', 1]] },
-        { t: 'Where they were sent', rows: [['District CPWO', 3], ['Health centre', 1], ['Health post', 1], ['Sector social worker', 1]] }
+        { t: 'Referrals by type', rows: [['Child protection', 3], ['Health', 2], ['Social protection', 2]] },
+        { t: 'Where they were sent', rows: [['District CPWO', 3], ['Health centre', 1], ['Health post', 1], ['Sector social worker', 1], ['Sector office', 1]] }
       ],
       bin: [['RF-0105', 'Health · withheld', 'J. Kamanzi', '25 Oct 2026', 'Sent to the wrong health centre']],
       reports: [['Referrals still open', 'A. Gahimana', 'Status is Active or Stabilized', '5 Nov 2026', 3]]
@@ -220,6 +220,9 @@
       });
       var tbl = tr.closest('table');
       if (tbl) tbl.dispatchEvent(new Event('filtered'));
+      var card = tr.closest('.card');
+      var lab = card && card.querySelector('.tfoot span:not(.pg)');
+      if (lab && !card.querySelector('.tfoot .pg button')) lab.textContent = lab.textContent.replace(/^(\d+)/, function (n) { return String(Math.max(0, +n + d)); });
     },
     remove: function (tr, screenId, why, what) {
       if (!tr || tr.classList.contains('r-gone')) return null;
@@ -718,7 +721,7 @@
   /* ---- Edit and Delete on every record ---- */
   var MODS = ['Welcome module'].concat(Array.apply(null, Array(12)).map(function (_, i) { return 'Module ' + (i + 1); }), ['Closing module']);
   var PICK = {
-    cohort: ['Cohort 1 · 2026', 'Cohort 2 · 2026', 'Cohort 3 · 2026', 'Cohort 4 · 2026'],
+    cohort: ['Cohort 1 · 2026', 'Cohort 2 · 2026', 'Cohort 1 · 2027', 'Cohort 2 · 2027', 'Cohort 3 · 2027'],
     village: ['Kabare', 'Kibimba', 'Rukoma', 'Munini', 'Rwesero', 'Rugarama', 'Bugoyi', 'Nyonirima'],
     place: ['Kibungo · Ngoma', 'Jarama · Ngoma', 'Sake · Ngoma', 'Mahama · Kirehe', 'Kigoma · Nyanza', 'Busasamana · Nyanza', 'Gisenyi · Rubavu', 'Kinigi · Musanze'],
     sector: ['Kibungo', 'Jarama', 'Sake', 'Kigoma', 'Busasamana', 'Mahama', 'Gisenyi', 'Kinigi'],
@@ -828,6 +831,11 @@
           if (val === f.val) return;
           if (f.el === h1 || f.el === alt) { f.el.textContent = val; alt && (alt.hidden = !alt.textContent); return; }
           if (/booster/i.test(f.label)) { rec.setAttribute('data-booster', val); rec.setAttribute('data-booster-set', '1'); }
+          if (key === 'person' && window.SugiraPersonRow) {
+            var pr = window.SugiraPersonRow;
+            if (/^position$/i.test(f.label) && pr.cells[1]) pr.cells[1].textContent = val;
+            if (/^where$/i.test(f.label) && pr.cells[2]) pr.cells[2].textContent = val;
+          }
           if (/^village$/i.test(f.label) && window.SugiraRecData) {
             var H = window.SugiraRecData.households, at = Object.keys(H).filter(function (k) { return H[k].village === val; })[0];
             var cq = f.el.querySelector('.conseq');
@@ -846,6 +854,36 @@
     var title = ($('h1', rec) || {}).textContent || '';
     var id = ($('.rec-id', rec) || {}).textContent || title || 'This record';
     var listKey = { household: 'households', visit: 'visits', 'case': 'safeguarding', referral: 'referrals' }[key];
+    if (key === 'form' && window.SugiraProg) {
+      window.SugiraModal.ask({
+        title: 'Delete “' + title + '”?', ok: 'Delete', danger: true, body: '',
+        onOk: function () {
+          var back = window.SugiraProg.remove(title);
+          var close0 = document.querySelector('#dw:not([hidden]) [data-dw="close"]');
+          if (close0) close0.click();
+          if (window.SugiraGo) window.SugiraGo('forms');
+          setTimeout(function () { say('“' + title + '” deleted', back ? { label: 'Undo', onClick: back } : null); }, 50);
+        },
+        done: ''
+      });
+      return;
+    }
+    if (key === 'person') {
+      var prow = window.SugiraPersonRow;
+      window.SugiraModal.ask({
+        title: 'Delete ' + title + '?', ok: 'Delete', danger: true, body: '',
+        onOk: function () {
+          if (prow) rows.remove(prow, 'people', 'Deleted');
+          var c1 = document.querySelector('#dw:not([hidden]) [data-dw="close"]');
+          if (c1) c1.click();
+          var rail = document.querySelector('.si[data-go="people"] .ct');
+          if (rail) rail.textContent = String((parseInt(rail.textContent.replace(/\D/g, ''), 10) || 1) - 1);
+          setTimeout(function () { say(title + ' deleted', prow ? { label: 'Undo', onClick: function () { rows.restore({ tr: prow }); if (rail) rail.textContent = String((parseInt(rail.textContent.replace(/\D/g, ''), 10) || 0) + 1); } } : null); }, 50);
+        },
+        done: ''
+      });
+      return;
+    }
     window.SugiraModal.ask({
       title: 'Delete ' + id + '?', ok: 'Delete', danger: true,
       body: '<p class="m-lead">It moves to Recycled data, where it can be restored.</p>',
@@ -934,7 +972,9 @@
     if (!host || !P) return;
     var pos = P.positions().filter(function (p) { return p.id === host.getAttribute('data-position'); })[0];
     var held = pos ? P.held(pos) : {};
-    var own = { 'fs-community': true, 'rep-export': true };
+    var who = host.getAttribute('data-person') || 'C. Uwimana';
+    var OWN = window.SugiraOwnPerms || (window.SugiraOwnPerms = { 'C. Uwimana': { 'fs-community': true, 'rep-export': true } });
+    var own = OWN[who] || {};
     host.innerHTML = P.groups.map(function (g) {
       var perms = P.all.filter(function (x) { return x.group === g.key; });
       if (!perms.length) return '';
@@ -958,6 +998,10 @@
     if (save) save.addEventListener('click', function () {
       var changed = $$('input', host).filter(function (i) { return (i.checked ? '1' : '0') !== i.getAttribute('data-was'); });
       changed.forEach(function (i) { i.setAttribute('data-was', i.checked ? '1' : '0'); });
+      /* what differs from the position is what is theirs */
+      var mine = {};
+      $$('input', host).forEach(function (i) { if (i.checked !== (i.getAttribute('data-base') === '1')) mine[i.value] = true; });
+      (window.SugiraOwnPerms || (window.SugiraOwnPerms = {}))[host.getAttribute('data-person') || 'C. Uwimana'] = mine;
       var n = changed.length;
       say(n ? n + ' change' + (n === 1 ? '' : 's') + ' saved, for them only' : 'Nothing changed');
     });
@@ -990,8 +1034,10 @@
         return a;
       }, []);
     }
-    P.addEventListener('change', function () { opts(D, 'All districts', districts()); });
-    D.addEventListener('change', function () { opts(S, 'All sectors', sectors()); });
+    /* a level above changes, the levels below start again */
+    P.addEventListener('change', function () { D.value = 'All districts'; opts(D, 'All districts', districts()); });
+    D.addEventListener('change', function () { S.value = 'All sectors'; opts(S, 'All sectors', sectors()); });
+    var SHARE = { Ngoma: 0.26, Kirehe: 0.19, Nyanza: 0.2, Rubavu: 0.22, Musanze: 0.13 };
     opts(D, 'All districts', districts());
     var total = 538;
     function run() {
@@ -1004,8 +1050,10 @@
         tr.hidden = !keep;
         if (keep) n++;
       });
-      var all = /^All/.test(pv) && /^All/.test(d) && /^All/.test(sc);
-      total = all ? (form === 'ref' ? 212 : 538) : n;
+      var whole = form === 'ref' ? 212 : 538;
+      var ds = !/^All/.test(d) ? [d] : districts();
+      total = Math.round(whole * ds.reduce(function (a, x) { return a + (SHARE[x] || 0); }, 0) / (/^All/.test(sc) ? 1 : 3));
+      if (!n) total = 0;
       var show = function (v) { var x = new Date(v + 'T00:00:00'); return x.getDate() + ' ' + MONTHS[x.getMonth()] + ' ' + x.getFullYear(); };
       $('#fur-n').textContent = 'Found ' + total + (total === 1 ? ' result' : ' results') + ' between ' + show($('#fur-a').value) + ' and ' + show($('#fur-b').value);
       var foot = $('#fur-foot');
@@ -1021,8 +1069,11 @@
 
   /* Rows deleted from a list's selection bar land in the same bin. */
   window.SugiraFU = { data: FU, mount: followups };
+  var HM_REPORTS = null;
   window.SugiraFormStats = function (f) {
     var c = CFG.form, n = f.responses;
+    if (!HM_REPORTS) HM_REPORTS = c.reports;
+    c.reports = f.name === 'Household Module Tracking Form' ? HM_REPORTS : [];
     c.stats = [['Responses', n], ['This week', Math.round(n * 0.08)], ['Flagged', Math.round(n * 0.012), 'warn'], ['Median minutes', Math.max(5, Math.round(f.questions * 1.4))]];
     var mods = f.sessions.length ? f.sessions : ['The whole project'];
     var share = mods.length ? Math.floor(n / mods.length) : n;

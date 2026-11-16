@@ -72,7 +72,9 @@
          form, and the column that says who fills them in is what makes them
          monitoring forms. */
       ['Module in action', 'Ikiganiro mu bikorwa', 22, 412, 'Active', MONITORED, 'IZU Cell Coordinator'],
-      ['IZU quality score', 'Amanota y’ubuziranenge bwa IZU', 16, 344, 'Active', MONITORED, 'IZU Cell Coordinator']
+      ['IZU quality score', 'Amanota y’ubuziranenge bwa IZU', 16, 344, 'Active', MONITORED, 'IZU Cell Coordinator'],
+      ['Household Module Tracking Form — version 2', '', 30, 412, 'Archived', ['6.The Importance of Good Health'], 'IZU at Village'],
+      ['Growth check (pilot)', '', 9, 96, 'Archived', ['6.The Importance of Good Health'], 'IZU at Village']
     ]],
     ['Household Tracking Project', 'tablet', 'near-duplicate', ['Welcome module', '1.Family Narrative'], [
       ['Household Module Tracking Form — version 0', '', 30, 0, 'Archived', ['Welcome module'], 'IZU at Village'],
@@ -84,7 +86,8 @@
     ]],
     ['Risk of Harm/other family problems Management', 'tablet', null, [], [
       ['Risk of Harm management — intake', '', 28, 34, 'Active', [], 'IZU at Village'],
-      ['Risk of Harm management — follow-up', '', 9, 61, 'Active', [], 'Sector lead (SLA)']
+      ['Risk of Harm management — follow-up', '', 9, 61, 'Active', [], 'Sector lead (SLA)'],
+      ['Household Referral Checklist', '', 12, 7, 'Active', [], 'IZU at Village']
     ]],
     ['FCG participation and interaction form', 'tablet', null, [], [
       ['FCG participation and interaction', '', 14, 1204, 'Active', [], 'IZU at Village']
@@ -238,7 +241,7 @@
      the Forms column cannot disagree. */
   function formsOf(project, session) {
     return project.forms.filter(function (f) {
-      return f.sessions.indexOf(session) !== -1;
+      return f.sessions.indexOf(session) !== -1 && f.status !== 'Archived';
     });
   }
 
@@ -398,7 +401,7 @@
          Monitoring forms tab was telling you, said where the form is. */
       function tag(r) { if (tags) r.setAttribute('data-tags', tags); return r; }
       function sumResp(list) {
-        return list.reduce(function (a, f) { return a + f.responses; }, 0);
+        return list.reduce(function (a, f) { return a + Math.round(f.responses / Math.max(1, f.sessions.length)); }, 0);
       }
       function formRow(depth, f) {
         return tag(kidRow({
@@ -599,7 +602,7 @@
       library.unshift({ name: name, rw: rw || '', questions: questions || 0, responses: 0, status: 'Draft',
         sessions: [], by: 'IZU at Village', project: '', bySupervisor: false,
         created: 'A. Gahimana · FXB Rwanda · 6 November 2026', edited: 'Today by A. Gahimana',
-        strings: extra && extra.questions, rules: extra && extra.rules, required: extra && extra.required });
+        strings: extra && extra.questions, rules: extra && extra.rules, required: extra && extra.required, access: extra && extra.access });
       redraw();
     }
   };
@@ -635,12 +638,7 @@
     return m ? 'Module ' + m[1] : modName(s);
   }
   /* Forms taken out of a module, kept there under Archived forms. */
-  var archivedIn = {
-    'Household Module Tracking|6.The Importance of Good Health': [
-      { name: 'Household Module Tracking Form — version 2', responses: 412, when: '3 Aug 2026', by: 'A. Gahimana' },
-      { name: 'Growth check (pilot)', responses: 96, when: '19 Jun 2026', by: 'C. Uwimana' }
-    ]
-  };
+  var archivedIn = {};
   function archOf(p, s) { var k = p.name + '|' + s; return archivedIn[k] || (archivedIn[k] = []); }
 
   var cur = { project: projects[0], session: '6.The Importance of Good Health', form: null };
@@ -753,9 +751,7 @@
     head(sc, 'form', formId(f), f.name, f.rw);
     fieldsOf(sc, { 'Form name': { en: f.name, rw: f.rw }, 'Version': f.status === 'Draft' ? '1' : '4', 'Archived': f.status === 'Archived' ? 'Yes' : 'No' });
     field(sc, 'Status', '<span class="pg-badge ' + (f.status === 'Active' ? 'ok' : f.status === 'Draft' ? 'warn' : '') + '">' + h(f.status) + '</span>');
-    field(sc, 'Used in', !f.project ? 'Not in a project yet' : !f.sessions.length ? 'The whole project'
-      : f.sessions.slice(0, 4).map(function (s) { return rel('module', 'programme', modShort(s), s); }).join('')
-        + (f.sessions.length > 4 ? '<span class="conseq">and ' + (f.sessions.length - 4) + ' more</span>' : ''));
+    field(sc, 'Used in', h(usedIn(f)));
     field(sc, 'Project', p ? rel('project', 'project', p.name, p.name) : '');
     var req = f.required != null ? f.required : Math.round(f.questions * 0.37);
     field(sc, 'Questions', f.questions ? f.questions + ' <span class="chip">' + req + ' required</span>' : '');
@@ -801,13 +797,16 @@
       if (pg3) pg3.hidden = false;
     }
     var np = sc.querySelector('[data-panelid="notify"] .card');
+    if (!f.rules) f.rules = f.name === 'Household Module Tracking Form' ? [
+      { q: 'Q5 Any sign of harm or neglect?', op: 'is', v: 'Yes', msg: 'A risk of harm was raised in your sector', who: ['Sugira Muryango Sector lead (SLA)', 'District NCDA Child protection and Welfare Officer (CPWO)'] },
+      { q: 'Q8 Referred to the health post?', op: 'is', v: 'Yes', msg: 'A referral needs following up', who: ['IZU Cell Coordinator (ICC)'] }] : [];
     if (np) {
       if (!np._static) np._static = np.innerHTML;
       if (f.rules) {
         np.innerHTML = '<div class="card-h"><h3>When a response is sent in</h3><span class="side"><button class="btn sec sm" type="button" data-modal="fnotify"><svg aria-hidden="true"><use href="#i-plus"/></svg>Add a rule</button></span></div>'
-          + (f.rules.length ? f.rules.map(function (r) {
-            return '<div class="lr"><span class="t">' + h(r.q + ' ' + r.op + ' ' + r.v) + '</span><span class="s">' + (r.msg ? '“' + h(r.msg) + '” → ' : '') + h(r.who.join(', '))
-              + '</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-toast="Rule removed">Remove</a></span></div>';
+          + (f.rules.length ? f.rules.map(function (r, i) {
+            return '<div class="lr" data-rule="' + i + '"><span class="t">' + h(r.q + ' ' + r.op + ' ' + r.v) + '</span><span class="s">' + (r.msg ? '“' + h(r.msg) + '” → ' : '') + h(r.who.join(', '))
+              + '</span><span class="c rowacts"><a data-modal="fnotify">Change</a><a data-rule-del="' + i + '">Remove</a></span></div>';
           }).join('') : '<p class="empty-line">No rule yet</p>');
       } else np.innerHTML = np._static;
     }
@@ -817,8 +816,74 @@
       if (tf) tf.textContent = 'Showing ' + Math.min(5, f.questions) + ' of ' + f.questions;
     }
     if (window.SugiraFormStats) window.SugiraFormStats(f);
+    /* its own dashboard and reports, drawn again from it */
+    Array.prototype.forEach.call(sc.querySelectorAll('[data-panelid="freports"] .vb.on, [data-panelid="data"] .vb.on:not([data-v="data"])'), function (b) { b.click(); });
+    Array.prototype.forEach.call(sc.querySelectorAll('.acc-k'), function (card) {
+      var kind = card.getAttribute('data-acc-kind');
+      var rows = Array.prototype.slice.call(card.querySelectorAll('.lr'));
+      if (!card._static) card._static = rows.map(function (r) { return r.outerHTML; }).join('');
+      rows.forEach(function (r) { r.remove(); });
+      var list = f.access && f.access[kind];
+      card.insertAdjacentHTML('beforeend', list ? list.map(function (o) {
+        return '<div class="lr"><span class="t">' + h(o) + '</span><span class="c rowacts"><a data-acc="update">Change</a><a data-acc="remove">Remove</a></span></div>';
+      }).join('') : card._static);
+    });
     var arch = sc.querySelector('[data-modal="archive"]');
     if (arch) arch.hidden = f.status === 'Archived';
+    var acts = sc.querySelector('.rec-top .acts');
+    var rs = acts && acts.querySelector('[data-frestore]');
+    if (acts && !rs) {
+      rs = document.createElement('button');
+      rs.type = 'button'; rs.className = 'btn sec sm'; rs.setAttribute('data-frestore', '');
+      rs.textContent = 'Restore';
+      acts.insertBefore(rs, acts.firstChild);
+    }
+    if (rs) rs.hidden = f.status !== 'Archived';
+    var HM = f.name === 'Household Module Tracking Form';
+    /* About this form: this form's facts */
+    var about = sc.querySelector('[data-panelid="preview"] .cols > .card:nth-child(2)');
+    if (about) {
+      var reqN = f.required != null ? f.required : Math.round(f.questions * 0.37);
+      about.innerHTML = '<div class="card-h"><h3>About this form</h3></div>'
+        + '<div class="lr" style="margin-top:var(--space-3)"><span class="t">Created by</span><span class="s">' + h((f.created || 'A. Gahimana · FXB Rwanda · 18 January 2026').split(' · ').slice(0, 2).join(' · ')) + '</span><span class="c">' + h((f.created || ' ·  · 18 Jan 2026').split(' · ')[2] || '') + '</span></div>'
+        + '<div class="lr"><span class="t">Last edited</span><span class="c">' + h(f.edited || '14 October by C. Uwimana') + '</span></div>'
+        + '<div class="lr"><span class="t">Status</span><span class="c">' + stChip(f.status) + '</span></div>'
+        + '<div class="lr"><span class="t">Questions</span><span class="c">' + f.questions + ' · ' + reqN + ' required</span></div>'
+        + '<div class="lr"><span class="t">Time expected</span><span class="c">' + Math.max(5, Math.round(f.questions * 1.33)) + ' minutes</span></div>';
+    }
+    /* How the visitor sees it: this form's first question */
+    var dev = sc.querySelector('[data-panelid="preview"] .tdev');
+    if (dev) {
+      if (!dev._static) dev._static = dev.innerHTML;
+      if (HM) dev.innerHTML = dev._static;
+      else {
+        var q0 = f.strings && f.strings[0] ? f.strings[0] : { en: 'Household ID', rw: 'Nimero y’urugo', opts: [] };
+        var yn = (q0.opts || []).length ? q0.opts : null;
+        dev.innerHTML = '<p class="tdev-k">Ikibazo 1 muri ' + Math.max(1, f.questions) + '</p><p class="tdev-q">' + h(q0.rw || q0.en) + '</p>'
+          + (yn ? yn.map(function (o) { return '<div class="lr click" role="radio" aria-checked="false"><span class="t">' + h(o) + '</span></div>'; }).join('')
+            : '<div class="lr"><span class="t mut">Igisubizo</span></div>')
+          + '<div class="tdev-f"><button data-toast="Previous question" class="btn sec sm" type="button">Subira inyuma</button><button data-toast="Next question" class="btn sm" type="button">Komeza</button></div>';
+      }
+    }
+    /* its responses are visits only where it is asked at a visit */
+    if (dataP) {
+      var visitForm = HM || (f.sessions.length && f.responses);
+      Array.prototype.forEach.call(dataP.querySelectorAll('table.tbl tbody tr'), function (r) { r.classList.toggle('f-none', !visitForm); });
+      var foot2 = dataP.querySelector('.tfoot span:not(.pg)');
+      if (foot2 && !visitForm) foot2.textContent = f.responses ? fmt(f.responses) + ' responses' : 'No response yet';
+    }
+    /* its translations: its own strings where it has them */
+    if (trf && !f.strings && !HM) {
+      if (!trf._static) trf._static = trf.tBodies[0].innerHTML;
+      trf.tBodies[0].innerHTML = [{ en: f.name, rw: f.rw }].map(function (x, i) {
+        return '<tr><td class="mut">' + (i + 1) + '</td><td>' + h(x.en) + '</td><td><span class="v' + (x.rw ? '' : ' mut') + '" data-ftype="text">' + h(x.rw || 'Not translated')
+          + '</span></td><td>' + (x.rw ? 'C. Uwimana' : '—') + '</td><td class="num mut">' + (x.rw ? '14 Oct' : '—') + '</td></tr>';
+      }).join('');
+      var tf3 = trf.closest('.card').querySelector('.tfoot span:not(.pg)');
+      if (tf3) tf3.textContent = 'Form name · ' + f.questions + ' questions to translate';
+      var pg4 = trf.closest('.card').querySelector('.tfoot .pg');
+      if (pg4) pg4.hidden = true;
+    }
   }
 
   /* ---- the module ---- */
@@ -829,7 +894,10 @@
     var i = p.sessions.indexOf(s);
     head(sc, 'module', 'MOD-' + (17 + i), modName(s), RW[s] ? RW[s].replace(/^\d+\.\s*/, '') : '');
     fieldsOf(sc, { 'Module name': { en: modName(s), rw: (RW[s] || '').replace(/^\d+\.\s*/, '') }, 'Booster module': /Booster/.test(s) ? 'Yes' : 'No' });
-    var fs = formsOf(p, s), ar = archOf(p, s);
+    var fs = formsOf(p, s);
+    var ar = archOf(p, s).concat(p.forms.filter(function (f) { return f.status === 'Archived' && f.sessions.indexOf(s) > -1; }).map(function (f) {
+      return { name: f.name, responses: f.responses, when: f.archivedWhen || '3 Aug 2026', by: f.archivedBy || 'A. Gahimana', archived: true };
+    }));
     tabChip(sc, 'forms', fs.length);
     tabChip(sc, 'marchived', ar.length);
     panel(sc, 'forms', '<div class="card flush plainsurface"><div class="tblwrap"><table class="tbl"><thead><tr><th>Form</th><th class="num">Questions</th><th class="num">Responses</th><th>Languages</th><th>Status</th><th class="ract">Actions</th></tr></thead><tbody>'
@@ -843,8 +911,8 @@
     panel(sc, 'marchived', '<div class="card flush plainsurface"><div class="tblwrap"><table class="tbl"><thead><tr><th>Form</th><th class="num">Responses</th><th>Archived</th><th data-person>Archived by</th><th class="ract">Actions</th></tr></thead><tbody>'
       + (ar.map(function (a) {
         var known = formByName(a.name) && formByName(a.name).name === a.name;
-        return '<tr><td class="nm">' + h(a.name) + '</td><td class="num">' + fmt(a.responses) + '</td><td class="mut">' + h(a.when) + '</td><td>' + h(a.by) + '</td><td class="rowacts">'
-          + (known ? '<a data-go="form" data-recid="' + h(a.name) + '" data-view="tab:Data">View data</a><a data-mrestore="' + h(a.name) + '">Restore</a>' : '<a data-go="data">View data</a>') + '</td></tr>';
+        return '<tr' + (known ? ' data-go="form" data-recid="' + h(a.name) + '"' : '') + '><td class="nm">' + h(a.name) + '</td><td class="num">' + fmt(a.responses) + '</td><td class="mut">' + h(a.when) + '</td><td>' + h(a.by) + '</td><td class="rowacts">'
+          + (known ? '<a data-go="form" data-recid="' + h(a.name) + '" data-view="tab:Data">View data</a><a data-mrestore="' + h(a.name) + '"' + (a.archived ? ' data-whole="1"' : '') + '>Restore</a>' : '') + '</td></tr>';
       }).join('') || '<tr><td colspan="5" class="mut">Nothing archived</td></tr>')
       + '</tbody></table></div><div class="tfoot"><span>' + ar.length + ' archived</span></div></div>');
   }
@@ -858,9 +926,9 @@
     fieldsOf(sc, { 'Project name': { en: p.name, rw: p === projects[0] ? 'Gukurikirana amasomo y’umuryango' : '' },
       'Description': { en: p === projects[0] ? 'The core home-visiting curriculum: twelve fortnightly modules, a welcome, a closing and three boosters.' : '', rw: '' } });
     var live = p.forms.filter(function (f) { return f.status !== 'Archived'; });
-    field(sc, 'Status', '<span class="pg-badge ' + (live.some(function (f) { return f.status === 'Active'; }) ? 'ok">Active' : '">Archived') + '</span>');
+    field(sc, 'Status', '<span class="pg-badge ok">Active</span>');
     field(sc, 'Modules', p.sessions.length ? p.sessions.length + (p.sessions.length === 1 ? ' module' : ' modules') : 'Forms only, no modules');
-    field(sc, 'Forms', live.length + (live.length === 1 ? ' form' : ' forms'));
+    field(sc, 'Forms', p.forms.length + (p.forms.length === 1 ? ' form' : ' forms'));
     field(sc, 'Translation', live.filter(function (f) { return f.rw; }).length + ' of ' + live.length + ' forms');
     field(sc, 'Mobile app', p.tags === 'tablet' ? 'Yes' : 'No');
     tabChip(sc, 'modules', p.sessions.length || null);
@@ -919,10 +987,10 @@
     projects.forEach(function (p) {
       p.responses = p.forms.reduce(function (a, f) { return a + f.responses; }, 0);
     });
-    var live = function (id) { var s = document.getElementById(id); return s && (s.classList.contains('live') || s.closest('#dw')); };
-    if (live('s-module')) fillModule(cur.project, cur.session);
-    if (live('s-project')) fillProject(cur.project);
-    if (live('s-form') && cur.form) fillForm(cur.form);
+    /* every page that shows the library is drawn again, on screen or not */
+    fillModule(cur.project, cur.session);
+    fillProject(cur.project);
+    if (cur.form) fillForm(cur.form);
   }
 
   /* ---- which page a click opens ---- */
@@ -967,6 +1035,21 @@
     setTimeout(function () { if (pend) { var j = pend; pend = null; j(); } }, 0);
   }, true);
 
+  document.addEventListener('click', function (e) {
+    var r = e.target.closest('[data-frestore]');
+    if (r && cur.form) {
+      window.SugiraProg.restore(cur.form.name);
+      if (window.SugiraToast) window.SugiraToast.say('“' + cur.form.name + '” restored');
+      return;
+    }
+    var d = e.target.closest('[data-rule-del]');
+    if (d && cur.form && cur.form.rules) {
+      var i = +d.getAttribute('data-rule-del'), gone = cur.form.rules.splice(i, 1)[0];
+      fillForm(cur.form);
+      if (window.SugiraToast) window.SugiraToast.say('Rule removed', { label: 'Undo', onClick: function () { cur.form.rules.splice(i, 0, gone); fillForm(cur.form); } });
+    }
+  });
+
   /* ---- taking a form out of a module, and putting it back ---- */
   document.addEventListener('click', function (e) {
     var rm = e.target.closest('[data-mremove]'), rs = e.target.closest('[data-mrestore]');
@@ -976,6 +1059,7 @@
     var p = cur.project, s = cur.session;
     if (rs) {
       var nm = rs.getAttribute('data-mrestore'), f0 = formByName(nm);
+      if (rs.hasAttribute('data-whole') && f0) { f0.status = 'Active'; }
       var list = archOf(p, s);
       archivedIn[p.name + '|' + s] = list.filter(function (x) { return x.name !== nm; });
       if (f0 && f0.sessions.indexOf(s) === -1) f0.sessions.push(s);
@@ -1039,6 +1123,34 @@
       });
       redraw();
     },
+    restore: function (name) {
+      var f = formByName(name);
+      if (!f) return;
+      f.status = f.questions ? 'Active' : 'Draft';
+      redraw();
+    },
+    remove: function (name) {
+      var f = formByName(name);
+      if (!f) return null;
+      var at = library.indexOf(f), p = projectOf(f), pi = p ? p.forms.indexOf(f) : -1;
+      library.splice(at, 1);
+      if (p && pi > -1) p.forms.splice(pi, 1);
+      redraw();
+      return function () {
+        library.splice(at, 0, f);
+        if (p && pi > -1) p.forms.splice(pi, 0, f);
+        redraw();
+      };
+    },
+    rules: function () { return cur.form ? cur.form.rules || (cur.form.rules = []) : []; },
+    questions: function () {
+      var f = cur.form;
+      if (!f) return [];
+      if (f.strings) return f.strings.map(function (q, i) { return 'Q' + (i + 1) + ' ' + q.en; });
+      if (f.name === 'Household Module Tracking Form') return ['Q5 Any sign of harm or neglect?', 'Q8 Referred to the health post?'];
+      return ['Q1 Household ID'];
+    },
+    redrawForm: function () { if (cur.form) fillForm(cur.form); },
     archive: function (name) {
       var f = formByName(name);
       if (!f) return;

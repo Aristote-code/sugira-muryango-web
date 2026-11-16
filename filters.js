@@ -339,7 +339,7 @@
       }
       if (k === 'male') {
         var md = el.querySelector('.d');
-        if (md) md.textContent = 'of ' + fmt(t.hh) + ' households';
+        if (md) md.textContent = 'of ' + fmt(Math.round(t.visits)) + ' visits';
       }
       var trk = el.querySelector('.trk i');
       if (trk) trk.style.width = Math.min(100, x.pct) + '%';
@@ -349,20 +349,31 @@
 
     drawTrend(period);
     donuts(t, male);
-    /* Needs attention: the active cases in the place filtered to, the latest two shown. */
+    /* Needs attention: the active cases in the place, cohort and dates
+       filtered to, the latest two of them shown. */
     var al = document.querySelector('#s-dashboard .al');
     if (al) {
-      var rowsA = $$('.al-row', al), shownA = 0;
-      rowsA.forEach(function (r) {
+      var day = { 'Today': 310, 'This week': 304, 'This month': 305 }[period] || 0;
+      var hit = $$('.al-row', al).filter(function (r) {
         var txt = (r.textContent || '').toLowerCase();
-        var ok = live && ds.some(function (d) { return txt.indexOf(d.toLowerCase()) > -1; });
-        r.hidden = !ok;
-        if (ok) shownA++;
+        return live && ds.some(function (d) { return txt.indexOf(d.toLowerCase()) > -1; })
+          && (!cohort || r.getAttribute('data-cohort') === cohort)
+          && (+r.getAttribute('data-day') >= day);
       });
+      $$('.al-row', al).forEach(function (r) { r.hidden = hit.slice(0, 2).indexOf(r) === -1; });
       var ct = al.querySelector('.al-hd .ct');
-      if (ct) ct.textContent = t.rohOpen + ' active risk of harm ' + (t.rohOpen === 1 ? 'case' : 'cases');
-      al.hidden = !t.rohOpen;
+      if (ct) ct.textContent = hit.length + ' active risk of harm ' + (hit.length === 1 ? 'case' : 'cases');
+      al.hidden = !hit.length;
     }
+    /* District and sector lists keep the rows inside the place. */
+    $$('#s-dashboard .cmpr, #s-dashboard .mx .mr, #s-dashboard .card .lr').forEach(function (r) {
+      var lb = (r.textContent || '').toLowerCase();
+      var names = [];
+      Object.keys(PLACES).forEach(function (p) { Object.keys(PLACES[p]).forEach(function (d) { names.push(d); }); });
+      var named = names.filter(function (n) { return lb.indexOf(n.toLowerCase()) > -1; });
+      if (!named.length) return;
+      r.hidden = !named.some(function (n) { return ds.indexOf(n) > -1; });
+    });
 
     var where = place || 'Rwanda';
     var bits = [where === 'Rwanda' ? 'All five districts' : where];
@@ -647,9 +658,11 @@
     var narrow = valueOf(btn) === dim.all;
     var tables = $$('.tbl', screen).filter(function (t) { return t.offsetParent !== null; });
     if (!tables.length) tables = $$('.tbl', screen);
+    var hasCol = false;
     tables.forEach(function (table) {
       var i = headerIndex(table, key);
       if (i < 0) return;
+      hasCol = true;
       $$('tbody tr', table).forEach(function (r) {
         /* Project, then module, then form: a choice already made narrows what
            the next one offers. A filter that is itself set still lists every
@@ -670,7 +683,7 @@
       var d = DIMENSIONS[keyOf(o)];
       if (d && valueOf(o) !== d.all) others = true;
     });
-    if (others && narrow) return seen.sort();
+    if (others && narrow && hasCol) return seen.sort();
     return seen.length > 1 ? seen.sort() : dim.options;
   }
 

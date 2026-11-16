@@ -194,7 +194,7 @@
     h.mods.forEach(function (d, i) {
       if (!i) return;
       var known = Object.keys(V).filter(function (k) { return V[k].hh === id && V[k].mod === i && V[k].ok; })[0];
-      var vid = known || ('VIS-' + (7000 + parseInt(id.replace(/\D/g, '').slice(-3), 10) * 10 + i));
+      var vid = known || ('VIS-' + (7000 + Object.keys(H).indexOf(id) * 20 + i));
       if (!V[vid]) V[vid] = { hh: id, mod: i, date: d, min: MIN[(i + id.length) % 12], ok: true };
       out.push(vid);
     });
@@ -216,7 +216,7 @@
   }
   function badge(s) {
     return s === 'Closed' || s === 'Completed' || s === 'On track' ? 'ok'
-      : s === 'Risk of harm' || s === 'Active' ? 'bad' : s === 'Stabilized' || s === 'Not started' ? '' : 'warn';
+      : s === 'Risk of harm' || s === 'Active' ? 'bad' : 'warn';
   }
   function chipCls(s) { return s === 'Closed' || s === 'Completed' || s === 'On track' ? 'ok' : s === 'Stabilized' || s === 'Not started' ? '' : s === 'Risk of harm' ? 'bad' : 'warn'; }
 
@@ -407,7 +407,7 @@
     field(sc, 'Recorded by', rel('people', 'person', izu));
     field(sc, 'Sent in', v.ok ? esc(v.date) + ' ' + (v.time ? v.time.slice(-5) : '') : '');
     var sub = $('[data-panelid="answers"] [data-submission]', sc);
-    if (sub && window.SugiraSubmission) sub.innerHTML = window.SugiraSubmission(visitAnswers(id));
+    if (sub && window.SugiraSubmission) sub.innerHTML = window.SugiraSubmission(visitAnswers(id), form);
     tabChip(sc, 'answers', visitAnswers(id).length);
     var all = visitsOf(v.hh), med = all.filter(function (k) { return V[k].ok; }).map(function (k) { return V[k].min; }).sort()[Math.floor(all.length / 2)] || v.min;
     panel(sc, 'happened', '<div class="cols c2"><div class="card"><div class="card-h"><h3>This visit, in order</h3></div><div class="tl">'

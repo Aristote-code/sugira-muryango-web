@@ -34,8 +34,9 @@
     var body = table.tBodies[0];
     if (!body) return;
     var real = $$('tr', body).filter(function (r) { return !r.classList.contains('t-empty'); });
+    var all = table.classList.contains('q-all');
     var shown = real.filter(function (r) {
-      return !r.classList.contains('f-out') && !r.classList.contains('t-out') && !r.classList.contains('p-out') && !r.classList.contains('r-gone');
+      return !r.classList.contains('f-out') && (all || !r.classList.contains('t-out')) && !r.classList.contains('p-out') && !r.classList.contains('r-gone');
     });
     var row = body.querySelector('tr.t-empty');
     var screen = table.closest('.screen');
@@ -435,6 +436,7 @@
     if (!table) return;
 
     function select(tag, initial) {
+      table = scope.querySelector('.tbl') || table;
       var total = 0, shown = 0;
       if (tag === 'all') tag = null;      // the "everything" tab names itself
       $$('tbody tr', table).forEach(function (r) {

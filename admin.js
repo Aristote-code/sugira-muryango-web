@@ -124,6 +124,8 @@
   /* ---- people: a user created is a user on the list ---- */
   window.SugiraPeople = {
     add: function (p) {
+      PEOPLE[p.name] = { phone: p.phone || '', joined: '6 November 2026', id: 'USR-' + ('000' + (nextId++)).slice(-4) };
+      if (p.extra) (window.SugiraOwnPerms || (window.SugiraOwnPerms = {}))[p.name] = p.extra;
       var body = $('#s-people table.tbl tbody');
       if (!body) return;
       var tr = document.createElement('tr');
@@ -139,6 +141,18 @@
       var tbl = tr.closest('table');
       if (tbl) tbl.dispatchEvent(new Event('filtered'));
     }
+  };
+
+  window.SugiraPost = function (text, where) {
+    var body = $('#s-community table.tbl tbody');
+    if (!body) return;
+    var tr = document.createElement('tr');
+    tr.setAttribute('data-tags', 'all');
+    tr.innerHTML = '<td class="nm">A. Gahimana</td><td class="mut">Just now</td><td>' + esc(text.length > 80 ? text.slice(0, 80) + '…' : text)
+      + '</td><td class="mut">' + esc(where) + '</td><td class="num">0</td><td class="num">0</td><td><span class="chip ok"><i></i>Posted</span></td><td class="gap"></td>';
+    body.insertBefore(tr, body.firstChild);
+    var c = $('#s-community .tab[data-tab="all"] .chip');
+    if (c) c.textContent = String((parseInt(c.textContent.replace(/\D/g, ''), 10) || 0) + 1);
   };
 
   /* ---- a report opened shows what it found ---- */
@@ -178,19 +192,35 @@
       if (k && k.textContent.trim() === label) $('.v', row).innerHTML = html;
     });
   }
+  /* What is known about each person beyond their row. */
+  var PEOPLE = {
+    'A. Gahimana': { phone: '+250 78 555 0144', joined: '6 March 2025', id: 'USR-0001' },
+    'C. Uwimana': { phone: '+250 78 812 4410', joined: '19 August 2026', id: 'USR-0042' },
+    'M. Dusabe': { phone: '+250 78 301 2214', joined: '4 June 2026', id: 'USR-0118' },
+    'E. Mutesi': { phone: '+250 72 640 1189', joined: '11 May 2026', id: 'USR-0097' },
+    'D. Niyonsaba': { phone: '+250 73 220 9031', joined: '2 June 2026', id: 'USR-0121' },
+    'P. Niyonkuru': { phone: '+250 78 004 5521', joined: '30 April 2026', id: 'USR-0088' },
+    'B. Nkurunziza': { phone: '+250 78 712 0066', joined: '14 January 2026', id: 'USR-0031' },
+    'R. Mugisha': { phone: '+250 72 118 7740', joined: '3 February 2026', id: 'USR-0036' },
+    'T. Mukamana': { phone: '+250 78 990 1203', joined: '9 March 2026', id: 'USR-0051' },
+    'S. Habimana': { phone: '+250 73 505 6681', joined: '21 April 2026', id: 'USR-0077' },
+    'D. Uwera': { phone: '+250 78 223 4410', joined: '15 May 2026', id: 'USR-0101' }
+  };
+  var nextId = 540;
   function fillPerson(tr) {
     var sc = document.getElementById('s-person');
     if (!sc) return;
+    window.SugiraPersonRow = tr;
     var c = tr.cells, name = c[0].textContent.trim(), pos = c[1].textContent.replace(/\s+/g, ' ').trim();
     var where = c[2].textContent.replace(/\s+/g, ' ').trim(), last = c[4].textContent.trim(), st = c[5].textContent.trim();
     var P = window.SugiraPerms, p = P ? P.positions().filter(function (x) { return x.name === pos || pos.indexOf(x.name) === 0 || x.name.indexOf(pos) === 0; })[0] : null;
     $('h1', sc).textContent = FULL[name] || name;
+    var me = PEOPLE[name] || (PEOPLE[name] = { phone: '+250 78 ' + (300 + name.length * 13) + ' ' + (1000 + name.charCodeAt(0) * 7), joined: '12 May 2026', id: 'USR-' + ('000' + (nextId++)).slice(-4) });
     var id = $('.rec-id', sc);
-    if (id) id.textContent = 'USR-' + (100 + name.length * 7);
-    var sd = window.SugiraScreens && window.SugiraScreens.person;
-    if (sd && sd.crumbs && sd.crumbs.length) sd.crumbs[sd.crumbs.length - 1][0] = name;
+    if (id) id.textContent = me.id;
     setField(sc, 'Status', '<span class="pg-badge ' + (st === 'Active' ? 'ok' : '') + '">' + esc(st) + '</span>');
-    setField(sc, 'Phone', '+250 78 ' + (300 + name.length * 13) + ' ' + (1000 + name.charCodeAt(0) * 7));
+    setField(sc, 'Phone', esc(me.phone));
+    setField(sc, 'Joined', esc(me.joined));
     setField(sc, 'Position', p ? '<button class="rel" type="button" data-go="position" data-pos-id="' + esc(p.id) + '">' + ic('role') + esc(p.name) + '</button>' : esc(pos));
     setField(sc, 'Where', esc(where));
     setField(sc, 'Email', esc(name.replace(/[^A-Za-z]+/g, '.').replace(/^\.|\.$/g, '').toLowerCase()) + '@fxbrwanda.org');
@@ -200,12 +230,16 @@
     var block = document.getElementById('ppBlock');
     if (block) {
       block.setAttribute('data-position', p ? p.id : '');
+      block.setAttribute('data-person', name);
       if (window.SugiraPersonPerms) window.SugiraPersonPerms();
     }
   }
   document.addEventListener('click', function (e) {
     var tr = e.target.closest('#s-people tbody tr[data-go="person"]');
     if (!tr) return;
+    /* the way back names this person, set before the drawer draws it */
+    var sd = window.SugiraScreens && window.SugiraScreens.person;
+    if (sd && sd.crumbs && sd.crumbs.length) sd.crumbs[sd.crumbs.length - 1][0] = tr.cells[0].textContent.trim();
     setTimeout(function () { fillPerson(tr); }, 0);
   }, true);
 

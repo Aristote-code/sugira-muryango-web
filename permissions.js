@@ -1169,13 +1169,15 @@
       state.pos.push({ id: id, name: name, short: name, base: null, people: 0, what: what || '', reach: 'sector',
         heldBy: null, reaches: {}, adds: perms.slice() });
       render();
+      var rail = document.querySelector('.si[data-go="permissions"] .ct');
+      if (rail) rail.textContent = String(state.pos.length);
       return id;
     },
     addPerm: function (label, what, groupName) {
       var g = GROUPS.filter(function (x) { return x.name === groupName; })[0] || GROUPS[GROUPS.length - 1];
       var p = { id: 'new-' + (ALL.length + 1), group: g.key, label: label, what: what || '', replaces: [], risk: null };
       ALL.push(p); BY_ID[p.id] = p; g.perms.push(p);
-      renderPerms();
+      render();
       return p.id;
     }
   };
